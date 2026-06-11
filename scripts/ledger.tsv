@@ -30,3 +30,6 @@ timestamp	label	agent	model	effort	seconds	input_tokens	output_tokens	total_toke
 2026-06-11T11:10:22Z	phase10-status	cursor	composer-2.5	default	663	NA	NA	NA	0
 2026-06-11T14:07:05Z	phase0910-consolidation-r2	codex	default	default	519	3249629	26597	3276226	0
 2026-06-11T14:16:09Z	phase0910-verify	cursor	composer-2.5	default	81	NA	NA	NA	0
+2026-06-11T14:18:02Z	phase11-player	codex	default	default	445	2256454	24626	2281080	0
+2026-06-11T14:18:27Z	phase12-inventory-r2	cursor	composer-2.5	default	489	NA	NA	NA	0
+2026-06-11T14:27:05Z	phase1112-verify	cursor	composer-2.5	default	89	NA	NA	NA	0

@@ -76,6 +76,13 @@ tools and must be re-verified by the Phase 01 environment spike; facts marked
 
 ## Worktrees & repo facts
 
+- **[observed 2026-06-11]** Parallel implement-workers on the SAME worktree:
+  disjoint file ownership prevents edit conflicts, but `pnpm run check` runs
+  collide with the sibling's half-written files. Either dispatch parallel
+  implement tasks in separate worktrees, or instruct workers to gate only
+  their owned test path (`pnpm test -- <owned dir>` + typecheck) and let the
+  combined verification run the full gate after all siblings land.
+
 - **[inherited]** `.env*` files are gitignored and do **not** propagate into new
   worktrees — the orchestrator copies them explicitly when (and only when) the
   brief requires a key.

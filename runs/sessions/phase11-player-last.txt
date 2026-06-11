@@ -1,0 +1,21 @@
+**Phase Completion Check**
+Status: Blocked by unowned test failures; owned scope implemented.
+
+Implemented:
+- Added [player.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/systems/player.ts:24) with `level_up` and `starvation` event shapes carrying HUD pulse metadata.
+- Added XP thresholding, multi-level gains, level cap, HP/ATK/DEF growth, and HP max-delta healing on level-up in [player.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/systems/player.ts:193).
+- Added fullness drain, overfeed cap/decay, starvation damage, natural regen gating, and self-registration into `hunger`/`regen` tick slots in [player.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/systems/player.ts:178).
+- Added tests for level curve, multi-level/cap, growth math, HP delta, registered hook behavior, closed-form starvation death, regen gating, and overfeed decay in [player.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/systems/player.test.ts:23).
+
+Validation:
+- `pnpm exec eslint src/engine/systems/player.ts src/engine/systems/player.test.ts` -> passed.
+- `pnpm test src/engine/systems/player.test.ts` -> passed: 1 file, 8 tests.
+- `rg -n "Math\.random|Date\.now" src/engine/systems/player.ts` -> no matches.
+- `pnpm run check` -> blocked: typecheck and lint passed, then unrelated unowned `src/engine/systems/inventory.test.ts` failed 7 tests. Summary: 25 passed files, 1 failed file; 174 passed tests, 7 failed.
+
+Ambiguities / notes:
+- I treated `state.player.xp` as spendable XP toward the next level, subtracting thresholds on level-up. Combat’s existing `xp_gained.totalXp` is emitted before this hook normalizes level-ups.
+- I did not update `PROGRESS.md` because the brief’s owned files were limited to `player.ts` and `player.test.ts`.
+- No environment discoveries. Out-of-scope blocker: untracked inventory files are present and currently break the full test gate.
+
+No commit made. Actual time: ~28m vs 30m estimate.
