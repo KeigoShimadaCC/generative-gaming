@@ -1,0 +1,11 @@
+Completed the spike report at [findings.md](/Users/keigoshimada/Documents/generative-gaming/runs/spikes/01A-codex-env/findings.md).
+
+Key results:
+- `.git` writes blocked: **REFUTED**. `git commit --allow-empty -m test` succeeded and created `36a3db0 test`; I did not undo it per the brief.
+- `rm -rf` blocked: **CONFIRMED**.
+- chained `&&` commands blocked: **REFUTED**.
+- browser launch unavailable via permitted checks: **CONFIRMED**.
+- network access: **CONFIRMED**.
+- JSONL usage fields: **not visible from inside**.
+
+Verification: read back the report, checked `git status --short`, and confirmed `HEAD` is `36a3db0 test`. No project checks were run because the phase plan says verification commands are none/pre-scaffold. Actual time was about 10 minutes, within the 15 minute timebox.

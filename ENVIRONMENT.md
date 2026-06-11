@@ -10,27 +10,53 @@ Facts marked **[inherited]** come from previous-project rehearsals with the same
 tools and must be re-verified by the Phase 01 environment spike; facts marked
 **[verified]** have been confirmed in *this* repo, with the date.
 
-## Codex CLI (`codex exec`) sandbox facts
+## Codex CLI (`codex exec`) sandbox facts — codex-cli 0.137.0
 
-- **[inherited]** All `.git` writes are blocked in-sandbox: no commit, tag, stage,
-  or push. Workers record an intended commit breakdown (see AGENTS.md §Commits);
-  the orchestrator executes commits.
-- **[inherited]** No browser launch in-sandbox. Browser verification routes through
-  Playwright MCP or an orchestrator-dispatched verifier.
-- **[inherited]** `rm -rf` and chained shell commands are policy-blocked. Use Node
-  `fs` removals; issue commands separately.
+- **[verified 2026-06-11, spike 01A]** `.git` writes are **ALLOWED** under
+  `--sandbox workspace-write` (empty commit succeeded) — the inherited "blocked"
+  fact is REFUTED for this CLI version. Codex workers use AGENTS.md's
+  direct-commit path under `Codex Agent <agent@codex.local>`; COMMIT_PLAN.md
+  remains the fallback if a future version re-blocks.
+- **[verified 2026-06-11, spike 01A]** Non-destructive `&&` chaining WORKS —
+  inherited "chained commands blocked" REFUTED. `rm -rf` is rejected by policy
+  before execution (CONFIRMED) — use Node `fs` removals.
+- **[verified 2026-06-11, spike 01A]** No browser available in-sandbox: no
+  chromium binary; `npx --no-install playwright` fails. CONFIRMED — browser
+  verification routes through the orchestrator/host.
+- **[verified 2026-06-11, spike 01A]** Outbound HTTPS works with
+  `-c sandbox_workspace_write.network_access=true`.
+- **[verified 2026-06-11]** Host npm cache contains root-owned files →
+  `npx` fails with EPERM in sandbox. Machine fix (human, optional):
+  `sudo chown -R 501:20 ~/.npm`.
+- **[verified 2026-06-11]** Token usage: the `turn.completed` JSONL event carries
+  `usage:{input_tokens, cached_input_tokens, output_tokens,
+  reasoning_output_tokens}` — ledger total = input + output.
+- **[verified 2026-06-11]** `codex exec` reads stdin when invoked without
+  redirection — **always append `< /dev/null`** in scripted invocations; omitting
+  it caused a 15-minute no-event stall (observed).
 - **[inherited]** Shared ambient auth does not reliably tolerate concurrent
-  `codex` sessions — they can contend or stall. **One Codex session at a time.**
-- **[inherited]** On a no-event stall: relaunch the identical brief once; if it
-  stalls again, stop and re-brief smaller.
-- **[inherited]** Token usage in JSONL is `input_tokens` + `output_tokens` (no
-  `total_tokens` field) — sum them for the ledger.
+  `codex` sessions — **one Codex session at a time** (not re-tested; keep until
+  a deliberate probe says otherwise).
+- **[verified 2026-06-11]** Stall rule works as written: no-event stall →
+  relaunch identical brief once (with root cause fixed) → completed in ~7m.
 
 ## Cursor Agent CLI facts
 
-- Invocation: `agent --print --trust --model composer-2.5 --workspace <worktree>
-  "<bounded prompt>"`; read-only audits use `--mode=ask` with explicit no-edit
-  instructions (fall back from `--mode=plan` if it returns empty output).
+- **[verified 2026-06-11]** On this machine, `agent` resolves to the **grok CLI**
+  (`~/.grok/bin/agent`), NOT Cursor. The Cursor CLI is **`cursor-agent`**
+  (`~/.local/bin/cursor-agent`, version 2026.05.24). All Cursor invocations must
+  use `cursor-agent`.
+- **[verified 2026-06-11]** `cursor-agent` has no `--trust` or `--workspace`
+  flags; use `--print` (full tool access incl. write/shell), `--model <model>`,
+  `--mode plan|ask` for read-only, `--output-format text|json|stream-json`, and
+  set the working directory by `cd`-ing into the target worktree before invoking.
+- Canonical invocation: `cd <worktree> && cursor-agent --print --model
+  composer-2.5 "<bounded prompt>"`; read-only audits: `--mode=ask` with explicit
+  no-edit instructions.
+- **[verified 2026-06-11, spike 01B]** Cursor workers CAN mutate `.git` (commit
+  succeeded, reverted) — the AGENTS.md direct-commit path for Cursor is valid.
+- **[verified 2026-06-11, spike 01B]** `&&` chaining and outbound HTTPS both work
+  in Cursor sessions; model identity `composer-2.5` confirmed; cwd = invocation dir.
 - **[inherited]** macOS keychain errors on `agent status`/`agent models` → rerun
   with elevated access; record the occurrence here.
 - Cursor sessions may run concurrently (separate worktrees); Cursor is the fan-out
