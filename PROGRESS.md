@@ -20,7 +20,9 @@ This file records *state*, never *design* — design lives in the doc spine
 |---|---|---|---|---|---|
 | 01A-1 | Codex sandbox probe spike | Codex | main (runs/spikes only) | verified | audit clean (Cursor) |
 | 01B-1 | Cursor CLI probe spike | Cursor | main (runs/spikes only) | verified | 1 audit finding → amended (claim 4 evidence) |
-| 02-1 | codex-run.sh harness + ledger | Codex | main (scripts/ only) | in-progress | timebox 30m |
+| 02-1 | codex-run.sh harness + ledger | Codex | main (scripts/ only) | verified | |
+| 02-2/3 | cursor-run.sh + agent-report.sh | Cursor | main (scripts/ only) | verified | |
+| 03-1 | Repo scaffold (tooling + skeleton) | Codex | main | in-progress | via harness; timebox 60m |
 
 Status values: `queued` → `claimed` → `in-progress` → `ready-for-verify` →
 `verified` → `merged` (or `blocked` / `returned` with a note).
@@ -42,6 +44,7 @@ Format: `YYYY-MM-DD · phase/task · who · what was verified · evidence (comma
 | 2026-06-11 | — | claude (orchestrator) | 73 phase plans authored (PHASE-01A…PHASE-61) + PHASE-INDEX; automation scheme hardened (ENVIRONMENT.md, timeboxes, velocity ledger) | this commit |
 | 2026-06-11 | 01A | Cursor (audit) | All 6 sandbox claims verified vs session.jsonl; 2 inherited facts REFUTED (.git writes allowed, && works) | runs/spikes/01A-codex-env/ |
 | 2026-06-11 | 01B | Codex (audit) | 5/5 claims verified after claim-4 evidence amendment; Cursor can commit directly | runs/spikes/01B-cursor-env/ |
+| 2026-06-11 | 02 | Cursor (verify) | READY: 3 scripts syntax-clean, both live smokes green, rollup matches ledger arithmetic, 0 malformed rows. Orchestrator adjudication: NA token fields accepted for cursor text mode (plan §9.1 narrowed) | runs/sessions/, scripts/ledger.tsv |
 
 ## Worktrees & Branches
 
@@ -59,6 +62,7 @@ spike ≤ 15 min (hard).
 |---|---|---|---|---|---|---|
 | 01B·1 | spike | Cursor | 10m | 15m | ~6m | clean one-shot |
 | 01A·1 | spike | Codex | 10m | 15m | ~7m (+15m stall) | run 1 no-event stall: codex exec without `< /dev/null`; fix recorded in ENVIRONMENT.md; retry one-shot |
+| 02·1 | implement | Codex | 15m | 30m | ~30m | overrun cause: diagnosing nested-codex CODEX_HOME issue (new unknown, now in ENVIRONMENT.md) |
 
 ## Future Backlog (out-of-scope discoveries land here, not in code)
 

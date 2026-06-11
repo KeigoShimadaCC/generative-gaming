@@ -1,0 +1,6 @@
+timestamp	label	agent	model	effort	seconds	input_tokens	output_tokens	total_tokens	exit_code
+2026-06-11T09:29:03Z	harness-smoke	codex	default	default	0	0	0	0	1
+2026-06-11T09:32:55Z	harness-smoke	codex	default	default	3	13099	5	13104	0
+2026-06-11T09:36:17Z	harness-smoke-cursor	cursor	composer-2.5	default	13	NA	NA	NA	0
+2026-06-11T09:37:35Z	verify-smoke	codex	default	default	5	16737	20	16757	0
+2026-06-11T09:37:44Z	verify-smoke-cursor	cursor	composer-2.5	default	19	NA	NA	NA	0

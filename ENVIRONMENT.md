@@ -34,6 +34,13 @@ tools and must be re-verified by the Phase 01 environment spike; facts marked
 - **[verified 2026-06-11]** `codex exec` reads stdin when invoked without
   redirection — **always append `< /dev/null`** in scripted invocations; omitting
   it caused a 15-minute no-event stall (observed).
+- **[verified 2026-06-11, phase 02]** Nested `codex exec` (Codex launched from
+  inside a Codex sandbox) fails when `~/.codex` is read-only ("failed to
+  initialize in-process app-server client"). `scripts/codex-run.sh` handles this:
+  temp writable `CODEX_HOME` + `auth.json` copy, cleaned on exit. Note: auth.json
+  is briefly copied to a temp dir — local-only, deleted on exit.
+- **[verified 2026-06-11, phase 02]** `rm -f` against `/private/tmp` paths is
+  policy-rejected in-sandbox; use Node/Python fs cleanup.
 - **[inherited]** Shared ambient auth does not reliably tolerate concurrent
   `codex` sessions — **one Codex session at a time** (not re-tested; keep until
   a deliberate probe says otherwise).
