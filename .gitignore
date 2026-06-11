@@ -1,0 +1,20 @@
+# Local reference material — not part of the repo
+references/
+
+# OS
+.DS_Store
+
+# Dependencies & build output
+node_modules/
+dist/
+.next/
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+
+# Local data & logs
+*.sqlite
+*.log
+.local/
