@@ -23,7 +23,7 @@ This file records *state*, never *design* — design lives in the doc spine
 | 07B-a | Turn contract amendment: action-resolver registry | Codex | main (src/engine/turn) | in-progress | orchestrator-authorized after correct 08 STOP; external 5-method contract unchanged |
 | 08-1 | Movement & collision | Codex | main (src/engine/systems) | ready-for-verify | resolver/tests green; no commit per brief |
 | 09/10-c | Combat/status/turn consolidation seams | Codex | main (src/config, src/engine/turn, src/engine/systems) | ready-for-verify | config magnitudes, tick registry, death unification; `pnpm run check` green; no commit per brief |
-| 14-1 | Item triggers, targeting, identification, curses | Codex | main (src/engine/items) | blocked | STOP per brief: retry r2 fixed curse, but weapon/armor schemas still lack on_hit/on_struck proc bundle fields required by acceptance thesis |
+| 14-1 | Item triggers, targeting, identification, curses | Codex | main (src/engine/items) | blocked | implementation complete; `pnpm run check` blocked by unrelated untracked `src/engine/behaviors/**` lint errors outside owned scope |
 
 Status values: `queued` → `claimed` → `in-progress` → `ready-for-verify` →
 `verified` → `merged` (or `blocked` / `returned` with a note).
@@ -51,6 +51,7 @@ Format: `YYYY-MM-DD · phase/task · who · what was verified · evidence (comma
 | 2026-06-11 | 09/10-c | Codex | Combat/status/turn consolidation: config magnitudes, tick registry, unified death path | `pnpm run check` → 24 test files, 161 tests passed; `rg -n "STATUS_|hp\\.current\\s*[-+]\\s*[12]|defense\\s*\\+=\\s*3|attack\\s*\\+=\\s*-2|nextHp\\s*=.*[-+]\\s*[12]" src/engine/systems/combat.ts src/engine/systems/status.ts` → no matches |
 | 2026-06-11 | 14-1 | Codex | BLOCKED before implementation: cursed gear behavior requires a schema-authored data flag, but `ItemDefinitionSchema` has no curse field and weapon/armor bonuses are positive-only | `rg -n "curse|cursed" src/schemas src/engine` → no matches; `src/schemas/entities/items.ts` lines 44-130 show no curse field |
 | 2026-06-12 | 14-1 | Codex | BLOCKED before implementation retry r2: proc trigger vocabulary exists, but weapon/armor item payloads have no schema field for on_hit/on_struck effect bundles; pure-data on-hit weapon thesis test cannot be authored | `rg -n "WeaponItemPayloadSchema\|ArmorItemPayloadSchema\|CharmItemPayloadSchema\|on_hit\|onHit\|on_struck\|onStruck\|proc\|effect" src/schemas/entities/items.ts src/schemas/vocab/triggers.ts src/schemas/fixtures/entities.ts` |
+| 2026-06-12 | 14-1 | Codex | Item triggers, identification, charges, curses, and THESIS TEST implemented; local touched-path verification and full tests green; full gate blocked at lint by unrelated untracked behavior files | `pnpm run typecheck` → pass; `pnpm exec eslint src/engine/items src/engine/effects/core.ts src/engine/effects/core.test.ts src/engine/state/types.ts src/engine/state/init.ts src/engine/state/serialize.ts src/engine/turn/actions.ts src/engine/systems/inventory.ts` → pass; `pnpm test` → 33 files, 265 tests passed; `pnpm run check` → fails in `src/engine/behaviors/**`; `rg -n 'Math\.random\|Date\.now' src/engine/items/` → no matches |
 
 ## Worktrees & Branches
 

@@ -260,6 +260,37 @@ describe("core effect executors", () => {
         bounds.effectVocabulary.verbs.enchant.itemCapIncrease
     );
   });
+
+  it("enchant lifts a cursed equipped weapon instead of increasing its bonus", () => {
+    const attackBonus = bounds.itemsEconomy.weaponAtkBonus.min;
+    const state = withEquipment(createInitialState("effect-enchant-curse"), {
+      weapon: carried(
+        "weapon#cursed",
+        cursedWeaponWithBonus(attackBonus),
+        true
+      )
+    });
+    const result = executeBundle(
+      state,
+      bundle([
+        makeEffectFixture("enchant", "enchant", {
+          target: "weapon",
+          bonus: 1
+        })
+      ]),
+      context("effect-enchant-curse")
+    );
+
+    expect(result.state.player.equipment.weapon?.definition.weapon).toMatchObject({
+      attackBonus,
+      cursed: false
+    });
+    expect(eventOfType(result.events, "effect_executed").data.details).toMatchObject({
+      target: "weapon",
+      bonusAfter: attackBonus,
+      curseLifted: true
+    });
+  });
 });
 
 describe("core effect execution rejection", () => {
@@ -509,6 +540,15 @@ const weaponWithBonus = (attackBonus: number): ItemDefinition => ({
   weapon: {
     attackBonus,
     cursed: false,
+    onHit: null,
+  },
+});
+
+const cursedWeaponWithBonus = (attackBonus: number): ItemDefinition => ({
+  ...validWeaponItemFixture,
+  weapon: {
+    attackBonus,
+    cursed: true,
     onHit: null,
   },
 });

@@ -55,6 +55,7 @@ export type UseItemAction = {
   readonly kind: "use_item";
   readonly itemId: string;
   readonly target?: ActionTarget;
+  readonly direction?: MoveDirection;
 };
 
 export type PickupAction = {
@@ -271,7 +272,10 @@ const checkUseItemAction = (
   }
 
   if (action.target === undefined || action.target.kind === "self") {
-    return LEGAL_ACTION;
+    return action.direction === undefined ||
+      MOVE_DIRECTIONS.some((entry) => entry.direction === action.direction)
+      ? LEGAL_ACTION
+      : illegal(`unknown use direction ${action.direction}`);
   }
 
   if (action.target.kind === "entity") {

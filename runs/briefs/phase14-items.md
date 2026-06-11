@@ -17,3 +17,5 @@ THE WORK:
 DEFINITION OF DONE: pnpm run check green (paste); rg 'Math.random|Date.now' src/engine/items/ empty. Report + AMBIGUITIES + actual vs 45m. NO commit. Then stop.
 
 RETRY AMENDMENTS (r2): the curse blocker is resolved — schemas now have the required `cursed` boolean on weapon/armor/charm (PROTOCOL 1.1.0), config has cursedRate, and GAME_DESIGN §8 pins the mechanics including: applying the `enchant` verb to a cursed item LIFTS THE CURSE instead of granting +1. SCOPED EXCEPTION to the forbidden list: you MAY modify the enchant executor in src/engine/effects/core.ts (and its tests) for exactly this curse-lift branch — nothing else in that file. Curse behavior to implement: announce on equip, block unequip while cursed, enchant lifts.
+
+RETRY AMENDMENTS (r3): second blocker also resolved — weapon definitions now carry a required-nullable on_hit proc field {chancePercent, bundle}, armor likewise on_struck (PROTOCOL 1.2.0). The thesis test's on-hit-proc weapon is now authorable as pure data. All prior amendments stand (curse field + scoped core.ts enchant exception).

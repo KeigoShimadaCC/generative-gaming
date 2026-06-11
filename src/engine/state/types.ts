@@ -45,6 +45,15 @@ export interface RunMeta {
   readonly band: DepthBand;
   readonly turn: number;
   readonly terminalStatus: TerminalStatus;
+  readonly itemKnowledge: ItemKnowledgeState;
+}
+
+export interface ItemKnowledgeState {
+  readonly identifiedDefinitionIds: readonly string[];
+  readonly bonusRevealedItemInstanceIds: readonly string[];
+  readonly chargesByItemInstanceId: {
+    readonly [itemInstanceId: string]: number;
+  };
 }
 
 export interface Position {

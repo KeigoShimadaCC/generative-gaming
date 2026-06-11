@@ -1,0 +1,33 @@
+Implemented Phase 14 item system. No commit made.
+
+**Phase Completion Check**
+Status: Implementation complete, full-gate blocked by unrelated lint.
+
+Key changes:
+- Added item subsystem: [identify.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/items/identify.ts:1), [triggers.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/items/triggers.ts:1), tests, and barrel export.
+- Wired durable `run.itemKnowledge` into state init/serialization.
+- Added `use_item.direction` for throw targeting.
+- Extended inventory equip/unequip for curse reveal and curse hold.
+- Added scoped `enchant` curse-lift branch in [core.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/effects/core.ts:576).
+- Added the named THESIS TEST in [triggers.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/items/triggers.test.ts:491).
+
+Verification:
+- `pnpm run typecheck` -> passed
+- Touched-path eslint -> passed
+- `pnpm test` -> 33 files, 265 tests passed
+- `rg -n 'Math\.random|Date\.now' src/engine/items/` -> no matches
+- `pnpm run check` -> failed at lint due unrelated untracked `src/engine/behaviors/**` files:
+  - unused imports/vars in `movement.ts`, `movement.test.ts`, `perception.test.ts`
+
+**AMBIGUITIES**
+- The brief referenced a PHASE-14 comment in the identify executor; I found no literal PHASE-14 comment. I built on the existing `identified` fields and added `run.itemKnowledge`.
+- `enchant` schema targets only weapon/armor, so the curse-lift branch applies there. Cursed charms announce and hold, but there is no schema path to enchant a charm.
+
+Scope deviations:
+- Minimal wiring outside `src/engine/items/**`: state knowledge, turn action direction, inventory curse behavior, and the scoped `core.ts` enchant exception.
+
+Environment discoveries:
+- No new environment facts. Validation blocker is repo state: untracked behavior files outside this task’s owned scope.
+
+Actual time:
+- About 1h50m vs 45m estimate.

@@ -88,6 +88,11 @@ export const createInitialState = (
       band,
       turn,
       terminalStatus: ACTIVE_TERMINAL_STATUS,
+      itemKnowledge: {
+        identifiedDefinitionIds: [],
+        bonusRevealedItemInstanceIds: [],
+        chargesByItemInstanceId: {},
+      },
     },
     floor: {
       floorId: `floor#${depth}`,

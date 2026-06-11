@@ -76,6 +76,11 @@ declare module "../state/types.js" {
       readonly slot: EquipTarget;
       readonly inventorySlot: number;
     };
+    readonly item_curse_announced: {
+      readonly itemInstanceId: string;
+      readonly definitionId: string;
+      readonly slot: EquipTarget;
+    };
   }
 }
 
@@ -83,7 +88,8 @@ type InventoryLogEventType =
   | "item_picked_up"
   | "item_dropped"
   | "item_equipped"
-  | "item_unequipped";
+  | "item_unequipped"
+  | "item_curse_announced";
 
 const STACKABLE_CONSUMABLE_KINDS = new Set<ItemCategory>([
   "draught",
@@ -598,6 +604,14 @@ export const equipItem = (
     };
   }
 
+  const currentEquipped = equippedStackForTarget(state, resolvedTarget);
+  if (currentEquipped !== null && isCursedStack(currentEquipped)) {
+    return {
+      illegal: true,
+      reason: `Cannot remove cursed ${currentEquipped.definition.kind}.`,
+    };
+  }
+
   const inventory = [...state.player.inventory];
   inventory[slotIndex] = null;
 
@@ -608,25 +622,47 @@ export const equipItem = (
   };
 
   let swappedItem: PlayerItemStack | null = null;
+  const equippedItem = {
+    ...carried,
+    identified: true,
+  };
 
   switch (resolvedTarget.kind) {
     case "weapon":
       swappedItem = equipment.weapon;
-      equipment.weapon = carried;
+      equipment.weapon = equippedItem;
       break;
     case "armor":
       swappedItem = equipment.armor;
-      equipment.armor = carried;
+      equipment.armor = equippedItem;
       break;
     case "charm": {
       const previousCharm = equipment.charms[resolvedTarget.index];
       swappedItem = previousCharm ?? null;
-      equipment.charms[resolvedTarget.index] = carried;
+      equipment.charms[resolvedTarget.index] = equippedItem;
       break;
     }
   }
 
   inventory[slotIndex] = swappedItem;
+  const events: TurnEvent[] = [
+    inventoryEvent(state, "item_equipped", {
+      itemInstanceId,
+      definitionId: carried.definition.id,
+      slot: resolvedTarget,
+      swappedItemInstanceId: swappedItem?.itemInstanceId ?? null,
+    }),
+  ];
+
+  if (isCursedStack(equippedItem)) {
+    events.push(
+      inventoryEvent(state, "item_curse_announced", {
+        itemInstanceId,
+        definitionId: carried.definition.id,
+        slot: resolvedTarget,
+      }),
+    );
+  }
 
   return {
     state: {
@@ -637,14 +673,7 @@ export const equipItem = (
         equipment,
       },
     },
-    events: [
-      inventoryEvent(state, "item_equipped", {
-        itemInstanceId,
-        definitionId: carried.definition.id,
-        slot: resolvedTarget,
-        swappedItemInstanceId: swappedItem?.itemInstanceId ?? null,
-      }),
-    ],
+    events,
   };
 };
 
@@ -688,6 +717,13 @@ export const unequipItem = (
     return {
       illegal: true,
       reason: "That equipment slot is empty.",
+    };
+  }
+
+  if (isCursedStack(unequipped)) {
+    return {
+      illegal: true,
+      reason: `Cannot remove cursed ${unequipped.definition.kind}.`,
     };
   }
 
@@ -761,6 +797,33 @@ const isValidEquipTarget = (
         target.index >= 0 &&
         target.index < config.playerCharacter.equipmentSlots.charms
       );
+  }
+};
+
+const equippedStackForTarget = (
+  state: GameState,
+  target: EquipTarget,
+): PlayerItemStack | null => {
+  switch (target.kind) {
+    case "weapon":
+      return state.player.equipment.weapon;
+    case "armor":
+      return state.player.equipment.armor;
+    case "charm":
+      return state.player.equipment.charms[target.index] ?? null;
+  }
+};
+
+const isCursedStack = (stack: PlayerItemStack): boolean => {
+  switch (stack.definition.kind) {
+    case "weapon":
+      return stack.definition.weapon?.cursed ?? false;
+    case "armor":
+      return stack.definition.armor?.cursed ?? false;
+    case "charm":
+      return stack.definition.charm?.cursed ?? false;
+    default:
+      return false;
   }
 };
 

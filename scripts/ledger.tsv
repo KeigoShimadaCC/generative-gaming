@@ -44,3 +44,7 @@ timestamp	label	agent	model	effort	seconds	input_tokens	output_tokens	total_toke
 2026-06-11T15:03:22Z	phase05-curse-sweep	cursor	composer-2.5	default	94	NA	NA	NA	0
 2026-06-11T15:05:29Z	phase14-items-r2	codex	default	default	360	1580349	16805	1597154	0
 2026-06-11T15:12:26Z	phase05-proc-addendum	codex	default	default	285	1717427	17227	1734654	0
+2026-06-11T17:03:44Z	phase15a-behaviors	cursor	composer-2.5	default	658	NA	NA	NA	0
+2026-06-11T15:17:34Z	phase14-items-r3	codex	default	default	7821	8277555	54863	8332418	0
+2026-06-11T17:28:32Z	phase15a-lint-fix	cursor	composer-2.5	default	34	NA	NA	NA	0
+2026-06-11T17:29:35Z	phase1415a-verify	cursor	composer-2.5	default	123	NA	NA	NA	0

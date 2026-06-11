@@ -576,6 +576,32 @@ function executeEnchant(
     return invalidTarget(state, effect, ctx, `equipped ${target} is malformed`);
   }
 
+  if (isCursedEquipment(stack, target)) {
+    const liftedStack = withEquipmentCurse(stack, target, false);
+
+    return {
+      state: {
+        ...state,
+        player: {
+          ...state.player,
+          equipment: {
+            ...state.player.equipment,
+            [target]: liftedStack
+          }
+        }
+      },
+      events: [
+        effectExecutedEvent(state, "enchant", ctx, {
+          target,
+          bonus,
+          bonusBefore: currentBonus,
+          bonusAfter: currentBonus,
+          curseLifted: true
+        })
+      ]
+    };
+  }
+
   const maxBonus = enchantRuntimeMax(target);
   const bonusAfter = Math.min(maxBonus, currentBonus + bonus);
   const enchantedStack = withEquipmentBonus(stack, target, bonusAfter);
@@ -847,6 +873,53 @@ const withEquipmentBonus = (
           : {
               ...stack.definition.armor,
               defenseBonus: bonus
+            }
+    }
+  };
+};
+
+const isCursedEquipment = (
+  stack: PlayerItemStack,
+  target: "weapon" | "armor"
+): boolean => {
+  if (target === "weapon") {
+    return stack.definition.weapon?.cursed ?? false;
+  }
+
+  return stack.definition.armor?.cursed ?? false;
+};
+
+const withEquipmentCurse = (
+  stack: PlayerItemStack,
+  target: "weapon" | "armor",
+  cursed: boolean
+): PlayerItemStack => {
+  if (target === "weapon") {
+    return {
+      ...stack,
+      definition: {
+        ...stack.definition,
+        weapon:
+          stack.definition.weapon === null
+            ? null
+            : {
+                ...stack.definition.weapon,
+                cursed
+              }
+      }
+    };
+  }
+
+  return {
+    ...stack,
+    definition: {
+      ...stack.definition,
+      armor:
+        stack.definition.armor === null
+          ? null
+          : {
+              ...stack.definition.armor,
+              cursed
             }
     }
   };

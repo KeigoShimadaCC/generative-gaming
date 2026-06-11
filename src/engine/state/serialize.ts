@@ -62,6 +62,15 @@ const VersionStampSchema = z.strictObject({
   engineVersion: z.literal(ENGINE_VERSION),
 });
 
+const ItemKnowledgeStateSchema = z.strictObject({
+  identifiedDefinitionIds: z.array(nonEmptyString),
+  bonusRevealedItemInstanceIds: z.array(nonEmptyString),
+  chargesByItemInstanceId: z.record(
+    nonEmptyString,
+    z.number().int().nonnegative(),
+  ),
+});
+
 const RunMetaSchema = z
   .strictObject({
     runId: nonEmptyString,
@@ -70,6 +79,7 @@ const RunMetaSchema = z
     band: DepthBandSchema,
     turn: z.number().int().nonnegative(),
     terminalStatus: TerminalStatusSchema,
+    itemKnowledge: ItemKnowledgeStateSchema,
   })
   .superRefine((run, ctx) => {
     const expectedBand = expectedBandFor(run.depth, ctx, ["band"]);
