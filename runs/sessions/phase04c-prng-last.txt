@@ -1,0 +1,29 @@
+Implemented PHASE-04C task 1 in [src/engine/rng/index.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/rng/index.ts:1) with seeded PRNG, deterministic string seed hashing, independent named forks, and helpers. Added coverage in [src/engine/rng/rng.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/rng/rng.test.ts:1). Did not touch `src/engine/clock/`. No commit made.
+
+Verification:
+
+```text
+$ pnpm run check
+
+> generative-gaming@0.0.0 check /Users/keigoshimada/Documents/generative-gaming
+> pnpm run typecheck && pnpm run lint && pnpm test
+
+> generative-gaming@0.0.0 typecheck /Users/keigoshimada/Documents/generative-gaming
+> tsc --noEmit
+
+> generative-gaming@0.0.0 lint /Users/keigoshimada/Documents/generative-gaming
+> eslint .
+
+> generative-gaming@0.0.0 test /Users/keigoshimada/Documents/generative-gaming
+> vitest run
+
+ Test Files  10 passed (10)
+      Tests  24 passed (24)
+```
+
+```text
+$ rg "Math.random|Date.now" src/
+# no output
+```
+
+Scope deviations: I did not update `PROGRESS.md` because the brief’s owned files were `src/engine/rng/**` only, and `PROGRESS.md` itself says workers update only rows their brief tells them to. Environment discoveries: none. Residual risks: none identified. Actual time spent: about 15 minutes.

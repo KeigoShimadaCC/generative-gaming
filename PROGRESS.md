@@ -23,8 +23,11 @@ This file records *state*, never *design* — design lives in the doc spine
 | 02-1 | codex-run.sh harness + ledger | Codex | main (scripts/ only) | verified | |
 | 02-2/3 | cursor-run.sh + agent-report.sh | Cursor | main (scripts/ only) | verified | |
 | 03-1 | Repo scaffold (tooling + skeleton) | Codex | main | verified | READY; merged 689616b |
-| 04A-1 | CI workflow + README stub | Cursor | main (.github, README) | in-progress | red-path demo → backlog (adjudicated) |
-| 04B-1 | Config module ([T]/[HARD] transcription) | Codex | main (src/config) | in-progress | timebox 40m |
+| 04A-1 | CI workflow + README stub | Cursor | main (.github, README) | verified | live Actions run GREEN on main (b54db42) |
+| 04C-2 | Injected clock | Cursor | main (src/engine/clock) | ready-for-verify | clean |
+| 04B-1 | Config module ([T]/[HARD] transcription) | Codex | main (src/config) | ready-for-verify | 2 doc ambiguities → orchestrator pinned in GAME_DESIGN |
+| 04B-2 | Config addendum (xp factor, pack_hunter N) | Cursor | main (src/config) | in-progress | |
+| 04C-1 | Seeded PRNG + substreams | Codex | main (src/engine/rng) | in-progress | timebox 30m |
 
 Status values: `queued` → `claimed` → `in-progress` → `ready-for-verify` →
 `verified` → `merged` (or `blocked` / `returned` with a note).

@@ -1,0 +1,38 @@
+Implemented the Phase 04B config module under `src/config/**` only.
+
+Changed:
+- [index.ts](/Users/keigoshimada/Documents/generative-gaming/src/config/index.ts:1): typed `config` and separate `bounds`, both `as const` and recursively `Object.freeze`d.
+- [config.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/config/config.test.ts:1): structure checks, 28 verbatim value spot-checks, deep-freeze assertions.
+
+Verification:
+```text
+pnpm run check
+> tsc --noEmit
+> eslint .
+> vitest run
+
+Test Files  9 passed (9)
+Tests       14 passed (14)
+```
+
+**Coverage Table**
+
+| GAME_DESIGN source | Config path |
+|---|---|
+| §2 Run structure table | `config.runStructure.*`, `bounds.runStructure.*` |
+| §2 Floor geometry table | `config.runStructure.floorGeometry.*` |
+| §4 Player stat table + regen/fullness/inventory | `config.playerCharacter.*`, `bounds.playerCharacter.*` |
+| §6 Status vocabulary table | `bounds.statusVocabulary.*` |
+| §7 Effect vocabulary table | `bounds.effectVocabulary.*` |
+| §8 Category/economy table + economy bullets | `config.itemsEconomy.*`, `bounds.itemsEconomy.*` |
+| §9.1 Enemy stat budgets table | `bounds.enemyDesign.statBudgetsByBand.*`, `config.enemyDesign.spawnBudgetPoints.*` |
+| §9.2 Behavior vocabulary table | `bounds.enemyDesign.behaviorVocabulary.*` |
+| §10 Traps/NPCs/quests caps | `bounds.trapsNpcsQuests.*`, `config.trapsNpcsQuests.quests.maxPerRun` |
+| §11 Gate-2 thresholds table | `config.difficultyGate.*`, `bounds.difficultyGate.*` |
+| §12 Director manifest/signature allowances | `config.directorManifest.*`, `bounds.directorManifest.*` |
+
+**AMBIGUITIES**
+- `GAME_DESIGN §4`: Level growth says “XP from kills; thresholds ~steady kills-per-level” but gives no numeric threshold schedule. I recorded the policy label, not invented thresholds.
+- `GAME_DESIGN §9.2`: `pack_hunter` says waits until `>=N` same-tag allies have line of sight, but gives no bound for `N`. I kept the behavior in the closed list and did not invent a parameter bound.
+
+No commits made. Existing non-owned worktree changes were left untouched. Actual time: ~30m vs 20m estimate.

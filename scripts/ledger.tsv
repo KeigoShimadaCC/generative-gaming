@@ -7,3 +7,8 @@ timestamp	label	agent	model	effort	seconds	input_tokens	output_tokens	total_toke
 2026-06-11T09:40:11Z	phase03-scaffold	codex	default	default	262	786395	14280	800675	0
 2026-06-11T09:45:06Z	phase03-verify	cursor	composer-2.5	default	70	NA	NA	NA	0
 2026-06-11T09:47:24Z	phase04a-ci	cursor	composer-2.5	default	74	NA	NA	NA	0
+2026-06-11T09:49:57Z	phase04c-clock	cursor	composer-2.5	default	141	NA	NA	NA	0
+2026-06-11T09:47:15Z	phase04b-config	codex	default	default	348	599153	24546	623699	0
+2026-06-11T09:53:51Z	phase04b-addendum	cursor	composer-2.5	default	145	NA	NA	NA	0
+2026-06-11T09:53:46Z	phase04c-prng	codex	default	default	194	392254	11887	404141	0
+2026-06-11T09:57:21Z	phase04-verify	cursor	composer-2.5	default	121	NA	NA	NA	0

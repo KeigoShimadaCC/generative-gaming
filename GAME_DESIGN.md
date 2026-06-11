@@ -72,7 +72,7 @@ Attack and Defense are derived: base (from level) + weapon/armor + buffs.
 | Stat | Start [T] | Growth [T] | Cap [HARD] |
 |---|---|---|---|
 | HP | 20 | +4 per level | 99 |
-| Level | 1 | XP from kills; thresholds ~steady kills-per-level | 12 |
+| Level | 1 | XP from kills; XP to next level = 8 × current level [T] (≈3–4 band-typical kills per level) | 12 |
 | Base ATK | 2 | +1 per 2 levels | — |
 | Base DEF | 0 | +1 per 3 levels | — |
 | Fullness | 100 | −1 per 10 turns [T]; at 0, lose 1 HP per 2 turns | 100 (200 briefly when overfed) |
@@ -205,7 +205,7 @@ cost; a cheap statline with a nasty ability is legal but not free.
 | `approach_melee` | Pathfind to player, attack adjacent |
 | `keep_range` | Hold distance band 2–5, use bolt ability when able |
 | `flee_low_hp` | Below X% HP (20–50), run from player |
-| `pack_hunter` | Waits until ≥N same-tag allies have line of sight, then all engage |
+| `pack_hunter` | Waits until ≥N same-tag allies have line of sight (N: 2–4 [HARD]), then all engage |
 | `ambusher` | Dormant/hidden until player within radius 1–2, then acts |
 | `territorial` | Passive until player enters radius 2–4 or attacks |
 | `guard` | Tethered to a cell/object within radius 1–3; never strays |
