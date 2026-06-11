@@ -22,6 +22,7 @@ This file records *state*, never *design* — design lives in the doc spine
 | 07A/B | Map+FOV+path / turn contract | Codex+Cursor | main (src/engine) | verified | merged 0862e5c; 1 coverage round-trip |
 | 07B-a | Turn contract amendment: action-resolver registry | Codex | main (src/engine/turn) | in-progress | orchestrator-authorized after correct 08 STOP; external 5-method contract unchanged |
 | 08-1 | Movement & collision | Codex | main (src/engine/systems) | ready-for-verify | resolver/tests green; no commit per brief |
+| 09/10-c | Combat/status/turn consolidation seams | Codex | main (src/config, src/engine/turn, src/engine/systems) | in-progress | config magnitudes, tick registry, death unification; no commit per brief |
 
 Status values: `queued` → `claimed` → `in-progress` → `ready-for-verify` →
 `verified` → `merged` (or `blocked` / `returned` with a note).

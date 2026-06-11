@@ -46,6 +46,11 @@ tools and must be re-verified by the Phase 01 environment spike; facts marked
   a deliberate probe says otherwise).
 - **[verified 2026-06-11]** Stall rule works as written: no-event stall →
   relaunch identical brief once (with root cause fixed) → completed in ~7m.
+- **[observed 2026-06-11, n=2]** Codex no-event stalls (2-event JSONL, then
+  silence) occur intermittently even with stdin redirected; both recoveries
+  succeeded on relaunch with `@brieffile` prompts. Prefer `@brieffile` over
+  long inline prompts for codex-run.sh dispatches; keep the early-stall watch
+  (static <500 bytes for 5m → alert) on every Codex dispatch.
 
 ## Cursor Agent CLI facts
 

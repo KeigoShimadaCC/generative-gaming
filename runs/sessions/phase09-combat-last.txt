@@ -1,0 +1,34 @@
+**Report**
+Implemented PHASE-09 combat in:
+- `src/engine/systems/combat.ts`
+- `src/engine/systems/combat.test.ts`
+
+Covered melee `attack` resolver registration, exported `resolveAttack`, bolt attacks, config-driven hit/variance math, derived stats, death/removal, XP, loot-drop hook, player `LOSS`, and combat log events.
+
+**Verification**
+`pnpm run check`:
+```text
+tsc --noEmit
+eslint .
+vitest run
+
+Test Files  22 passed (22)
+Tests  136 passed (136)
+```
+
+`rg 'Math.random|Date.now' src/engine/systems/`:
+```text
+no matches
+```
+
+Combat RNG fork line:
+```ts
+const combatRng = rng.fork("combat");
+```
+
+**AMBIGUITIES**
+`config` does not currently expose explicit shield/weaken magnitudes, so `combat.ts` pins `shield +3 DEF` and `weaken -2 ATK` from `GAME_DESIGN §6` locally. Also, `buff_stat` has no committed runtime status shape yet, so combat reads typed charm passive `buff_stat` effects and tolerates future serialized buff-stat-shaped status entries.
+
+No commit made. `git status` also shows unrelated untracked run artifacts and `src/engine/systems/status.ts`; I did not edit them.
+
+Actual time: ~45m vs 25m estimate.
