@@ -84,12 +84,15 @@ tools and must be re-verified by the Phase 01 environment spike; facts marked
 ## Gate commands (cheapest first — fail fast)
 
 ```
-pnpm run typecheck && pnpm run lint && pnpm test && pnpm run build
-pnpm run check        # the all-in-one equivalent
+pnpm run typecheck   # tsc --noEmit (cheapest)
+pnpm run lint        # eslint .
+pnpm test            # vitest run (@live excluded unless CODEX_LIVE=1)
+pnpm run check       # all three, in that order
 ```
 
-(Exact scripts are created in Phase 01; update this block when they exist
-**[to-verify]**.)
+**[verified 2026-06-11, phase 03]** — pnpm v10.28.2, TS 6.0.3 strict, vitest
+4.1.8, eslint 10.4.1, zod 4.4.3. Dispatch workers via `scripts/codex-run.sh
+<label> @<brieffile>` / `scripts/cursor-run.sh <label> <dir> "<prompt>"`.
 
 ## Update protocol
 

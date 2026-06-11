@@ -18,3 +18,8 @@ dist/
 *.sqlite
 *.log
 .local/
+
+# Phase 03 scaffold
+node_modules/
+dist/
+*.tsbuildinfo
