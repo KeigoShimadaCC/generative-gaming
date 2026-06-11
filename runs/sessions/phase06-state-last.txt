@@ -1,0 +1,34 @@
+**Phase Completion Check**
+Status: Complete  
+Plan checked: `phase-plans/PHASE-06-ENGINE-STATE.md`
+
+Implemented under `src/engine/state/**` only:
+
+- [types.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/state/types.ts): canonical `GameState`, run/floor/player/entities/quests/log/RNG/version shapes, PHASE-07A opaque floor geometry contract, log extension pattern.
+- [init.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/state/init.ts): deterministic `createInitialState`, config-derived depth bands, monotonic per-kind entity IDs.
+- [serialize.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/state/serialize.ts): stable-key JSON `serialize`, validated `deserialize`, protocol/engine version checks.
+- [state.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/state/state.test.ts) and [initial-state.golden.json](/Users/keigoshimada/Documents/generative-gaming/src/engine/state/__fixtures__/initial-state.golden.json): round-trip byte identity, golden fixture, ID determinism, band derivation, nondeterminism guard.
+- [README.md](/Users/keigoshimada/Documents/generative-gaming/src/engine/state/README.md): reducer convention and extension rules.
+- [index.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/state/index.ts), [node-fs.d.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/state/node-fs.d.ts): exports and minimal test-only `node:fs` typing.
+
+Verification run:
+
+```text
+pnpm run check
+typecheck: passed
+lint: passed
+vitest: 14 test files passed, 75 tests passed
+```
+
+```text
+rg 'Math.random|Date.now' src/engine/state/
+<empty>
+```
+
+Ambiguities: none blocking. `PROGRESS.md` already had task `06-1` in progress; I did not edit it because the brief’s owned files were `src/engine/state/**` only.
+
+Scope deviations: none. `git status` shows unrelated untracked `runs/briefs/phase06-state.md` and `runs/sessions/phase06-state.jsonl`; I left them untouched. No commit made.
+
+Environment discovery: this repo has no Node type declarations, so the state test needed a tiny owned-path ambient declaration for the `node:fs` calls used to read the fixture and scan state files.
+
+Actual time: ~40m vs 40m estimate.
