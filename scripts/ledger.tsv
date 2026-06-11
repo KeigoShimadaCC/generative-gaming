@@ -6,3 +6,4 @@ timestamp	label	agent	model	effort	seconds	input_tokens	output_tokens	total_toke
 2026-06-11T09:37:44Z	verify-smoke-cursor	cursor	composer-2.5	default	19	NA	NA	NA	0
 2026-06-11T09:40:11Z	phase03-scaffold	codex	default	default	262	786395	14280	800675	0
 2026-06-11T09:45:06Z	phase03-verify	cursor	composer-2.5	default	70	NA	NA	NA	0
+2026-06-11T09:47:24Z	phase04a-ci	cursor	composer-2.5	default	74	NA	NA	NA	0

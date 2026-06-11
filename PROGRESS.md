@@ -22,7 +22,9 @@ This file records *state*, never *design* — design lives in the doc spine
 | 01B-1 | Cursor CLI probe spike | Cursor | main (runs/spikes only) | verified | 1 audit finding → amended (claim 4 evidence) |
 | 02-1 | codex-run.sh harness + ledger | Codex | main (scripts/ only) | verified | |
 | 02-2/3 | cursor-run.sh + agent-report.sh | Cursor | main (scripts/ only) | verified | |
-| 03-1 | Repo scaffold (tooling + skeleton) | Codex | main | in-progress | via harness; timebox 60m |
+| 03-1 | Repo scaffold (tooling + skeleton) | Codex | main | verified | READY; merged 689616b |
+| 04A-1 | CI workflow + README stub | Cursor | main (.github, README) | in-progress | red-path demo → backlog (adjudicated) |
+| 04B-1 | Config module ([T]/[HARD] transcription) | Codex | main (src/config) | in-progress | timebox 40m |
 
 Status values: `queued` → `claimed` → `in-progress` → `ready-for-verify` →
 `verified` → `merged` (or `blocked` / `returned` with a note).
