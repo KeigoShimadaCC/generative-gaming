@@ -146,6 +146,13 @@ export const config = deepFreeze({
       max: 1.15 // GAME_DESIGN §5
     }
   },
+  statusMagnitudes: {
+    poisonHpPerTurn: -1, // GAME_DESIGN §6
+    burnHpPerTurn: -2, // GAME_DESIGN §6
+    regenHpPerTurn: 2, // GAME_DESIGN §6
+    shieldDefBonus: 3, // GAME_DESIGN §6
+    weakenAtkPenalty: -2 // GAME_DESIGN §6
+  },
   itemsEconomy: {
     valueBandsCoin: {
       shallows: {

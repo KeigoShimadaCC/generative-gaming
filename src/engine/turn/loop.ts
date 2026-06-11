@@ -10,8 +10,9 @@
  *
  * Frozen extension surface:
  * - registerActionResolver handles move/attack/use_item/pickup/talk/inspect.
+ * - registerTickHook handles damageOverTime/durations/hunger/regen.
  * - TurnHooks.actorTurn handles non-player actors in stable actor-id order.
- * - TurnHooks.ticks handles fixed-order end-of-turn systems.
+ * - TurnHooks.ticks handles per-step tick overrides.
  *
  * Do not rename action kinds or TickHookName values, reorder TICK_HOOK_ORDER, or
  * let resolvers/hooks call ambient nondeterminism or LLMs. Resolvers and hooks
@@ -168,6 +169,7 @@ export type StartContent = {
 };
 
 const actionResolvers = new Map<ActionResolverActionKind, ActionResolver>();
+const tickHookRegistry = new Map<TickHookName, TickHook>();
 
 export const registerActionResolver = <
   Kind extends ActionResolverActionKind,
@@ -190,6 +192,27 @@ export const registerActionResolver = <
     }
 
     actionResolvers.set(actionType, previous);
+  };
+};
+
+export const registerTickHook = (
+  slot: TickHookName,
+  hook: TickHook,
+): (() => void) => {
+  const previous = tickHookRegistry.get(slot);
+  tickHookRegistry.set(slot, hook);
+
+  return () => {
+    if (tickHookRegistry.get(slot) !== hook) {
+      return;
+    }
+
+    if (previous === undefined) {
+      tickHookRegistry.delete(slot);
+      return;
+    }
+
+    tickHookRegistry.set(slot, previous);
   };
 };
 
@@ -476,12 +499,31 @@ const resolveTurnHooks = (hooks: TurnHooks | undefined): ResolvedTurnHooks => {
 
   return {
     actorTurn: hooks?.actorTurn ?? noopHooks.actorTurn,
-    ticks: {
-      ...noopHooks.ticks,
-      ...hooks?.ticks,
-    },
+    ticks: resolveTickHooks(noopHooks.ticks, hooks?.ticks),
   };
 };
+
+const resolveTickHooks = (
+  noopTicks: TickHooks,
+  overrides: Partial<TickHooks> | undefined,
+): TickHooks => ({
+  damageOverTime:
+    overrides?.damageOverTime ??
+    tickHookRegistry.get("damageOverTime") ??
+    noopTicks.damageOverTime,
+  durations:
+    overrides?.durations ??
+    tickHookRegistry.get("durations") ??
+    noopTicks.durations,
+  hunger:
+    overrides?.hunger ??
+    tickHookRegistry.get("hunger") ??
+    noopTicks.hunger,
+  regen:
+    overrides?.regen ??
+    tickHookRegistry.get("regen") ??
+    noopTicks.regen,
+});
 
 const normalizeHookResult = (
   result: TurnHookResult,

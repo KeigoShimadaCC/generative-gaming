@@ -19,6 +19,7 @@ describe("game config", () => {
       "runStructure",
       "playerCharacter",
       "combatMath",
+      "statusMagnitudes",
       "itemsEconomy",
       "enemyDesign",
       "trapsNpcsQuests",
@@ -55,6 +56,11 @@ describe("game config", () => {
     expect(config.playerCharacter.xpToNextLevelFactor).toBe(8);
     expect(config.combatMath.hitChancePercent).toBe(95);
     expect(config.combatMath.varianceMultiplier.min).toBe(0.85);
+    expect(config.statusMagnitudes.poisonHpPerTurn).toBe(-1);
+    expect(config.statusMagnitudes.burnHpPerTurn).toBe(-2);
+    expect(config.statusMagnitudes.regenHpPerTurn).toBe(2);
+    expect(config.statusMagnitudes.shieldDefBonus).toBe(3);
+    expect(config.statusMagnitudes.weakenAtkPenalty).toBe(-2);
     expect(config.itemsEconomy.valueBandsCoin.lowest.max).toBe(200);
     expect(config.itemsEconomy.merchantMultipliers.buy).toBe(0.5);
     expect(config.enemyDesign.spawnBudgetPoints.middle).toBe(45);

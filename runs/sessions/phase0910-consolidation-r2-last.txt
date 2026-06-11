@@ -1,0 +1,22 @@
+**Phase Completion Check**
+Status: Complete, ready-for-verify. Checked `phase-plans/PHASE-09-COMBAT.md` and `phase-plans/PHASE-10-STATUS-ENGINE.md`.
+
+Changed:
+- Added `config.statusMagnitudes` with §6 comments in [src/config/index.ts](/Users/keigoshimada/Documents/generative-gaming/src/config/index.ts:149).
+- Added `registerTickHook` and updated the frozen turn header in [src/engine/turn/loop.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/turn/loop.ts:198).
+- Self-registered status DoT/duration hooks in [src/engine/systems/status.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/systems/status.ts:195).
+- Exported unified `applyDeath` in [src/engine/systems/combat.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/systems/combat.ts:685).
+- Added coverage for tick registry, burn loot/no-XP, player burn `LOSS`, and status self-registration.
+
+Verification:
+- `pnpm run check` -> passed: typecheck, lint, and `vitest run`; `24 test files, 161 tests passed`.
+- `git diff -- src/engine/turn/loop.test.ts` -> no output; pre-existing turn tests unmodified.
+- `rg -n "STATUS_|hp\\.current\\s*[-+]\\s*[12]|defense\\s*\\+=\\s*3|attack\\s*\\+=\\s*-2|nextHp\\s*=.*[-+]\\s*[12]" src/engine/systems/combat.ts src/engine/systems/status.ts` -> no matches.
+
+Scope / risks:
+- No commit made.
+- `PROGRESS.md` updated to `ready-for-verify`.
+- `runs/sessions/phase0910-consolidation-r2.jsonl` was modified by the harness/session logging; I did not hand-edit it.
+- No new environment discoveries. No out-of-scope fixes.
+
+Actual time: ~8m vs 20m estimate.
