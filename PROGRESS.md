@@ -18,7 +18,10 @@ This file records *state*, never *design* — design lives in the doc spine
 
 | ID | Task | Owner (agent) | Worktree / branch | Status | Notes |
 |---|---|---|---|---|---|
-| 06-1 | Engine state model & serialization | Codex | main (src/engine/state) | in-progress | timebox 60m |
+| 06-1 | Engine state model & serialization | Codex | main (src/engine/state) | verified | merged 9d5e3ac |
+| 07A/B | Map+FOV+path / turn contract | Codex+Cursor | main (src/engine) | verified | merged 0862e5c; 1 coverage round-trip |
+| 07B-a | Turn contract amendment: action-resolver registry | Codex | main (src/engine/turn) | in-progress | orchestrator-authorized after correct 08 STOP; external 5-method contract unchanged |
+| 08-1 | Movement & collision | Codex | main (src/engine/systems) | ready-for-verify | resolver/tests green; no commit per brief |
 
 Status values: `queued` → `claimed` → `in-progress` → `ready-for-verify` →
 `verified` → `merged` (or `blocked` / `returned` with a note).
@@ -42,6 +45,7 @@ Format: `YYYY-MM-DD · phase/task · who · what was verified · evidence (comma
 | 2026-06-11 | 01B | Codex (audit) | 5/5 claims verified after claim-4 evidence amendment; Cursor can commit directly | runs/spikes/01B-cursor-env/ |
 | 2026-06-11 | 02 | Cursor (verify) | READY: 3 scripts syntax-clean, both live smokes green, rollup matches ledger arithmetic, 0 malformed rows. Orchestrator adjudication: NA token fields accepted for cursor text mode (plan §9.1 narrowed) | runs/sessions/, scripts/ledger.tsv |
 | 2026-06-11 | 05-1a | Codex | Text caps wired into config bounds and schemas; full gate green | `pnpm run check` → 13 test files, 70 tests passed |
+| 2026-06-11 | 08-1 | Codex | Movement resolver registered; ASCII bump/door/stairs tests and 1k seeded occupancy property green | `pnpm run check` → 21 test files, 124 tests passed; `rg 'Math.random\|Date.now' src/engine/systems/` → no matches |
 
 ## Worktrees & Branches
 

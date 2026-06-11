@@ -1,0 +1,26 @@
+Implemented the PHASE-07B amendment. No commit made.
+
+Changed:
+- [loop.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/turn/loop.ts:1): added frozen action-resolver registry surface, `registerActionResolver`, resolver dispatch for `move/attack/use_item/pickup/talk/inspect`, built-in `wait/abort/descend`, and `no handler registered` illegal result.
+- [loop.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/turn/loop.test.ts:239): added resolver dispatch, unregistered no-op illegal, and resolver→actorTurn→ticks ordering tests. Existing test cases/expectations were not changed.
+
+Verification:
+```text
+pnpm run check
+
+> pnpm run typecheck && pnpm run lint && pnpm test
+> tsc --noEmit
+> eslint .
+> vitest run
+
+ Test Files  20 passed (20)
+      Tests  117 passed (117)
+```
+
+Scope deviations: none.  
+Residual risks: none known.  
+Out-of-scope discoveries: none.  
+Environment discoveries: none.  
+Actual time spent: ~15m; no estimate was included in the amendment brief.
+
+Pre-existing dirty files outside owned scope remain untouched: `PROGRESS.md`, `scripts/ledger.tsv`, and `runs/sessions/*`.

@@ -1,0 +1,12 @@
+Blocked at the brief’s turn-contract check. I did not edit files and did not commit.
+
+Finding: [loop.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/turn/loop.ts:110) exposes only `actorTurn` and tick hooks. `step()` calls private `applyPlayerAction` before those hooks at [loop.ts:167](/Users/keigoshimada/Documents/generative-gaming/src/engine/turn/loop.ts:167), and that private resolver only handles abort/final-descend at [loop.ts:265](/Users/keigoshimada/Documents/generative-gaming/src/engine/turn/loop.ts:265). Movement needs to mutate player position during player-action resolution, so it cannot be wired through the frozen extension points without modifying `src/engine/turn`.
+
+**AMBIGUITIES:** the brief allows a one-line registration only if an existing pattern exists; I found no registry or player-action hook. Need an explicit player-action extension point or permission to modify the turn contract.
+
+Verification:
+- `git status --short` -> only pre-existing/unrelated `?? runs/sessions/phase08-movement.jsonl`
+- `rg -n "Math.random|Date.now" src/engine/systems` -> failed because `src/engine/systems` does not exist; no system files were created
+- `pnpm run check` not run because the task hit the required STOP condition before implementation
+
+Actual vs 25m: ~1m. Environment discoveries: none.

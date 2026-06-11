@@ -23,12 +23,23 @@ import {
   TICK_HOOK_ORDER,
   getAvailableActions,
   isTerminal,
+  registerActionResolver,
   render,
   start,
   step,
+  type PlayerAction,
   type TickHookName,
   type TurnEvent,
 } from "./loop.js";
+
+declare module "../state/types.js" {
+  interface EngineLogEventDataByType {
+    readonly resolver_probe: {
+      readonly actionKind: PlayerAction["kind"];
+      readonly label: string;
+    };
+  }
+}
 
 describe("turn loop public contract", () => {
   it("starts seeded runs by delegating to state initialization", () => {
@@ -226,6 +237,164 @@ describe("turn ordering hooks", () => {
       TICK_HOOK_ORDER,
     );
   });
+});
+
+describe("action resolver registry", () => {
+  it("dispatches registered resolvers and flows returned state/events into the step result", () => {
+    const state = withGrid(
+      start("resolver-dispatch"),
+      createTileGrid({ width: 3, height: 3 }),
+      { x: 1, y: 1 },
+    );
+    const resolverEvent: TurnEvent = {
+      turn: 0,
+      type: "resolver_probe",
+      data: {
+        actionKind: "move",
+        label: "resolver returned event",
+      },
+    };
+    let receivedState: GameState | null = null;
+    let receivedAction: PlayerAction | null = null;
+    let result: ReturnType<typeof step>;
+
+    const unregister = registerActionResolver("move", (resolverState, action) => {
+      receivedState = resolverState;
+      receivedAction = action;
+
+      return {
+        state: {
+          ...resolverState,
+          player: {
+            ...resolverState.player,
+            position: { x: 2, y: 1 },
+          },
+        },
+        events: [resolverEvent],
+      };
+    });
+
+    try {
+      result = step(state, { kind: "move", direction: "east" });
+    } finally {
+      unregister();
+    }
+
+    expect(receivedState).toBe(state);
+    expect(receivedAction).toEqual({ kind: "move", direction: "east" });
+    expect(result.state.player.position).toEqual({ x: 2, y: 1 });
+    expect(result.events.slice(0, 2)).toEqual([
+      {
+        turn: 0,
+        type: "action_resolved",
+        data: {
+          actionKind: "move",
+        },
+      },
+      resolverEvent,
+    ]);
+    expect(result.state.log).toContainEqual(resolverEvent);
+  });
+
+  it("returns a typed illegal event and leaves serialized state unchanged for unregistered action types", () => {
+    const state = withGrid(
+      start("resolver-missing"),
+      createTileGrid({ width: 3, height: 3 }),
+      { x: 1, y: 1 },
+    );
+    const before = serialize(state);
+
+    const result = step(state, { kind: "move", direction: "north" });
+
+    expect(serialize(result.state)).toBe(before);
+    expect(result.events).toEqual([
+      {
+        turn: 0,
+        type: "action_illegal",
+        data: {
+          actionKind: "move",
+          reason: "no handler registered",
+        },
+      },
+    ]);
+  });
+
+  it("runs registered resolvers before actor turns and fixed-order ticks", () => {
+    const seen: string[] = [];
+    const state = withEntities(
+      withGrid(
+        start("resolver-order"),
+        createTileGrid({ width: 3, height: 3 }),
+        { x: 1, y: 1 },
+      ),
+      [enemy("enemy#1", { x: 0, y: 0 })],
+    );
+
+    const unregister = registerActionResolver("move", (resolverState) => {
+      seen.push("resolver");
+
+      return {
+        state: resolverState,
+        events: [],
+      };
+    });
+
+    try {
+      step(state, { kind: "move", direction: "east" }, {
+        hooks: {
+          actorTurn: ({ actor, state: hookState }) => {
+            seen.push(`actor:${actor.id}`);
+            return hookState;
+          },
+          ticks: {
+            damageOverTime: ({ hook, state: hookState }) => {
+              seen.push(`tick:${hook}`);
+              return hookState;
+            },
+            durations: ({ hook, state: hookState }) => {
+              seen.push(`tick:${hook}`);
+              return hookState;
+            },
+            hunger: ({ hook, state: hookState }) => {
+              seen.push(`tick:${hook}`);
+              return hookState;
+            },
+            regen: ({ hook, state: hookState }) => {
+              seen.push(`tick:${hook}`);
+              return hookState;
+            },
+          },
+        },
+      });
+    } finally {
+      unregister();
+    }
+
+    expect(seen).toEqual([
+      "resolver",
+      "actor:enemy#1",
+      "tick:damageOverTime",
+      "tick:durations",
+      "tick:hunger",
+      "tick:regen",
+    ]);
+  });
+});
+
+const withGrid = (
+  state: GameState,
+  grid: Parameters<typeof createFloorGeometrySlot>[1],
+  position: Position,
+): GameState => ({
+  ...state,
+  floor: {
+    ...state.floor,
+    geometry: createFloorGeometrySlot(state.floor.geometry.refId, grid),
+  },
+  player: {
+    ...state.player,
+    position,
+  },
 });
 
 const withPlayerHp = (state: GameState, hp: number): GameState => ({

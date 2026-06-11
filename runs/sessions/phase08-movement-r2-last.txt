@@ -1,0 +1,43 @@
+Implemented PHASE-08 movement/collision and did not commit.
+
+Changed:
+- [movement.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/systems/movement.ts:32): movement event types, resolver, import-time `move` registration, occupancy invariant, door opening, stairs detection.
+- [movement.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/systems/movement.test.ts:60): ASCII fixture tests for move, enemy/NPC bump intents, wall bump, door open turn cost, stairs event, plus 1000 seeded occupancy attempts.
+- [PROGRESS.md](/Users/keigoshimada/Documents/generative-gaming/PROGRESS.md:21): marked `08-1` ready-for-verify and logged validation evidence.
+
+Verification:
+```text
+pnpm run check
+> tsc --noEmit
+> eslint .
+> vitest run
+Test Files  21 passed (21)
+Tests       124 passed (124)
+```
+
+```text
+rg 'Math.random|Date.now' src/engine/systems/
+# no output / no matches
+```
+
+**Phase Completion Check**
+Status: Complete within the owned implementation scope.
+
+Plan checked: `phase-plans/PHASE-08-MOVEMENT.md`
+
+What matches:
+- Move resolution, bump routing, door handling, stairs event: implemented in `movement.ts`.
+- One-actor-per-tile invariant: enforced in resolver and tested with 1000 seeded legal move attempts.
+- No combat resolution: move-into-enemy emits `attack_intent` only.
+- No turn-module edits by me.
+
+**AMBIGUITIES**
+Existing action legality still rejects wall/out-of-bounds moves before registered resolver dispatch, so `bumped_wall` is resolver-covered and directly tested, but `step()` cannot currently emit `bumped_wall` for a wall move without changing unowned action-legality code.
+
+Residual risks: movement module registers on import; future app entrypoint must import it for runtime use. Tests prove the registration path once imported.
+
+Out-of-scope discoveries: none beyond the legality prefilter note.
+
+Environment discoveries: none.
+
+Actual time: ~25m vs 25m estimate.

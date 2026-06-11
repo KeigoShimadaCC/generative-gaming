@@ -1,15 +1,21 @@
 /*
- * PHASE-07B FROZEN TURN HOOK INTERFACE
+ * PHASE-07B FROZEN TURN EXTENSION INTERFACE
  *
  * A turn always resolves in this order:
- * 1. the player action resolves;
+ * 1. the player action resolves through built-in handling or the action-resolver
+ *    registry;
  * 2. every other actor runs exactly once in stable actor-id order;
  * 3. end-of-turn tick hooks run in this fixed order:
  *    damageOverTime -> durations -> hunger -> regen.
  *
- * Later phases register combat/AI/status/hunger/regen behavior through TurnHooks.
- * Do not rename TickHookName values, reorder TICK_HOOK_ORDER, or let hooks call
- * ambient nondeterminism or LLMs. Hooks must return deterministic state/events.
+ * Frozen extension surface:
+ * - registerActionResolver handles move/attack/use_item/pickup/talk/inspect.
+ * - TurnHooks.actorTurn handles non-player actors in stable actor-id order.
+ * - TurnHooks.ticks handles fixed-order end-of-turn systems.
+ *
+ * Do not rename action kinds or TickHookName values, reorder TICK_HOOK_ORDER, or
+ * let resolvers/hooks call ambient nondeterminism or LLMs. Resolvers and hooks
+ * must return deterministic state/events.
  */
 
 import { bounds, config, type GameConfig } from "../../config/index.js";
@@ -71,6 +77,37 @@ export type TurnEvent = EngineLogEvent;
 
 export type ActorEntity = Extract<EntityInstance, { readonly kind: "enemy" | "npc" }>;
 
+export type ActionResolverActionKind =
+  | "move"
+  | "attack"
+  | "use_item"
+  | "pickup"
+  | "talk"
+  | "inspect";
+
+export type ActionResolverAction = Extract<
+  PlayerAction,
+  { readonly kind: ActionResolverActionKind }
+>;
+
+export type ActionResolverSuccess = {
+  readonly state: GameState;
+  readonly events: readonly TurnEvent[];
+};
+
+export type ActionResolverIllegal = {
+  readonly illegal: true;
+  readonly reason: string;
+};
+
+export type ActionResolverResult =
+  | ActionResolverSuccess
+  | ActionResolverIllegal;
+
+export type ActionResolver<
+  Action extends ActionResolverAction = ActionResolverAction,
+> = (state: GameState, action: Action) => ActionResolverResult;
+
 export type TickHookName =
   | "damageOverTime"
   | "durations"
@@ -130,6 +167,32 @@ export type StartContent = {
   readonly config?: GameConfig;
 };
 
+const actionResolvers = new Map<ActionResolverActionKind, ActionResolver>();
+
+export const registerActionResolver = <
+  Kind extends ActionResolverActionKind,
+>(
+  actionType: Kind,
+  resolver: ActionResolver<Extract<PlayerAction, { readonly kind: Kind }>>,
+): (() => void) => {
+  const previous = actionResolvers.get(actionType);
+  const registeredResolver = resolver as ActionResolver;
+  actionResolvers.set(actionType, registeredResolver);
+
+  return () => {
+    if (actionResolvers.get(actionType) !== registeredResolver) {
+      return;
+    }
+
+    if (previous === undefined) {
+      actionResolvers.delete(actionType);
+      return;
+    }
+
+    actionResolvers.set(actionType, previous);
+  };
+};
+
 export const start = (seed: string, content: StartContent = {}): GameState =>
   createInitialState(seed, content.config ?? config);
 
@@ -157,16 +220,19 @@ export const step = (
   }
 
   const hooks = resolveTurnHooks(options.hooks);
+  const playerActionResult = applyPlayerAction(state, action);
+  if (isActionResolverIllegal(playerActionResult)) {
+    return illegalStep(state, action, playerActionResult.reason);
+  }
+
   const events: TurnEvent[] = [
     turnEvent(state.run.turn, "action_resolved", {
       actionKind: action.kind,
     }),
+    ...playerActionResult.events,
   ];
 
-  let nextState = state;
-  const playerActionResult = applyPlayerAction(nextState, action);
-  nextState = playerActionResult.state;
-  events.push(...playerActionResult.events);
+  let nextState = playerActionResult.state;
 
   if (!isTerminal(nextState)) {
     for (const actor of actorsInTurnOrder(nextState)) {
@@ -265,7 +331,7 @@ export const createNoopTurnHooks = (): ResolvedTurnHooks => ({
 const applyPlayerAction = (
   state: GameState,
   action: PlayerAction,
-): StepResult => {
+): ActionResolverResult => {
   if (action.kind === "abort") {
     const status = config.runStructure.terminalStates.abort;
     const terminalState = withTerminalStatus(state, status);
@@ -299,11 +365,60 @@ const applyPlayerAction = (
     };
   }
 
+  if (action.kind === "wait") {
+    return {
+      state,
+      events: [],
+    };
+  }
+
+  if (isActionResolverAction(action)) {
+    return applyRegisteredActionResolver(state, action);
+  }
+
   return {
     state,
     events: [],
   };
 };
+
+const applyRegisteredActionResolver = (
+  state: GameState,
+  action: ActionResolverAction,
+): ActionResolverResult => {
+  const resolver = actionResolvers.get(action.kind);
+
+  if (resolver === undefined) {
+    return {
+      illegal: true,
+      reason: "no handler registered",
+    };
+  }
+
+  return resolver(state, action);
+};
+
+const isActionResolverAction = (
+  action: PlayerAction,
+): action is ActionResolverAction => {
+  switch (action.kind) {
+    case "move":
+    case "attack":
+    case "use_item":
+    case "pickup":
+    case "talk":
+    case "inspect":
+      return true;
+    case "wait":
+    case "descend":
+    case "abort":
+      return false;
+  }
+};
+
+const isActionResolverIllegal = (
+  result: ActionResolverResult,
+): result is ActionResolverIllegal => "illegal" in result;
 
 const forcedTerminalFor = (
   state: GameState,
