@@ -1,0 +1,32 @@
+**Phase Completion Check**
+Status: Blocked on full repo gate; scoped Phase 16 implementation is complete.
+
+Implemented:
+- Added enemy assembly/runtime constructor in [assembly.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/enemies/assembly.ts:20).
+- Added deterministic cost, band validation, roster budget, and XP mapping in [cost.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/enemies/cost.ts:16).
+- Added [T] cost config under `enemyDesign.costWeights` in [config/index.ts](/Users/keigoshimada/Documents/generative-gaming/src/config/index.ts:195).
+- Resolved the transform TODO to use `costOf(...)` in [spatial.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/effects/spatial.ts:503).
+- Added reference table, monotonicity, validators, XP, and serialization tests in [cost.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/enemies/cost.test.ts:34).
+- Updated `PROGRESS.md`. No commit made.
+
+Verification:
+- `pnpm exec eslint src/engine/enemies` -> pass
+- `pnpm exec vitest run src/engine/enemies` -> pass, 1 file / 6 tests
+- `pnpm exec eslint src/engine/enemies src/engine/effects/spatial.ts src/config/index.ts` -> pass
+- `pnpm exec vitest run src/engine/effects/spatial.test.ts` -> pass, 1 file / 17 tests
+- `rg 'Math.random|Date.now' src/engine/enemies/` -> no matches
+- `pnpm run typecheck` -> blocked by unrelated untracked `src/engine/quests/**` and quest render-log exhaustiveness errors
+- `pnpm run check` -> blocked at typecheck for the same unrelated files
+
+Ambiguities / notes:
+- Cost weights were absent; I added them to config because the brief explicitly allowed/required that if absent.
+- `rosterAffordable(defs, band)` checks both band stat validity and total cost against spawn budget.
+- `assemble(definition)` has deterministic defaults, plus options for real state insertion.
+
+Residual risks:
+- Full DoD gate is not green because untracked `src/engine/quests/**` is currently in the workspace and failing typecheck. I did not edit it.
+- Unrelated existing/unowned changes remain: `scripts/ledger.tsv`, `runs/sessions/phase16-enemies.jsonl`, and `src/engine/quests/**`.
+
+Environment discoveries: none.
+
+Actual time: ~35m vs 30m estimate, mostly from diagnosing the outside-scope full-gate blocker.

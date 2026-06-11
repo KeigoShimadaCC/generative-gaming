@@ -191,6 +191,99 @@ export const config = deepFreeze({
       shallows: 20, // GAME_DESIGN §9.1
       middle: 45, // GAME_DESIGN §9.1
       lowest: 70 // GAME_DESIGN §9.1
+    },
+    costWeights: {
+      stats: {
+        baseByBand: {
+          shallows: 1, // GAME_DESIGN §9.1 [T]
+          middle: 4, // GAME_DESIGN §9.1 [T]
+          lowest: 8 // GAME_DESIGN §9.1 [T]
+        },
+        hpDeltaDivisor: 2, // GAME_DESIGN §9.1 [T]
+        attackDelta: 2, // GAME_DESIGN §9.1 [T]
+        defenseDelta: 3 // GAME_DESIGN §9.1 [T]
+      },
+      behaviors: {
+        approach_melee: 1, // GAME_DESIGN §9.2 [T]
+        keep_range: 2, // GAME_DESIGN §9.2 [T]
+        flee_low_hp: 2, // GAME_DESIGN §9.2 [T]
+        pack_hunter: 3, // GAME_DESIGN §9.2 [T]
+        ambusher: 3, // GAME_DESIGN §9.2 [T]
+        territorial: 2, // GAME_DESIGN §9.2 [T]
+        guard: 2, // GAME_DESIGN §9.2 [T]
+        patrol: 2, // GAME_DESIGN §9.2 [T]
+        thief: 4, // GAME_DESIGN §9.2 [T]
+        caster: 4, // GAME_DESIGN §9.2 [T]
+        bodyguard: 4, // GAME_DESIGN §9.2 [T]
+        mimic: 5 // GAME_DESIGN §9.2 [T]
+      },
+      effects: {
+        verbs: {
+          damage: 1, // GAME_DESIGN §7, §9.1 [T]
+          heal: 1, // GAME_DESIGN §7, §9.1 [T]
+          apply_status: 2, // GAME_DESIGN §7, §9.1 [T]
+          cure_status: 1, // GAME_DESIGN §7, §9.1 [T]
+          buff_stat: 2, // GAME_DESIGN §7, §9.1 [T]
+          nutrition: 1, // GAME_DESIGN §7, §9.1 [T]
+          teleport_self: 3, // GAME_DESIGN §7, §9.1 [T]
+          teleport_target: 4, // GAME_DESIGN §7, §9.1 [T]
+          blink: 2, // GAME_DESIGN §7, §9.1 [T]
+          knockback: 2, // GAME_DESIGN §7, §9.1 [T]
+          reveal: 1, // GAME_DESIGN §7, §9.1 [T]
+          identify: 1, // GAME_DESIGN §7, §9.1 [T]
+          enchant: 2, // GAME_DESIGN §7, §9.1 [T]
+          summon: 3, // GAME_DESIGN §7, §9.1 [T]
+          transform: 3, // GAME_DESIGN §7, §9.1 [T]
+          dig: 2 // GAME_DESIGN §7, §9.1 [T]
+        },
+        magnitudeDivisors: {
+          damageAmount: 2, // GAME_DESIGN §7, §9.1 [T]
+          healAmount: 4, // GAME_DESIGN §7, §9.1 [T]
+          statusDuration: 3, // GAME_DESIGN §7, §9.1 [T]
+          buffMagnitudeDurationProduct: 8, // GAME_DESIGN §7, §9.1 [T]
+          nutritionFullness: 25, // GAME_DESIGN §7, §9.1 [T]
+          blinkDistanceTiles: 2, // GAME_DESIGN §7, §9.1 [T]
+          knockbackPushTiles: 1, // GAME_DESIGN §7, §9.1 [T]
+          knockbackCollisionDamage: 1, // GAME_DESIGN §7, §9.1 [T]
+          summonCount: 1, // GAME_DESIGN §7, §9.1 [T]
+          digLengthTiles: 2, // GAME_DESIGN §7, §9.1 [T]
+          boltRangeTiles: 4, // GAME_DESIGN §7, §9.1 [T]
+          burstRadiusTiles: 1, // GAME_DESIGN §7, §9.1 [T]
+          procChancePercent: 10, // GAME_DESIGN §7, §9.1 [T]
+          useCharges: 2 // GAME_DESIGN §7, §9.1 [T]
+        },
+        targeting: {
+          self: 0, // GAME_DESIGN §7, §9.1 [T]
+          melee: 0, // GAME_DESIGN §7, §9.1 [T]
+          bolt: 1, // GAME_DESIGN §7, §9.1 [T]
+          burst: 2, // GAME_DESIGN §7, §9.1 [T]
+          floor: 2 // GAME_DESIGN §7, §9.1 [T]
+        },
+        trigger: {
+          quaff: 0, // GAME_DESIGN §7, §9.1 [T]
+          read: 0, // GAME_DESIGN §7, §9.1 [T]
+          throw_hit: 1, // GAME_DESIGN §7, §9.1 [T]
+          equip_passive: 2, // GAME_DESIGN §7, §9.1 [T]
+          on_hit: 1, // GAME_DESIGN §7, §9.1 [T]
+          on_struck: 1, // GAME_DESIGN §7, §9.1 [T]
+          step: 1, // GAME_DESIGN §7, §9.1 [T]
+          use: 1 // GAME_DESIGN §7, §9.1 [T]
+        }
+      },
+      xpYieldByCost: {
+        shallows: {
+          pointsPerXp: 4, // GAME_DESIGN §9.1 [T]
+          offset: 1 // GAME_DESIGN §9.1 [T]
+        },
+        middle: {
+          pointsPerXp: 3, // GAME_DESIGN §9.1 [T]
+          offset: 1 // GAME_DESIGN §9.1 [T]
+        },
+        lowest: {
+          pointsPerXp: 3, // GAME_DESIGN §9.1 [T]
+          offset: 3 // GAME_DESIGN §9.1 [T]
+        }
+      }
     }
   },
   trapsNpcsQuests: {

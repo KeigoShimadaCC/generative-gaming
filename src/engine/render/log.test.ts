@@ -4,12 +4,20 @@ import {
   ALL_LOG_EVENT_TYPES,
   dummyLogEvent,
   formatLogEvent,
+  SILENT_LOG_EVENT_TYPES,
 } from "./log.js";
+
+const silentLogEventTypes = new Set<string>(SILENT_LOG_EVENT_TYPES);
 
 describe("formatLogEvent", () => {
   it("formats every log event type with non-empty text", () => {
     for (const type of ALL_LOG_EVENT_TYPES) {
       const line = formatLogEvent(dummyLogEvent(type, 3));
+
+      if (silentLogEventTypes.has(type)) {
+        expect(line).toBe("");
+        continue;
+      }
 
       expect(line.length).toBeGreaterThan(0);
       expect(line.startsWith("t3 ")).toBe(true);

@@ -104,6 +104,22 @@ export const formatLogEvent = (event: EngineLogEvent): string => {
       return `t${turn} barter opened with ${data.npcId}`;
     case "quest_offer_hook":
       return `t${turn} quest hook ${data.questHookId} from ${data.npcId}`;
+    case "quest_offered":
+      return `t${turn} quest offered ${data.questId} from ${data.npcId}`;
+    case "quest_accepted":
+      return `t${turn} accepted quest ${data.questId}`;
+    case "quest_refused":
+      return `t${turn} refused quest ${data.questId}`;
+    case "quest_completed":
+      return `t${turn} completed quest ${data.questId}${data.rewardCoin === null ? "" : ` (+${data.rewardCoin} coin)`}`;
+    case "quest_failed":
+      return `t${turn} quest ${data.questId} failed: ${data.reason}`;
+    case "quest_reward_paid":
+      return `t${turn} quest reward ${data.questId} +${data.coin} coin${data.itemDefinitionIds.length === 0 ? "" : ` items:${data.itemDefinitionIds.join(",")}`}`;
+    case "quest_escort_moved":
+      return "";
+    case "quest_item_delivered":
+      return `t${turn} delivered ${data.itemDefinitionId} for ${data.questId}`;
     case "barter_buy":
       return `t${turn} bought ${data.definitionId} for ${data.price} from ${data.npcId}`;
     case "barter_sell":
@@ -191,6 +207,14 @@ export const ALL_LOG_EVENT_TYPES = [
   "dialogue_flag_set",
   "barter_opened",
   "quest_offer_hook",
+  "quest_offered",
+  "quest_accepted",
+  "quest_refused",
+  "quest_completed",
+  "quest_failed",
+  "quest_reward_paid",
+  "quest_escort_moved",
+  "quest_item_delivered",
   "barter_buy",
   "barter_sell",
   "action_illegal",
@@ -201,6 +225,8 @@ export const ALL_LOG_EVENT_TYPES = [
   "resolver_probe",
   "tick_registry_probe",
 ] as const satisfies readonly EngineLogEventType[];
+
+export const SILENT_LOG_EVENT_TYPES = ["quest_escort_moved"] as const satisfies readonly EngineLogEventType[];
 
 export const dummyLogEvent = (
   type: EngineLogEventType,
@@ -533,6 +559,52 @@ const dummyEventData = (
       return {
         npcId: "npc#1",
         questHookId: "quest-1",
+      };
+    case "quest_offered":
+      return {
+        questId: "quest-1",
+        npcId: "npc#1",
+      };
+    case "quest_accepted":
+      return {
+        questId: "quest-1",
+        npcId: "npc#1",
+      };
+    case "quest_refused":
+      return {
+        questId: "quest-1",
+        npcId: "npc#1",
+      };
+    case "quest_completed":
+      return {
+        questId: "quest-1",
+        rewardCoin: 10,
+      };
+    case "quest_failed":
+      return {
+        questId: "quest-1",
+        reason: "timeout",
+      };
+    case "quest_reward_paid":
+      return {
+        questId: "quest-1",
+        coin: 10,
+        itemDefinitionIds: ["draught-1"],
+        identifyDefinitionIds: [],
+      };
+    case "quest_escort_moved":
+      return {
+        questId: "quest-1",
+        npcId: "npc#1",
+        from: { x: 0, y: 0 },
+        to: { x: 1, y: 0 },
+        direction: "east",
+      };
+    case "quest_item_delivered":
+      return {
+        questId: "quest-1",
+        npcId: "npc#1",
+        itemDefinitionId: "draught-1",
       };
     case "barter_buy":
       return {

@@ -18,6 +18,7 @@ import {
   type FogMemory,
   type TileGrid
 } from "../map/index.js";
+import { costOf } from "../enemies/index.js";
 import {
   allocateEntityId,
   type EnemyEntityInstance,
@@ -499,16 +500,8 @@ function executeTransform(
     );
   }
 
-  const currentCost = budgetCostFor(state, actor.entity.definition);
-  const nextCost = budgetCostFor(state, nextDefinition);
-  if (currentCost === null || nextCost === null) {
-    return invalidTarget(
-      state,
-      effect,
-      ctx,
-      "transform requires schema-declared budget cost on current and roster enemies"
-    );
-  }
+  const currentCost = costOf(actor.entity.definition);
+  const nextCost = costOf(nextDefinition);
 
   if (nextCost > currentCost) {
     return rejectEffect(
@@ -1235,37 +1228,6 @@ const mergeIds = (
   [...new Set([...(existing ?? []), ...next])].sort((left, right) =>
     left.localeCompare(right)
   );
-
-// TODO-PHASE-16: Replace this reader with the real enemy assembly cost function.
-const budgetCostFor = (
-  state: GameState,
-  definition: EnemyDefinition
-): number | null => {
-  const directCost = budgetCostFromDefinition(definition);
-  if (directCost !== null) {
-    return directCost;
-  }
-
-  const rosterDefinition = floorEnemyRoster(state).find(
-    (candidate) => candidate.id === definition.id
-  );
-
-  return rosterDefinition === undefined
-    ? null
-    : budgetCostFromDefinition(rosterDefinition);
-};
-
-const budgetCostFromDefinition = (definition: EnemyDefinition): number | null => {
-  const record = definition as EnemyDefinition & {
-    readonly cost?: unknown;
-    readonly budgetCost?: unknown;
-  };
-  const cost = record.cost ?? record.budgetCost;
-
-  return typeof cost === "number" && Number.isSafeInteger(cost) && cost >= 0
-    ? cost
-    : null;
-};
 
 const stripBudgetCost = (definition: EnemyDefinition): EnemyDefinition => {
   const schemaDefinition = { ...definition } as Record<string, unknown>;

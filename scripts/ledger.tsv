@@ -57,3 +57,7 @@ timestamp	label	agent	model	effort	seconds	input_tokens	output_tokens	total_toke
 2026-06-11T23:24:18Z	phase15b-special-r3	codex	default	default	669	3759670	44848	3804518	0
 2026-06-11T23:34:30Z	phase18-traps	cursor	composer-2.5	default	517	NA	NA	NA	0
 2026-06-11T23:43:39Z	phaseB-batch-verify	cursor	composer-2.5	default	99	NA	NA	NA	0
+2026-06-11T23:46:10Z	phase20-quests	cursor	composer-2.5	default	506	NA	NA	NA	0
+2026-06-11T23:45:58Z	phase16-enemies	codex	default	default	563	4517051	30190	4547241	0
+2026-06-11T23:55:52Z	phase22-quest-events	cursor	composer-2.5	default	47	NA	NA	NA	0
+2026-06-11T23:57:07Z	phase1620-verify	cursor	composer-2.5	default	77	NA	NA	NA	0
