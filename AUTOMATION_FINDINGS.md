@@ -128,6 +128,15 @@ The structure that has one-shotted ~90% of tasks here:
 - **Coverage audits must be bidirectional.** "Every doc row has a schema" AND
   "no schema exists outside the doc rows" — the second direction is what keeps
   a closed vocabulary actually closed. (phase05-verify)
+- **Table coverage ≠ authorability. Verify schemas against use cases, not just
+  vocabularies.** PHASE-05 passed a bidirectional table audit yet could not
+  express an on-hit-proc weapon (trigger existed; no equipment field could
+  carry the bundle) or a cursed item (prose rule, never a table row). Both
+  surfaced only when PHASE-14's "thesis test" demanded authoring concrete
+  items. Schema verification briefs should include 3–5 "author this entity as
+  pure data" probes spanning the *composition* space — and design-doc rules
+  that live in prose rather than tables WILL be missed by table-driven audits;
+  audit the prose too. (phase14 STOPs #1–2)
 - **Give verifiers a verdict protocol:** "End with exactly one line: 'READY'
   or 'NEEDS WORK:' + numbered findings." Parses reliably; numbered findings
   convert directly into round-trip briefs.

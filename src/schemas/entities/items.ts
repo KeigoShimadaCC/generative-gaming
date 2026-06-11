@@ -41,14 +41,38 @@ export const ItemValueSchema = z
     }
   });
 
+export const WeaponOnHitProcSchema = z
+  .strictObject({
+    chancePercent: boundedInt(
+      bounds.effectVocabulary.triggers.procChancePercent.onHit,
+    ),
+    bundle: EffectBundleSchema,
+  })
+  .superRefine((proc, ctx) => {
+    enforceProcBundle(proc.bundle, "on_hit", proc.chancePercent, ctx);
+  });
+
+export const ArmorOnStruckProcSchema = z
+  .strictObject({
+    chancePercent: boundedInt(
+      bounds.effectVocabulary.triggers.procChancePercent.onStruck,
+    ),
+    bundle: EffectBundleSchema,
+  })
+  .superRefine((proc, ctx) => {
+    enforceProcBundle(proc.bundle, "on_struck", proc.chancePercent, ctx);
+  });
+
 export const WeaponItemPayloadSchema = z.strictObject({
   attackBonus: boundedInt(bounds.itemsEconomy.weaponAtkBonus),
   cursed: z.boolean(),
+  onHit: WeaponOnHitProcSchema.nullable(),
 });
 
 export const ArmorItemPayloadSchema = z.strictObject({
   defenseBonus: boundedInt(bounds.itemsEconomy.armorDefBonus),
   cursed: z.boolean(),
+  onStruck: ArmorOnStruckProcSchema.nullable(),
 });
 
 export const CharmItemPayloadSchema = z
@@ -141,6 +165,35 @@ export const ItemDefinitionSchema = z
   });
 
 export type ItemDefinition = z.infer<typeof ItemDefinitionSchema>;
+
+const enforceProcBundle = (
+  bundle: EffectBundle,
+  triggerKind: "on_hit" | "on_struck",
+  chancePercent: number,
+  ctx: z.RefinementCtx,
+): void => {
+  if (bundle.trigger.kind !== triggerKind) {
+    ctx.addIssue({
+      code: "custom",
+      path: ["bundle", "trigger", "kind"],
+      message: `proc bundle trigger must be ${triggerKind}`,
+    });
+    return;
+  }
+
+  const triggerChancePercent =
+    triggerKind === "on_hit"
+      ? bundle.trigger.onHit?.procChancePercent
+      : bundle.trigger.onStruck?.procChancePercent;
+
+  if (triggerChancePercent !== chancePercent) {
+    ctx.addIssue({
+      code: "custom",
+      path: ["bundle", "trigger"],
+      message: "proc chancePercent must match bundle trigger chance",
+    });
+  }
+};
 
 const enforceCharmPassive = (
   passive: EffectBundle,

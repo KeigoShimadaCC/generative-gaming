@@ -149,6 +149,9 @@ these, and the Director's creativity is names + fiction + composition + paramete
 - Triggers: `quaff`, `read`, `throw_hit`, `equip_passive`, `on_hit` (weapon proc,
   chance 10–30% [HARD]), `on_struck` (armor proc, same), `step` (trap), `use`
   (tool, 1–5 charges).
+- Equipment proc slots [HARD]: a weapon definition may carry **0–1** `on_hit`
+  proc (chance + effect bundle); armor may carry **0–1** `on_struck` proc.
+  Charms remain exactly one `equip_passive` effect.
 - Targeting shapes: `self`, `melee`, `bolt` (first target in line, range 3–8),
   `burst` (radius 1–2, centered self or impact), `floor`.
 

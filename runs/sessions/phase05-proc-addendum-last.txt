@@ -1,0 +1,25 @@
+Implemented schema addendum #2. No commit made.
+
+Changed:
+- Added required nullable `onHit` / `onStruck` proc slots with `{ chancePercent, bundle }`.
+- Bumped `PROTOCOL_VERSION` to `1.2.0`.
+- Added proc weapon validation, OOB chance rejection, and trigger-slot mismatch tests.
+- Updated null-proc fixture literals and regenerated the initial-state golden through the serializer path.
+
+Verification:
+```text
+pnpm run check
+> tsc --noEmit
+> eslint .
+> vitest run
+
+Test Files  30 passed (30)
+Tests       233 passed (233)
+```
+
+Scoped diff stat:
+```text
+9 files changed, 179 insertions(+), 4 deletions(-)
+```
+
+Note: the worktree had pre-existing unrelated dirty files (`GAME_DESIGN.md`, `PROGRESS.md`, run artifacts, etc.); I left them untouched. Environment discoveries: none. Actual time: ~25m; brief estimate not specified.

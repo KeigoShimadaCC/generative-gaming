@@ -1,0 +1,22 @@
+Blocked per the task contract.
+
+The retry fixed `cursed`, but the schema still cannot express the required pure-data proc equipment:
+
+- [src/schemas/entities/items.ts](/Users/keigoshimada/Documents/generative-gaming/src/schemas/entities/items.ts:44): `WeaponItemPayloadSchema` has only `attackBonus` and `cursed`.
+- [src/schemas/entities/items.ts](/Users/keigoshimada/Documents/generative-gaming/src/schemas/entities/items.ts:49): `ArmorItemPayloadSchema` has only `defenseBonus` and `cursed`.
+- [src/schemas/vocab/triggers.ts](/Users/keigoshimada/Documents/generative-gaming/src/schemas/vocab/triggers.ts:56): `onHit` / `onStruck` triggers exist, but no weapon/armor payload field can hold an `EffectBundle`.
+
+That makes the thesis test impossible as written: “define … an on-hit-proc weapon … as pure schema data” cannot be authored without a schema field. Adding that field is outside my owned files, and the brief says to stop rather than invent bespoke code.
+
+I updated `PROGRESS.md` back to `blocked` with this r2 blocker and appended a validation log entry. No implementation files changed and I did not commit.
+
+Verification run:
+`rg -n "WeaponItemPayloadSchema|ArmorItemPayloadSchema|CharmItemPayloadSchema|on_hit|onHit|on_struck|onStruck|proc|effect" src/schemas/entities/items.ts src/schemas/vocab/triggers.ts src/schemas/fixtures/entities.ts`
+
+Result: proc triggers are present only in trigger vocabulary; weapon/armor schemas have no proc/effect bundle field.
+
+Ambiguities: the intended schema shape for equipment procs is unspecified.
+
+Environment discoveries: none.
+
+Actual time: ~15m vs 45m estimate.

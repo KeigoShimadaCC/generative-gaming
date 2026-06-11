@@ -11,6 +11,9 @@ import {
   makeEffectBundleFixture,
   validDamageEffectFixture,
   validEquipPassiveTriggerFixture,
+  validMeleeTargetingFixture,
+  validOnHitTriggerFixture,
+  validOnStruckTriggerFixture,
   validQuaffTriggerFixture,
   validSelfTargetingFixture,
   validStepTriggerFixture,
@@ -79,6 +82,24 @@ export const validStepEffectBundleFixture = makeEffectBundleFixture(
   validSelfTargetingFixture,
 );
 
+export const validWeaponOnHitProcFixture = {
+  chancePercent: bounds.effectVocabulary.triggers.procChancePercent.onHit.min,
+  bundle: makeEffectBundleFixture(
+    [validDamageEffectFixture],
+    validOnHitTriggerFixture,
+    validMeleeTargetingFixture,
+  ),
+} satisfies NonNullable<NonNullable<ItemDefinition["weapon"]>["onHit"]>;
+
+export const validArmorOnStruckProcFixture = {
+  chancePercent: bounds.effectVocabulary.triggers.procChancePercent.onStruck.min,
+  bundle: makeEffectBundleFixture(
+    [validDamageEffectFixture],
+    validOnStruckTriggerFixture,
+    validMeleeTargetingFixture,
+  ),
+} satisfies NonNullable<NonNullable<ItemDefinition["armor"]>["onStruck"]>;
+
 export const makeItemFixture = (
   kind: ItemDefinition["kind"],
   field: ItemPayloadKey,
@@ -101,11 +122,13 @@ export const makeItemFixture = (
 export const validWeaponItemFixture = makeItemFixture("weapon", "weapon", {
   attackBonus: bounds.itemsEconomy.weaponAtkBonus.min,
   cursed: false,
+  onHit: null,
 });
 
 export const validArmorItemFixture = makeItemFixture("armor", "armor", {
   defenseBonus: bounds.itemsEconomy.armorDefBonus.min,
   cursed: false,
+  onStruck: null,
 });
 
 export const validCharmItemFixture = makeItemFixture("charm", "charm", {

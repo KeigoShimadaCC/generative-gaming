@@ -509,6 +509,7 @@ const weaponWithBonus = (attackBonus: number): ItemDefinition => ({
   weapon: {
     attackBonus,
     cursed: false,
+    onHit: null,
   },
 });
 

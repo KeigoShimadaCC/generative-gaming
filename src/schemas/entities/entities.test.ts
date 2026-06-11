@@ -18,6 +18,7 @@ import {
   makeItemFixture,
   makeQuestObjectiveFixture,
   validBehaviorFixtures,
+  validArmorOnStruckProcFixture,
   validArmorItemFixture,
   validCharmItemFixture,
   validCharmPassiveFixture,
@@ -29,6 +30,7 @@ import {
   validQuestDefinitionFixture,
   validQuestObjectiveFixtures,
   validTrapDefinitionFixture,
+  validWeaponOnHitProcFixture,
   validWeaponItemFixture,
 } from "../fixtures/entities.js";
 import {
@@ -168,6 +170,7 @@ describe("item definition schema", () => {
       makeItemFixture("weapon", "weapon", {
         attackBonus: weaponBounds.min - 1,
         cursed: false,
+        onHit: null,
       }),
     );
     expectFails(
@@ -175,6 +178,7 @@ describe("item definition schema", () => {
       makeItemFixture("weapon", "weapon", {
         attackBonus: weaponBounds.max + 1,
         cursed: false,
+        onHit: null,
       }),
     );
 
@@ -184,6 +188,7 @@ describe("item definition schema", () => {
       makeItemFixture("armor", "armor", {
         defenseBonus: armorBounds.min - 1,
         cursed: false,
+        onStruck: null,
       }),
     );
     expectFails(
@@ -191,6 +196,95 @@ describe("item definition schema", () => {
       makeItemFixture("armor", "armor", {
         defenseBonus: armorBounds.max + 1,
         cursed: false,
+        onStruck: null,
+      }),
+    );
+  });
+
+  it("accepts a weapon with an on_hit proc", () => {
+    expectPasses(
+      ItemDefinitionSchema,
+      makeItemFixture("weapon", "weapon", {
+        attackBonus: bounds.itemsEconomy.weaponAtkBonus.min,
+        cursed: false,
+        onHit: validWeaponOnHitProcFixture,
+      }),
+    );
+  });
+
+  it("rejects equipment proc chances outside bounds", () => {
+    const weaponProcChance =
+      bounds.effectVocabulary.triggers.procChancePercent.onHit;
+    expectFails(
+      ItemDefinitionSchema,
+      makeItemFixture("weapon", "weapon", {
+        attackBonus: bounds.itemsEconomy.weaponAtkBonus.min,
+        cursed: false,
+        onHit: {
+          ...validWeaponOnHitProcFixture,
+          chancePercent: weaponProcChance.min - 1,
+        },
+      }),
+    );
+    expectFails(
+      ItemDefinitionSchema,
+      makeItemFixture("weapon", "weapon", {
+        attackBonus: bounds.itemsEconomy.weaponAtkBonus.min,
+        cursed: false,
+        onHit: {
+          ...validWeaponOnHitProcFixture,
+          chancePercent: weaponProcChance.max + 1,
+        },
+      }),
+    );
+
+    const armorProcChance =
+      bounds.effectVocabulary.triggers.procChancePercent.onStruck;
+    expectFails(
+      ItemDefinitionSchema,
+      makeItemFixture("armor", "armor", {
+        defenseBonus: bounds.itemsEconomy.armorDefBonus.min,
+        cursed: false,
+        onStruck: {
+          ...validArmorOnStruckProcFixture,
+          chancePercent: armorProcChance.min - 1,
+        },
+      }),
+    );
+    expectFails(
+      ItemDefinitionSchema,
+      makeItemFixture("armor", "armor", {
+        defenseBonus: bounds.itemsEconomy.armorDefBonus.min,
+        cursed: false,
+        onStruck: {
+          ...validArmorOnStruckProcFixture,
+          chancePercent: armorProcChance.max + 1,
+        },
+      }),
+    );
+  });
+
+  it("rejects equipment procs whose bundle trigger does not match the slot", () => {
+    expectFails(
+      ItemDefinitionSchema,
+      makeItemFixture("weapon", "weapon", {
+        attackBonus: bounds.itemsEconomy.weaponAtkBonus.min,
+        cursed: false,
+        onHit: {
+          ...validWeaponOnHitProcFixture,
+          bundle: validCharmPassiveFixture,
+        },
+      }),
+    );
+    expectFails(
+      ItemDefinitionSchema,
+      makeItemFixture("armor", "armor", {
+        defenseBonus: bounds.itemsEconomy.armorDefBonus.min,
+        cursed: false,
+        onStruck: {
+          ...validArmorOnStruckProcFixture,
+          bundle: validWeaponOnHitProcFixture.bundle,
+        },
       }),
     );
   });
@@ -224,12 +318,14 @@ describe("item definition schema", () => {
       ...validWeaponItemFixture,
       weapon: {
         attackBonus: bounds.itemsEconomy.weaponAtkBonus.min,
+        onHit: null,
       },
     });
     expectFails(ItemDefinitionSchema, {
       ...validArmorItemFixture,
       armor: {
         defenseBonus: bounds.itemsEconomy.armorDefBonus.min,
+        onStruck: null,
       },
     });
     expectFails(ItemDefinitionSchema, {
