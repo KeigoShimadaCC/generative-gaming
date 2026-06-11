@@ -45,3 +45,4 @@ adjudication, stall intervention, or doc-spine edit, at the time it happens.
 | ~11:35 | orchestrator | r2 progressing; ENVIRONMENT.md: prefer @brieffile + early-stall watch standard |
 | ~11:40 | orchestrator | GitHub repo metadata set (description + topics) at human request |
 | ~14:08 | orchestrator | This log created (backfilled); convention adopted: append per action |
+| ~17:55 | human | OVERNIGHT AUTHORIZATION: skip/defer human checkpoints; finish autonomously. Orchestrator plan: complete Waves B+C (M0 provisional via bots + scripted CLI, human ratifies in morning); Wave D mock-path only (no API key on disk — @live tests deferred, marked pending); Wave E mocked + CI; Wave G UI fully. Deferred to morning: PHASE-29 live spike, Wave F live tuning, M2 session, Wave H. |
