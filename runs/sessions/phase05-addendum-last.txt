@@ -1,0 +1,36 @@
+Implemented the Phase 05 text-cap addendum.
+
+Changed:
+- Added `bounds.directorManifest.textCaps` in [src/config/index.ts](/Users/keigoshimada/Documents/generative-gaming/src/config/index.ts:669)
+- Wired shared schema caps in [src/schemas/entities/common.ts](/Users/keigoshimada/Documents/generative-gaming/src/schemas/entities/common.ts:12)
+- Applied caps to narration, names, and dialogue text across entity schemas
+- Added over-cap tests in [entities.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/schemas/entities/entities.test.ts:54)
+- Updated config transcription test in [config.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/config/config.test.ts:79)
+- Updated `PROGRESS.md` status/log per repo contract
+
+No commit made.
+
+Verification output:
+
+```text
+> generative-gaming@0.0.0 check /Users/keigoshimada/Documents/generative-gaming
+> pnpm run typecheck && pnpm run lint && pnpm test
+
+> generative-gaming@0.0.0 typecheck /Users/keigoshimada/Documents/generative-gaming
+> tsc --noEmit
+
+> generative-gaming@0.0.0 lint /Users/keigoshimada/Documents/generative-gaming
+> eslint .
+
+> generative-gaming@0.0.0 test /Users/keigoshimada/Documents/generative-gaming
+> vitest run
+
+ RUN  v4.1.8 /Users/keigoshimada/Documents/generative-gaming
+
+ Test Files  13 passed (13)
+      Tests  70 passed (70)
+   Start at  19:16:57
+   Duration  265ms (transform 309ms, setup 0ms, import 503ms, tests 55ms, environment 1ms)
+```
+
+Scope deviations: only `PROGRESS.md` coordination update outside implementation scope, required by `AGENTS.md`. Residual risks: none found. Environment discoveries: none. Actual time: ~12 minutes; brief estimate not supplied.

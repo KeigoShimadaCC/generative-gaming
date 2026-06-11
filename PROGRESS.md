@@ -9,25 +9,16 @@ This file records *state*, never *design* — design lives in the doc spine
 
 ## Active Phase
 
-**Phase:** Wave A — PHASE-01A + PHASE-01B (parallel environment spikes)
-**Phase plan:** phase-plans/PHASE-01A-SPIKE-CODEX-ENV.md, PHASE-01B-SPIKE-CURSOR-ENV.md
+**Phase:** Wave B — engine core (PHASE-06 first; see PHASE-INDEX.md)
+**Phase plan:** phase-plans/PHASE-06-ENGINE-STATE.md
 **Started:** 2026-06-11
-**Status:** executing (human approved Wave A)
+**Status:** executing (Wave A closed: 01A, 01B, 02, 03, 04A, 04B, 04C, 05 all verified & merged)
 
 ## Task Queue
 
 | ID | Task | Owner (agent) | Worktree / branch | Status | Notes |
 |---|---|---|---|---|---|
-| 01A-1 | Codex sandbox probe spike | Codex | main (runs/spikes only) | verified | audit clean (Cursor) |
-| 01B-1 | Cursor CLI probe spike | Cursor | main (runs/spikes only) | verified | 1 audit finding → amended (claim 4 evidence) |
-| 02-1 | codex-run.sh harness + ledger | Codex | main (scripts/ only) | verified | |
-| 02-2/3 | cursor-run.sh + agent-report.sh | Cursor | main (scripts/ only) | verified | |
-| 03-1 | Repo scaffold (tooling + skeleton) | Codex | main | verified | READY; merged 689616b |
-| 04A-1 | CI workflow + README stub | Cursor | main (.github, README) | verified | live Actions run GREEN on main (b54db42) |
-| 04C-2 | Injected clock | Cursor | main (src/engine/clock) | ready-for-verify | clean |
-| 04B-1 | Config module ([T]/[HARD] transcription) | Codex | main (src/config) | ready-for-verify | 2 doc ambiguities → orchestrator pinned in GAME_DESIGN |
-| 04B-2 | Config addendum (xp factor, pack_hunter N) | Cursor | main (src/config) | in-progress | |
-| 04C-1 | Seeded PRNG + substreams | Codex | main (src/engine/rng) | in-progress | timebox 30m |
+| 06-1 | Engine state model & serialization | Codex | main (src/engine/state) | in-progress | timebox 60m |
 
 Status values: `queued` → `claimed` → `in-progress` → `ready-for-verify` →
 `verified` → `merged` (or `blocked` / `returned` with a note).
@@ -50,6 +41,7 @@ Format: `YYYY-MM-DD · phase/task · who · what was verified · evidence (comma
 | 2026-06-11 | 01A | Cursor (audit) | All 6 sandbox claims verified vs session.jsonl; 2 inherited facts REFUTED (.git writes allowed, && works) | runs/spikes/01A-codex-env/ |
 | 2026-06-11 | 01B | Codex (audit) | 5/5 claims verified after claim-4 evidence amendment; Cursor can commit directly | runs/spikes/01B-cursor-env/ |
 | 2026-06-11 | 02 | Cursor (verify) | READY: 3 scripts syntax-clean, both live smokes green, rollup matches ledger arithmetic, 0 malformed rows. Orchestrator adjudication: NA token fields accepted for cursor text mode (plan §9.1 narrowed) | runs/sessions/, scripts/ledger.tsv |
+| 2026-06-11 | 05-1a | Codex | Text caps wired into config bounds and schemas; full gate green | `pnpm run check` → 13 test files, 70 tests passed |
 
 ## Worktrees & Branches
 
@@ -68,6 +60,12 @@ spike ≤ 15 min (hard).
 | 01B·1 | spike | Cursor | 10m | 15m | ~6m | clean one-shot |
 | 01A·1 | spike | Codex | 10m | 15m | ~7m (+15m stall) | run 1 no-event stall: codex exec without `< /dev/null`; fix recorded in ENVIRONMENT.md; retry one-shot |
 | 02·1 | implement | Codex | 15m | 30m | ~30m | overrun cause: diagnosing nested-codex CODEX_HOME issue (new unknown, now in ENVIRONMENT.md) |
+| 03·1 | implement | Codex | 30m | 60m | 4.4m session | harness-measured; codex far faster than reference baseline on assembly |
+| 04A·1 | implement | Cursor | 20m | 30m | ~8m + CI run | live Actions green = verification |
+| 04B·1 | implement | Codex | 20m | 40m | 5.8m session | 2 doc ambiguities surfaced (good catch, not overrun) |
+| 04C·1+2 | implement | Codex+Cursor | 20m | 30m | ~6m combined | clean |
+| 05·1 | implement | Codex | 45m | 90m | 13m session | 67 tests; 1 doc ambiguity (text caps) |
+| 05·1a | implement | Codex | 10m | 20m | ~5m | caps wired from config |
 
 ## Future Backlog (out-of-scope discoveries land here, not in code)
 

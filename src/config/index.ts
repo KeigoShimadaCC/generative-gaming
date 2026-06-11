@@ -665,7 +665,12 @@ export const bounds = deepFreeze({
   directorManifest: {
     signatureMomentsPerRun: 1, // GAME_DESIGN §12
     signatureMomentBand: "middle", // GAME_DESIGN §12
-    namedMadeEntityPermitted: true // GAME_DESIGN §12
+    namedMadeEntityPermitted: true, // GAME_DESIGN §12
+    textCaps: {
+      narrationLineMaxChars: 160, // GAME_DESIGN §12
+      nameMaxChars: 40, // GAME_DESIGN §12
+      descriptionDialogueLineMaxChars: 200 // GAME_DESIGN §12
+    }
   },
   gauntlet: {
     repairRetriesMax: 2 // TECH_SPEC §6, NORTH_STAR §5

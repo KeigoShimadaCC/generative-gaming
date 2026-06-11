@@ -1,0 +1,95 @@
+Implemented PHASE-05 schema work under `src/schemas/**`. No commit made.
+
+**Phase Completion Check**
+Status: implemented with one blocked ambiguity: narration text length caps are required by the brief, but no numeric cap exists in the required docs/config, so I did not invent one.
+
+Files:
+`src/schemas/common.ts`, `src/schemas/index.ts`, `src/schemas/protocol.ts`, `src/schemas/protocol.test.ts`, `src/schemas/vocab/**`, `src/schemas/entities/**`, `src/schemas/fixtures/**`.
+
+Verification:
+```text
+pnpm run check
+> tsc --noEmit
+> eslint .
+> vitest run
+
+Test Files  13 passed (13)
+Tests       67 passed (67)
+```
+
+```text
+rg 'Math.random|Date.now' src/schemas/
+# empty
+```
+
+**Coverage Table**
+| GAME_DESIGN row | Schema export |
+|---|---|
+| §6 `poison` | `StatusIdSchema`, `StatusApplicationSchema` |
+| §6 `burn` | `StatusIdSchema`, `StatusApplicationSchema` |
+| §6 `regen` | `StatusIdSchema`, `StatusApplicationSchema` |
+| §6 `stun` | `StatusIdSchema`, `StatusApplicationSchema` |
+| §6 `confusion` | `StatusIdSchema`, `StatusApplicationSchema` |
+| §6 `slow` | `StatusIdSchema`, `StatusApplicationSchema` |
+| §6 `haste` | `StatusIdSchema`, `StatusApplicationSchema` |
+| §6 `blind` | `StatusIdSchema`, `StatusApplicationSchema` |
+| §6 `shield` | `StatusIdSchema`, `StatusApplicationSchema` |
+| §6 `weaken` | `StatusIdSchema`, `StatusApplicationSchema` |
+| §7 `damage` | `DamageEffectPayloadSchema` |
+| §7 `heal` | `HealEffectPayloadSchema` |
+| §7 `apply_status` | `ApplyStatusEffectPayloadSchema` |
+| §7 `cure_status` | `CureStatusEffectPayloadSchema` |
+| §7 `buff_stat` | `BuffStatEffectPayloadSchema` |
+| §7 `nutrition` | `NutritionEffectPayloadSchema` |
+| §7 `teleport_self` | `EmptyEffectPayloadSchema` via `EffectSchema` |
+| §7 `teleport_target` | `EmptyEffectPayloadSchema` via `EffectSchema` |
+| §7 `blink` | `BlinkEffectPayloadSchema` |
+| §7 `knockback` | `KnockbackEffectPayloadSchema` |
+| §7 `reveal` | `RevealEffectPayloadSchema` |
+| §7 `identify` | `IdentifyEffectPayloadSchema` |
+| §7 `enchant` | `EnchantEffectPayloadSchema` |
+| §7 `summon` | `SummonEffectPayloadSchema` |
+| §7 `transform` | `TransformEffectPayloadSchema` |
+| §7 `dig` | `DigEffectPayloadSchema` |
+| §7 trigger `quaff` | `TriggerSchema` |
+| §7 trigger `read` | `TriggerSchema` |
+| §7 trigger `throw_hit` | `TriggerSchema` |
+| §7 trigger `equip_passive` | `TriggerSchema` |
+| §7 trigger `on_hit` | `OnHitTriggerPayloadSchema` |
+| §7 trigger `on_struck` | `OnStruckTriggerPayloadSchema` |
+| §7 trigger `step` | `TriggerSchema` |
+| §7 trigger `use` | `UseTriggerPayloadSchema` |
+| §7 shape `self` | `TargetingShapeSchema` |
+| §7 shape `melee` | `TargetingShapeSchema` |
+| §7 shape `bolt` | `BoltTargetingPayloadSchema` |
+| §7 shape `burst` | `BurstTargetingPayloadSchema` |
+| §7 shape `floor` | `TargetingShapeSchema` |
+| §9.2 `approach_melee` | `BehaviorSchema` |
+| §9.2 `keep_range` | `KeepRangeBehaviorPayloadSchema` |
+| §9.2 `flee_low_hp` | `FleeLowHpBehaviorPayloadSchema` |
+| §9.2 `pack_hunter` | `PackHunterBehaviorPayloadSchema` |
+| §9.2 `ambusher` | `AmbusherBehaviorPayloadSchema` |
+| §9.2 `territorial` | `TerritorialBehaviorPayloadSchema` |
+| §9.2 `guard` | `GuardBehaviorPayloadSchema` |
+| §9.2 `patrol` | `BehaviorSchema` |
+| §9.2 `thief` | `BehaviorSchema` |
+| §9.2 `caster` | `CasterBehaviorPayloadSchema` |
+| §9.2 `bodyguard` | `BehaviorSchema` |
+| §9.2 `mimic` | `BehaviorSchema` |
+| §10 `fetch` | `FetchQuestObjectivePayloadSchema` |
+| §10 `kill` | `KillQuestObjectivePayloadSchema` |
+| §10 `reach` | `ReachQuestObjectivePayloadSchema` |
+| §10 `deliver` | `DeliverQuestObjectivePayloadSchema` |
+| §10 `escort` | `EscortQuestObjectivePayloadSchema` |
+| §10 `constraint` | `ConstraintQuestObjectivePayloadSchema` |
+
+**AMBIGUITIES**
+- Narration text length caps: required by brief, but no numeric cap exists in `GAME_DESIGN.md` §§6–10, `TECH_SPEC.md` §6, or `src/config`. Implemented strict structure and observation count cap only.
+- Food has no dedicated `eat` trigger in §7. Schema requires an effect bundle but does not invent an extra trigger.
+- `identify` category targeting is a non-empty category string because §7 does not define a closed category field shape for that effect.
+
+Scope deviations: none inside owned files. Existing dirty `PROGRESS.md` / run-log files outside scope were left untouched.
+
+Environment discoveries: none.
+
+Actual time: ~12m vs 45m estimate.

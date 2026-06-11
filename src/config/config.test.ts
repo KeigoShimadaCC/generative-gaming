@@ -76,6 +76,11 @@ describe("game config", () => {
     expect(bounds.trapsNpcsQuests.npcs.perFloor.max).toBe(2);
     expect(bounds.gauntlet.repairRetriesMax).toBe(2);
     expect(bounds.directorManifest.signatureMomentsPerRun).toBe(1);
+    expect(bounds.directorManifest.textCaps.narrationLineMaxChars).toBe(160);
+    expect(bounds.directorManifest.textCaps.nameMaxChars).toBe(40);
+    expect(bounds.directorManifest.textCaps.descriptionDialogueLineMaxChars).toBe(
+      200,
+    );
   });
 
   it("deep-freezes config and hard bounds", () => {

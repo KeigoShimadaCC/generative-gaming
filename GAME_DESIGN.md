@@ -264,8 +264,10 @@ Per floor, the Director submits exactly: layout knobs (§2), theme/palette choic
 enemy roster + placements (within §9 budgets), item list + placements (§8), traps
 (§10), 0–2 NPCs with dialogue/inventory/quest (§10), narration beats (floor intro
 line + up to 3 [T] triggered observation lines), and metadata (origin tags,
-callbacks referenced). Schema detail is a phase-plan concern; *this* table of
-what-and-how-much is the design contract the schema must express.
+callbacks referenced). Generated text caps [HARD]: narration lines ≤160
+characters; entity/item/NPC names ≤40; descriptions and dialogue lines ≤200.
+Schema detail is a phase-plan concern; *this* table of what-and-how-much is the
+design contract the schema must express.
 
 Per run, additionally: one **signature moment** (NORTH_STAR §6) — a single
 flagged floor in the Middle band where budgets relax by 25% [T] and a named Made

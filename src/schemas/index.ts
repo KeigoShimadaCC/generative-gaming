@@ -1,2 +1,3 @@
-// Schemas boundary: shared Zod contracts and content vocabularies.
-export {};
+export * from "./entities/index.js";
+export * from "./protocol.js";
+export * from "./vocab/index.js";
