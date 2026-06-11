@@ -1,0 +1,37 @@
+**Phase Completion Check**
+Status: Complete for PHASE-07A tasks 1+2; full phase remains partial because pathfinding task 3 is explicitly assigned elsewhere.
+
+Implemented:
+- [grid.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/map/grid.ts:18): serializable flat `TileGrid`, config-band sizing, floor geometry slot helper, bounds/index/coord, 8-way neighbors, Bresenham lines, radius/disc cells.
+- [terrain.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/map/terrain.ts:1): terrain constants/tables, door open/closed tile state, walkability/transparency helpers.
+- [fov.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/map/fov.ts:50): symmetric shadowcasting FOV with radius override hook, visible set helpers, per-player fog memory.
+- [index.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/map/index.ts:1): exports.
+- Tests added for grid, terrain, FOV symmetry/fixtures, radius override, fog transitions.
+
+Validation:
+```text
+pnpm run check
+> tsc --noEmit
+> eslint .
+> vitest run
+
+Test Files  17 passed (17)
+Tests       90 passed (90)
+```
+
+```text
+rg 'Math.random|Date.now' src/engine/map/
+# empty output
+```
+
+No `src/engine/map/path.ts` or `path.test.ts` was created.
+
+AMBIGUITIES pinned in fixtures:
+- Pillar shadow is conservative/widening: [fov.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/map/fov.test.ts:52) expects `v...v` on the far row behind a pillar.
+- Diagonal corner peeking is explicitly pinned: [fov.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/map/fov.test.ts:67) documents the exact visible pattern.
+
+Scope notes:
+- No commit made.
+- Pre-existing dirty `PROGRESS.md` and `runs/...` artifacts were present and left untouched.
+- No environment discoveries.
+- Actual time: ~6m 23s vs 30m estimate.

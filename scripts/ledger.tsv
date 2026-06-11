@@ -17,3 +17,8 @@ timestamp	label	agent	model	effort	seconds	input_tokens	output_tokens	total_toke
 2026-06-11T10:17:57Z	phase05-verify	cursor	composer-2.5	default	140	NA	NA	NA	0
 2026-06-11T10:21:44Z	phase06-state	codex	default	default	527	2448895	33398	2482293	0
 2026-06-11T10:30:59Z	phase06-verify	cursor	composer-2.5	default	107	NA	NA	NA	0
+2026-06-11T10:33:36Z	phase07a-map	codex	default	default	414	1482682	27470	1510152	0
+2026-06-11T10:40:59Z	phase07a-path	cursor	composer-2.5	default	274	NA	NA	NA	0
+2026-06-11T10:41:22Z	phase07b-turn	codex	default	default	479	1301780	31019	1332799	0
+2026-06-11T10:49:44Z	phase07-verify	cursor	composer-2.5	default	114	NA	NA	NA	0
+2026-06-11T10:51:55Z	phase07a-path-fix	cursor	composer-2.5	default	84	NA	NA	NA	0

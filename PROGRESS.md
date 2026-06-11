@@ -74,6 +74,8 @@ spike ≤ 15 min (hard).
 | 2026-06-11 | orchestrator | Boss-fight system for floor 12 (GAME_DESIGN §13) | post-MVP |
 | 2026-06-11 | orchestrator | Free-form NPC conversation behind gauntlet (NORTH_STAR §11) | post-MVP |
 | 2026-06-11 | orchestrator | Effect/behavior vocabulary expansion round (GAME_DESIGN §7) | post-M3 |
+| 2026-06-11 | orchestrator | CI red-path demo (intentional failure blocks PR) deferred from 04A | with PHASE-43 |
+| 2026-06-11 | verifier | Prefer @types/node over growing state/node-fs.d.ts shim | when Node APIs grow |
 
 ## Phase Rotation Procedure
 

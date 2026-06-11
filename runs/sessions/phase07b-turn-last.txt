@@ -1,0 +1,28 @@
+Implemented Phase 07B under `src/engine/turn/**` only. No commit made.
+
+Files:
+- [actions.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/turn/actions.ts)
+- [loop.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/turn/loop.ts)
+- [index.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/turn/index.ts)
+- [actions.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/turn/actions.test.ts)
+- [loop.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/turn/loop.test.ts)
+
+Verification:
+```text
+pnpm run check
+Test Files  20 passed (20)
+Tests       113 passed (113)
+```
+
+```text
+rg 'Math.random|Date.now' src/engine/turn/
+(no output)
+```
+
+Notes:
+- Turn hook interface is documented/frozen in `loop.ts`; tick order is `damageOverTime -> durations -> hunger -> regen`.
+- Invalid actions return `action_illegal` events and serialize-equal unchanged state.
+- WIN, LOSS, ABORTED, terminal no-op, hard cap, actor order, and tick order are covered.
+- Ambiguity: `AGENTS.md` says claim `PROGRESS.md`, but this brief owned only `src/engine/turn/**` and `PROGRESS.md` says workers update only rows/logs their brief tells them to, so I did not edit it.
+- Environment discoveries: none.
+- Actual time: ~7m12s vs 45m estimate.
