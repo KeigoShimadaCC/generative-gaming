@@ -33,3 +33,9 @@ timestamp	label	agent	model	effort	seconds	input_tokens	output_tokens	total_toke
 2026-06-11T14:18:02Z	phase11-player	codex	default	default	445	2256454	24626	2281080	0
 2026-06-11T14:18:27Z	phase12-inventory-r2	cursor	composer-2.5	default	489	NA	NA	NA	0
 2026-06-11T14:27:05Z	phase1112-verify	cursor	composer-2.5	default	89	NA	NA	NA	0
+2026-06-11T14:29:40Z	phase13b-geometry	cursor	composer-2.5	default	1	NA	NA	NA	1
+2026-06-11T14:30:20Z	phase13b-geometry-r2	cursor	composer-2.5	default	245	NA	NA	NA	0
+2026-06-11T14:29:29Z	phase13a-effects	codex	default	default	618	3478543	35671	3514214	0
+2026-06-11T14:40:18Z	phase13b-spatial	codex	default	default	584	3070336	37961	3108297	0
+2026-06-11T14:50:31Z	phase13-verify	cursor	composer-2.5	default	127	NA	NA	NA	0
+2026-06-11T14:52:59Z	phase13b-oob-fix	codex	default	default	203	861170	12065	873235	0

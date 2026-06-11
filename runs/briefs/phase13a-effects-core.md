@@ -1,0 +1,13 @@
+IMPLEMENT TASK — PHASE-13A: effect interpreter I — core verbs (contract: phase-plans/PHASE-13A-EFFECTS-CORE.md; read it plus GAME_DESIGN.md §7 and the schemas in src/schemas/vocab/).
+
+STEP 0 (ENVIRONMENT.md, verified): GATE SCOPE — a sibling worker is concurrently writing src/engine/effects/geometry.ts; gate with `pnpm run typecheck` + `pnpm test -- src/engine/effects` ONLY (the full check runs at combined verification). Import: schemas (validated EffectBundle types are your INPUT — you execute, never re-validate shapes beyond bounds re-assertion), config bounds, state, status system (apply_status/cure_status route through src/engine/systems/status.ts exports), player/inventory state fields for heal/nutrition/identify/enchant, combat's applyDeath for lethal damage. Do NOT modify any existing module. Do NOT create spatial.ts or geometry.ts. No Math.random/Date.now (use rng.fork('effects')). Do NOT commit.
+
+OWNED FILES: src/engine/effects/registry.ts, src/engine/effects/core.ts (+ core.test.ts, registry.test.ts).
+
+THE WORK:
+1. FIRST (≤15 min in): registry.ts — the verb-executor registry: registerEffectExecutor(verb, executor) where executor(state, effect, ctx) → {state, events}; executeBundle(state, bundle, ctx) running 1–3 effects in order ATOMICALLY (any effect failing bounds → whole bundle no-ops with typed event); ctx carries source/target/origin info + rng. Write registry.test.ts. This interface is the 13A/13B coupling point — keep it minimal and stable; note completion of this file in your report's first line.
+2. core.ts — executors for 8 verbs per GAME_DESIGN §7 rows: damage (1–12, routes lethality through applyDeath), heal (1–20, cap at max HP), apply_status / cure_status (via status system), buff_stat (±1–3, duration 5–20 — as a timed status-like modifier consistent with how combat derives stats; read combat.ts derivation first and match its expectations), nutrition (+10–100 fullness, overfeed rules via player conventions), identify (one item or category — set identification knowledge fields on run state per inventory/items conventions; if the knowledge field doesn't exist yet in state, add ONLY the minimal field with a comment for PHASE-14), enchant (+1, cap +3 over base).
+3. Bounds re-assertion at execution per verb (defense in depth) — out-of-bounds → typed rejection event, zero state change.
+4. Tests per verb: doc-exact semantics; OOB execution rejection with state serialize-unchanged; bundle atomicity (2nd effect OOB → 1st rolled back).
+
+DEFINITION OF DONE: pnpm run typecheck green + pnpm test -- src/engine/effects green (paste); rg 'Math.random|Date.now' src/engine/effects/ empty. Report + AMBIGUITIES + actual vs 40m. NO commit. Then stop.

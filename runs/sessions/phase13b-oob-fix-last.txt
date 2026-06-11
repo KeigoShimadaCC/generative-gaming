@@ -1,0 +1,16 @@
+Updated only [spatial.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/effects/spatial.test.ts:452). Added table-driven rejection coverage for all 8 spatial verbs, asserting one typed `effect_rejected` event and unchanged serialized state. Teleport rows use an impossible walkable-cell state because those verbs have no numeric payload bounds.
+
+Verification:
+
+```text
+pnpm test -- src/engine/effects
+
+> generative-gaming@0.0.0 test /Users/keigoshimada/Documents/generative-gaming
+> vitest run -- src/engine/effects
+
+ Test Files  30 passed (30)
+      Tests  228 passed (228)
+   Duration  783ms
+```
+
+No commit made. Scope deviations: none. Residual risks/environment discoveries: none. Actual time: ~18m.

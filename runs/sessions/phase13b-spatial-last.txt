@@ -1,0 +1,44 @@
+Implemented Phase 13B task 2 in:
+
+- [spatial.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/effects/spatial.ts)
+- [spatial.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/effects/spatial.test.ts)
+
+No commit made.
+
+Verification:
+
+```text
+pnpm run typecheck
+> tsc --noEmit
+PASS
+```
+
+```text
+pnpm test -- src/engine/effects
+> vitest run -- src/engine/effects
+Test Files  30 passed (30)
+Tests       220 passed (220)
+```
+
+```text
+pnpm exec vitest run src/engine/effects
+Test Files  4 passed (4)
+Tests       39 passed (39)
+```
+
+```text
+rg 'Math.random|Date.now' src/engine/effects/spatial.ts
+# no matches
+```
+
+Also ran focused lint on the two owned files; clean.
+
+AMBIGUITIES:
+
+- `EnemyDefinitionSchema` does not currently declare a cost field. I used floor-roster metadata `cost`/`budgetCost` with a `TODO-PHASE-16` reader, and strip that metadata before storing live entity definitions so serialization remains strict.
+- There is no dedicated state field for floor roster, reveal knowledge, or fog. I used serializable extras on `floor.geometry.opaque`, which existing grid readers tolerate.
+- Spatial direction is not part of effect payloads. Blink/dig derive direction from `ctx.origin` or source-target vector; knockback derives away from origin/source.
+
+Environment discoveries: none new.
+
+Actual time: ~40m vs 40m estimate.

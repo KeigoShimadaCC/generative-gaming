@@ -1,0 +1,33 @@
+REGISTRY FROZEN: [registry.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/effects/registry.ts) is complete with `registerEffectExecutor` and atomic `executeBundle`.
+
+Implemented the core effect interpreter in [core.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/effects/core.ts) and tests in [core.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/effects/core.test.ts), [registry.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/effects/registry.test.ts). No commit made.
+
+Verification:
+```text
+pnpm run typecheck
+> tsc --noEmit
+exit 0
+```
+
+```text
+pnpm test -- src/engine/effects
+Test Files  29 passed (29)
+Tests       211 passed (211)
+exit 0
+```
+
+```text
+rg 'Math.random|Date.now' src/engine/effects/
+no matches
+```
+
+Also ran narrow owned-file lint: `pnpm exec eslint src/engine/effects/core.ts src/engine/effects/registry.ts src/engine/effects/core.test.ts src/engine/effects/registry.test.ts` -> exit 0.
+
+AMBIGUITIES / residual risks:
+- `status.ts` exports `applyStatus` but no cure helper, so `apply_status` routes through the status system and `cure_status` uses the same immutable status-field convention locally.
+- `buff_stat` uses the combat-compatible runtime status metadata shape already read by `combat.ts`; the persisted status schema does not yet model this as a first-class runtime status.
+- Enchant has no persisted per-item base bonus field, so cap is implemented as authored max + 3. Per-item “+3 over original base” needs a later runtime item/enchantment field.
+
+Scope deviation: while formatting owned files, a broad `src/engine/effects/*.ts` glob also formatted sibling-owned `geometry.ts` / `geometry.test.ts` after they appeared. I did not otherwise edit them. Existing unrelated changes remain untouched: `scripts/ledger.tsv`, `runs/briefs/...`, `runs/sessions/...`.
+
+Actual time: ~10m session time vs 40m estimate.
