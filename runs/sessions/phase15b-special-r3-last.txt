@@ -1,0 +1,30 @@
+**Phase Completion Check**
+Status: Complete
+
+Implemented PHASE-15B special behaviors in [special.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/behaviors/special.ts:138) and added the additive combat interception seam in [combat.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/systems/combat.ts:33). Added fixture coverage in [special.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/behaviors/special.test.ts:59) and appended combat seam tests in [combat.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/systems/combat.test.ts:304).
+
+What changed:
+- Ability/cooldown execution via `executeBundle`, using the AI RNG stream and runtime `abilityCooldowns`.
+- Special evaluators: `caster`, `pack_hunter`, `ambusher`, `thief`, `bodyguard`, `mimic`.
+- Thief steal/flee/drop-on-death through combat’s loot-drop hook.
+- Bodyguard interception through `registerAttackInterceptor`, chained in registration order.
+- No edits to frozen `perception.ts` or `movement.ts`.
+- No commit made.
+
+Validation:
+- `pnpm run typecheck` -> passed.
+- `pnpm exec eslint src/engine/behaviors` -> passed.
+- `pnpm test -- src/engine/behaviors` -> passed: 41 files, 315 tests.
+- `pnpm vitest run src/engine/systems/combat.test.ts --reporter=verbose` -> passed: 14 tests.
+- `pnpm exec eslint src/engine/systems/combat.ts src/engine/systems/combat.test.ts` -> passed.
+- `rg 'Math.random|Date.now' src/engine/behaviors/special.ts` -> no matches.
+
+AMBIGUITIES:
+- Used `behaviorRuntime.wardId` for bodyguard wards because the behavior payload is empty.
+- Used `behaviorRuntime.disguisedAsItem` for mimic disguise state.
+- Since `movement.ts` is frozen, `special.ts` exports the composed special behavior hook/evaluator instead of modifying the existing movement module.
+
+Environment discovery:
+- The exact `pnpm test -- src/engine/behaviors` command ran the full Vitest suite here, not only behavior tests.
+
+Actual time: ~10m measured vs 40m estimate.

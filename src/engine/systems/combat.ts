@@ -30,6 +30,12 @@ import {
 export type PlayerActorId = "player";
 export type CombatActorId = PlayerActorId | EntityId;
 
+export type AttackInterceptor = (
+  state: GameState,
+  attackerId: CombatActorId,
+  intendedDefenderId: CombatActorId,
+) => CombatActorId;
+
 export type CombatStats = {
   readonly attack: number;
   readonly defense: number;
@@ -117,6 +123,7 @@ const HIT_ROLL_MIN = 1;
 const HIT_ROLL_MAX = 100;
 
 let lootDropHook: LootDropHook = ({ state }) => state;
+const attackInterceptors: AttackInterceptor[] = [];
 
 type CombatActor =
   | {
@@ -208,7 +215,6 @@ export const resolveAttack = (
   defenderId: CombatActorId,
 ): ActionResolverResult => {
   const attacker = combatActor(state, attackerId);
-  const defender = combatActor(state, defenderId);
 
   if (attacker === null) {
     return {
@@ -217,17 +223,24 @@ export const resolveAttack = (
     };
   }
 
+  const interceptedDefenderId = applyAttackInterceptors(
+    state,
+    attackerId,
+    defenderId,
+  );
+  const defender = combatActor(state, interceptedDefenderId);
+
   if (defender === null) {
     return {
       illegal: true,
-      reason: `defender ${defenderId} is not a combat actor`,
+      reason: `defender ${interceptedDefenderId} is not a combat actor`,
     };
   }
 
   if (!isAdjacent(attacker.position, defender.position)) {
     return {
       illegal: true,
-      reason: `defender ${defenderId} is not adjacent to attacker ${attackerId}`,
+      reason: `defender ${interceptedDefenderId} is not adjacent to attacker ${attackerId}`,
     };
   }
 
@@ -302,7 +315,21 @@ export const resolveBoltAttack = (
     };
   }
 
-  return resolveAttackRoll(state, attacker, target.actor);
+  const interceptedDefenderId = applyAttackInterceptors(
+    state,
+    attackerId,
+    target.actor.id,
+  );
+  const defender = combatActor(state, interceptedDefenderId);
+
+  if (defender === null) {
+    return {
+      illegal: true,
+      reason: `defender ${interceptedDefenderId} is not a combat actor`,
+    };
+  }
+
+  return resolveAttackRoll(state, attacker, defender);
 };
 
 export const resolveAttackAction: ActionResolver<AttackAction> = (
@@ -324,6 +351,34 @@ export const registerLootDropHook = (hook: LootDropHook): (() => void) => {
       lootDropHook = previous;
     }
   };
+};
+
+export const registerAttackInterceptor = (
+  interceptor: AttackInterceptor,
+): (() => void) => {
+  attackInterceptors.push(interceptor);
+
+  return () => {
+    const index = attackInterceptors.lastIndexOf(interceptor);
+
+    if (index !== -1) {
+      attackInterceptors.splice(index, 1);
+    }
+  };
+};
+
+const applyAttackInterceptors = (
+  state: GameState,
+  attackerId: CombatActorId,
+  defenderId: CombatActorId,
+): CombatActorId => {
+  let nextDefenderId = defenderId;
+
+  for (const interceptor of attackInterceptors) {
+    nextDefenderId = interceptor(state, attackerId, nextDefenderId);
+  }
+
+  return nextDefenderId;
 };
 
 const resolveAttackRoll = (

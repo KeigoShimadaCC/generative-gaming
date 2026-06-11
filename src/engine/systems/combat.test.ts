@@ -35,6 +35,7 @@ import { step, type TurnEvent } from "../turn/index.js";
 import {
   calculateDamage,
   deriveCombatStats,
+  registerAttackInterceptor,
   registerLootDropHook,
   resolveAttack,
   resolveBoltAttack,
@@ -297,6 +298,50 @@ describe("combat log event shape", () => {
     expect(result.state.rng.streams.root?.draws).toBe(0);
     expect(result.state.rng.streams.combat?.parentStreamId).toBe("root");
     expect(result.state.rng.streams.combat?.draws).toBeGreaterThan(0);
+  });
+});
+
+describe("attack interception", () => {
+  it("chains interceptors in registration order before defender resolution", () => {
+    const state = stateFromFixture("attack-interception-chain", "B@A");
+    const calls: string[] = [];
+    const unregisterFirst = registerAttackInterceptor(
+      (_state, attackerId, defenderId) => {
+        calls.push(`first:${attackerId}->${defenderId}`);
+        return "enemy#2";
+      },
+    );
+    const unregisterSecond = registerAttackInterceptor(
+      (_state, attackerId, defenderId) => {
+        calls.push(`second:${attackerId}->${defenderId}`);
+        return defenderId;
+      },
+    );
+
+    try {
+      const result = expectSuccess(resolveAttack(state, "player", "enemy#1"));
+      const resolution = result.events.find(isAttackResolutionEvent);
+
+      expect(calls).toEqual([
+        "first:player->enemy#1",
+        "second:player->enemy#2",
+      ]);
+      expect(resolution?.data.defenderId).toBe("enemy#2");
+    } finally {
+      unregisterSecond();
+      unregisterFirst();
+    }
+  });
+
+  it("returns to identity defender resolution after unregistering", () => {
+    const state = stateFromFixture("attack-interception-unregister", "B@A");
+    const unregister = registerAttackInterceptor(() => "enemy#2");
+    unregister();
+
+    const result = expectSuccess(resolveAttack(state, "player", "enemy#1"));
+    const resolution = result.events.find(isAttackResolutionEvent);
+
+    expect(resolution?.data.defenderId).toBe("enemy#1");
   });
 });
 

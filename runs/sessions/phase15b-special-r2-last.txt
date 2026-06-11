@@ -1,0 +1,17 @@
+STOP: bodyguard cannot be implemented within the brief as written.
+
+I found no `resolveAttack` interception point. Combat has `resolveAttack`, `resolveAttackRoll`, `resolveAttackAction`, and `registerLootDropHook`, but no hook or callback before defender selection/damage where a bodyguard can retarget the hit. `registerActionResolver("attack", ...)` only wraps player attack actions and would not intercept direct `resolveAttack(...)` calls from enemy behavior, item procs, bolt attacks, or tests, so using it would invent different semantics outside the requested seam.
+
+No implementation files were edited. No commit was made.
+
+Evidence:
+- `rg -n "intercept|interception|resolveAttack|register.*Attack|attack.*hook|ActionResolver|registerActionResolver|lootDropHook|registerLootDropHook|bodyguard|ward" src/engine src/schemas`
+- Relevant files inspected: `src/engine/systems/combat.ts`, `src/engine/turn/loop.ts`, `src/engine/turn/actions.ts`, `src/engine/items/triggers.ts`
+
+AMBIGUITIES:
+- `special.ts` cannot “plug into existing evaluateBehaviors composition” without either modifying frozen `movement.ts` or introducing a new wrapper that callers must explicitly import later.
+- Bodyguard needs an engine-owned attack interception contract in `combat.ts` or a clarified lower-scope meaning limited to player attack actions.
+
+Scoped gates were not run because the brief’s explicit STOP condition was hit before edits.
+
+Actual time: ~15m vs 40m estimate.

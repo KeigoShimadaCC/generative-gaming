@@ -85,6 +85,9 @@ tools and must be re-verified by the Phase 01 environment spike; facts marked
 - **[amended 2026-06-12]** Scoped gates MUST include lint on the owned path
   (`pnpm exec eslint <owned dir>`) — a scoped gate of typecheck+tests only let
   6 lint errors through to the sibling's full gate (15A).
+- **[verified 2026-06-12]** `pnpm test -- <path>` does NOT filter — it runs the
+  full vitest suite. The correct scoped form is `pnpm exec vitest run <path>`.
+  Use that in scoped-gate briefs from now on.
 
 - **[inherited]** `.env*` files are gitignored and do **not** propagate into new
   worktrees — the orchestrator copies them explicitly when (and only when) the
