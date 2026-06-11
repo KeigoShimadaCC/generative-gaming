@@ -43,15 +43,18 @@ export const ItemValueSchema = z
 
 export const WeaponItemPayloadSchema = z.strictObject({
   attackBonus: boundedInt(bounds.itemsEconomy.weaponAtkBonus),
+  cursed: z.boolean(),
 });
 
 export const ArmorItemPayloadSchema = z.strictObject({
   defenseBonus: boundedInt(bounds.itemsEconomy.armorDefBonus),
+  cursed: z.boolean(),
 });
 
 export const CharmItemPayloadSchema = z
   .strictObject({
     passive: EffectBundleSchema,
+    cursed: z.boolean(),
   })
   .superRefine((payload, ctx) => {
     enforceCharmPassive(payload.passive, ctx);

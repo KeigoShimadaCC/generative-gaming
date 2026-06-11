@@ -9,7 +9,7 @@ import { ENGINE_VERSION, PROTOCOL_VERSION, stamp } from "./protocol.js";
 
 describe("protocol stamping", () => {
   it("exposes the protocol and package engine versions", () => {
-    expect(PROTOCOL_VERSION).toBe("1.0.0");
+    expect(PROTOCOL_VERSION).toBe("1.1.0");
     expect(ENGINE_VERSION).toBe(packageJson.version);
   });
 

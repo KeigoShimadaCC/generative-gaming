@@ -179,6 +179,7 @@ export const config = deepFreeze({
         max: 1.5 // GAME_DESIGN §8
       }
     },
+    cursedRate: 0.10, // GAME_DESIGN §8
     cursedGearChanceMaxPercent: 10, // GAME_DESIGN §8
     questRewardValueMultiplier: {
       min: 1.5, // GAME_DESIGN §8

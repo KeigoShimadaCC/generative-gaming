@@ -507,8 +507,9 @@ const carried = (
 const weaponWithBonus = (attackBonus: number): ItemDefinition => ({
   ...validWeaponItemFixture,
   weapon: {
-    attackBonus
-  }
+    attackBonus,
+    cursed: false,
+  },
 });
 
 const eventOfType = <Type extends TurnEvent["type"]>(

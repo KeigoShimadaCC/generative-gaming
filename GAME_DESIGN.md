@@ -173,7 +173,11 @@ space multiplies. Verbs are added by humans via this file, never by the Director
   per-run seeded appearance pool ("a chalky draught", "a humming charm").
   Identify-by-use; knowledge lasts the run. Weapons/armor reveal their bonus only
   when equipped; cursed (negative) gear exists at low rate (≤10% [T]) and announces
-  itself on equip — fair (WORLD §3.2), still costly.
+  itself on equip — fair (WORLD §3.2), still costly. Curse mechanics [HARD]:
+  `cursed` is a generation-time boolean on weapon/armor/charm definitions; a
+  cursed item cannot be unequipped while cursed; applying the `enchant` verb to
+  a cursed item lifts the curse instead of granting +1 (the blessing burns off
+  the curse).
 - **Economy:** coin exists for barter with the Kept. Merchants buy at 50% value,
   sell at 100–150% [T]. Quest rewards: 1.5–3× the floor's item-value band, paid in
   coin, items, or identification — never in stat ups or rule-breaks [HARD].

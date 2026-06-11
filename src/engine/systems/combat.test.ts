@@ -458,6 +458,7 @@ const withWeaponBonus = (attackBonus: number): ItemDefinition => ({
   ...validWeaponItemFixture,
   weapon: {
     attackBonus,
+    cursed: false,
   },
 });
 
@@ -465,6 +466,7 @@ const withArmorBonus = (defenseBonus: number): ItemDefinition => ({
   ...validArmorItemFixture,
   armor: {
     defenseBonus,
+    cursed: false,
   },
 });
 
@@ -481,6 +483,7 @@ const buffCharm = (stat: "ATK" | "DEF", magnitude: number): ItemDefinition =>
       validEquipPassiveTriggerFixture,
       validSelfTargetingFixture,
     ),
+    cursed: false,
   });
 
 const carriedItem = (

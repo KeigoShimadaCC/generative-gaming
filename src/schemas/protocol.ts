@@ -1,6 +1,6 @@
 import packageJson from "../../package.json" with { type: "json" };
 
-export const PROTOCOL_VERSION = "1.0.0" as const;
+export const PROTOCOL_VERSION = "1.1.0" as const;
 
 export const ENGINE_VERSION = packageJson.version;
 

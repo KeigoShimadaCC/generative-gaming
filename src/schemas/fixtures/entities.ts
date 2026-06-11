@@ -100,14 +100,17 @@ export const makeItemFixture = (
 
 export const validWeaponItemFixture = makeItemFixture("weapon", "weapon", {
   attackBonus: bounds.itemsEconomy.weaponAtkBonus.min,
+  cursed: false,
 });
 
 export const validArmorItemFixture = makeItemFixture("armor", "armor", {
   defenseBonus: bounds.itemsEconomy.armorDefBonus.min,
+  cursed: false,
 });
 
 export const validCharmItemFixture = makeItemFixture("charm", "charm", {
   passive: validCharmPassiveFixture,
+  cursed: false,
 });
 
 export const validDraughtItemFixture = makeItemFixture("draught", "draught", {

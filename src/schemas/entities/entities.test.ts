@@ -18,6 +18,7 @@ import {
   makeItemFixture,
   makeQuestObjectiveFixture,
   validBehaviorFixtures,
+  validArmorItemFixture,
   validCharmItemFixture,
   validCharmPassiveFixture,
   validDialogueTreeFixture,
@@ -28,6 +29,7 @@ import {
   validQuestDefinitionFixture,
   validQuestObjectiveFixtures,
   validTrapDefinitionFixture,
+  validWeaponItemFixture,
 } from "../fixtures/entities.js";
 import {
   makeEffectBundleFixture,
@@ -165,12 +167,14 @@ describe("item definition schema", () => {
       ItemDefinitionSchema,
       makeItemFixture("weapon", "weapon", {
         attackBonus: weaponBounds.min - 1,
+        cursed: false,
       }),
     );
     expectFails(
       ItemDefinitionSchema,
       makeItemFixture("weapon", "weapon", {
         attackBonus: weaponBounds.max + 1,
+        cursed: false,
       }),
     );
 
@@ -179,14 +183,61 @@ describe("item definition schema", () => {
       ItemDefinitionSchema,
       makeItemFixture("armor", "armor", {
         defenseBonus: armorBounds.min - 1,
+        cursed: false,
       }),
     );
     expectFails(
       ItemDefinitionSchema,
       makeItemFixture("armor", "armor", {
         defenseBonus: armorBounds.max + 1,
+        cursed: false,
       }),
     );
+  });
+
+  it("accepts cursed equippable item definitions", () => {
+    expectPasses(ItemDefinitionSchema, {
+      ...validWeaponItemFixture,
+      weapon: {
+        ...validWeaponItemFixture.weapon,
+        cursed: true,
+      },
+    });
+    expectPasses(ItemDefinitionSchema, {
+      ...validArmorItemFixture,
+      armor: {
+        ...validArmorItemFixture.armor,
+        cursed: true,
+      },
+    });
+    expectPasses(ItemDefinitionSchema, {
+      ...validCharmItemFixture,
+      charm: {
+        ...validCharmItemFixture.charm,
+        cursed: true,
+      },
+    });
+  });
+
+  it("requires cursed on weapon, armor, and charm payloads", () => {
+    expectFails(ItemDefinitionSchema, {
+      ...validWeaponItemFixture,
+      weapon: {
+        attackBonus: bounds.itemsEconomy.weaponAtkBonus.min,
+      },
+    });
+    expectFails(ItemDefinitionSchema, {
+      ...validArmorItemFixture,
+      armor: {
+        defenseBonus: bounds.itemsEconomy.armorDefBonus.min,
+      },
+    });
+    expectFails(ItemDefinitionSchema, {
+      ...validCharmItemFixture,
+      charm: {
+        passive: validCharmPassiveFixture,
+      },
+    });
   });
 
   it("rejects charm passives that are not exactly one equip_passive bundle", () => {
@@ -198,6 +249,7 @@ describe("item definition schema", () => {
           validCharmPassiveFixture.trigger,
           validCharmPassiveFixture.targeting,
         ),
+        cursed: false,
       }),
     );
     expectFails(
@@ -208,6 +260,7 @@ describe("item definition schema", () => {
           validQuaffTriggerFixture,
           validSelfTargetingFixture,
         ),
+        cursed: false,
       }),
     );
   });
@@ -225,6 +278,7 @@ describe("item definition schema", () => {
       ...validCharmItemFixture,
       charm: {
         passive: validCharmPassiveFixture,
+        cursed: false,
         extra: true,
       },
     });

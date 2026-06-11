@@ -1,0 +1,18 @@
+**NEEDS RE-BRIEF / BLOCKED**
+
+Stopped before implementation per the task’s explicit curse-field rule. The current item schema has no curse/cursed field:
+
+- [src/schemas/entities/items.ts](/Users/keigoshimada/Documents/generative-gaming/src/schemas/entities/items.ts:44): weapon/armor payloads only expose positive bonus fields.
+- [src/schemas/entities/items.ts](/Users/keigoshimada/Documents/generative-gaming/src/schemas/entities/items.ts:113): `ItemDefinitionSchema` has no generation-time curse flag.
+- `rg -n "curse|cursed" src/schemas src/engine` → no matches.
+
+I updated [PROGRESS.md](/Users/keigoshimada/Documents/generative-gaming/PROGRESS.md:23) to mark Phase 14 as blocked. No implementation files were changed and no commit was made.
+
+**Verification**
+`pnpm run check` was not run because the brief required STOP before implementation.  
+`git status --short` shows only `M PROGRESS.md` plus pre-existing untracked run artifacts.
+
+**AMBIGUITIES**
+The schema needs an authored curse surface before this phase can proceed: likely a per-item/per-instance `cursed` boolean or equivalent hold flag, plus the intended cure/removal representation. Schema changes are explicitly out of this task’s scope.
+
+Actual time: ~8m vs 45m estimate. Environment discoveries: none.

@@ -63,6 +63,7 @@ describe("game config", () => {
     expect(config.statusMagnitudes.weakenAtkPenalty).toBe(-2);
     expect(config.itemsEconomy.valueBandsCoin.lowest.max).toBe(200);
     expect(config.itemsEconomy.merchantMultipliers.buy).toBe(0.5);
+    expect(config.itemsEconomy.cursedRate).toBe(0.10);
     expect(config.enemyDesign.spawnBudgetPoints.middle).toBe(45);
     expect(config.trapsNpcsQuests.quests.maxPerRun).toBe(3);
     expect(config.difficultyGate.botEnsemble.policies).toHaveLength(3);

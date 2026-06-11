@@ -1,0 +1,31 @@
+Blocked at the owned-file boundary.
+
+Implemented the requested owned changes:
+- Required `cursed: boolean` on weapon/armor/charm payload schemas in [items.ts](/Users/keigoshimada/Documents/generative-gaming/src/schemas/entities/items.ts:44).
+- Updated schema fixtures with `cursed:false` in [entities.ts](/Users/keigoshimada/Documents/generative-gaming/src/schemas/fixtures/entities.ts:101).
+- Added tests for cursed-valid and missing-cursed-invalid cases in [entities.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/schemas/entities/entities.test.ts:198).
+- Bumped `PROTOCOL_VERSION` to `1.1.0` in [protocol.ts](/Users/keigoshimada/Documents/generative-gaming/src/schemas/protocol.ts:3).
+- Added `config.itemsEconomy.cursedRate = 0.10` with `GAME_DESIGN §8` comment in [index.ts](/Users/keigoshimada/Documents/generative-gaming/src/config/index.ts:182).
+
+Verification:
+```text
+pnpm exec vitest run src/schemas/entities/entities.test.ts src/schemas/protocol.test.ts src/config/config.test.ts
+Test Files  3 passed (3)
+Tests       33 passed (33)
+```
+
+Full gate is not green:
+```text
+pnpm run check
+tsc --noEmit
+
+src/engine/effects/core.test.ts(509,3): missing cursed
+src/engine/systems/combat.test.ts(459,3): missing cursed
+src/engine/systems/combat.test.ts(466,3): missing cursed
+src/engine/systems/combat.test.ts(472,37): missing cursed
+src/engine/systems/inventory.test.ts(445,3): missing cursed
+```
+
+A prior test run also exposed the expected next non-owned fallout: the engine initial-state golden still expects `protocolVersion:"1.0.0"`.
+
+I did not edit `src/engine/**`, `PROGRESS.md`, or any other non-owned files, and I made no commit. Environment discoveries: none. Actual time: ~15m; no estimate was provided.

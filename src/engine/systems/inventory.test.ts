@@ -442,7 +442,7 @@ const definitionKind = (definition: ItemDefinition): ItemDefinition["kind"] =>
 const withWeaponBonus = (attackBonus: number): ItemDefinition => ({
   ...validWeaponItemFixture,
   id: `weapon-bonus-${attackBonus}`,
-  weapon: { attackBonus },
+  weapon: { attackBonus, cursed: false },
 });
 
 const carried = (
