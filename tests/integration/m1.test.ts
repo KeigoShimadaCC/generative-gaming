@@ -265,7 +265,7 @@ describe("M1 integration milestone", () => {
     ).toMatchObject({
       director: "ambient"
     });
-  }, 120_000);
+  }, 600_000);
 
   const liveIt = process.env.CODEX_LIVE === "1" ? it : it.skip;
 

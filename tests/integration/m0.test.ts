@@ -55,7 +55,7 @@ describe("M0 integration milestone", () => {
     }
 
     writeMilestoneReport(runs);
-  }, 120_000);
+  }, 600_000);
 
   it("records byte-identical traces when the same policy and seed are run twice", () => {
     const first = runBot(

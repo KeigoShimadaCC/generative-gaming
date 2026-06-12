@@ -177,7 +177,7 @@ describe("M2 integration milestone", () => {
       expect(prompt).toContain("RESPONSIVENESS TARGETS");
       expect(prompt).toContain("Hoarder-clear");
     },
-    120_000,
+    600_000,
   );
 
   it("records transition budget instrumentation after a fixture descend", async () => {

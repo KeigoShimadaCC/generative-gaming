@@ -1,0 +1,22 @@
+Done. Raised the non-live integration test timeouts from `120_000` to `600_000` in:
+
+- [m0.test.ts](/Users/keigoshimada/Documents/generative-gaming/tests/integration/m0.test.ts:58)
+- [m1.test.ts](/Users/keigoshimada/Documents/generative-gaming/tests/integration/m1.test.ts:268)
+- [m2.test.ts](/Users/keigoshimada/Documents/generative-gaming/tests/integration/m2.test.ts:180)
+
+Verification:
+
+```text
+$ pnpm exec vitest run --config tests/integration/vitest.config.ts
+
+ RUN  v4.1.8 /Users/keigoshimada/Documents/generative-gaming
+
+ Test Files  3 passed (3)
+      Tests  9 passed | 2 skipped (11)
+   Start at  00:39:48
+   Duration  93.02s (transform 740ms, setup 0ms, import 1.10s, tests 101.58s, environment 0ms)
+```
+
+Exit code: `0`.
+
+No commit made. No scope deviations; I did not edit `PROGRESS.md` because the brief limited ownership to `tests/integration` timeout declarations.

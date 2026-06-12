@@ -13,6 +13,7 @@
     "test": "vitest run",
     "check": "pnpm run typecheck && pnpm run lint && pnpm test",
     "e2e": "XDG_CACHE_HOME=${XDG_CACHE_HOME:-.cache} PLAYWRIGHT_BROWSERS_PATH=${PLAYWRIGHT_BROWSERS_PATH:-.cache/ms-playwright} playwright test",
+    "e2e:fullclear": "FULLCLEAR=1 XDG_CACHE_HOME=${XDG_CACHE_HOME:-.cache} PLAYWRIGHT_BROWSERS_PATH=${PLAYWRIGHT_BROWSERS_PATH:-.cache/ms-playwright} playwright test --project=fullclear",
     "dev": "WATCHPACK_POLLING=true CHOKIDAR_USEPOLLING=true next dev -p ${PORT:-3001}",
     "build": "next build",
     "evals": "pnpm dlx tsx src/evals/runner/run.ts",

@@ -1,0 +1,34 @@
+Implemented the full-clear campaign tooling. No commit made.
+
+Changed:
+- [e2e/browser-bot.ts](/Users/keigoshimada/Documents/generative-gaming/e2e/browser-bot.ts): live UI turn-loop bot, 3000 turn cap, stuck dumps to `test-results/full-clear-stuck/`.
+- [e2e/full-clear.spec.ts](/Users/keigoshimada/Documents/generative-gaming/e2e/full-clear.spec.ts): title to WIN to diary to run-index campaign, default `SEED=fullclear-1`, optional determinism note via `FULLCLEAR_DETERMINISM=1`.
+- [playwright.config.ts](/Users/keigoshimada/Documents/generative-gaming/playwright.config.ts), [package.json](/Users/keigoshimada/Documents/generative-gaming/package.json): `e2e:fullclear` script and opt-in `fullclear` project excluded from default `pnpm run e2e`.
+- Added passive UI signals on grid cells: `data-terrain`, `data-feature-kind`, `data-feature-id`, `data-has-item`.
+- Added title URL seed override for `/?seed=...`.
+- Added `AMBIENT=1` provider switch in the web transport.
+
+Policy summary:
+Attack adjacent enemies by moving into them; pick up only when an item is underfoot; heal at HP <= 45% via enabled `Quaff`/`Use`; on floor 12 route to visible Hoard and press `T` on it; otherwise descend on stairs, route to visible stairs, then explore unvisited/frontier cells. On stuck/unexpected state it writes screenshot plus JSON attributes/log tail.
+
+Verification:
+```text
+pnpm run typecheck
+exit 0
+tsc --noEmit -p tsconfig.src.json && tsc --noEmit -p tsconfig.next.json
+```
+
+Extra non-browser load check:
+```text
+FULLCLEAR=1 pnpm exec playwright test --list --project=fullclear
+exit 0
+Total: 2 tests in 1 file
+```
+
+Browser campaign was not launched in-sandbox, per brief. Residual risk: host-side `pnpm run e2e:fullclear` is still required to validate the real campaign.
+
+Scope notes: `app/input/keys.ts` already had the needed `T`/`take_hoard` keyboard binding when I started; I left it in place because the bot requires keyboard-only WIN. Existing dirty `runs/**` and `scripts/ledger.tsv` artifacts were also left untouched.
+
+Environment discoveries: none.
+
+Actual time: ~8m vs 40m estimate.

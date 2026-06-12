@@ -148,3 +148,6 @@ timestamp	label	agent	model	effort	seconds	input_tokens	output_tokens	total_toke
 2026-06-12T15:05:43Z	play-polish	cursor	composer-2.5	default	63	NA	NA	NA	0
 2026-06-12T15:06:50Z	ci-truth	codex	default	default	807	5772777	33137	5805914	0
 2026-06-12T15:26:34Z	ci-timeout-straggler	codex	default	default	74	414297	3801	418098	0
+2026-06-12T15:22:40Z	fullclear-spec	cursor	composer-2.5	default	391	NA	NA	NA	124
+2026-06-12T15:29:30Z	fullclear-spec-codex	codex	default	default	523	6519848	28149	6547997	0
+2026-06-12T15:38:42Z	ci-m0-timeout	codex	default	default	183	297608	5644	303252	0
