@@ -2,6 +2,23 @@ import { expect, type Locator, type Page } from "@playwright/test";
 import fs from "node:fs/promises";
 import path from "node:path";
 
+import { deserialize, type GameState, type PlayerItemStack } from "../src/engine/state/index.js";
+import type { RunAction } from "../src/engine/run/loop.js";
+import type { MoveDirection } from "../src/engine/turn/index.js";
+import { balancedPolicy } from "../src/harness/bots/policies/index.js";
+import {
+  actionKey,
+  fallbackAction,
+  hasAction
+} from "../src/harness/bots/policies/helpers.js";
+import {
+  createBotStateView,
+  createEmptyBotMemory,
+  updateBotMemory,
+  type BotMemory,
+  type BotStateView
+} from "../src/harness/bots/index.js";
+
 export const MAX_TURN_CAP = 3_000;
 export const FINAL_DEPTH = 12;
 const FLOOR_TRANSITION_TIMEOUT_MS = 90_000;
@@ -11,9 +28,19 @@ const NO_VISITED_PROGRESS_TURNS = 150;
 const NO_PROGRESS_REPEAT_CAP = 24;
 const NO_OBSERVABLE_CHANGE_ACTION_CAP = 12;
 const LOOP_BREAK_AVOID_TURNS = 30;
+const PICKUP_LOOP_THRESHOLD = 3;
+const PICKUP_LOOP_WINDOW_TURNS = 10;
 const DIAGNOSTICS_DIR = path.join("test-results", "fullclear-diagnostics");
 const ACTION_HISTORY_LIMIT = 20;
 const MAX_CONSOLE_MESSAGES = 300;
+
+const PREFERRED_INVENTORY_ACTION_IDS = [
+  "quaff",
+  "use",
+  "read",
+  "equip",
+  "unequip"
+] as const;
 
 export type GridCell = {
   readonly x: number;
@@ -55,15 +82,7 @@ export type BotDiagnosis = {
   readonly consoleMessages: readonly ConsoleMessageRecord[];
 };
 
-type Direction =
-  | "north"
-  | "south"
-  | "east"
-  | "west"
-  | "northeast"
-  | "northwest"
-  | "southeast"
-  | "southwest";
+type Direction = MoveDirection;
 
 type GridPosition = {
   readonly x: number;
@@ -76,18 +95,78 @@ type BotOptions = {
 };
 
 type BotDecision = {
-  readonly key: string | null;
+  readonly keys: readonly string[];
   readonly action: string;
+  readonly policyAction: string;
+  readonly inventoryExec?: InventoryExecRequest;
+};
+
+type InventoryExecRequest = {
+  readonly itemId: string;
+  readonly direction?: MoveDirection;
+};
+
+export type BrowserBotViewDiagnostics = {
+  readonly adjacentEnemyCount: number;
+  readonly visibleEnemyCount: number;
+  readonly inventoryCount: number;
+  readonly equipmentCount: number;
+  readonly hp: {
+    readonly current: number;
+    readonly max: number;
+    readonly ratio: number;
+  };
+  readonly playerLevel: number;
+  readonly playerXp: number;
+  readonly mapCellCount: number;
+  readonly visibleMapCellCount: number;
+  readonly rememberedMapCellCount: number;
+  readonly serializedEntityCount: number;
+  readonly serializedInventorySlotCount: number;
+  readonly serializedCarriedInventoryCount: number;
+  readonly serializedEquipmentCount: number;
+  readonly serializedFog:
+    | {
+        readonly present: true;
+        readonly visible: number;
+        readonly remembered: number;
+        readonly unseen: number;
+      }
+    | {
+        readonly present: false;
+        readonly visible: 0;
+        readonly remembered: 0;
+        readonly unseen: 0;
+      };
+  readonly availableActionKinds: readonly string[];
+};
+
+export type BrowserBotViewConstruction = {
+  readonly state: GameState;
+  readonly view: BotStateView;
+  readonly nextMemory: BotMemory;
+  readonly diagnostics: BrowserBotViewDiagnostics;
+};
+
+type PickupLoopBreakerState = {
+  readonly recentPickups: Array<{ readonly posKey: string; readonly turn: number }>;
+  readonly blacklistedPositions: Set<string>;
 };
 
 type BotPolicyState = {
   readonly visitedByDepth: Map<number, Set<string>>;
+  botMemory: BotMemory;
   readonly rng: () => number;
   readonly log: (message: string) => void;
   readonly lastActions: string[];
   loopBreaker: LoopBreakerState;
+  pickupLoopBreaker: PickupLoopBreakerState;
+  failedItemIds: Set<string>;
   descendIntent: DescendIntentState | null;
+  inventoryIndex: number;
   lastAction: string | null;
+  lastPolicyAction: string | null;
+  lastViewDiagnostics: BrowserBotViewDiagnostics | null;
 };
 
 type DescendIntentState = {
@@ -108,6 +187,8 @@ export type BotStateSnapshot = {
   readonly turn: number | null;
   readonly visitedCount: number;
   readonly lastAction: string | null;
+  readonly lastPolicyAction: string | null;
+  readonly lastViewDiagnostics: BrowserBotViewDiagnostics | null;
   readonly last20Actions: readonly string[];
   readonly noProgressTurns: number;
 };
@@ -252,6 +333,8 @@ function emptyBotStateSnapshot(): BotStateSnapshot {
     turn: null,
     visitedCount: 0,
     lastAction: null,
+    lastPolicyAction: null,
+    lastViewDiagnostics: null,
     last20Actions: [],
     noProgressTurns: 0
   };
@@ -267,6 +350,177 @@ function emptyLoopBreakerState(): LoopBreakerState {
   };
 }
 
+function emptyPickupLoopBreakerState(): PickupLoopBreakerState {
+  return {
+    recentPickups: [],
+    blacklistedPositions: new Set()
+  };
+}
+
+export function selectPreferredInventoryActionId(
+  actionIds: readonly string[]
+): string | null {
+  for (const preferred of PREFERRED_INVENTORY_ACTION_IDS) {
+    if (actionIds.includes(preferred)) {
+      return preferred;
+    }
+  }
+
+  return null;
+}
+
+export function resolveItemEntryIndex(
+  state: GameState,
+  itemId: string
+): number | null {
+  const slotIndex = state.player.inventory.findIndex(
+    (slot) => slot?.itemInstanceId === itemId
+  );
+  if (slotIndex >= 0) {
+    return slotIndex;
+  }
+
+  const equipmentBase = state.player.inventory.length;
+  if (state.player.equipment.weapon?.itemInstanceId === itemId) {
+    return equipmentBase;
+  }
+  if (state.player.equipment.armor?.itemInstanceId === itemId) {
+    return equipmentBase + 1;
+  }
+
+  for (let index = 0; index < state.player.equipment.charms.length; index += 1) {
+    if (state.player.equipment.charms[index]?.itemInstanceId === itemId) {
+      return equipmentBase + 2 + index;
+    }
+  }
+
+  return null;
+}
+
+export function inventoryNavigationKeys(
+  currentIndex: number,
+  targetIndex: number,
+  entryCount: number
+): readonly string[] {
+  if (entryCount <= 0 || currentIndex === targetIndex) {
+    return [];
+  }
+
+  const normalizedCurrent =
+    ((currentIndex % entryCount) + entryCount) % entryCount;
+  const normalizedTarget =
+    ((targetIndex % entryCount) + entryCount) % entryCount;
+  const down = (normalizedTarget - normalizedCurrent + entryCount) % entryCount;
+  const up = (normalizedCurrent - normalizedTarget + entryCount) % entryCount;
+
+  return Array.from(
+    { length: Math.min(down, up) },
+    () => (down <= up ? "ArrowDown" : "ArrowUp")
+  );
+}
+
+export function recordPickupForLoopBreaker(
+  breaker: PickupLoopBreakerState,
+  position: GridPosition,
+  turn: number,
+  log: (message: string) => void
+): PickupLoopBreakerState {
+  const posKeyValue = posKey(position.x, position.y);
+  const recentPickups = [
+    ...breaker.recentPickups.filter(
+      (entry) => turn - entry.turn <= PICKUP_LOOP_WINDOW_TURNS
+    ),
+    { posKey: posKeyValue, turn }
+  ];
+  const samePositionCount = recentPickups.filter(
+    (entry) => entry.posKey === posKeyValue
+  ).length;
+  const blacklistedPositions = new Set(breaker.blacklistedPositions);
+
+  if (samePositionCount >= PICKUP_LOOP_THRESHOLD) {
+    blacklistedPositions.add(posKeyValue);
+    log(
+      `[full-clear bot] pickup loop-breaker blacklisted position ${posKeyValue} after ${samePositionCount} pickups in ${PICKUP_LOOP_WINDOW_TURNS} turns`
+    );
+  }
+
+  return {
+    recentPickups,
+    blacklistedPositions
+  };
+}
+
+export function isPickupBlacklisted(
+  breaker: PickupLoopBreakerState,
+  position: GridPosition
+): boolean {
+  return breaker.blacklistedPositions.has(posKey(position.x, position.y));
+}
+
+export function verifyInventoryItemActionSucceeded(
+  before: GameState,
+  after: GameState,
+  itemId: string
+): boolean {
+  const beforeQty = inventoryItemQuantity(before, itemId);
+  const afterQty = inventoryItemQuantity(after, itemId);
+  if (afterQty < beforeQty) {
+    return true;
+  }
+
+  const beforeEquipped = isItemEquipped(before, itemId);
+  const afterEquipped = isItemEquipped(after, itemId);
+  if (!beforeEquipped && afterEquipped) {
+    return true;
+  }
+
+  if (beforeQty > 0 && afterQty === 0 && !isItemInInventorySlots(after, itemId)) {
+    return true;
+  }
+
+  return false;
+}
+
+function inventoryItemQuantity(state: GameState, itemId: string): number {
+  const inInventory = state.player.inventory.find(
+    (slot) => slot?.itemInstanceId === itemId
+  );
+  if (inInventory !== undefined && inInventory !== null) {
+    return inInventory.quantity;
+  }
+
+  const equipped = findEquippedStack(state, itemId);
+  return equipped?.quantity ?? 0;
+}
+
+function isItemInInventorySlots(state: GameState, itemId: string): boolean {
+  return state.player.inventory.some((slot) => slot?.itemInstanceId === itemId);
+}
+
+function isItemEquipped(state: GameState, itemId: string): boolean {
+  return findEquippedStack(state, itemId) !== null;
+}
+
+function findEquippedStack(
+  state: GameState,
+  itemId: string
+): PlayerItemStack | null {
+  if (state.player.equipment.weapon?.itemInstanceId === itemId) {
+    return state.player.equipment.weapon;
+  }
+  if (state.player.equipment.armor?.itemInstanceId === itemId) {
+    return state.player.equipment.armor;
+  }
+
+  for (const charm of state.player.equipment.charms) {
+    if (charm?.itemInstanceId === itemId) {
+      return charm;
+    }
+  }
+
+  return null;
+}
+
 export async function driveRunToWin(
   page: Page,
   options: BotOptions = {}
@@ -275,12 +529,18 @@ export async function driveRunToWin(
   const state = page.getByTestId("game-state");
   const policyState: BotPolicyState = {
     visitedByDepth: new Map<number, Set<string>>(),
+    botMemory: createEmptyBotMemory(),
     rng: seededRandom(options.seed ?? resolveCampaignSeed()),
     log: options.log ?? console.log,
     lastActions: [],
     loopBreaker: emptyLoopBreakerState(),
+    pickupLoopBreaker: emptyPickupLoopBreakerState(),
+    failedItemIds: new Set(),
     descendIntent: null,
-    lastAction: null
+    inventoryIndex: 0,
+    lastAction: null,
+    lastPolicyAction: null,
+    lastViewDiagnostics: null
   };
   let turns = 0;
   let lastSignature = "";
@@ -358,10 +618,19 @@ export async function driveRunToWin(
       const decision = await choosePolicyKey(page, shell, policyState);
       recordAction(policyState, shell, decision);
       updateBotDiagnostics(page, shell, policyState, noProgressTurns);
-      if (decision.key === null) {
+      if (decision.inventoryExec !== undefined) {
+        const inventoryOk = await executePolicyInventoryAction(
+          page,
+          decision.inventoryExec,
+          policyState
+        );
+        if (!inventoryOk) {
+          policyState.failedItemIds.add(decision.inventoryExec.itemId);
+        }
+      } else if (decision.keys.length === 0) {
         await waitForUiFrame(page);
       } else {
-        await pressGameplayKey(page, decision.key);
+        await pressGameplayKeys(page, decision.keys);
       }
 
       let after = await readShellSnapshot(state);
@@ -449,6 +718,17 @@ export async function driveRunToWin(
       lastSignature = "";
       turns += 1;
       await markPlayerVisitedFromPage(page, after.depth, policyState);
+      if (decision.policyAction === "pickup") {
+        const player = await readPlayerPosition(page);
+        if (player !== null) {
+          policyState.pickupLoopBreaker = recordPickupForLoopBreaker(
+            policyState.pickupLoopBreaker,
+            player,
+            after.turn,
+            policyState.log
+          );
+        }
+      }
 
       const visitedCount = visitedCountForDepth(policyState, after.depth);
       const depthChanged = after.depth !== shell.depth;
@@ -540,6 +820,12 @@ export async function dumpStuckState(
     () => ({})
   );
   const recentLogLines = await readRecentLogLines(page).catch(() => []);
+  const rawSerializedSnapshot = await readBotBridgeSerializedSnapshot(page).catch(
+    (error) => {
+      artifactErrors.push(`bot-state-bridge: ${errorMessage(error)}`);
+      return null;
+    }
+  );
 
   await page.screenshot({
     path: screenshotPath,
@@ -567,6 +853,7 @@ export async function dumpStuckState(
     player,
     gameStateAttributes,
     recentLogLines,
+    rawSerializedSnapshot,
     botState: diagnostics.botState,
     consoleMessages: diagnostics.consoleMessages,
     artifactErrors,
@@ -646,102 +933,436 @@ async function choosePolicyKey(
   shell: ShellSnapshot,
   policyState: BotPolicyState
 ): Promise<BotDecision> {
-  const cells = await readGridCells(page);
-  const player = findPlayer(cells);
-  const hud = await readHudSnapshot(page);
+  const serializedSnapshot = await readRequiredBotBridgeSerializedSnapshot(page);
+  const construction = constructBrowserBotStateView(
+    serializedSnapshot,
+    policyState.botMemory
+  );
+  const { state: gameState, view } = construction;
+  policyState.botMemory = construction.nextMemory;
+  policyState.lastViewDiagnostics = construction.diagnostics;
+  markVisited(policyState.visitedByDepth, shell.depth, gameState.player.position);
 
-  if (player === null) {
-    return botDecision(".", "wait:player-not-found");
-  }
-
-  resetDescendIntentIfStairsVisitChanged(policyState, shell, cells, player);
-  markVisited(policyState.visitedByDepth, shell.depth, player);
-  await updateLoopBreaker(page, shell, policyState, cells, player, hud);
-  const visited = policyState.visitedByDepth.get(shell.depth) ?? new Set();
-  const blockedCells = blockedCellsForLoopBreak(policyState, shell, cells);
-
-  const adjacentEnemies = findAdjacentEnemies(cells, player);
-  const adjacentEnemy = adjacentEnemies.find(
-    (enemy) => !blockedCells.has(posKey(enemy.x, enemy.y))
-  ) ?? null;
-
-  if (shell.depth >= FINAL_DEPTH && isOnHoard(cells, player)) {
-    return botDecision("T", "take-hoard");
-  }
-
-  if (shell.depth < FINAL_DEPTH && isOnStairs(cells, player)) {
-    const stairsKey = posKey(player.x, player.y);
-    if (hasPendingDescendIntent(policyState, shell.depth, stairsKey)) {
-      return botDecision(null, "wait:descend-pending");
-    }
-
-    policyState.descendIntent = { depth: shell.depth, stairsKey };
-    return botDecision(">", "descend-on-stairs");
-  }
-
-  if (hud !== null && shouldUseHealingItem(hud, adjacentEnemies.length)) {
-    const healed = await tryHeal(page);
-    if (healed) {
-      return botDecision(null, "use-healing-item");
-    }
-  }
-
-  if (hud !== null && shouldRetreat(hud, adjacentEnemies.length)) {
-    const retreat = retreatStep(player, cells, blockedCells);
-    if (retreat !== null) {
+  const policyAction = constrainPolicyDecision(
+    view,
+    legalizePolicyDecision(view, balancedPolicy.decide(view)),
+    gameState,
+    policyState
+  );
+  const mapped = mapPolicyActionToKeys(gameState, policyAction, policyState);
+  if (mapped !== null) {
+    if (mapped.inventoryExec !== undefined) {
       return botDecision(
-        retreat,
-        `retreat-from-enemies:${adjacentEnemies.length}`
+        [],
+        mapped.action,
+        policyAction,
+        mapped.inventoryExec
+      );
+    }
+    return botDecision(mapped.keys, mapped.action, policyAction);
+  }
+
+  const retry = requeryExpressiblePolicyAction(
+    gameState,
+    view,
+    policyAction,
+    policyState
+  );
+  await dumpUnsupportedPolicyAction(page, shell, policyAction, retry?.action ?? null);
+  policyState.log(
+    `[full-clear bot] unsupported policy action ${actionKey(
+      policyAction
+    )}; retry=${retry === null ? "none" : actionKey(retry.action)}`
+  );
+
+  if (retry !== null) {
+    return botDecision(retry.keys, retry.actionLabel, retry.action);
+  }
+
+  return botDecision(["."], "policy-fallback:wait", policyAction);
+}
+
+export function constructBrowserBotStateView(
+  serializedSnapshot: string,
+  memory: BotMemory
+): BrowserBotViewConstruction {
+  const state = deserialize(serializedSnapshot);
+  const view = createBotStateView(state, {
+    policyName: balancedPolicy.name,
+    memory
+  });
+
+  return {
+    state,
+    view,
+    nextMemory: updateBotMemory(memory, view),
+    diagnostics: browserBotViewDiagnostics(state, view)
+  };
+}
+
+function browserBotViewDiagnostics(
+  state: GameState,
+  view: BotStateView
+): BrowserBotViewDiagnostics {
+  const hp = view.player.hp;
+
+  return {
+    adjacentEnemyCount: view.visible.enemies.filter((enemy) =>
+      positionsAdjacent(view.player.position, enemy.position)
+    ).length,
+    visibleEnemyCount: view.visible.enemies.length,
+    inventoryCount: view.player.inventory.length,
+    equipmentCount:
+      (view.player.equipment.weapon === null ? 0 : 1) +
+      (view.player.equipment.armor === null ? 0 : 1) +
+      view.player.equipment.charms.length,
+    hp: {
+      current: hp.current,
+      max: hp.max,
+      ratio: hp.ratio
+    },
+    playerLevel: view.player.level,
+    playerXp: state.player.xp,
+    mapCellCount: view.map.cells.length,
+    visibleMapCellCount: view.map.cells.filter(
+      (cell) => cell.visibility === "visible"
+    ).length,
+    rememberedMapCellCount: view.map.cells.filter(
+      (cell) => cell.visibility === "remembered"
+    ).length,
+    serializedEntityCount: Object.keys(state.entities).length,
+    serializedInventorySlotCount: state.player.inventory.length,
+    serializedCarriedInventoryCount: state.player.inventory.filter(
+      (slot) => slot !== null
+    ).length,
+    serializedEquipmentCount:
+      (state.player.equipment.weapon === null ? 0 : 1) +
+      (state.player.equipment.armor === null ? 0 : 1) +
+      state.player.equipment.charms.filter((slot) => slot !== null).length,
+    serializedFog: serializedFogDiagnostics(state),
+    availableActionKinds: uniqueSorted(
+      view.availableActions.map((action) => action.kind)
+    )
+  };
+}
+
+function serializedFogDiagnostics(
+  state: GameState
+): BrowserBotViewDiagnostics["serializedFog"] {
+  const opaque = state.floor.geometry.opaque;
+  const fog =
+    opaque !== null && typeof opaque === "object" && "fog" in opaque
+      ? (opaque as { readonly fog?: unknown }).fog
+      : undefined;
+
+  if (fog === undefined || fog === null || typeof fog !== "object") {
+    return {
+      present: false,
+      visible: 0,
+      remembered: 0,
+      unseen: 0
+    };
+  }
+
+  const tiles = (fog as { readonly tiles?: unknown }).tiles;
+  if (!Array.isArray(tiles)) {
+    return {
+      present: false,
+      visible: 0,
+      remembered: 0,
+      unseen: 0
+    };
+  }
+
+  let visible = 0;
+  let remembered = 0;
+  let unseen = 0;
+  for (const tile of tiles) {
+    const stateValue =
+      tile !== null && typeof tile === "object" && "state" in tile
+        ? (tile as { readonly state?: unknown }).state
+        : undefined;
+    if (stateValue === "visible") {
+      visible += 1;
+    } else if (stateValue === "remembered") {
+      remembered += 1;
+    } else if (stateValue === "unseen") {
+      unseen += 1;
+    }
+  }
+
+  return {
+    present: true,
+    visible,
+    remembered,
+    unseen
+  };
+}
+
+function uniqueSorted(values: readonly string[]): readonly string[] {
+  return [...new Set(values)].sort();
+}
+
+function positionsAdjacent(
+  left: { readonly x: number; readonly y: number },
+  right: { readonly x: number; readonly y: number }
+): boolean {
+  return (
+    Math.max(Math.abs(left.x - right.x), Math.abs(left.y - right.y)) <= 1
+  );
+}
+
+type UiActionMapping = {
+  readonly keys: readonly string[];
+  readonly action: string;
+  readonly nextInventoryIndex: number;
+  readonly inventoryExec?: InventoryExecRequest;
+};
+
+function constrainPolicyDecision(
+  view: BotStateView,
+  action: RunAction,
+  state: GameState,
+  policyState: BotPolicyState
+): RunAction {
+  if (
+    action.kind === "use_item" &&
+    policyState.failedItemIds.has(action.itemId)
+  ) {
+    const withoutFailed = {
+      ...view,
+      availableActions: view.availableActions.filter(
+        (candidate) =>
+          !(
+            candidate.kind === "use_item" &&
+            policyState.failedItemIds.has(candidate.itemId)
+          )
+      )
+    };
+    return legalizePolicyDecision(withoutFailed, balancedPolicy.decide(withoutFailed));
+  }
+
+  if (action.kind === "pickup") {
+    const position = state.player.position;
+    if (isPickupBlacklisted(policyState.pickupLoopBreaker, position)) {
+      const withoutPickup = {
+        ...view,
+        availableActions: view.availableActions.filter(
+          (candidate) => candidate.kind !== "pickup"
+        )
+      };
+      return legalizePolicyDecision(
+        withoutPickup,
+        balancedPolicy.decide(withoutPickup)
       );
     }
   }
 
-  if (adjacentEnemies.length === 0 && hasItemUnderfoot(cells, player)) {
-    return botDecision("g", "pickup-underfoot");
+  return action;
+}
+
+type RequeriedAction = {
+  readonly action: RunAction;
+  readonly actionLabel: string;
+  readonly keys: readonly string[];
+};
+
+async function readBotBridgeSerializedSnapshot(
+  page: Page
+): Promise<string | null> {
+  return page.evaluate(() => {
+    const bridgeWindow = window as Window & {
+      readonly __GG_BOT_STATE__?: unknown;
+    };
+    return typeof bridgeWindow.__GG_BOT_STATE__ === "string"
+      ? bridgeWindow.__GG_BOT_STATE__
+      : null;
+  });
+}
+
+async function readRequiredBotBridgeSerializedSnapshot(
+  page: Page
+): Promise<string> {
+  const serialized = await readBotBridgeSerializedSnapshot(page);
+  if (serialized === null) {
+    throw new Error("bot state bridge unavailable");
   }
 
-  if (shell.depth >= FINAL_DEPTH) {
-    const hoard = findTargetCells(
-      cells,
-      (cell) => cell.featureKind === "hoard"
-    );
-    const hoardRoute = routeStep(player, hoard, cells, blockedCells);
-    if (hoardRoute !== null) {
-      return botDecision(hoardRoute, "route-to-hoard");
-    }
-  }
+  return serialized;
+}
 
-  if (shell.depth < FINAL_DEPTH) {
-    const stairs = findTargetCells(
-      cells,
-      (cell) => cell.glyph === ">" || cell.terrain === "stairs_down"
-    );
-    const stairsRoute = routeStep(player, stairs, cells, blockedCells);
-    if (stairsRoute !== null) {
-      return botDecision(stairsRoute, "route-to-stairs");
-    }
-  }
+const legalizePolicyDecision = (
+  view: BotStateView,
+  action: RunAction
+): RunAction => (hasAction(view, action) ? action : fallbackAction(view));
 
-  const exploreStep = frontierStep(player, cells, visited, blockedCells);
-  if (exploreStep !== null) {
-    return botDecision(exploreStep, "explore-frontier");
-  }
-
-  if (adjacentEnemy !== null) {
-    return botDecision(
-      directionKeyToward(player, adjacentEnemy),
-      `attack-adjacent-enemy:${posKey(adjacentEnemy.x, adjacentEnemy.y)}`
-    );
-  }
-
-  if (hasItemUnderfoot(cells, player)) {
-    return botDecision("g", "pickup-underfoot");
-  }
-
-  return botDecision(
-    boxedBreakKey(player, cells, policyState.rng, blockedCells),
-    "boxed-break"
+function mapPolicyActionToKeys(
+  state: GameState,
+  action: RunAction,
+  policyState: BotPolicyState
+): UiActionMapping | null {
+  const mapping = keySequenceForAction(
+    state,
+    action,
+    policyState.inventoryIndex
   );
+  if (mapping !== null) {
+    policyState.inventoryIndex = mapping.nextInventoryIndex;
+  }
+  return mapping;
+}
+
+function requeryExpressiblePolicyAction(
+  state: GameState,
+  view: BotStateView,
+  unsupportedAction: RunAction,
+  policyState: BotPolicyState
+): RequeriedAction | null {
+  const unsupportedKey = actionKey(unsupportedAction);
+  const constrainedView: BotStateView = {
+    ...view,
+    availableActions: view.availableActions.filter(
+      (candidate) =>
+        actionKey(candidate) !== unsupportedKey &&
+        keySequenceForAction(state, candidate, policyState.inventoryIndex) !== null
+    )
+  };
+
+  if (constrainedView.availableActions.length === 0) {
+    return null;
+  }
+
+  const retryAction = legalizePolicyDecision(
+    constrainedView,
+    balancedPolicy.decide(constrainedView)
+  );
+  const retryMapping = mapPolicyActionToKeys(state, retryAction, policyState);
+  if (retryMapping === null) {
+    return null;
+  }
+
+  return {
+    action: retryAction,
+    actionLabel: `policy-requery:${retryMapping.action}`,
+    keys: retryMapping.keys
+  };
+}
+
+function keySequenceForAction(
+  state: GameState,
+  action: RunAction,
+  inventoryIndex: number
+): UiActionMapping | null {
+  switch (action.kind) {
+    case "move":
+      return actionMapping([DIRECTION_KEYS[action.direction]], action, inventoryIndex);
+    case "attack":
+      return attackActionMapping(state, action, inventoryIndex);
+    case "pickup":
+      return actionMapping(["g"], action, inventoryIndex);
+    case "wait":
+      return actionMapping(["."], action, inventoryIndex);
+    case "descend":
+      return actionMapping([">"], action, inventoryIndex);
+    case "take_hoard":
+      return actionMapping(["T"], action, inventoryIndex);
+    case "use_item":
+      return useItemActionMapping(state, action, inventoryIndex);
+    case "abort":
+      return actionMapping(["Escape", "y"], action, inventoryIndex);
+    case "inspect":
+    case "talk":
+      return null;
+  }
+}
+
+function actionMapping(
+  keys: readonly string[],
+  action: RunAction,
+  inventoryIndex: number
+): UiActionMapping {
+  return {
+    keys,
+    action: `policy:${actionKey(action)}`,
+    nextInventoryIndex: inventoryIndex
+  };
+}
+
+function attackActionMapping(
+  state: GameState,
+  action: Extract<RunAction, { readonly kind: "attack" }>,
+  inventoryIndex: number
+): UiActionMapping | null {
+  const target = state.entities[action.targetId];
+  if (target === undefined || target.kind !== "enemy") {
+    return null;
+  }
+
+  const direction = directionBetweenPositions(state.player.position, target.position);
+  return direction === null
+    ? null
+    : actionMapping([DIRECTION_KEYS[direction]], action, inventoryIndex);
+}
+
+function useItemActionMapping(
+  state: GameState,
+  action: Extract<RunAction, { readonly kind: "use_item" }>,
+  inventoryIndex: number
+): UiActionMapping | null {
+  if (resolveItemEntryIndex(state, action.itemId) === null) {
+    return null;
+  }
+
+  return {
+    keys: [],
+    action: `policy:${actionKey(action)}`,
+    nextInventoryIndex: inventoryIndex,
+    inventoryExec: {
+      itemId: action.itemId,
+      direction: action.direction
+    }
+  };
+}
+
+function directionBetweenPositions(
+  from: { readonly x: number; readonly y: number },
+  to: { readonly x: number; readonly y: number }
+): Direction | null {
+  const dx = Math.sign(to.x - from.x);
+  const dy = Math.sign(to.y - from.y);
+  if (dx === 0 && dy === 0) {
+    return null;
+  }
+  if (Math.abs(to.x - from.x) > 1 || Math.abs(to.y - from.y) > 1) {
+    return null;
+  }
+  return deltaToDirection(dx, dy);
+}
+
+async function dumpUnsupportedPolicyAction(
+  page: Page,
+  shell: ShellSnapshot,
+  unsupportedAction: RunAction,
+  retryAction: RunAction | null
+): Promise<void> {
+  const dir = DIAGNOSTICS_DIR;
+  await fs.mkdir(dir, { recursive: true });
+  const statePath = path.join(
+    dir,
+    `policy-unsupported-${Date.now()}-${shell.depth}-${shell.turn}.json`
+  );
+  const payload = {
+    shell,
+    unsupportedAction,
+    retryAction,
+    rawSerializedSnapshot: await readBotBridgeSerializedSnapshot(page).catch(
+      () => null
+    ),
+    gameStateAttributes: await readGameStateAttributes(page).catch(() => ({})),
+    recentLogLines: await readRecentLogLines(page).catch(() => [])
+  };
+
+  await fs.writeFile(statePath, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
 }
 
 async function logTelemetry(
@@ -764,19 +1385,39 @@ async function logTelemetry(
     walkable.size === 0
       ? 0
       : Math.min(100, (visitedKnownCount / walkable.size) * 100);
-  const hud = await readHudSnapshot(page);
-  const hp = hud === null ? "unknown" : `${hud.hpCurrent}/${hud.hpMax}`;
+  const viewDiagnostics = policyState.lastViewDiagnostics;
+  const hp =
+    viewDiagnostics === null
+      ? "unknown"
+      : `${viewDiagnostics.hp.current}/${viewDiagnostics.hp.max}`;
+  const adjacentEnemyCount =
+    viewDiagnostics === null
+      ? "unknown"
+      : String(viewDiagnostics.adjacentEnemyCount);
+  const inventoryCount =
+    viewDiagnostics === null ? "unknown" : String(viewDiagnostics.inventoryCount);
   const lastAction = policyState.lastAction ?? "none";
+  const lastPolicyAction = policyState.lastPolicyAction ?? "none";
 
   policyState.log(
     `[full-clear bot] depth=${shell.depth} turn=${shell.turn} visited=${visitedPercent.toFixed(
       1
-    )}% hp=${hp} lastAction=${lastAction}`
+    )}% hp=${hp} adjacentEnemyCount=${adjacentEnemyCount} inventoryCount=${inventoryCount} policy=${lastPolicyAction} lastAction=${lastAction}`
   );
 }
 
-function botDecision(key: string | null, action: string): BotDecision {
-  return { key, action };
+function botDecision(
+  keys: readonly string[],
+  action: string,
+  policyAction: RunAction,
+  inventoryExec?: InventoryExecRequest
+): BotDecision {
+  return {
+    keys,
+    action,
+    policyAction: actionKey(policyAction),
+    inventoryExec
+  };
 }
 
 function recordAction(
@@ -784,9 +1425,11 @@ function recordAction(
   shell: ShellSnapshot,
   decision: BotDecision
 ): void {
-  const renderedKey = decision.key ?? "none";
-  const entry = `d${shell.depth} t${shell.turn} ${decision.action} key=${renderedKey}`;
+  const renderedKeys =
+    decision.keys.length === 0 ? "none" : decision.keys.join(",");
+  const entry = `d${shell.depth} t${shell.turn} ${decision.action} policy=${decision.policyAction} keys=${renderedKeys}`;
   policyState.lastAction = decision.action;
+  policyState.lastPolicyAction = decision.policyAction;
   policyState.lastActions.push(entry);
   if (policyState.lastActions.length > ACTION_HISTORY_LIMIT) {
     policyState.lastActions.splice(
@@ -819,6 +1462,8 @@ function updateBotDiagnostics(
     turn: shell.turn,
     visitedCount: visitedCountForDepth(policyState, shell.depth),
     lastAction: policyState.lastAction,
+    lastPolicyAction: policyState.lastPolicyAction,
+    lastViewDiagnostics: policyState.lastViewDiagnostics,
     last20Actions: [...policyState.lastActions],
     noProgressTurns
   };
@@ -1078,11 +1723,205 @@ async function finishInventoryItemUse(
   return true;
 }
 
+async function executePolicyInventoryAction(
+  page: Page,
+  request: InventoryExecRequest,
+  policyState: BotPolicyState
+): Promise<boolean> {
+  const stateLocator = page.getByTestId("game-state");
+  const beforeSerialized = await readRequiredBotBridgeSerializedSnapshot(page);
+  const beforeState = deserialize(beforeSerialized);
+
+  if (resolveItemEntryIndex(beforeState, request.itemId) === null) {
+    policyState.log(
+      `[full-clear bot] inventory action skipped: item ${request.itemId} not in pack`
+    );
+    return false;
+  }
+
+  await page.keyboard.press("i");
+  await expect(stateLocator).toHaveAttribute("data-panel-mode", "inventory");
+
+  const panel = page.getByTestId("inventory-panel");
+  await expect(panel).toBeVisible();
+
+  const domState = await readInventoryDomState(page);
+  const targetIndex = resolveItemEntryIndex(beforeState, request.itemId);
+  if (targetIndex === null) {
+    await closeInventoryPanel(page, stateLocator);
+    return false;
+  }
+
+  const targetRow = domState.rows[targetIndex];
+  if (targetRow === undefined || targetRow.empty) {
+    await dumpInventoryActionFailure(
+      page,
+      request,
+      `target row ${targetIndex} empty in DOM`
+    );
+    await closeInventoryPanel(page, stateLocator);
+    return false;
+  }
+
+  for (const key of inventoryNavigationKeys(
+    domState.selectedIndex,
+    targetIndex,
+    domState.entryCount
+  )) {
+    await pressGameplayKey(page, key);
+  }
+
+  await waitForUiFrame(page);
+  const actionIds = await readInventoryActionIds(page);
+  const preferredActionId = selectPreferredInventoryActionId(actionIds);
+  if (preferredActionId === null) {
+    await dumpInventoryActionFailure(
+      page,
+      request,
+      `no preferred action among [${actionIds.join(", ")}]`
+    );
+    await closeInventoryPanel(page, stateLocator);
+    return false;
+  }
+
+  const actionIndex = actionIds.indexOf(preferredActionId);
+  if (actionIndex < 0) {
+    await closeInventoryPanel(page, stateLocator);
+    return false;
+  }
+
+  if (preferredActionId === "throw") {
+    await dumpInventoryActionFailure(page, request, "throw action not supported");
+    await closeInventoryPanel(page, stateLocator);
+    return false;
+  }
+
+  const actionNumberKey = String(actionIndex + 1);
+  await pressGameplayKey(page, actionNumberKey);
+
+  if (request.direction !== undefined) {
+    await pressGameplayKey(page, DIRECTION_KEYS[request.direction]);
+  }
+
+  await waitForUiFrame(page);
+  await closeInventoryPanel(page, stateLocator);
+
+  const afterSerialized = await readBotBridgeSerializedSnapshot(page);
+  if (afterSerialized === null) {
+    return false;
+  }
+
+  const afterState = deserialize(afterSerialized);
+  const succeeded = verifyInventoryItemActionSucceeded(
+    beforeState,
+    afterState,
+    request.itemId
+  );
+
+  if (!succeeded) {
+    await dumpInventoryActionFailure(
+      page,
+      request,
+      `item ${request.itemId} still present after ${preferredActionId}`
+    );
+    return false;
+  }
+
+  policyState.inventoryIndex = targetIndex;
+  return true;
+}
+
+type InventoryDomRow = {
+  readonly index: number;
+  readonly empty: boolean;
+  readonly label: string;
+  readonly selected: boolean;
+};
+
+type InventoryDomState = {
+  readonly entryCount: number;
+  readonly selectedIndex: number;
+  readonly rows: readonly InventoryDomRow[];
+};
+
+async function readInventoryDomState(page: Page): Promise<InventoryDomState> {
+  return page.getByTestId("inventory-panel").evaluate((panel) => {
+    const slotNodes = [...panel.querySelectorAll("[data-inventory-slot]")];
+    const equipmentNodes = [...panel.querySelectorAll("[data-equipment-slot]")];
+    const slotRows = slotNodes.map((node, index) => ({
+      index,
+      empty: (node.textContent ?? "").toLowerCase().includes("empty"),
+      label: (node.textContent ?? "").trim(),
+      selected: node.className.includes("border-gg-accent")
+    }));
+    const equipmentRows = equipmentNodes.map((node, offset) => ({
+      index: slotRows.length + offset,
+      empty: (node.textContent ?? "").trim().length === 0,
+      label: (node.textContent ?? "").trim(),
+      selected: node.className.includes("border-gg-accent")
+    }));
+    const rows = [...slotRows, ...equipmentRows];
+    const selectedIndex = rows.findIndex((row) => row.selected);
+
+    return {
+      entryCount: rows.length,
+      selectedIndex: selectedIndex < 0 ? 0 : selectedIndex,
+      rows
+    };
+  });
+}
+
+async function readInventoryActionIds(page: Page): Promise<readonly string[]> {
+  const panel = page.getByTestId("inventory-panel");
+  return panel
+    .locator('[data-action-id]:not([disabled])')
+    .evaluateAll((nodes) =>
+      nodes
+        .map((node) => node.getAttribute("data-action-id") ?? "")
+        .filter((id) => id.length > 0)
+    );
+}
+
+async function dumpInventoryActionFailure(
+  page: Page,
+  request: InventoryExecRequest,
+  reason: string
+): Promise<void> {
+  const dir = DIAGNOSTICS_DIR;
+  await fs.mkdir(dir, { recursive: true });
+  const statePath = path.join(
+    dir,
+    `inventory-action-failed-${Date.now()}-${slugForReason(request.itemId)}.json`
+  );
+  const payload = {
+    reason,
+    request,
+    domState: await readInventoryDomState(page).catch(() => null),
+    actionIds: await readInventoryActionIds(page).catch(() => []),
+    rawSerializedSnapshot: await readBotBridgeSerializedSnapshot(page).catch(
+      () => null
+    ),
+    gameStateAttributes: await readGameStateAttributes(page).catch(() => ({})),
+    recentLogLines: await readRecentLogLines(page).catch(() => [])
+  };
+
+  await fs.writeFile(statePath, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
+}
+
 async function closeInventoryPanel(page: Page, state: Locator): Promise<void> {
   const shell = await readShellSnapshot(state);
   if (shell.screen === "playing" && shell.panelMode === "inventory") {
     await page.keyboard.press("Escape");
     await expect(state).toHaveAttribute("data-panel-mode", "inspect");
+  }
+}
+
+async function pressGameplayKeys(
+  page: Page,
+  keys: readonly string[]
+): Promise<void> {
+  for (const key of keys) {
+    await pressGameplayKey(page, key);
   }
 }
 

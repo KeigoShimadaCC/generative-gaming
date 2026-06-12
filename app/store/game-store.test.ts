@@ -7,9 +7,14 @@ import type {
   ClientPrefetchState,
   ClientServedFloor
 } from "@/input/game-session";
-import { createInitialState, type GameState } from "@engine/state";
+import { createInitialState, deserialize, type GameState } from "@engine/state";
 
-import { defaultUi, useGameStore } from "./game-store";
+import {
+  defaultUi,
+  updateBotStateBridge,
+  useGameStore,
+  type BotStateBridgeTarget
+} from "./game-store";
 
 vi.mock("@/input/game-session", () => ({
   createClientGameSession: vi.fn()
@@ -112,6 +117,32 @@ describe("game store arrival transition", () => {
   });
 });
 
+describe("game store bot state bridge", () => {
+  it("publishes a read-only serialized snapshot when the dev bridge flag is set", () => {
+    const target = bridgeTarget("?botBridge=1");
+    const state = createInitialState("bot-bridge-on");
+
+    updateBotStateBridge(state, target);
+
+    expect(target.__GG_BOT_STATE__).toBeTypeOf("string");
+    expect(deserialize(target.__GG_BOT_STATE__ ?? "").run.seed).toBe(
+      "bot-bridge-on"
+    );
+    expect(
+      Object.getOwnPropertyDescriptor(target, "__GG_BOT_STATE__")?.writable
+    ).toBe(false);
+  });
+
+  it("keeps the snapshot absent when the dev bridge flag is not set", () => {
+    const target = bridgeTarget("");
+    target.__GG_BOT_STATE__ = "stale";
+
+    updateBotStateBridge(createInitialState("bot-bridge-off"), target);
+
+    expect("__GG_BOT_STATE__" in target).toBe(false);
+  });
+});
+
 const resetGameStore = (): void => {
   useGameStore.setState({
     gameState: null,
@@ -126,6 +157,10 @@ const resetGameStore = (): void => {
     ui: defaultUi
   });
 };
+
+const bridgeTarget = (search: string): BotStateBridgeTarget => ({
+  location: { search }
+});
 
 const beginArrival = async (session: ClientGameSession): Promise<void> => {
   useGameStore.setState({

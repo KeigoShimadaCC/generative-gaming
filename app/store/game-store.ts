@@ -36,10 +36,12 @@ import {
   type TransitionLatencySample
 } from "@/components/transition/model";
 import type { RunAction } from "@engine/run";
-import type { GameState } from "@engine/state";
+import { serialize, type GameState } from "@engine/state";
 import { checkActionLegality } from "@engine/turn";
 
 const ARRIVAL_COMPLETION_RETRY_MS = 100;
+const BOT_STATE_BRIDGE_QUERY_PARAM = "botBridge";
+const BOT_STATE_BRIDGE_ENABLED_VALUE = "1";
 
 export type ContextPanelMode = "inspect" | "inventory" | "quest" | "dialogue";
 export type AppScreen = "title" | "playing" | "settings" | "run-index";
@@ -88,6 +90,13 @@ export type GameStore = {
   ) => void;
   readonly setInputLocked: (inputLocked: boolean) => void;
   readonly patchUi: (patch: Partial<UiSlice>) => void;
+};
+
+export type BotStateBridgeTarget = {
+  readonly location?: {
+    readonly search: string;
+  };
+  __GG_BOT_STATE__?: string;
 };
 
 export const defaultUi: UiSlice = {
@@ -238,6 +247,36 @@ export const useGameStore = create<GameStore>((set, get) => ({
       ui: { ...current.ui, ...patch }
     }))
 }));
+
+useGameStore.subscribe((state) => {
+  updateBotStateBridge(state.gameState);
+});
+
+export const updateBotStateBridge = (
+  gameState: GameState | null,
+  target: BotStateBridgeTarget | null = botStateBridgeTarget()
+): void => {
+  if (
+    target === null ||
+    process.env.NODE_ENV === "production" ||
+    !botStateBridgeRequested(target)
+  ) {
+    clearBotStateBridge(target);
+    return;
+  }
+
+  if (gameState === null) {
+    clearBotStateBridge(target);
+    return;
+  }
+
+  Object.defineProperty(target, "__GG_BOT_STATE__", {
+    configurable: true,
+    enumerable: false,
+    value: serialize(gameState),
+    writable: false
+  });
+};
 
 type StoreSet = typeof useGameStore.setState;
 type StoreGet = typeof useGameStore.getState;
@@ -604,6 +643,20 @@ const activeRunFromSession = (session: ClientGameSession): ActiveRunRecord => ({
 
 const browserStorage = (): Storage | null =>
   typeof window === "undefined" ? null : window.localStorage;
+
+const botStateBridgeTarget = (): BotStateBridgeTarget | null =>
+  typeof window === "undefined" ? null : window;
+
+const botStateBridgeRequested = (target: BotStateBridgeTarget): boolean =>
+  new URLSearchParams(target.location?.search ?? "").get(
+    BOT_STATE_BRIDGE_QUERY_PARAM
+  ) === BOT_STATE_BRIDGE_ENABLED_VALUE;
+
+const clearBotStateBridge = (target: BotStateBridgeTarget | null): void => {
+  if (target !== null) {
+    delete target.__GG_BOT_STATE__;
+  }
+};
 
 const nowMs = (): number =>
   typeof performance === "undefined" ? Date.now() : performance.now();

@@ -10,6 +10,9 @@ import {
 
 const campaignSeed = resolveCampaignSeed();
 
+// Playwright fullclear project starts the dev server with DIRECTOR=fallback
+// (see playwright.config.ts webServer.env) so this campaign uses the calibrated pack.
+
 test.describe("full-game browser-clear campaign", () => {
   test.beforeEach(async ({ page }) => {
     prepareFullClearDiagnostics(page);
@@ -25,7 +28,9 @@ test.describe("full-game browser-clear campaign", () => {
     const state = page.getByTestId("game-state");
 
     try {
-      await page.goto(`/?seed=${encodeURIComponent(campaignSeed)}`);
+      await page.goto(
+        `/?seed=${encodeURIComponent(campaignSeed)}&botBridge=1`
+      );
       await expect(state).toHaveAttribute("data-screen", "title");
       await expect(page.getByTestId("title-seed")).toContainText(campaignSeed);
 
@@ -84,7 +89,9 @@ test.describe("determinism note", () => {
       }, seedToTitleNowMs(campaignSeed));
 
       const state = page.getByTestId("game-state");
-      await page.goto(`/?seed=${encodeURIComponent(campaignSeed)}`);
+      await page.goto(
+        `/?seed=${encodeURIComponent(campaignSeed)}&botBridge=1`
+      );
       await page.getByTestId("new-run-button").click();
       await driveRunToWin(page, { seed: campaignSeed });
       const turns = Number.parseInt(
