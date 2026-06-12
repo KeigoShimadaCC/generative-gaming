@@ -8,7 +8,6 @@ import "../../engine/systems/movement.js";
 import "../../engine/systems/player.js";
 import "../../engine/systems/status.js";
 
-import { config } from "../../config/index.js";
 import { summarizeRun } from "../../engine/run/endings.js";
 import {
   startRun,
@@ -19,7 +18,6 @@ import {
 import type { RunEvent } from "../../engine/run/events.js";
 import type {
   GameState,
-  SerializableRecord,
   TerminalStatus,
 } from "../../engine/state/index.js";
 import {
@@ -135,7 +133,7 @@ export const runBot = (
       );
     }
 
-    state = preserveHoardKnowledge(stepped.state, memory);
+    state = stepped.state;
     turns.push(
       recorder.recordTurn(action, {
         state,
@@ -313,66 +311,3 @@ const actionWasIllegal = (events: readonly RunEvent[]): boolean =>
       (event.type === "run_action_illegal" || event.type === "action_illegal") &&
       "actionKind" in event.data,
   );
-
-const preserveHoardKnowledge = (
-  state: GameState,
-  memory: BotMemory,
-): GameState => {
-  if (state.run.depth !== config.runStructure.depthFloors) {
-    return state;
-  }
-
-  const hoard = (memory.knownFeaturesByDepth.get(state.run.depth) ?? []).find(
-    (feature) => feature.kind === "hoard",
-  );
-  if (hoard === undefined) {
-    return state;
-  }
-
-  const opaque = state.floor.geometry.opaque;
-  if (opaque === null || typeof opaque !== "object") {
-    return state;
-  }
-
-  const knowledge =
-    "knowledge" in opaque &&
-    opaque.knowledge !== null &&
-    typeof opaque.knowledge === "object"
-      ? (opaque.knowledge as SerializableRecord)
-      : {};
-  const decorative =
-    "decorativeFeatures" in knowledge &&
-    Array.isArray(knowledge.decorativeFeatures)
-      ? (knowledge.decorativeFeatures as SerializableRecord[])
-      : [];
-
-  if (decorative.some((feature) => feature.kind === "hoard")) {
-    return state;
-  }
-
-  const hoardRecord: SerializableRecord = {
-    id: hoard.id,
-    kind: "hoard",
-    name: hoard.name,
-    x: hoard.position.x,
-    y: hoard.position.y,
-    depth: hoard.depth,
-  };
-
-  return {
-    ...state,
-    floor: {
-      ...state.floor,
-      geometry: {
-        ...state.floor.geometry,
-        opaque: {
-          ...opaque,
-          knowledge: {
-            ...knowledge,
-            decorativeFeatures: [...decorative, hoardRecord],
-          },
-        } as SerializableRecord,
-      },
-    },
-  };
-};

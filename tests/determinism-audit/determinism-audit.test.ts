@@ -23,7 +23,7 @@ const KNOWN_ENGINE_OBJECT_ITERATION_SITES = [
   "src/engine/systems/traps.ts:136:  Object.values(state.entities).filter((entity) => entity.kind === \"trap\")",
   "src/engine/systems/traps.ts:489:  Object.values(state.entities)",
   "src/engine/systems/traps.ts:505:    Object.entries(state.entities).map(([id, entity]) => {",
-  "src/engine/systems/movement.ts:311:  ...Object.values(state.entities)",
+  "src/engine/systems/movement.ts:318:  ...Object.values(state.entities)",
   "src/engine/systems/status.ts:316:  ...Object.keys(state.entities)",
   "src/engine/systems/inventory.ts:145:  for (const entity of Object.values(state.entities)) {",
   "src/engine/systems/inventory.ts:410:  const items = Object.values(state.entities)",
@@ -67,7 +67,7 @@ describe("determinism audit", () => {
 
     expect(first).toBe(second);
     expect(JSON.parse(first) as { terminalStatus: string }).toMatchObject({
-      terminalStatus: "ABORTED",
+      terminalStatus: "WIN",
     });
   }, 120_000);
 });

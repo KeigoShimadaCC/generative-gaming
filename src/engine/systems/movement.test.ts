@@ -22,6 +22,7 @@ import {
   type GameState,
   type NpcEntityInstance,
   type Position,
+  type SerializableRecord,
 } from "../state/index.js";
 import {
   getAvailableActions,
@@ -171,6 +172,36 @@ describe("movement resolver", () => {
     });
   });
 
+  it("preserves known decorative features when opening a door", () => {
+    const hoard: SerializableRecord = {
+      id: "hoard",
+      kind: "hoard",
+      name: "The Hoard",
+      x: 2,
+      y: 0,
+      depth: 12,
+    };
+    const state = withFloorKnowledge(
+      stateFromFixture("move-into-door-with-hoard-knowledge", `@+`),
+      {
+        decorativeFeatures: [hoard],
+      },
+    );
+
+    const result = step(state, { kind: "move", direction: "east" });
+    const opaque = result.state.floor.geometry.opaque as {
+      readonly knowledge?: {
+        readonly decorativeFeatures?: readonly SerializableRecord[];
+      };
+    } | null;
+
+    expect(result.state.run.turn).toBe(1);
+    expect(getTile(gridFromState(result.state), { x: 1, y: 0 })).toEqual(
+      createTile(Terrain.Door, "open"),
+    );
+    expect(opaque?.knowledge?.decorativeFeatures).toEqual([hoard]);
+  });
+
   it("logs stairs detection after entering stairs_down", () => {
     const state = stateFromFixture("move-onto-stairs", `@>`);
 
@@ -317,6 +348,30 @@ const withGrid = (
     position,
   },
 });
+
+const withFloorKnowledge = (
+  state: GameState,
+  knowledge: SerializableRecord,
+): GameState => {
+  const opaque = state.floor.geometry.opaque;
+  if (opaque === null) {
+    throw new Error("missing fixture grid");
+  }
+
+  return {
+    ...state,
+    floor: {
+      ...state.floor,
+      geometry: {
+        ...state.floor.geometry,
+        opaque: {
+          ...opaque,
+          knowledge,
+        } as SerializableRecord,
+      },
+    },
+  };
+};
 
 const withEntities = (
   state: GameState,

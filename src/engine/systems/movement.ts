@@ -1,5 +1,4 @@
 import {
-  createFloorGeometrySlot,
   createTile,
   getTile,
   inBounds,
@@ -255,13 +254,21 @@ const openDoor = (
   direction: MoveDirection,
 ): ActionResolverResult => {
   const openedGrid = withTile(grid, at, createTile(Terrain.Door, "open"));
+  const previousOpaque = state.floor.geometry.opaque;
+  const nextOpaque =
+    previousOpaque !== null && typeof previousOpaque === "object"
+      ? ({ ...previousOpaque, ...openedGrid } as SerializableRecord)
+      : (openedGrid as unknown as SerializableRecord);
 
   return {
     state: {
       ...state,
       floor: {
         ...state.floor,
-        geometry: createFloorGeometrySlot(state.floor.geometry.refId, openedGrid),
+        geometry: {
+          ...state.floor.geometry,
+          opaque: nextOpaque,
+        },
       },
     },
     events: [
