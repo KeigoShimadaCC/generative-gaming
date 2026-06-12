@@ -1,0 +1,279 @@
+.viewer,
+.empty {
+  display: grid;
+  min-height: 0;
+  color: var(--gg-text);
+}
+
+.viewer {
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 0.75rem;
+}
+
+.empty {
+  align-content: center;
+  gap: 0.4rem;
+  min-height: 16rem;
+}
+
+.empty h2,
+.empty p {
+  margin: 0;
+}
+
+.empty p {
+  color: var(--gg-muted);
+}
+
+.header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.header h2,
+.header p {
+  margin: 0;
+}
+
+.header h2 {
+  font-size: 1.1rem;
+  line-height: 1.1;
+}
+
+.header p {
+  color: var(--gg-muted);
+  font-size: 0.78rem;
+}
+
+.search {
+  display: grid;
+  gap: 0.25rem;
+  min-width: min(17rem, 42vw);
+}
+
+.search span {
+  color: var(--gg-muted);
+  font-size: 0.66rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.search input {
+  min-width: 0;
+  border: 1px solid var(--gg-border);
+  border-radius: 6px;
+  background: #070a0e;
+  color: var(--gg-text);
+  font: inherit;
+  padding: 0.46rem 0.55rem;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(16rem, 0.85fr) minmax(0, 1.4fr);
+  gap: 0.75rem;
+  min-height: 0;
+}
+
+.tree,
+.document {
+  min-height: 0;
+  overflow: auto;
+  border: 1px solid var(--gg-border);
+  border-radius: 8px;
+  background: rgba(8, 11, 16, 0.82);
+}
+
+.tree {
+  display: grid;
+  align-content: start;
+  gap: 0.6rem;
+  padding: 0.65rem;
+}
+
+.floor {
+  display: grid;
+  gap: 0.45rem;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 6px;
+  background: #0f141b;
+  padding: 0.55rem;
+}
+
+.fallback {
+  border-color: #e6bd5a;
+  background: #17140d;
+}
+
+.floor button,
+.gates button {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+}
+
+.floor > button {
+  display: grid;
+  gap: 0.2rem;
+  cursor: pointer;
+}
+
+.floor > button span {
+  color: var(--gg-muted);
+  font-size: 0.72rem;
+}
+
+.floor > button strong {
+  overflow-wrap: anywhere;
+  font-size: 0.86rem;
+}
+
+.floor ol,
+.gates {
+  display: grid;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.floor ol > li {
+  display: grid;
+  gap: 0.3rem;
+  padding-top: 0.45rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.floor ol > li > button {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.floor ol > li > button span {
+  font-weight: 700;
+}
+
+.floor ol > li > button em {
+  flex: 0 0 auto;
+  color: var(--gg-muted);
+  font-size: 0.7rem;
+  font-style: normal;
+}
+
+.usage {
+  color: var(--gg-muted);
+  font-size: 0.72rem;
+}
+
+.paths {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.paths code {
+  overflow-wrap: anywhere;
+  color: #9ed0ff;
+  font-size: 0.68rem;
+}
+
+.gates li {
+  display: grid;
+  gap: 0.25rem;
+  border-radius: 5px;
+  padding: 0.35rem;
+}
+
+.gatePass {
+  background: rgba(83, 176, 122, 0.1);
+}
+
+.gateFail {
+  background: rgba(230, 104, 91, 0.14);
+}
+
+.gates button {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.gates p {
+  margin: 0;
+  color: var(--gg-muted);
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+
+.document {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+.fallbackDocument {
+  border-color: #e6bd5a;
+}
+
+.document header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-bottom: 1px solid var(--gg-border);
+  padding: 0.65rem 0.75rem;
+}
+
+.document h3,
+.document p {
+  margin: 0;
+}
+
+.document h3 {
+  font-size: 0.95rem;
+}
+
+.document p {
+  overflow-wrap: anywhere;
+  color: var(--gg-muted);
+  font-size: 0.72rem;
+}
+
+.document button {
+  flex: 0 0 auto;
+  border: 1px solid var(--gg-border);
+  border-radius: 6px;
+  background: #151b24;
+  color: var(--gg-text);
+  font: inherit;
+  font-size: 0.78rem;
+  padding: 0.38rem 0.58rem;
+}
+
+.document pre {
+  min-height: 0;
+  margin: 0;
+  overflow: auto;
+  color: #d6deea;
+  font-size: 0.74rem;
+  line-height: 1.45;
+  padding: 0.8rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.noDocument {
+  display: grid;
+  place-items: center;
+  color: var(--gg-muted);
+  min-height: 10rem;
+}

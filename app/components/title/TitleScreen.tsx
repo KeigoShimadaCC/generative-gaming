@@ -2,7 +2,9 @@
 
 import { useEffect, useMemo, useState } from "react";
 
+import { DiaryPanel } from "@/components/diary";
 import type { GameState } from "@engine/state";
+import { composeDiary } from "@harness/diary";
 
 import styles from "./TitleScreen.module.css";
 import {
@@ -31,6 +33,10 @@ export function TitleScreen({
 }: TitleScreenProps) {
   const [seed, setSeed] = useState(() => createTitleSeed());
   const terminal = terminalRun === null ? null : terminalRunViewModel(terminalRun);
+  const terminalDiary = useMemo(
+    () => (terminalRun === null ? null : composeDiary({ state: terminalRun })),
+    [terminalRun],
+  );
   const model = useMemo(
     () => createTitleViewModel({ activeRun, seed }),
     [activeRun, seed],
@@ -52,19 +58,12 @@ export function TitleScreen({
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [onNewRun, seed]);
 
-  if (terminal !== null) {
+  if (terminal !== null && terminalDiary !== null) {
     return (
       <section className={styles.screen} aria-label="Run diary">
         <div className={styles.surface}>The Last Lantern</div>
-        <div className={styles.titleBlock}>
-          <h1>{terminal.outcome === "victory" ? "Victory" : terminal.outcome === "defeat" ? "Defeat" : "Run Ended"}</h1>
-          <p>{nextRunMemoryNote(terminal)}</p>
-        </div>
-        <div className={styles.summaryStrip}>
-          <Summary label="Depth" value={String(terminal.depth)} />
-          <Summary label="Turns" value={String(terminal.turns)} />
-          <Summary label="Found" value={String(terminal.discoveries)} />
-        </div>
+        <DiaryPanel diary={terminalDiary} variant="final" />
+        <p className={styles.terminalNote}>{nextRunMemoryNote(terminal)}</p>
         <div className={styles.actions}>
           <button type="button" onClick={() => onNewRun(seed)}>
             New run
@@ -108,21 +107,6 @@ export function TitleScreen({
         Reroll seed
       </button>
     </section>
-  );
-}
-
-function Summary({
-  label,
-  value,
-}: {
-  readonly label: string;
-  readonly value: string;
-}) {
-  return (
-    <div>
-      <span>{label}</span>
-      <strong>{value}</strong>
-    </div>
   );
 }
 

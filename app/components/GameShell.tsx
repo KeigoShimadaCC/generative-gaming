@@ -9,6 +9,7 @@ import {
 } from "react";
 
 import { useGameStore } from "@/store/game-store";
+import { DiaryLayer, type DiaryLayerTab } from "@/components/diary";
 import { GridRegion } from "@/components/grid";
 import { HudRegion } from "@/components/hud";
 import { KeymapOverlay } from "@/components/keymap-overlay/KeymapOverlay";
@@ -27,6 +28,7 @@ import { FloorTransitionOverlay } from "@/components/transition";
 import { GameInputOwner } from "@/input";
 import { InlineConfirmPrompt } from "@/input/InlineConfirmPrompt";
 import type { Position } from "@engine/state";
+import { composeDiary } from "@harness/diary";
 
 const gridRegionClass = "min-h-0";
 
@@ -49,9 +51,14 @@ export function GameShell() {
   const skipTransitionTheater = useGameStore(
     (state) => state.skipTransitionTheater,
   );
+  const patchUi = useGameStore((state) => state.patchUi);
   const [hoverPosition, setHoverPosition] = useState<Position | null>(null);
   const questMarkers = useMemo(
     () => (gameState === null ? [] : questMarkersForState(gameState)),
+    [gameState],
+  );
+  const diary = useMemo(
+    () => (gameState === null ? null : composeDiary({ state: gameState })),
     [gameState],
   );
   const shellStyle = themeVariables(settings.colorTheme) as CSSProperties;
@@ -138,6 +145,20 @@ export function GameShell() {
         transition={transition}
         onSkip={skipTransitionTheater}
       />
+      {diary !== null && (ui.diaryOpen || ui.artifactOpen) ? (
+        <DiaryLayer
+          activeTab={ui.artifactOpen ? "artifacts" : "diary"}
+          artifactModel={null}
+          diary={diary}
+          onClose={() => patchUi({ diaryOpen: false, artifactOpen: false })}
+          onSelectTab={(tab: DiaryLayerTab) =>
+            patchUi({
+              diaryOpen: tab === "diary",
+              artifactOpen: tab === "artifacts",
+            })
+          }
+        />
+      ) : null}
     </main>
   );
 }

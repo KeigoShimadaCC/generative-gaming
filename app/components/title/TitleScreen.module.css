@@ -39,6 +39,16 @@
   line-height: 1.55;
 }
 
+.terminalNote {
+  width: min(42rem, 100%);
+  justify-self: center;
+  margin: 0;
+  color: var(--gg-muted);
+  font-size: 0.92rem;
+  line-height: 1.45;
+  text-align: center;
+}
+
 .actions {
   display: grid;
   width: min(26rem, 100%);

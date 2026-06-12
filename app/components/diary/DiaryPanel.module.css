@@ -1,0 +1,180 @@
+.panel {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 0.8rem;
+  min-height: 0;
+  color: var(--gg-text);
+}
+
+.final {
+  width: min(68rem, calc(100vw - 2rem));
+}
+
+.summaryStrip {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.summaryStrip div {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+  border: 1px solid var(--gg-border);
+  border-radius: 8px;
+  background: #10151d;
+  padding: 0.58rem 0.65rem;
+}
+
+.summaryStrip span {
+  color: var(--gg-muted);
+  font-size: 0.66rem;
+  letter-spacing: 0;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.summaryStrip strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: #f0d27a;
+  font-size: 1.02rem;
+  line-height: 1.1;
+}
+
+.body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(15rem, 0.55fr);
+  gap: 0.75rem;
+  min-height: 0;
+}
+
+.manuscript,
+.learnedNote {
+  min-height: 0;
+  overflow: auto;
+  border: 1px solid var(--gg-border);
+  border-radius: 8px;
+  background: rgba(8, 11, 16, 0.84);
+}
+
+.manuscript {
+  display: grid;
+  align-content: start;
+  gap: 0.75rem;
+  padding: 0.75rem;
+}
+
+.floor {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.floor h3,
+.floor p,
+.learnedNote h3,
+.learnedNote p {
+  margin: 0;
+}
+
+.floor h3 {
+  color: #d9c96c;
+  font-size: 0.95rem;
+  line-height: 1.15;
+}
+
+.floor ol {
+  display: grid;
+  gap: 0.48rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.entry {
+  display: grid;
+  gap: 0.25rem;
+  border-left: 3px solid #607083;
+  border-radius: 0 6px 6px 0;
+  background: #0f141b;
+  padding: 0.5rem 0.55rem;
+}
+
+.entry div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.7rem;
+  min-width: 0;
+}
+
+.entry span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: #e6ecf4;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.entry time {
+  flex: 0 0 auto;
+  color: var(--gg-muted);
+  font-size: 0.68rem;
+}
+
+.entry p {
+  color: #cbd6e2;
+  font-size: 0.84rem;
+  line-height: 1.42;
+}
+
+.narration {
+  border-left-color: #d9c96c;
+}
+
+.closeCall {
+  border-left-color: #e6685b;
+}
+
+.kill {
+  border-left-color: #d27b7b;
+}
+
+.discovery {
+  border-left-color: #76b8d7;
+}
+
+.quest {
+  border-left-color: #79d39f;
+}
+
+.callback {
+  border-left-color: #b6a0e8;
+}
+
+.floorEntry {
+  border-left-color: #e6bd5a;
+}
+
+.blank {
+  color: var(--gg-muted);
+  font-size: 0.82rem;
+}
+
+.learnedNote {
+  display: grid;
+  align-content: start;
+  gap: 0.45rem;
+  padding: 0.75rem;
+}
+
+.learnedNote h3 {
+  color: #f0d27a;
+  font-size: 0.9rem;
+}
+
+.learnedNote p {
+  color: #cbd6e2;
+  font-size: 0.86rem;
+  line-height: 1.48;
+}
