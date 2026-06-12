@@ -150,6 +150,8 @@ export type DiagnosticArtifactPaths = {
 type WalkableOptions = {
   readonly allowEnemyBlockers?: boolean;
   readonly blockedCells?: ReadonlySet<string>;
+  readonly avoidEnemyAdjacency?: boolean;
+  readonly allowedUnsafeCells?: ReadonlySet<string>;
 };
 
 const DIRECTION_KEYS: Record<Direction, string> = {
@@ -293,6 +295,25 @@ export async function driveRunToWin(
       await settleUi(page);
 
       const shell = await readShellSnapshot(state);
+      if (shell.screen !== "playing" && shell.terminalStatus === "LOSS") {
+        const reason = runLostReason(
+          shell,
+          ensurePageDiagnostics(page).botState
+        );
+        await dumpStuckState(page, reason);
+        diagnosticsWritten = true;
+        throw new BotFailure("run lost", {
+          shell,
+          hud: await readHudSnapshot(page),
+          player: null,
+          gameStateAttributes: await readGameStateAttributes(page),
+          recentLogLines: await readRecentLogLines(page),
+          botState: ensurePageDiagnostics(page).botState,
+          consoleMessages: ensurePageDiagnostics(page).consoleMessages,
+          reason
+        });
+      }
+
       updateBotDiagnostics(page, shell, policyState, noProgressTurns);
       if (isTransitionActive(shell)) {
         const transition = await pollFloorTransition(page, state, shell);
@@ -368,6 +389,26 @@ export async function driveRunToWin(
       }
 
       if (after.screen !== "playing") {
+        if (after.terminalStatus === "LOSS") {
+          updateBotDiagnostics(page, shell, policyState, noProgressTurns);
+          const reason = runLostReason(
+            shell,
+            ensurePageDiagnostics(page).botState
+          );
+          await dumpStuckState(page, reason);
+          diagnosticsWritten = true;
+          throw new BotFailure("run lost", {
+            shell: after,
+            hud: await readHudSnapshot(page),
+            player: null,
+            gameStateAttributes: await readGameStateAttributes(page),
+            recentLogLines: await readRecentLogLines(page),
+            botState: ensurePageDiagnostics(page).botState,
+            consoleMessages: ensurePageDiagnostics(page).consoleMessages,
+            reason
+          });
+        }
+
         updateBotDiagnostics(page, after, policyState, noProgressTurns);
         await dumpStuckState(page, "left playing screen after action before WIN");
         diagnosticsWritten = true;
@@ -466,6 +507,15 @@ export async function driveRunToWin(
     }
     throw error;
   }
+}
+
+function runLostReason(
+  shell: ShellSnapshot,
+  botState: BotStateSnapshot
+): string {
+  const depth = botState.depth ?? shell.depth;
+  const turn = botState.turn ?? shell.turn;
+  return `run lost at depth ${depth} turn ${turn}`;
 }
 
 export async function dumpStuckState(
@@ -610,41 +660,13 @@ async function choosePolicyKey(
   const visited = policyState.visitedByDepth.get(shell.depth) ?? new Set();
   const blockedCells = blockedCellsForLoopBreak(policyState, shell, cells);
 
-  const adjacentEnemy = findAdjacentEnemy(cells, player);
-  if (
-    adjacentEnemy !== null &&
-    !blockedCells.has(posKey(adjacentEnemy.x, adjacentEnemy.y))
-  ) {
-    return botDecision(
-      directionKeyToward(player, adjacentEnemy),
-      `attack-adjacent-enemy:${posKey(adjacentEnemy.x, adjacentEnemy.y)}`
-    );
-  }
+  const adjacentEnemies = findAdjacentEnemies(cells, player);
+  const adjacentEnemy = adjacentEnemies.find(
+    (enemy) => !blockedCells.has(posKey(enemy.x, enemy.y))
+  ) ?? null;
 
-  if (hasItemUnderfoot(cells, player)) {
-    return botDecision("g", "pickup-underfoot");
-  }
-
-  if (hud !== null && hud.hpRatio <= 0.45) {
-    const healed = await tryHeal(page);
-    if (healed) {
-      return botDecision(null, "use-healing-item");
-    }
-  }
-
-  if (shell.depth >= FINAL_DEPTH) {
-    if (isOnHoard(cells, player)) {
-      return botDecision("T", "take-hoard");
-    }
-
-    const hoard = findTargetCells(
-      cells,
-      (cell) => cell.featureKind === "hoard"
-    );
-    const hoardRoute = routeStep(player, hoard, cells, blockedCells);
-    if (hoardRoute !== null) {
-      return botDecision(hoardRoute, "route-to-hoard");
-    }
+  if (shell.depth >= FINAL_DEPTH && isOnHoard(cells, player)) {
+    return botDecision("T", "take-hoard");
   }
 
   if (shell.depth < FINAL_DEPTH && isOnStairs(cells, player)) {
@@ -655,6 +677,38 @@ async function choosePolicyKey(
 
     policyState.descendIntent = { depth: shell.depth, stairsKey };
     return botDecision(">", "descend-on-stairs");
+  }
+
+  if (hud !== null && shouldUseHealingItem(hud, adjacentEnemies.length)) {
+    const healed = await tryHeal(page);
+    if (healed) {
+      return botDecision(null, "use-healing-item");
+    }
+  }
+
+  if (hud !== null && shouldRetreat(hud, adjacentEnemies.length)) {
+    const retreat = retreatStep(player, cells, blockedCells);
+    if (retreat !== null) {
+      return botDecision(
+        retreat,
+        `retreat-from-enemies:${adjacentEnemies.length}`
+      );
+    }
+  }
+
+  if (adjacentEnemies.length === 0 && hasItemUnderfoot(cells, player)) {
+    return botDecision("g", "pickup-underfoot");
+  }
+
+  if (shell.depth >= FINAL_DEPTH) {
+    const hoard = findTargetCells(
+      cells,
+      (cell) => cell.featureKind === "hoard"
+    );
+    const hoardRoute = routeStep(player, hoard, cells, blockedCells);
+    if (hoardRoute !== null) {
+      return botDecision(hoardRoute, "route-to-hoard");
+    }
   }
 
   if (shell.depth < FINAL_DEPTH) {
@@ -671,6 +725,17 @@ async function choosePolicyKey(
   const exploreStep = frontierStep(player, cells, visited, blockedCells);
   if (exploreStep !== null) {
     return botDecision(exploreStep, "explore-frontier");
+  }
+
+  if (adjacentEnemy !== null) {
+    return botDecision(
+      directionKeyToward(player, adjacentEnemy),
+      `attack-adjacent-enemy:${posKey(adjacentEnemy.x, adjacentEnemy.y)}`
+    );
+  }
+
+  if (hasItemUnderfoot(cells, player)) {
+    return botDecision("g", "pickup-underfoot");
   }
 
   return botDecision(
@@ -854,6 +919,33 @@ function visibleEnemyKeys(cells: readonly GridCell[]): readonly string[] {
     .sort();
 }
 
+function visibleEnemyPositions(
+  cells: readonly GridCell[]
+): readonly GridPosition[] {
+  return cells
+    .filter((cell) => cell.layer === "enemy" && cell.fog === "visible")
+    .map((cell) => ({ x: cell.x, y: cell.y }));
+}
+
+function enemyAdjacentKeys(cells: readonly GridCell[]): ReadonlySet<string> {
+  const keys = new Set<string>();
+  for (const enemy of visibleEnemyPositions(cells)) {
+    for (const neighbor of neighbors(enemy)) {
+      keys.add(posKey(neighbor.x, neighbor.y));
+    }
+  }
+  return keys;
+}
+
+function nearestEnemyDistance(
+  position: GridPosition,
+  enemies: readonly GridPosition[]
+): number {
+  return Math.min(
+    ...enemies.map((enemy) => chebyshev(position, enemy))
+  );
+}
+
 function enemyStillVisible(cells: readonly GridCell[], key: string): boolean {
   return visibleEnemyKeys(cells).includes(key);
 }
@@ -905,7 +997,11 @@ function clearDescendIntent(policyState: BotPolicyState): void {
 async function tryHeal(page: Page): Promise<boolean> {
   const state = page.getByTestId("game-state");
   const shell = await readShellSnapshot(state);
-  if (shell.panelMode !== "inspect") {
+  if (shell.screen !== "playing") {
+    return false;
+  }
+
+  if (shell.panelMode !== "inventory") {
     await page.keyboard.press("i");
     await expect(state).toHaveAttribute("data-panel-mode", "inventory");
   }
@@ -913,6 +1009,8 @@ async function tryHeal(page: Page): Promise<boolean> {
   const panel = page.getByTestId("inventory-panel");
   const slots = panel.locator("[data-inventory-slot]");
   const count = await slots.count();
+  let emergencyDraughtIndex: number | null = null;
+
   for (let index = 0; index < count; index += 1) {
     const slot = slots.nth(index);
     const label = ((await slot.textContent()) ?? "").toLowerCase();
@@ -921,26 +1019,71 @@ async function tryHeal(page: Page): Promise<boolean> {
     }
 
     await slot.click();
+    await waitForUiFrame(page);
+    const selectedText = ((await panel.textContent()) ?? "").toLowerCase();
     const quaff = panel.locator('[data-action-id="quaff"]:not([disabled])');
     if (await quaff.isVisible().catch(() => false)) {
-      await quaff.click();
-      await page.keyboard.press("i");
-      await expect(state).toHaveAttribute("data-panel-mode", "inspect");
-      return true;
+      if (isKnownHealingInventoryText(selectedText)) {
+        await page.keyboard.press("Enter");
+        return finishInventoryItemUse(page, state);
+      }
+
+      if (
+        emergencyDraughtIndex === null &&
+        isPossibleHealingDraughtText(selectedText)
+      ) {
+        emergencyDraughtIndex = index;
+      }
     }
 
     const use = panel.locator('[data-action-id="use"]:not([disabled])');
-    if (await use.isVisible().catch(() => false)) {
-      await use.click();
-      await page.keyboard.press("i");
-      await expect(state).toHaveAttribute("data-panel-mode", "inspect");
-      return true;
+    if (
+      (await use.isVisible().catch(() => false)) &&
+      isKnownHealingInventoryText(selectedText)
+    ) {
+      await page.keyboard.press("Enter");
+      return finishInventoryItemUse(page, state);
     }
   }
 
-  await page.keyboard.press("i");
-  await expect(state).toHaveAttribute("data-panel-mode", "inspect");
+  if (emergencyDraughtIndex !== null) {
+    await slots.nth(emergencyDraughtIndex).click();
+    await waitForUiFrame(page);
+    await page.keyboard.press("Enter");
+    return finishInventoryItemUse(page, state);
+  }
+
+  await closeInventoryPanel(page, state);
   return false;
+}
+
+function isKnownHealingInventoryText(text: string): boolean {
+  return text.includes("heal") || text.includes("sour cordial");
+}
+
+function isPossibleHealingDraughtText(text: string): boolean {
+  if (!text.includes("draught") && !text.includes("cordial")) {
+    return false;
+  }
+
+  return !text.includes("cure_status");
+}
+
+async function finishInventoryItemUse(
+  page: Page,
+  state: Locator
+): Promise<boolean> {
+  await waitForUiFrame(page);
+  await closeInventoryPanel(page, state);
+  return true;
+}
+
+async function closeInventoryPanel(page: Page, state: Locator): Promise<void> {
+  const shell = await readShellSnapshot(state);
+  if (shell.screen === "playing" && shell.panelMode === "inventory") {
+    await page.keyboard.press("Escape");
+    await expect(state).toHaveAttribute("data-panel-mode", "inspect");
+  }
 }
 
 async function pressGameplayKey(page: Page, key: string): Promise<void> {
@@ -1151,19 +1294,46 @@ function findPlayer(
   return player === undefined ? null : { x: player.x, y: player.y };
 }
 
-function findAdjacentEnemy(
+function findAdjacentEnemies(
   cells: readonly GridCell[],
   player: { readonly x: number; readonly y: number }
-): { readonly x: number; readonly y: number } | null {
+): GridPosition[] {
+  const enemies: GridPosition[] = [];
   for (const cell of cells) {
     if (cell.layer !== "enemy" || cell.fog !== "visible") {
       continue;
     }
     if (chebyshev(player, cell) <= 1) {
-      return { x: cell.x, y: cell.y };
+      enemies.push({ x: cell.x, y: cell.y });
     }
   }
-  return null;
+  return enemies;
+}
+
+function shouldUseHealingItem(
+  hud: HudSnapshot,
+  adjacentEnemyCount: number
+): boolean {
+  if (adjacentEnemyCount >= 2) {
+    return hud.hpRatio <= 0.6;
+  }
+
+  if (adjacentEnemyCount === 1) {
+    return hud.hpRatio <= 0.5;
+  }
+
+  return hud.hpRatio <= 0.45;
+}
+
+function shouldRetreat(
+  hud: HudSnapshot,
+  adjacentEnemyCount: number
+): boolean {
+  if (adjacentEnemyCount >= 2) {
+    return hud.hpRatio <= 0.6;
+  }
+
+  return adjacentEnemyCount === 1 && hud.hpRatio <= 0.5;
 }
 
 function hasItemUnderfoot(
@@ -1215,10 +1385,18 @@ function routeStep(
     return null;
   }
 
-  const safeRoute = bfsRoute(
-    player,
-    targets,
-    knownWalkableKeys(cells, { blockedCells })
+  const targetKeys = new Set(
+    targets.map((target) => posKey(target.x, target.y))
+  );
+  const safeWalkable = knownWalkableKeys(cells, { blockedCells });
+  const cautiousWalkable = knownWalkableKeys(cells, {
+    blockedCells,
+    avoidEnemyAdjacency: true,
+    allowedUnsafeCells: targetKeys
+  });
+  const safeRoute = preferCautiousRoute(
+    bfsRoute(player, targets, safeWalkable),
+    bfsRoute(player, targets, cautiousWalkable)
   );
   const route =
     safeRoute ??
@@ -1238,6 +1416,10 @@ function frontierStep(
 ): string | null {
   const cellMap = cellsByKey(cells);
   const safeWalkable = knownWalkableKeys(cells, { blockedCells });
+  const cautiousWalkable = knownWalkableKeys(cells, {
+    blockedCells,
+    avoidEnemyAdjacency: true
+  });
   const enemyRouteWalkable = knownWalkableKeys(cells, {
     allowEnemyBlockers: true,
     blockedCells
@@ -1264,20 +1446,114 @@ function frontierStep(
       cellMap.has(key)
     );
   };
-  const routeToFrontier = bfsRouteToPredicate(
+  const routeToFrontier = preferredRouteToPredicate(
     player,
     safeWalkable,
+    cautiousWalkable,
     frontierTarget
   );
   const route =
     routeToFrontier ??
-    bfsRouteToPredicate(player, safeWalkable, unvisitedKnownTarget) ??
-    bfsRouteToPredicate(player, safeWalkable, anyFrontierTarget) ??
+    preferredRouteToPredicate(
+      player,
+      safeWalkable,
+      cautiousWalkable,
+      unvisitedKnownTarget
+    ) ??
+    preferredRouteToPredicate(
+      player,
+      safeWalkable,
+      cautiousWalkable,
+      anyFrontierTarget
+    ) ??
     bfsRouteToPredicate(player, enemyRouteWalkable, frontierTarget) ??
     bfsRouteToPredicate(player, enemyRouteWalkable, unvisitedKnownTarget) ??
     bfsRouteToPredicate(player, enemyRouteWalkable, anyFrontierTarget);
 
   return routeToDirectionKey(player, route);
+}
+
+function retreatStep(
+  player: GridPosition,
+  cells: readonly GridCell[],
+  blockedCells: ReadonlySet<string> = new Set()
+): string | null {
+  const enemies = visibleEnemyPositions(cells);
+  if (enemies.length === 0) {
+    return null;
+  }
+
+  const cellMap = cellsByKey(cells);
+  const enemyAdjacent = enemyAdjacentKeys(cells);
+  const currentDistance = nearestEnemyDistance(player, enemies);
+  const candidates = DIRECTIONS.flatMap((direction) => {
+    const delta = DIRECTION_DELTAS[direction];
+    const destination = {
+      x: player.x + delta.x,
+      y: player.y + delta.y
+    };
+    const key = posKey(destination.x, destination.y);
+    const cell = cellMap.get(key);
+    if (
+      cell === undefined ||
+      !isWalkable(cell, { blockedCells }) ||
+      blockedCells.has(key)
+    ) {
+      return [];
+    }
+
+    const distance = nearestEnemyDistance(destination, enemies);
+    return [
+      {
+        key: DIRECTION_KEYS[direction],
+        destination,
+        distance,
+        enemyAdjacent: enemyAdjacent.has(key)
+      }
+    ];
+  });
+
+  const safer = candidates
+    .filter((candidate) => candidate.distance > currentDistance)
+    .sort(compareRetreatCandidates);
+  if (safer.length > 0) {
+    return safer[0]!.key;
+  }
+
+  const notAdjacent = candidates
+    .filter((candidate) => !candidate.enemyAdjacent)
+    .sort(compareRetreatCandidates);
+  if (notAdjacent.length > 0) {
+    return notAdjacent[0]!.key;
+  }
+
+  const fallback = [...candidates].sort(compareRetreatCandidates);
+  return fallback[0]?.key ?? null;
+}
+
+function compareRetreatCandidates(
+  left: {
+    readonly destination: GridPosition;
+    readonly distance: number;
+    readonly enemyAdjacent: boolean;
+  },
+  right: {
+    readonly destination: GridPosition;
+    readonly distance: number;
+    readonly enemyAdjacent: boolean;
+  }
+): number {
+  if (left.enemyAdjacent !== right.enemyAdjacent) {
+    return left.enemyAdjacent ? 1 : -1;
+  }
+
+  if (left.distance !== right.distance) {
+    return right.distance - left.distance;
+  }
+
+  return posKey(left.destination.x, left.destination.y).localeCompare(
+    posKey(right.destination.x, right.destination.y)
+  );
 }
 
 function boxedBreakKey(
@@ -1314,6 +1590,32 @@ function bfsRoute(
   return bfsRouteToPredicate(start, walkable, (position) =>
     targetKeys.has(posKey(position.x, position.y))
   );
+}
+
+function preferredRouteToPredicate(
+  start: GridPosition,
+  walkable: ReadonlySet<string>,
+  cautiousWalkable: ReadonlySet<string>,
+  target: (position: GridPosition) => boolean
+): GridPosition[] | null {
+  return preferCautiousRoute(
+    bfsRouteToPredicate(start, walkable, target),
+    bfsRouteToPredicate(start, cautiousWalkable, target)
+  );
+}
+
+function preferCautiousRoute(
+  route: GridPosition[] | null,
+  cautiousRoute: GridPosition[] | null
+): GridPosition[] | null {
+  if (
+    cautiousRoute !== null &&
+    (route === null || cautiousRoute.length <= route.length)
+  ) {
+    return cautiousRoute;
+  }
+
+  return route;
 }
 
 function bfsRouteToPredicate(
@@ -1370,9 +1672,22 @@ function knownWalkableKeys(
   cells: readonly GridCell[],
   options: WalkableOptions = {}
 ): Set<string> {
+  const enemyAdjacent =
+    options.avoidEnemyAdjacency === true ? enemyAdjacentKeys(cells) : null;
   return new Set(
     cells
-      .filter((cell) => isWalkable(cell, options))
+      .filter((cell) => {
+        if (!isWalkable(cell, options)) {
+          return false;
+        }
+
+        const key = posKey(cell.x, cell.y);
+        return (
+          enemyAdjacent === null ||
+          !enemyAdjacent.has(key) ||
+          options.allowedUnsafeCells?.has(key) === true
+        );
+      })
       .map((cell) => posKey(cell.x, cell.y))
   );
 }

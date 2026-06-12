@@ -53,12 +53,14 @@ test.describe("full-game browser-clear campaign", () => {
         "victory"
       );
     } catch (error) {
-      await dumpStuckState(
-        page,
-        `full-clear spec failure: ${
-          error instanceof Error ? error.message : String(error)
-        }`
-      );
+      if (!isRunLostBotFailure(error)) {
+        await dumpStuckState(
+          page,
+          `full-clear spec failure: ${
+            error instanceof Error ? error.message : String(error)
+          }`
+        );
+      }
       throw error;
     }
   });
@@ -98,3 +100,11 @@ test.describe("determinism note", () => {
     expect(second).toBe(first);
   });
 });
+
+function isRunLostBotFailure(error: unknown): boolean {
+  return (
+    error instanceof Error &&
+    error.name === "BotFailure" &&
+    error.message === "run lost"
+  );
+}
