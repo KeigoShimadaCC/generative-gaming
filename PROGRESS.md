@@ -25,6 +25,7 @@ This file records *state*, never *design* — design lives in the doc spine
 | 31/32-RT | Round-trip verifier fixes: ambient test seam, judge taxonomy, prompt hardening | Codex | main (src/schemas, src/director/{provider,prompt}) | ready-for-verify | full gate green; no commit per brief |
 | 34-1 | Gate 2 simulated playability | Codex | main (src/gauntlet/gate2) | ready-for-verify | scoped gates green; local materializer TODO-PHASE-35; no commit per brief |
 | 36-1 | Repair loop & fallback degradation | Codex | main (src/gauntlet/repair) | ready-for-verify | full gate green; repair prompt snapshot covered; no commit per brief |
+| 42-1 | Novelty & responsiveness thesis metrics | Codex | main (src/evals/metrics, src/evals/runner/report.ts) | ready-for-verify | fallback-pack novelty baseline, responsiveness detectors, report wiring; scoped gates green; no commit per brief |
 | 26-1 | Fallback content pack (Old Stock) | Cursor | main (content/, loader) | in-progress | |
 | 21/26-I | Wire fallback pack to run loop + unified events | Codex | main (integration) | ready-for-verify | fallback provider wired; full-run smoke over real fallback content; full gate green; no commit |
 | — | Wave B merged through 16/20 (b1ccd1d): 06–20,22 all verified | — | — | merged | engine complete except run loop |
@@ -65,6 +66,7 @@ Format: `YYYY-MM-DD · phase/task · who · what was verified · evidence (comma
 | 2026-06-12 | 31/32-RT | Codex | Round-trip verifier fixes: duplicate ambient schema subprocess test removed, ambient judge failures covered, prompt example hardened for item/trap schemas | `pnpm exec vitest run src/director/provider src/director/prompt` → 4 files, 28 passed, 1 skipped; `pnpm run check` → 60 files, 424 passed, 1 skipped |
 | 2026-06-12 | 34-1 | Codex | Gate 2 simulated playability complete: single-floor bot ensemble, G2 report/judge, unwinnable and zero-threat rejects, fallback pass, deterministic verdict, injected wall-clock | `pnpm run typecheck` → pass; `pnpm exec eslint src/gauntlet/gate2` → pass; `pnpm exec vitest run src/gauntlet/gate2` → 1 file, 5 tests passed |
 | 2026-06-12 | 36-1 | Codex | Repair loop complete: gate 0→1→2 sequencing, reason-coded repair prompts, cap-2 retries, immediate timeout fallback, Old Stock degradation, full generation chain artifacts | `pnpm exec vitest run src/gauntlet/repair.test.ts` → 1 file, 5 tests passed; `pnpm run typecheck` → pass; `pnpm run lint` → pass; `pnpm run check` → 65 files, 466 passed, 1 skipped |
+| 2026-06-12 | 42-1 | Codex | Novelty and responsiveness thesis metrics complete: near-dup/fresh fixtures, same-persona/cross-persona detectors, report thesis summary + detector proposal | `pnpm run typecheck` → pass; `pnpm exec eslint src/evals/metrics` → pass; `pnpm exec vitest run src/evals/metrics` → 3 files, 11 tests passed |
 
 ## Worktrees & Branches
 
@@ -104,6 +106,8 @@ spike ≤ 15 min (hard).
 | 2026-06-11 | verifier | Prefer @types/node over growing state/node-fs.d.ts shim | when Node APIs grow |
 | 2026-06-12 | orchestrator | M0 finding: bots never WIN (15/15 ABORTED at maxTurns, 100% hp retention) — balance too soft + bot descent drive weak; feeds Gate-2 thresholds + PHASE-58 | PHASE-34 / PHASE-58 |
 | 2026-06-12 | worker | Root vitest config doesn't discover tests/integration/** (explicit config workaround in place) — consider root include | PHASE-57 hygiene |
+| 2026-06-12 | orchestrator | In-script stall watchdogs unreliable in live use (fired only in own smoke); cron-loop is the dependable net — debug both scripts | PHASE-57 hygiene |
+| 2026-06-12 | orchestrator | Cursor lane degraded ~17:00 JST (3 silent hangs, host auth fine) — re-test before Wave G; if persistent, Wave G goes Codex-serial | before PHASE-48 |
 
 ## Phase Rotation Procedure
 

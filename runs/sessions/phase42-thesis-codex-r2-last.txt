@@ -1,0 +1,30 @@
+**Phase Completion Check**
+
+Status: Complete, ready for verify. No commit made.
+
+Implemented:
+- Novelty scorer in [novelty.ts](/Users/keigoshimada/Documents/generative-gaming/src/evals/metrics/novelty.ts:51): fallback-pack closest match, recent-manifest match, name similarity, stat-vector distance, behavior/effect multiset overlap, near-duplicate flag.
+- Responsiveness scorer in [responsiveness.ts](/Users/keigoshimada/Documents/generative-gaming/src/evals/metrics/responsiveness.ts:129): named detector proposal, `hitRate`, same-persona and cross-persona matrix.
+- Runner report wiring in [report.ts](/Users/keigoshimada/Documents/generative-gaming/src/evals/runner/report.ts:241): per-generation, per-cell, aggregate thesis metrics plus detector proposal table in markdown.
+- Tests in [novelty.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/evals/metrics/novelty.test.ts:17) and [responsiveness.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/evals/metrics/responsiveness.test.ts:17).
+- Updated [PROGRESS.md](/Users/keigoshimada/Documents/generative-gaming/PROGRESS.md:28) per worker contract.
+
+Detector proposal for review:
+- Hoarder: item density, thief pressure, inventory narration. Uncertain: narration.
+- Pacifist: open routes, soft threats, caution narration.
+- Speedrunner: compact floor, near-entrance loot, pace narration. Uncertain: narration.
+- Completionist: NPC present, quest present, rich callbacks.
+- Chaos: behavior diversity, trap variety, mixed origins, varied engagement. Uncertain: all chaos detectors, because single-manifest inputs only proxy the requested per-seed variance tolerance.
+
+Verification:
+- `pnpm run typecheck` -> pass (`tsc --noEmit`)
+- `pnpm exec eslint src/evals/metrics` -> pass
+- `pnpm exec vitest run src/evals/metrics` -> pass: 3 files, 11 tests
+
+Scope / risks:
+- Did not modify `core.ts` or `src/evals/metrics/core.ts`.
+- Did not run full `pnpm run check`; the brief’s scoped gate was used.
+- Worktree has unrelated pre-existing/concurrent dirty files outside this task.
+- Environment discoveries: none.
+
+Actual time: ~23m vs 40m estimate.

@@ -1,0 +1,50 @@
+**Verification Summary**
+`pnpm run check`: green, 72 test files passed, 502 tests passed, 1 skipped.
+
+`pnpm run evals -- --mode mock --n 1`: complete, wrote `runs/evals/eval-2026-06-12T08-26-26-170Z/report.json`.
+
+Aggregate block:
+```json
+{
+  "recordCount": 15,
+  "rates": {
+    "validity": "10/15 66.67%",
+    "solvability": "9/15 60%",
+    "servedWithoutFallback": "9/15 60%",
+    "fallback": "6/15 40%",
+    "bandAccuracy": "0/10 0%"
+  },
+  "latencyMs": { "min": 10, "p50": 10, "avg": 10, "max": 10 },
+  "tokens": { "inputTokens": 1500, "outputTokens": 750, "totalTokens": 2250 },
+  "thesis": {
+    "novelty": { "averageScore": 0.41546384343210974, "nearDuplicateCount": 0, "sampleCount": 9 },
+    "responsiveness": { "samePersonaHitRate": 0.25925925925925924, "crossPersonaHitRate": 0.13194444444444445, "sampleCount": 9 }
+  }
+}
+```
+
+`pnpm exec vitest run src/evals/runner src/evals/metrics`: green, 4 files passed, 14 tests passed. Cost/cap and `compareReports()` tests exist and pass, but the cap test proves `maxCalls`, not a token/cost budget.
+
+`pnpm dlx tsx tests/eval-baselines/compare.ts tests/eval-baselines/mock-baseline.json runs/evals/ci-mock-baseline/report.json`: `eval threshold check passed (112 metrics compared, 0 regressions beyond tolerance)`.
+
+`rg 'Math.random|Date.now' src/evals/`: no matches.
+
+**Detector Review**
+Hoarder: `hoarder_item_density`, `hoarder_thief_pressure`, `hoarder_inventory_narration` uncertain.
+
+Pacifist: `pacifist_open_routes`, `pacifist_soft_threats`, `pacifist_caution_narration`.
+
+Speedrunner: `speedrunner_compact_floor`, `speedrunner_near_entrance_loot`, `speedrunner_pace_narration` uncertain.
+
+Completionist: `completionist_npc_present`, `completionist_quest_present`, `completionist_rich_callbacks`.
+
+Chaos: `chaos_behavior_diversity`, `chaos_trap_variety`, `chaos_mixed_origins`, `chaos_varied_engagement`, all uncertain in the generated report.
+
+Flagged for human review: `completionist_npc_present` and `completionist_quest_present` are trivial presence checks; `pacifist_open_routes` and `speedrunner_compact_floor` overlap on `open`/`halls`; `pacifist_soft_threats` is broad due its `OR`; keyword narration detectors are easy to satisfy by wording alone; `chaos_mixed_origins` measures provenance tags more than player-responsive design.
+
+**Workflow Review**
+`.github/workflows/ci.yml` uses pinned action versions and includes the mocked eval smoke plus threshold check. `.github/workflows/evals.yml` exits 0 with notices as an ambient stub, but it has no nightly trigger and does not produce/upload a live report artifact.
+
+Scope: edited nothing. Required eval command generated new `runs/evals/...` artifacts. Environment discoveries: none. Time spent: about 20 minutes.
+
+NEEDS WORK: 1. Phase 41’s required token/cost guard is not implemented: [run.ts](/Users/keigoshimada/Documents/generative-gaming/src/evals/runner/run.ts:54) only exposes `maxCalls`, and [runner.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/evals/runner/runner.test.ts:100) only proves a call cap. 2. Phase 43 §9 live/nightly uploaded-report criterion is unmet: [evals.yml](/Users/keigoshimada/Documents/generative-gaming/.github/workflows/evals.yml:17) is manual-only and [evals.yml](/Users/keigoshimada/Documents/generative-gaming/.github/workflows/evals.yml:41) always stubs out. 3. Cross-phase report criterion fails per-generation: the mock report has null `novelty` and `responsiveness` for 6/15 cells, because [report.ts](/Users/keigoshimada/Documents/generative-gaming/src/evals/runner/report.ts:256) writes null when no manifest is available.

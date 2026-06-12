@@ -1,0 +1,32 @@
+Implemented in [report.ts](/Users/keigoshimada/Documents/generative-gaming/src/evals/runner/report.ts) and [runner.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/evals/runner/runner.test.ts).
+
+Changed thesis generation metrics from bare `null` to tagged objects:
+```json
+{
+  "cellId": "shallows:hoarder",
+  "generations": [
+    {
+      "generationIndex": 0,
+      "novelty": { "scored": false, "reason": "fallback" },
+      "responsiveness": { "scored": false, "reason": "fallback" }
+    }
+  ],
+  "summary": {
+    "novelty": { "averageScore": 0, "nearDuplicateCount": 0, "sampleCount": 0 },
+    "responsiveness": { "samePersonaHitRate": 0, "crossPersonaHitRate": 0, "sampleCount": 0 }
+  }
+}
+```
+
+Markdown renderer now labels unscored cells:
+```text
+| shallows:hoarder | 1 | 0% | 0% | 0% | 100% | 0% | 5ms | — (fallback) | — (fallback) | — (fallback) |
+```
+
+Verification:
+- `pnpm exec vitest run src/evals` -> 6 files, 26 tests passed
+- `pnpm run typecheck` -> passed
+- `pnpm exec eslint src/evals/runner` -> passed
+- Mock eval artifact: `runs/evals/wave-e-nullfix-fallback-mock/report.json`
+
+No commit made. No source edits outside the owned report files.

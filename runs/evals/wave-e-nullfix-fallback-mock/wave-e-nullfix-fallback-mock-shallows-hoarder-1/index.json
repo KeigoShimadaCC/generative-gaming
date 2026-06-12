@@ -1,0 +1,21 @@
+{
+  "recordType": "generation-index",
+  "protocolVersion": "1.2.0",
+  "engineVersion": "0.0.0",
+  "modelId": "director:mock",
+  "seed": "wave-e-nullfix-fallback-mock-shallows-hoarder-1:seed",
+  "createdAt": "2026-06-12T08:36:08.325Z",
+  "runId": "wave-e-nullfix-fallback-mock-shallows-hoarder-1",
+  "updatedAt": "2026-06-12T08:36:08.325Z",
+  "floors": [
+    {
+      "depth": 3,
+      "recordPath": "floors/3/generation.json",
+      "outcome": {
+        "kind": "fallback",
+        "fallbackId": "fallback:old-stock:shallows-3"
+      },
+      "recordedAt": "2026-06-12T08:36:08.325Z"
+    }
+  ]
+}

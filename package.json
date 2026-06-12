@@ -12,6 +12,7 @@
     "lint": "eslint .",
     "test": "vitest run",
     "check": "pnpm run typecheck && pnpm run lint && pnpm test",
+    "evals": "pnpm dlx tsx src/evals/runner/run.ts",
     "play": "npx --yes tsx src/cli/play.ts",
     "simulate": "npx --yes tsx src/cli/simulate.ts",
     "replay": "npx --yes tsx src/cli/replay.ts",

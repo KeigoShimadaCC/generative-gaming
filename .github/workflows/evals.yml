@@ -1,0 +1,57 @@
+# Eval workflows — Phase 43
+#
+# PR gate: mocked eval smoke runs in ci.yml (no secrets, no live API).
+# Ambient (live) evals require Codex auth on the host and stay LOCAL; GitHub-hosted
+# runners cannot run them. This workflow is a manual-dispatch stub that checks for
+# Codex and skips gracefully when absent.
+#
+# Re-baseline (mock PR gate only; deliberate commit, never silent):
+#   1. pnpm run evals -- --mode mock --n 1 --eval-id ci-mock-baseline
+#   2. Review runs/evals/ci-mock-baseline/report.md
+#   3. Copy report.json to tests/eval-baselines/mock-baseline.json (see _baseline block)
+#   4. Commit with: Phase 43: re-baseline mock eval (reason: ...)
+# See docs/runbooks/evals.md for ambient live eval procedure.
+
+name: evals
+
+on:
+  workflow_dispatch:
+    inputs:
+      note:
+        description: Optional note for the dispatch log
+        required: false
+        default: ""
+
+jobs:
+  ambient-eval:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check Codex local auth
+        id: codex
+        run: |
+          if ! command -v codex >/dev/null 2>&1; then
+            echo "status=missing-binary" >> "$GITHUB_OUTPUT"
+          elif [ ! -s "$HOME/.codex/auth.json" ]; then
+            echo "status=missing-auth" >> "$GITHUB_OUTPUT"
+          else
+            echo "status=local-auth-present" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Ambient eval stub
+        run: |
+          case "${{ steps.codex.outputs.status }}" in
+            missing-binary)
+              echo "::notice title=Ambient eval skipped::codex is not installed on this runner."
+              ;;
+            missing-auth)
+              echo "::notice title=Ambient eval skipped::codex is installed, but local ambient auth is absent."
+              ;;
+            *)
+              echo "::notice title=Ambient eval skipped::Live ambient evals run on the host only (serialization and cost)."
+              ;;
+          esac
+          echo ""
+          echo "requires local ambient auth - see docs/runbooks/evals.md"
+          echo "Run locally: pnpm run evals -- --mode ambient --n 1"
+          exit 0

@@ -1,0 +1,43 @@
+Implemented Phase 43 eval CI wiring. No commit made.
+
+Changed:
+- [.github/workflows/ci.yml](/Users/keigoshimada/Documents/generative-gaming/.github/workflows/ci.yml): appended mock eval smoke after tests, then threshold comparator.
+- [.github/workflows/evals.yml](/Users/keigoshimada/Documents/generative-gaming/.github/workflows/evals.yml): manual-dispatch ambient stub; exits 0 with local-auth notice.
+- [tests/eval-baselines/](/Users/keigoshimada/Documents/generative-gaming/tests/eval-baselines): mock baseline, thresholds, comparator.
+- [docs/runbooks/evals.md](/Users/keigoshimada/Documents/generative-gaming/docs/runbooks/evals.md): local ambient runbook, sequential-only rule, cost cap, report paths, re-baseline procedure.
+
+Verification:
+```text
+Eval ci-mock-baseline: complete
+Report: /private/tmp/gg-phase43-eval-smoke-1781252303/ci-mock-baseline/report.json
+Records: 15
+Validity: 66.67%
+Solvability: 66.67%
+Fallback: 33.33%
+eval threshold check passed (112 metrics compared, 0 regressions beyond tolerance)
+```
+
+```text
+.github/workflows/ci.yml: YAML parsed
+.github/workflows/evals.yml: YAML parsed
+```
+
+Pinned action review:
+```text
+actions/checkout@v4.2.2
+pnpm/action-setup@v4.1.0
+actions/setup-node@v4.4.0
+```
+
+Full gate:
+```text
+pnpm run check
+Test Files  72 passed (72)
+Tests       502 passed | 1 skipped (503)
+```
+
+Notes:
+- The worktree already had `runs/evals/ci-mock-baseline`, so the fixed-id eval refused to overwrite it. I preserved the generated evidence and verified the same fixed eval id using a temp artifact root.
+- `PROGRESS.md` was read but not edited because it was outside the owned files.
+- Environment discoveries: none requiring `ENVIRONMENT.md`; the fixed-id artifact immutability wrinkle is documented in the eval runbook.
+- Actual time: ~5 minutes vs 25 minute estimate.

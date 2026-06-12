@@ -107,3 +107,10 @@ timestamp	label	agent	model	effort	seconds	input_tokens	output_tokens	total_toke
 2026-06-12T06:59:21Z	phase41-runner	codex	default	default	538	3299170	26821	3325991	0
 2026-06-12T07:10:24Z	phase42-thesis-metrics	cursor	composer-2.5	default	2674	NA	NA	NA	137
 2026-06-12T07:57:22Z	cursorwatch-smoke	cursor	composer-2.5	default	2	NA	NA	NA	1
+2026-06-12T08:00:20Z	phase42-thesis-codex	codex	default	default	136	0	0	0	137
+2026-06-12T08:01:38Z	phase43-evalci	cursor	composer-2.5	default	168	NA	NA	NA	137
+2026-06-12T08:02:37Z	phase42-thesis-codex-r2	codex	default	default	301	2479301	15607	2494908	0
+2026-06-12T08:14:57Z	phase43-evalci-codex	codex	default	default	340	981222	13993	995215	0
+2026-06-12T08:21:05Z	phaseE-verify	cursor	composer-2.5	default	191	NA	NA	NA	137
+2026-06-12T08:24:16Z	phaseE-verify-codex	codex	default	default	388	1970070	14502	1984572	0
+2026-06-12T08:31:18Z	phaseE-nullfix	codex	default	default	310	1771548	16668	1788216	0

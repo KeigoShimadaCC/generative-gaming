@@ -1,0 +1,40 @@
+Implemented Phase 41 eval runner. No commit made.
+
+Changed:
+- [run.ts](/Users/keigoshimada/Documents/generative-gaming/src/evals/runner/run.ts): serial persona × band × N runner, CLI args, mock/ambient provider modes, call cap partial reporting.
+- [report.ts](/Users/keigoshimada/Documents/generative-gaming/src/evals/runner/report.ts): per-cell and overall `EvalScores`, `report.json`, `report.md`, report comparison deltas.
+- [runner.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/evals/runner/runner.test.ts): mocked end-to-end, cap guard, compare tests.
+- [index.ts](/Users/keigoshimada/Documents/generative-gaming/src/evals/runner/index.ts): runner exports.
+- [package.json](/Users/keigoshimada/Documents/generative-gaming/package.json): added `evals` script only.
+
+Verification:
+
+```text
+pnpm run check
+> tsc --noEmit
+> eslint .
+> vitest run
+
+Test Files  70 passed (70)
+Tests       496 passed | 1 skipped (497)
+```
+
+Mocked smoke:
+
+```text
+pnpm run evals -- --mode mock --n 1
+
+Eval eval-2026-06-12T07-05-47-754Z: complete
+Report: runs/evals/eval-2026-06-12T07-05-47-754Z/report.json
+Markdown: runs/evals/eval-2026-06-12T07-05-47-754Z/report.md
+Records: 15
+Validity: 66.67%
+Solvability: 66.67%
+Fallback: 33.33%
+```
+
+Scope deviations: none. Low middle-band mock scores are left as eval data, not fixed.
+
+Environment discoveries: no new undocumented facts. The first smoke hit the already-documented `npx` npm cache EPERM, so the new `evals` script uses `pnpm dlx tsx`.
+
+Actual time: ~45m vs 35m estimate.

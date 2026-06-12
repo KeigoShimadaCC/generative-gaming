@@ -1,0 +1,5387 @@
+{
+  "recordType": "eval-report",
+  "reportVersion": "phase-41-eval-report-v1",
+  "evalId": "eval-2026-06-12T07-05-47-754Z",
+  "status": "complete",
+  "startedAt": "2026-06-12T07:05:47.754Z",
+  "completedAt": "2026-06-12T07:05:50.566Z",
+  "config": {
+    "evalId": "eval-2026-06-12T07-05-47-754Z",
+    "rootDir": "runs/evals",
+    "n": 1,
+    "maxCalls": 15,
+    "cells": [
+      {
+        "persona": "hoarder",
+        "band": "shallows",
+        "depth": 3
+      },
+      {
+        "persona": "hoarder",
+        "band": "middle",
+        "depth": 6
+      },
+      {
+        "persona": "hoarder",
+        "band": "lowest",
+        "depth": 11
+      },
+      {
+        "persona": "pacifist",
+        "band": "shallows",
+        "depth": 3
+      },
+      {
+        "persona": "pacifist",
+        "band": "middle",
+        "depth": 6
+      },
+      {
+        "persona": "pacifist",
+        "band": "lowest",
+        "depth": 11
+      },
+      {
+        "persona": "speedrunner",
+        "band": "shallows",
+        "depth": 3
+      },
+      {
+        "persona": "speedrunner",
+        "band": "middle",
+        "depth": 6
+      },
+      {
+        "persona": "speedrunner",
+        "band": "lowest",
+        "depth": 11
+      },
+      {
+        "persona": "completionist",
+        "band": "shallows",
+        "depth": 3
+      },
+      {
+        "persona": "completionist",
+        "band": "middle",
+        "depth": 6
+      },
+      {
+        "persona": "completionist",
+        "band": "lowest",
+        "depth": 11
+      },
+      {
+        "persona": "chaos",
+        "band": "shallows",
+        "depth": 3
+      },
+      {
+        "persona": "chaos",
+        "band": "middle",
+        "depth": 6
+      },
+      {
+        "persona": "chaos",
+        "band": "lowest",
+        "depth": 11
+      }
+    ]
+  },
+  "provider": {
+    "mode": "mock",
+    "modelId": "director:mock"
+  },
+  "bank": {
+    "version": "persona-bank:bc7a48f5ab54",
+    "fixtures": [
+      {
+        "persona": "chaos",
+        "seed": "persona-bank-1",
+        "relativePath": "tests/eval-bank/chaos-persona-bank-1.ndjson"
+      },
+      {
+        "persona": "chaos",
+        "seed": "persona-bank-2",
+        "relativePath": "tests/eval-bank/chaos-persona-bank-2.ndjson"
+      },
+      {
+        "persona": "chaos",
+        "seed": "persona-bank-3",
+        "relativePath": "tests/eval-bank/chaos-persona-bank-3.ndjson"
+      },
+      {
+        "persona": "completionist",
+        "seed": "persona-bank-1",
+        "relativePath": "tests/eval-bank/completionist-persona-bank-1.ndjson"
+      },
+      {
+        "persona": "completionist",
+        "seed": "persona-bank-2",
+        "relativePath": "tests/eval-bank/completionist-persona-bank-2.ndjson"
+      },
+      {
+        "persona": "completionist",
+        "seed": "persona-bank-3",
+        "relativePath": "tests/eval-bank/completionist-persona-bank-3.ndjson"
+      },
+      {
+        "persona": "hoarder",
+        "seed": "persona-bank-1",
+        "relativePath": "tests/eval-bank/hoarder-persona-bank-1.ndjson"
+      },
+      {
+        "persona": "hoarder",
+        "seed": "persona-bank-2",
+        "relativePath": "tests/eval-bank/hoarder-persona-bank-2.ndjson"
+      },
+      {
+        "persona": "hoarder",
+        "seed": "persona-bank-3",
+        "relativePath": "tests/eval-bank/hoarder-persona-bank-3.ndjson"
+      },
+      {
+        "persona": "pacifist",
+        "seed": "persona-bank-1",
+        "relativePath": "tests/eval-bank/pacifist-persona-bank-1.ndjson"
+      },
+      {
+        "persona": "pacifist",
+        "seed": "persona-bank-2",
+        "relativePath": "tests/eval-bank/pacifist-persona-bank-2.ndjson"
+      },
+      {
+        "persona": "pacifist",
+        "seed": "persona-bank-3",
+        "relativePath": "tests/eval-bank/pacifist-persona-bank-3.ndjson"
+      },
+      {
+        "persona": "speedrunner",
+        "seed": "persona-bank-1",
+        "relativePath": "tests/eval-bank/speedrunner-persona-bank-1.ndjson"
+      },
+      {
+        "persona": "speedrunner",
+        "seed": "persona-bank-2",
+        "relativePath": "tests/eval-bank/speedrunner-persona-bank-2.ndjson"
+      },
+      {
+        "persona": "speedrunner",
+        "seed": "persona-bank-3",
+        "relativePath": "tests/eval-bank/speedrunner-persona-bank-3.ndjson"
+      }
+    ]
+  },
+  "git": {
+    "rev": "975f32ffbb0e98a7847f34c34df7bd11754431d6"
+  },
+  "calls": {
+    "attempted": 15,
+    "completed": 15,
+    "cap": 15
+  },
+  "cells": [
+    {
+      "cellId": "shallows:hoarder",
+      "persona": "hoarder",
+      "band": "shallows",
+      "depth": 3,
+      "generationRunIds": [
+        "eval-2026-06-12T07-05-47-754Z-shallows-hoarder-1"
+      ],
+      "bankSeeds": [
+        "persona-bank-1"
+      ],
+      "scores": {
+        "recordType": "eval-scores",
+        "metricVersion": "phase-40b-core-v1",
+        "recordCount": 1,
+        "generations": [
+          {
+            "runId": "eval-2026-06-12T07-05-47-754Z-shallows-hoarder-1",
+            "depth": 3,
+            "band": "shallows",
+            "attemptCount": 1,
+            "validity": true,
+            "solvability": true,
+            "servedWithoutFallback": true,
+            "repairCount": 0,
+            "fallback": false,
+            "latencyMs": 10,
+            "tokens": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            },
+            "gate2": {
+              "recorded": true,
+              "passed": true,
+              "blockingCodes": []
+            },
+            "advisoryFlags": {
+              "hpRetentionRecorded": true,
+              "hpRetentionAdvisory": true,
+              "hpRetentionPassed": false,
+              "advisoryCodes": [
+                "G2_HP_RETENTION"
+              ],
+              "failedAdvisoryCodes": [
+                "G2_HP_RETENTION"
+              ]
+            },
+            "bandAccuracy": {
+              "band": "shallows",
+              "clearRatePercent": 100,
+              "clearRateTargetPercent": 95,
+              "clearRateMet": true,
+              "medianHpRetentionPercent": 100,
+              "medianHpRetentionTargetPercent": {
+                "min": 55,
+                "max": 90
+              },
+              "hpRetentionInBand": false,
+              "accurate": false
+            }
+          }
+        ],
+        "summary": {
+          "rates": {
+            "validity": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "solvability": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "servedWithoutFallback": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "fallback": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            },
+            "bandAccuracy": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            }
+          },
+          "latencyMs": {
+            "count": 1,
+            "min": 10,
+            "p50": 10,
+            "avg": 10,
+            "max": 10
+          },
+          "repairDistribution": {
+            "zero": 1,
+            "one": 0,
+            "two": 0,
+            "threeOrMore": 0,
+            "byRepairCount": [
+              {
+                "repairCount": 0,
+                "count": 1
+              }
+            ]
+          },
+          "tokens": {
+            "recordCountWithTokens": 1,
+            "totals": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            },
+            "averagePerRecordWithTokens": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            }
+          },
+          "byBand": {
+            "shallows": {
+              "band": "shallows",
+              "count": 1,
+              "rates": {
+                "validity": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "solvability": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "servedWithoutFallback": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "fallback": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 1,
+                "min": 10,
+                "p50": 10,
+                "avg": 10,
+                "max": 10
+              },
+              "repairDistribution": {
+                "zero": 1,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": [
+                  {
+                    "repairCount": 0,
+                    "count": 1
+                  }
+                ]
+              },
+              "tokens": {
+                "recordCountWithTokens": 1,
+                "totals": {
+                  "inputTokens": 100,
+                  "outputTokens": 50,
+                  "totalTokens": 150
+                },
+                "averagePerRecordWithTokens": {
+                  "inputTokens": 100,
+                  "outputTokens": 50,
+                  "totalTokens": 150
+                }
+              }
+            },
+            "middle": {
+              "band": "middle",
+              "count": 0,
+              "rates": {
+                "validity": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 0,
+                "min": 0,
+                "p50": 0,
+                "avg": 0,
+                "max": 0
+              },
+              "repairDistribution": {
+                "zero": 0,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": []
+              },
+              "tokens": {
+                "recordCountWithTokens": 0,
+                "totals": null,
+                "averagePerRecordWithTokens": null
+              }
+            },
+            "lowest": {
+              "band": "lowest",
+              "count": 0,
+              "rates": {
+                "validity": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 0,
+                "min": 0,
+                "p50": 0,
+                "avg": 0,
+                "max": 0
+              },
+              "repairDistribution": {
+                "zero": 0,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": []
+              },
+              "tokens": {
+                "recordCountWithTokens": 0,
+                "totals": null,
+                "averagePerRecordWithTokens": null
+              }
+            }
+          }
+        },
+        "comparability": {
+          "segmentId": "shallows:hoarder"
+        }
+      }
+    },
+    {
+      "cellId": "middle:hoarder",
+      "persona": "hoarder",
+      "band": "middle",
+      "depth": 6,
+      "generationRunIds": [
+        "eval-2026-06-12T07-05-47-754Z-middle-hoarder-1"
+      ],
+      "bankSeeds": [
+        "persona-bank-1"
+      ],
+      "scores": {
+        "recordType": "eval-scores",
+        "metricVersion": "phase-40b-core-v1",
+        "recordCount": 1,
+        "generations": [
+          {
+            "runId": "eval-2026-06-12T07-05-47-754Z-middle-hoarder-1",
+            "depth": 6,
+            "band": "middle",
+            "attemptCount": 1,
+            "validity": false,
+            "solvability": false,
+            "servedWithoutFallback": false,
+            "repairCount": 0,
+            "fallback": true,
+            "latencyMs": 10,
+            "tokens": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            },
+            "gate2": {
+              "recorded": false,
+              "passed": false,
+              "blockingCodes": []
+            },
+            "advisoryFlags": {
+              "hpRetentionRecorded": false,
+              "hpRetentionAdvisory": false,
+              "hpRetentionPassed": null,
+              "advisoryCodes": [],
+              "failedAdvisoryCodes": []
+            },
+            "bandAccuracy": null
+          }
+        ],
+        "summary": {
+          "rates": {
+            "validity": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            },
+            "solvability": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            },
+            "servedWithoutFallback": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            },
+            "fallback": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "bandAccuracy": {
+              "count": 0,
+              "passed": 0,
+              "percent": 0
+            }
+          },
+          "latencyMs": {
+            "count": 1,
+            "min": 10,
+            "p50": 10,
+            "avg": 10,
+            "max": 10
+          },
+          "repairDistribution": {
+            "zero": 1,
+            "one": 0,
+            "two": 0,
+            "threeOrMore": 0,
+            "byRepairCount": [
+              {
+                "repairCount": 0,
+                "count": 1
+              }
+            ]
+          },
+          "tokens": {
+            "recordCountWithTokens": 1,
+            "totals": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            },
+            "averagePerRecordWithTokens": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            }
+          },
+          "byBand": {
+            "shallows": {
+              "band": "shallows",
+              "count": 0,
+              "rates": {
+                "validity": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 0,
+                "min": 0,
+                "p50": 0,
+                "avg": 0,
+                "max": 0
+              },
+              "repairDistribution": {
+                "zero": 0,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": []
+              },
+              "tokens": {
+                "recordCountWithTokens": 0,
+                "totals": null,
+                "averagePerRecordWithTokens": null
+              }
+            },
+            "middle": {
+              "band": "middle",
+              "count": 1,
+              "rates": {
+                "validity": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 1,
+                "min": 10,
+                "p50": 10,
+                "avg": 10,
+                "max": 10
+              },
+              "repairDistribution": {
+                "zero": 1,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": [
+                  {
+                    "repairCount": 0,
+                    "count": 1
+                  }
+                ]
+              },
+              "tokens": {
+                "recordCountWithTokens": 1,
+                "totals": {
+                  "inputTokens": 100,
+                  "outputTokens": 50,
+                  "totalTokens": 150
+                },
+                "averagePerRecordWithTokens": {
+                  "inputTokens": 100,
+                  "outputTokens": 50,
+                  "totalTokens": 150
+                }
+              }
+            },
+            "lowest": {
+              "band": "lowest",
+              "count": 0,
+              "rates": {
+                "validity": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 0,
+                "min": 0,
+                "p50": 0,
+                "avg": 0,
+                "max": 0
+              },
+              "repairDistribution": {
+                "zero": 0,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": []
+              },
+              "tokens": {
+                "recordCountWithTokens": 0,
+                "totals": null,
+                "averagePerRecordWithTokens": null
+              }
+            }
+          }
+        },
+        "comparability": {
+          "segmentId": "middle:hoarder"
+        }
+      }
+    },
+    {
+      "cellId": "lowest:hoarder",
+      "persona": "hoarder",
+      "band": "lowest",
+      "depth": 11,
+      "generationRunIds": [
+        "eval-2026-06-12T07-05-47-754Z-lowest-hoarder-1"
+      ],
+      "bankSeeds": [
+        "persona-bank-1"
+      ],
+      "scores": {
+        "recordType": "eval-scores",
+        "metricVersion": "phase-40b-core-v1",
+        "recordCount": 1,
+        "generations": [
+          {
+            "runId": "eval-2026-06-12T07-05-47-754Z-lowest-hoarder-1",
+            "depth": 11,
+            "band": "lowest",
+            "attemptCount": 1,
+            "validity": true,
+            "solvability": true,
+            "servedWithoutFallback": true,
+            "repairCount": 0,
+            "fallback": false,
+            "latencyMs": 10,
+            "tokens": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            },
+            "gate2": {
+              "recorded": true,
+              "passed": true,
+              "blockingCodes": []
+            },
+            "advisoryFlags": {
+              "hpRetentionRecorded": true,
+              "hpRetentionAdvisory": true,
+              "hpRetentionPassed": false,
+              "advisoryCodes": [
+                "G2_HP_RETENTION"
+              ],
+              "failedAdvisoryCodes": [
+                "G2_HP_RETENTION"
+              ]
+            },
+            "bandAccuracy": {
+              "band": "lowest",
+              "clearRatePercent": 100,
+              "clearRateTargetPercent": 70,
+              "clearRateMet": true,
+              "medianHpRetentionPercent": 100,
+              "medianHpRetentionTargetPercent": {
+                "min": 15,
+                "max": 60
+              },
+              "hpRetentionInBand": false,
+              "accurate": false
+            }
+          }
+        ],
+        "summary": {
+          "rates": {
+            "validity": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "solvability": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "servedWithoutFallback": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "fallback": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            },
+            "bandAccuracy": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            }
+          },
+          "latencyMs": {
+            "count": 1,
+            "min": 10,
+            "p50": 10,
+            "avg": 10,
+            "max": 10
+          },
+          "repairDistribution": {
+            "zero": 1,
+            "one": 0,
+            "two": 0,
+            "threeOrMore": 0,
+            "byRepairCount": [
+              {
+                "repairCount": 0,
+                "count": 1
+              }
+            ]
+          },
+          "tokens": {
+            "recordCountWithTokens": 1,
+            "totals": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            },
+            "averagePerRecordWithTokens": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            }
+          },
+          "byBand": {
+            "shallows": {
+              "band": "shallows",
+              "count": 0,
+              "rates": {
+                "validity": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 0,
+                "min": 0,
+                "p50": 0,
+                "avg": 0,
+                "max": 0
+              },
+              "repairDistribution": {
+                "zero": 0,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": []
+              },
+              "tokens": {
+                "recordCountWithTokens": 0,
+                "totals": null,
+                "averagePerRecordWithTokens": null
+              }
+            },
+            "middle": {
+              "band": "middle",
+              "count": 0,
+              "rates": {
+                "validity": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 0,
+                "min": 0,
+                "p50": 0,
+                "avg": 0,
+                "max": 0
+              },
+              "repairDistribution": {
+                "zero": 0,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": []
+              },
+              "tokens": {
+                "recordCountWithTokens": 0,
+                "totals": null,
+                "averagePerRecordWithTokens": null
+              }
+            },
+            "lowest": {
+              "band": "lowest",
+              "count": 1,
+              "rates": {
+                "validity": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "solvability": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "servedWithoutFallback": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "fallback": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 1,
+                "min": 10,
+                "p50": 10,
+                "avg": 10,
+                "max": 10
+              },
+              "repairDistribution": {
+                "zero": 1,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": [
+                  {
+                    "repairCount": 0,
+                    "count": 1
+                  }
+                ]
+              },
+              "tokens": {
+                "recordCountWithTokens": 1,
+                "totals": {
+                  "inputTokens": 100,
+                  "outputTokens": 50,
+                  "totalTokens": 150
+                },
+                "averagePerRecordWithTokens": {
+                  "inputTokens": 100,
+                  "outputTokens": 50,
+                  "totalTokens": 150
+                }
+              }
+            }
+          }
+        },
+        "comparability": {
+          "segmentId": "lowest:hoarder"
+        }
+      }
+    },
+    {
+      "cellId": "shallows:pacifist",
+      "persona": "pacifist",
+      "band": "shallows",
+      "depth": 3,
+      "generationRunIds": [
+        "eval-2026-06-12T07-05-47-754Z-shallows-pacifist-1"
+      ],
+      "bankSeeds": [
+        "persona-bank-1"
+      ],
+      "scores": {
+        "recordType": "eval-scores",
+        "metricVersion": "phase-40b-core-v1",
+        "recordCount": 1,
+        "generations": [
+          {
+            "runId": "eval-2026-06-12T07-05-47-754Z-shallows-pacifist-1",
+            "depth": 3,
+            "band": "shallows",
+            "attemptCount": 1,
+            "validity": true,
+            "solvability": true,
+            "servedWithoutFallback": true,
+            "repairCount": 0,
+            "fallback": false,
+            "latencyMs": 10,
+            "tokens": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            },
+            "gate2": {
+              "recorded": true,
+              "passed": true,
+              "blockingCodes": []
+            },
+            "advisoryFlags": {
+              "hpRetentionRecorded": true,
+              "hpRetentionAdvisory": true,
+              "hpRetentionPassed": false,
+              "advisoryCodes": [
+                "G2_HP_RETENTION"
+              ],
+              "failedAdvisoryCodes": [
+                "G2_HP_RETENTION"
+              ]
+            },
+            "bandAccuracy": {
+              "band": "shallows",
+              "clearRatePercent": 100,
+              "clearRateTargetPercent": 95,
+              "clearRateMet": true,
+              "medianHpRetentionPercent": 100,
+              "medianHpRetentionTargetPercent": {
+                "min": 55,
+                "max": 90
+              },
+              "hpRetentionInBand": false,
+              "accurate": false
+            }
+          }
+        ],
+        "summary": {
+          "rates": {
+            "validity": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "solvability": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "servedWithoutFallback": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "fallback": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            },
+            "bandAccuracy": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            }
+          },
+          "latencyMs": {
+            "count": 1,
+            "min": 10,
+            "p50": 10,
+            "avg": 10,
+            "max": 10
+          },
+          "repairDistribution": {
+            "zero": 1,
+            "one": 0,
+            "two": 0,
+            "threeOrMore": 0,
+            "byRepairCount": [
+              {
+                "repairCount": 0,
+                "count": 1
+              }
+            ]
+          },
+          "tokens": {
+            "recordCountWithTokens": 1,
+            "totals": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            },
+            "averagePerRecordWithTokens": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            }
+          },
+          "byBand": {
+            "shallows": {
+              "band": "shallows",
+              "count": 1,
+              "rates": {
+                "validity": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "solvability": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "servedWithoutFallback": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "fallback": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 1,
+                "min": 10,
+                "p50": 10,
+                "avg": 10,
+                "max": 10
+              },
+              "repairDistribution": {
+                "zero": 1,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": [
+                  {
+                    "repairCount": 0,
+                    "count": 1
+                  }
+                ]
+              },
+              "tokens": {
+                "recordCountWithTokens": 1,
+                "totals": {
+                  "inputTokens": 100,
+                  "outputTokens": 50,
+                  "totalTokens": 150
+                },
+                "averagePerRecordWithTokens": {
+                  "inputTokens": 100,
+                  "outputTokens": 50,
+                  "totalTokens": 150
+                }
+              }
+            },
+            "middle": {
+              "band": "middle",
+              "count": 0,
+              "rates": {
+                "validity": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 0,
+                "min": 0,
+                "p50": 0,
+                "avg": 0,
+                "max": 0
+              },
+              "repairDistribution": {
+                "zero": 0,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": []
+              },
+              "tokens": {
+                "recordCountWithTokens": 0,
+                "totals": null,
+                "averagePerRecordWithTokens": null
+              }
+            },
+            "lowest": {
+              "band": "lowest",
+              "count": 0,
+              "rates": {
+                "validity": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 0,
+                "min": 0,
+                "p50": 0,
+                "avg": 0,
+                "max": 0
+              },
+              "repairDistribution": {
+                "zero": 0,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": []
+              },
+              "tokens": {
+                "recordCountWithTokens": 0,
+                "totals": null,
+                "averagePerRecordWithTokens": null
+              }
+            }
+          }
+        },
+        "comparability": {
+          "segmentId": "shallows:pacifist"
+        }
+      }
+    },
+    {
+      "cellId": "middle:pacifist",
+      "persona": "pacifist",
+      "band": "middle",
+      "depth": 6,
+      "generationRunIds": [
+        "eval-2026-06-12T07-05-47-754Z-middle-pacifist-1"
+      ],
+      "bankSeeds": [
+        "persona-bank-1"
+      ],
+      "scores": {
+        "recordType": "eval-scores",
+        "metricVersion": "phase-40b-core-v1",
+        "recordCount": 1,
+        "generations": [
+          {
+            "runId": "eval-2026-06-12T07-05-47-754Z-middle-pacifist-1",
+            "depth": 6,
+            "band": "middle",
+            "attemptCount": 1,
+            "validity": false,
+            "solvability": false,
+            "servedWithoutFallback": false,
+            "repairCount": 0,
+            "fallback": true,
+            "latencyMs": 10,
+            "tokens": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            },
+            "gate2": {
+              "recorded": false,
+              "passed": false,
+              "blockingCodes": []
+            },
+            "advisoryFlags": {
+              "hpRetentionRecorded": false,
+              "hpRetentionAdvisory": false,
+              "hpRetentionPassed": null,
+              "advisoryCodes": [],
+              "failedAdvisoryCodes": []
+            },
+            "bandAccuracy": null
+          }
+        ],
+        "summary": {
+          "rates": {
+            "validity": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            },
+            "solvability": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            },
+            "servedWithoutFallback": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            },
+            "fallback": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "bandAccuracy": {
+              "count": 0,
+              "passed": 0,
+              "percent": 0
+            }
+          },
+          "latencyMs": {
+            "count": 1,
+            "min": 10,
+            "p50": 10,
+            "avg": 10,
+            "max": 10
+          },
+          "repairDistribution": {
+            "zero": 1,
+            "one": 0,
+            "two": 0,
+            "threeOrMore": 0,
+            "byRepairCount": [
+              {
+                "repairCount": 0,
+                "count": 1
+              }
+            ]
+          },
+          "tokens": {
+            "recordCountWithTokens": 1,
+            "totals": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            },
+            "averagePerRecordWithTokens": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            }
+          },
+          "byBand": {
+            "shallows": {
+              "band": "shallows",
+              "count": 0,
+              "rates": {
+                "validity": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 0,
+                "min": 0,
+                "p50": 0,
+                "avg": 0,
+                "max": 0
+              },
+              "repairDistribution": {
+                "zero": 0,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": []
+              },
+              "tokens": {
+                "recordCountWithTokens": 0,
+                "totals": null,
+                "averagePerRecordWithTokens": null
+              }
+            },
+            "middle": {
+              "band": "middle",
+              "count": 1,
+              "rates": {
+                "validity": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 1,
+                "min": 10,
+                "p50": 10,
+                "avg": 10,
+                "max": 10
+              },
+              "repairDistribution": {
+                "zero": 1,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": [
+                  {
+                    "repairCount": 0,
+                    "count": 1
+                  }
+                ]
+              },
+              "tokens": {
+                "recordCountWithTokens": 1,
+                "totals": {
+                  "inputTokens": 100,
+                  "outputTokens": 50,
+                  "totalTokens": 150
+                },
+                "averagePerRecordWithTokens": {
+                  "inputTokens": 100,
+                  "outputTokens": 50,
+                  "totalTokens": 150
+                }
+              }
+            },
+            "lowest": {
+              "band": "lowest",
+              "count": 0,
+              "rates": {
+                "validity": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 0,
+                "min": 0,
+                "p50": 0,
+                "avg": 0,
+                "max": 0
+              },
+              "repairDistribution": {
+                "zero": 0,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": []
+              },
+              "tokens": {
+                "recordCountWithTokens": 0,
+                "totals": null,
+                "averagePerRecordWithTokens": null
+              }
+            }
+          }
+        },
+        "comparability": {
+          "segmentId": "middle:pacifist"
+        }
+      }
+    },
+    {
+      "cellId": "lowest:pacifist",
+      "persona": "pacifist",
+      "band": "lowest",
+      "depth": 11,
+      "generationRunIds": [
+        "eval-2026-06-12T07-05-47-754Z-lowest-pacifist-1"
+      ],
+      "bankSeeds": [
+        "persona-bank-1"
+      ],
+      "scores": {
+        "recordType": "eval-scores",
+        "metricVersion": "phase-40b-core-v1",
+        "recordCount": 1,
+        "generations": [
+          {
+            "runId": "eval-2026-06-12T07-05-47-754Z-lowest-pacifist-1",
+            "depth": 11,
+            "band": "lowest",
+            "attemptCount": 1,
+            "validity": true,
+            "solvability": true,
+            "servedWithoutFallback": true,
+            "repairCount": 0,
+            "fallback": false,
+            "latencyMs": 10,
+            "tokens": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            },
+            "gate2": {
+              "recorded": true,
+              "passed": true,
+              "blockingCodes": []
+            },
+            "advisoryFlags": {
+              "hpRetentionRecorded": true,
+              "hpRetentionAdvisory": true,
+              "hpRetentionPassed": false,
+              "advisoryCodes": [
+                "G2_HP_RETENTION"
+              ],
+              "failedAdvisoryCodes": [
+                "G2_HP_RETENTION"
+              ]
+            },
+            "bandAccuracy": {
+              "band": "lowest",
+              "clearRatePercent": 93.33333333333333,
+              "clearRateTargetPercent": 70,
+              "clearRateMet": true,
+              "medianHpRetentionPercent": 100,
+              "medianHpRetentionTargetPercent": {
+                "min": 15,
+                "max": 60
+              },
+              "hpRetentionInBand": false,
+              "accurate": false
+            }
+          }
+        ],
+        "summary": {
+          "rates": {
+            "validity": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "solvability": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "servedWithoutFallback": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "fallback": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            },
+            "bandAccuracy": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            }
+          },
+          "latencyMs": {
+            "count": 1,
+            "min": 10,
+            "p50": 10,
+            "avg": 10,
+            "max": 10
+          },
+          "repairDistribution": {
+            "zero": 1,
+            "one": 0,
+            "two": 0,
+            "threeOrMore": 0,
+            "byRepairCount": [
+              {
+                "repairCount": 0,
+                "count": 1
+              }
+            ]
+          },
+          "tokens": {
+            "recordCountWithTokens": 1,
+            "totals": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            },
+            "averagePerRecordWithTokens": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            }
+          },
+          "byBand": {
+            "shallows": {
+              "band": "shallows",
+              "count": 0,
+              "rates": {
+                "validity": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 0,
+                "min": 0,
+                "p50": 0,
+                "avg": 0,
+                "max": 0
+              },
+              "repairDistribution": {
+                "zero": 0,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": []
+              },
+              "tokens": {
+                "recordCountWithTokens": 0,
+                "totals": null,
+                "averagePerRecordWithTokens": null
+              }
+            },
+            "middle": {
+              "band": "middle",
+              "count": 0,
+              "rates": {
+                "validity": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 0,
+                "min": 0,
+                "p50": 0,
+                "avg": 0,
+                "max": 0
+              },
+              "repairDistribution": {
+                "zero": 0,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": []
+              },
+              "tokens": {
+                "recordCountWithTokens": 0,
+                "totals": null,
+                "averagePerRecordWithTokens": null
+              }
+            },
+            "lowest": {
+              "band": "lowest",
+              "count": 1,
+              "rates": {
+                "validity": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "solvability": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "servedWithoutFallback": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "fallback": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 1,
+                "min": 10,
+                "p50": 10,
+                "avg": 10,
+                "max": 10
+              },
+              "repairDistribution": {
+                "zero": 1,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": [
+                  {
+                    "repairCount": 0,
+                    "count": 1
+                  }
+                ]
+              },
+              "tokens": {
+                "recordCountWithTokens": 1,
+                "totals": {
+                  "inputTokens": 100,
+                  "outputTokens": 50,
+                  "totalTokens": 150
+                },
+                "averagePerRecordWithTokens": {
+                  "inputTokens": 100,
+                  "outputTokens": 50,
+                  "totalTokens": 150
+                }
+              }
+            }
+          }
+        },
+        "comparability": {
+          "segmentId": "lowest:pacifist"
+        }
+      }
+    },
+    {
+      "cellId": "shallows:speedrunner",
+      "persona": "speedrunner",
+      "band": "shallows",
+      "depth": 3,
+      "generationRunIds": [
+        "eval-2026-06-12T07-05-47-754Z-shallows-speedrunner-1"
+      ],
+      "bankSeeds": [
+        "persona-bank-1"
+      ],
+      "scores": {
+        "recordType": "eval-scores",
+        "metricVersion": "phase-40b-core-v1",
+        "recordCount": 1,
+        "generations": [
+          {
+            "runId": "eval-2026-06-12T07-05-47-754Z-shallows-speedrunner-1",
+            "depth": 3,
+            "band": "shallows",
+            "attemptCount": 1,
+            "validity": true,
+            "solvability": true,
+            "servedWithoutFallback": true,
+            "repairCount": 0,
+            "fallback": false,
+            "latencyMs": 10,
+            "tokens": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            },
+            "gate2": {
+              "recorded": true,
+              "passed": true,
+              "blockingCodes": []
+            },
+            "advisoryFlags": {
+              "hpRetentionRecorded": true,
+              "hpRetentionAdvisory": true,
+              "hpRetentionPassed": false,
+              "advisoryCodes": [
+                "G2_HP_RETENTION"
+              ],
+              "failedAdvisoryCodes": [
+                "G2_HP_RETENTION"
+              ]
+            },
+            "bandAccuracy": {
+              "band": "shallows",
+              "clearRatePercent": 100,
+              "clearRateTargetPercent": 95,
+              "clearRateMet": true,
+              "medianHpRetentionPercent": 100,
+              "medianHpRetentionTargetPercent": {
+                "min": 55,
+                "max": 90
+              },
+              "hpRetentionInBand": false,
+              "accurate": false
+            }
+          }
+        ],
+        "summary": {
+          "rates": {
+            "validity": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "solvability": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "servedWithoutFallback": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "fallback": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            },
+            "bandAccuracy": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            }
+          },
+          "latencyMs": {
+            "count": 1,
+            "min": 10,
+            "p50": 10,
+            "avg": 10,
+            "max": 10
+          },
+          "repairDistribution": {
+            "zero": 1,
+            "one": 0,
+            "two": 0,
+            "threeOrMore": 0,
+            "byRepairCount": [
+              {
+                "repairCount": 0,
+                "count": 1
+              }
+            ]
+          },
+          "tokens": {
+            "recordCountWithTokens": 1,
+            "totals": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            },
+            "averagePerRecordWithTokens": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            }
+          },
+          "byBand": {
+            "shallows": {
+              "band": "shallows",
+              "count": 1,
+              "rates": {
+                "validity": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "solvability": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "servedWithoutFallback": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "fallback": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 1,
+                "min": 10,
+                "p50": 10,
+                "avg": 10,
+                "max": 10
+              },
+              "repairDistribution": {
+                "zero": 1,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": [
+                  {
+                    "repairCount": 0,
+                    "count": 1
+                  }
+                ]
+              },
+              "tokens": {
+                "recordCountWithTokens": 1,
+                "totals": {
+                  "inputTokens": 100,
+                  "outputTokens": 50,
+                  "totalTokens": 150
+                },
+                "averagePerRecordWithTokens": {
+                  "inputTokens": 100,
+                  "outputTokens": 50,
+                  "totalTokens": 150
+                }
+              }
+            },
+            "middle": {
+              "band": "middle",
+              "count": 0,
+              "rates": {
+                "validity": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 0,
+                "min": 0,
+                "p50": 0,
+                "avg": 0,
+                "max": 0
+              },
+              "repairDistribution": {
+                "zero": 0,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": []
+              },
+              "tokens": {
+                "recordCountWithTokens": 0,
+                "totals": null,
+                "averagePerRecordWithTokens": null
+              }
+            },
+            "lowest": {
+              "band": "lowest",
+              "count": 0,
+              "rates": {
+                "validity": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 0,
+                "min": 0,
+                "p50": 0,
+                "avg": 0,
+                "max": 0
+              },
+              "repairDistribution": {
+                "zero": 0,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": []
+              },
+              "tokens": {
+                "recordCountWithTokens": 0,
+                "totals": null,
+                "averagePerRecordWithTokens": null
+              }
+            }
+          }
+        },
+        "comparability": {
+          "segmentId": "shallows:speedrunner"
+        }
+      }
+    },
+    {
+      "cellId": "middle:speedrunner",
+      "persona": "speedrunner",
+      "band": "middle",
+      "depth": 6,
+      "generationRunIds": [
+        "eval-2026-06-12T07-05-47-754Z-middle-speedrunner-1"
+      ],
+      "bankSeeds": [
+        "persona-bank-1"
+      ],
+      "scores": {
+        "recordType": "eval-scores",
+        "metricVersion": "phase-40b-core-v1",
+        "recordCount": 1,
+        "generations": [
+          {
+            "runId": "eval-2026-06-12T07-05-47-754Z-middle-speedrunner-1",
+            "depth": 6,
+            "band": "middle",
+            "attemptCount": 1,
+            "validity": false,
+            "solvability": false,
+            "servedWithoutFallback": false,
+            "repairCount": 0,
+            "fallback": true,
+            "latencyMs": 10,
+            "tokens": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            },
+            "gate2": {
+              "recorded": false,
+              "passed": false,
+              "blockingCodes": []
+            },
+            "advisoryFlags": {
+              "hpRetentionRecorded": false,
+              "hpRetentionAdvisory": false,
+              "hpRetentionPassed": null,
+              "advisoryCodes": [],
+              "failedAdvisoryCodes": []
+            },
+            "bandAccuracy": null
+          }
+        ],
+        "summary": {
+          "rates": {
+            "validity": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            },
+            "solvability": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            },
+            "servedWithoutFallback": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            },
+            "fallback": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "bandAccuracy": {
+              "count": 0,
+              "passed": 0,
+              "percent": 0
+            }
+          },
+          "latencyMs": {
+            "count": 1,
+            "min": 10,
+            "p50": 10,
+            "avg": 10,
+            "max": 10
+          },
+          "repairDistribution": {
+            "zero": 1,
+            "one": 0,
+            "two": 0,
+            "threeOrMore": 0,
+            "byRepairCount": [
+              {
+                "repairCount": 0,
+                "count": 1
+              }
+            ]
+          },
+          "tokens": {
+            "recordCountWithTokens": 1,
+            "totals": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            },
+            "averagePerRecordWithTokens": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            }
+          },
+          "byBand": {
+            "shallows": {
+              "band": "shallows",
+              "count": 0,
+              "rates": {
+                "validity": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 0,
+                "min": 0,
+                "p50": 0,
+                "avg": 0,
+                "max": 0
+              },
+              "repairDistribution": {
+                "zero": 0,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": []
+              },
+              "tokens": {
+                "recordCountWithTokens": 0,
+                "totals": null,
+                "averagePerRecordWithTokens": null
+              }
+            },
+            "middle": {
+              "band": "middle",
+              "count": 1,
+              "rates": {
+                "validity": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 1,
+                "min": 10,
+                "p50": 10,
+                "avg": 10,
+                "max": 10
+              },
+              "repairDistribution": {
+                "zero": 1,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": [
+                  {
+                    "repairCount": 0,
+                    "count": 1
+                  }
+                ]
+              },
+              "tokens": {
+                "recordCountWithTokens": 1,
+                "totals": {
+                  "inputTokens": 100,
+                  "outputTokens": 50,
+                  "totalTokens": 150
+                },
+                "averagePerRecordWithTokens": {
+                  "inputTokens": 100,
+                  "outputTokens": 50,
+                  "totalTokens": 150
+                }
+              }
+            },
+            "lowest": {
+              "band": "lowest",
+              "count": 0,
+              "rates": {
+                "validity": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 0,
+                "min": 0,
+                "p50": 0,
+                "avg": 0,
+                "max": 0
+              },
+              "repairDistribution": {
+                "zero": 0,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": []
+              },
+              "tokens": {
+                "recordCountWithTokens": 0,
+                "totals": null,
+                "averagePerRecordWithTokens": null
+              }
+            }
+          }
+        },
+        "comparability": {
+          "segmentId": "middle:speedrunner"
+        }
+      }
+    },
+    {
+      "cellId": "lowest:speedrunner",
+      "persona": "speedrunner",
+      "band": "lowest",
+      "depth": 11,
+      "generationRunIds": [
+        "eval-2026-06-12T07-05-47-754Z-lowest-speedrunner-1"
+      ],
+      "bankSeeds": [
+        "persona-bank-1"
+      ],
+      "scores": {
+        "recordType": "eval-scores",
+        "metricVersion": "phase-40b-core-v1",
+        "recordCount": 1,
+        "generations": [
+          {
+            "runId": "eval-2026-06-12T07-05-47-754Z-lowest-speedrunner-1",
+            "depth": 11,
+            "band": "lowest",
+            "attemptCount": 1,
+            "validity": true,
+            "solvability": true,
+            "servedWithoutFallback": true,
+            "repairCount": 0,
+            "fallback": false,
+            "latencyMs": 10,
+            "tokens": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            },
+            "gate2": {
+              "recorded": true,
+              "passed": true,
+              "blockingCodes": []
+            },
+            "advisoryFlags": {
+              "hpRetentionRecorded": true,
+              "hpRetentionAdvisory": true,
+              "hpRetentionPassed": false,
+              "advisoryCodes": [
+                "G2_HP_RETENTION"
+              ],
+              "failedAdvisoryCodes": [
+                "G2_HP_RETENTION"
+              ]
+            },
+            "bandAccuracy": {
+              "band": "lowest",
+              "clearRatePercent": 100,
+              "clearRateTargetPercent": 70,
+              "clearRateMet": true,
+              "medianHpRetentionPercent": 100,
+              "medianHpRetentionTargetPercent": {
+                "min": 15,
+                "max": 60
+              },
+              "hpRetentionInBand": false,
+              "accurate": false
+            }
+          }
+        ],
+        "summary": {
+          "rates": {
+            "validity": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "solvability": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "servedWithoutFallback": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "fallback": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            },
+            "bandAccuracy": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            }
+          },
+          "latencyMs": {
+            "count": 1,
+            "min": 10,
+            "p50": 10,
+            "avg": 10,
+            "max": 10
+          },
+          "repairDistribution": {
+            "zero": 1,
+            "one": 0,
+            "two": 0,
+            "threeOrMore": 0,
+            "byRepairCount": [
+              {
+                "repairCount": 0,
+                "count": 1
+              }
+            ]
+          },
+          "tokens": {
+            "recordCountWithTokens": 1,
+            "totals": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            },
+            "averagePerRecordWithTokens": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            }
+          },
+          "byBand": {
+            "shallows": {
+              "band": "shallows",
+              "count": 0,
+              "rates": {
+                "validity": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 0,
+                "min": 0,
+                "p50": 0,
+                "avg": 0,
+                "max": 0
+              },
+              "repairDistribution": {
+                "zero": 0,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": []
+              },
+              "tokens": {
+                "recordCountWithTokens": 0,
+                "totals": null,
+                "averagePerRecordWithTokens": null
+              }
+            },
+            "middle": {
+              "band": "middle",
+              "count": 0,
+              "rates": {
+                "validity": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 0,
+                "min": 0,
+                "p50": 0,
+                "avg": 0,
+                "max": 0
+              },
+              "repairDistribution": {
+                "zero": 0,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": []
+              },
+              "tokens": {
+                "recordCountWithTokens": 0,
+                "totals": null,
+                "averagePerRecordWithTokens": null
+              }
+            },
+            "lowest": {
+              "band": "lowest",
+              "count": 1,
+              "rates": {
+                "validity": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "solvability": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "servedWithoutFallback": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "fallback": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 1,
+                "min": 10,
+                "p50": 10,
+                "avg": 10,
+                "max": 10
+              },
+              "repairDistribution": {
+                "zero": 1,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": [
+                  {
+                    "repairCount": 0,
+                    "count": 1
+                  }
+                ]
+              },
+              "tokens": {
+                "recordCountWithTokens": 1,
+                "totals": {
+                  "inputTokens": 100,
+                  "outputTokens": 50,
+                  "totalTokens": 150
+                },
+                "averagePerRecordWithTokens": {
+                  "inputTokens": 100,
+                  "outputTokens": 50,
+                  "totalTokens": 150
+                }
+              }
+            }
+          }
+        },
+        "comparability": {
+          "segmentId": "lowest:speedrunner"
+        }
+      }
+    },
+    {
+      "cellId": "shallows:completionist",
+      "persona": "completionist",
+      "band": "shallows",
+      "depth": 3,
+      "generationRunIds": [
+        "eval-2026-06-12T07-05-47-754Z-shallows-completionist-1"
+      ],
+      "bankSeeds": [
+        "persona-bank-1"
+      ],
+      "scores": {
+        "recordType": "eval-scores",
+        "metricVersion": "phase-40b-core-v1",
+        "recordCount": 1,
+        "generations": [
+          {
+            "runId": "eval-2026-06-12T07-05-47-754Z-shallows-completionist-1",
+            "depth": 3,
+            "band": "shallows",
+            "attemptCount": 1,
+            "validity": true,
+            "solvability": true,
+            "servedWithoutFallback": true,
+            "repairCount": 0,
+            "fallback": false,
+            "latencyMs": 10,
+            "tokens": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            },
+            "gate2": {
+              "recorded": true,
+              "passed": true,
+              "blockingCodes": []
+            },
+            "advisoryFlags": {
+              "hpRetentionRecorded": true,
+              "hpRetentionAdvisory": true,
+              "hpRetentionPassed": false,
+              "advisoryCodes": [
+                "G2_HP_RETENTION"
+              ],
+              "failedAdvisoryCodes": [
+                "G2_HP_RETENTION"
+              ]
+            },
+            "bandAccuracy": {
+              "band": "shallows",
+              "clearRatePercent": 100,
+              "clearRateTargetPercent": 95,
+              "clearRateMet": true,
+              "medianHpRetentionPercent": 100,
+              "medianHpRetentionTargetPercent": {
+                "min": 55,
+                "max": 90
+              },
+              "hpRetentionInBand": false,
+              "accurate": false
+            }
+          }
+        ],
+        "summary": {
+          "rates": {
+            "validity": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "solvability": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "servedWithoutFallback": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "fallback": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            },
+            "bandAccuracy": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            }
+          },
+          "latencyMs": {
+            "count": 1,
+            "min": 10,
+            "p50": 10,
+            "avg": 10,
+            "max": 10
+          },
+          "repairDistribution": {
+            "zero": 1,
+            "one": 0,
+            "two": 0,
+            "threeOrMore": 0,
+            "byRepairCount": [
+              {
+                "repairCount": 0,
+                "count": 1
+              }
+            ]
+          },
+          "tokens": {
+            "recordCountWithTokens": 1,
+            "totals": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            },
+            "averagePerRecordWithTokens": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            }
+          },
+          "byBand": {
+            "shallows": {
+              "band": "shallows",
+              "count": 1,
+              "rates": {
+                "validity": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "solvability": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "servedWithoutFallback": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "fallback": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 1,
+                "min": 10,
+                "p50": 10,
+                "avg": 10,
+                "max": 10
+              },
+              "repairDistribution": {
+                "zero": 1,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": [
+                  {
+                    "repairCount": 0,
+                    "count": 1
+                  }
+                ]
+              },
+              "tokens": {
+                "recordCountWithTokens": 1,
+                "totals": {
+                  "inputTokens": 100,
+                  "outputTokens": 50,
+                  "totalTokens": 150
+                },
+                "averagePerRecordWithTokens": {
+                  "inputTokens": 100,
+                  "outputTokens": 50,
+                  "totalTokens": 150
+                }
+              }
+            },
+            "middle": {
+              "band": "middle",
+              "count": 0,
+              "rates": {
+                "validity": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 0,
+                "min": 0,
+                "p50": 0,
+                "avg": 0,
+                "max": 0
+              },
+              "repairDistribution": {
+                "zero": 0,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": []
+              },
+              "tokens": {
+                "recordCountWithTokens": 0,
+                "totals": null,
+                "averagePerRecordWithTokens": null
+              }
+            },
+            "lowest": {
+              "band": "lowest",
+              "count": 0,
+              "rates": {
+                "validity": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 0,
+                "min": 0,
+                "p50": 0,
+                "avg": 0,
+                "max": 0
+              },
+              "repairDistribution": {
+                "zero": 0,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": []
+              },
+              "tokens": {
+                "recordCountWithTokens": 0,
+                "totals": null,
+                "averagePerRecordWithTokens": null
+              }
+            }
+          }
+        },
+        "comparability": {
+          "segmentId": "shallows:completionist"
+        }
+      }
+    },
+    {
+      "cellId": "middle:completionist",
+      "persona": "completionist",
+      "band": "middle",
+      "depth": 6,
+      "generationRunIds": [
+        "eval-2026-06-12T07-05-47-754Z-middle-completionist-1"
+      ],
+      "bankSeeds": [
+        "persona-bank-1"
+      ],
+      "scores": {
+        "recordType": "eval-scores",
+        "metricVersion": "phase-40b-core-v1",
+        "recordCount": 1,
+        "generations": [
+          {
+            "runId": "eval-2026-06-12T07-05-47-754Z-middle-completionist-1",
+            "depth": 6,
+            "band": "middle",
+            "attemptCount": 1,
+            "validity": false,
+            "solvability": false,
+            "servedWithoutFallback": false,
+            "repairCount": 0,
+            "fallback": true,
+            "latencyMs": 10,
+            "tokens": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            },
+            "gate2": {
+              "recorded": false,
+              "passed": false,
+              "blockingCodes": []
+            },
+            "advisoryFlags": {
+              "hpRetentionRecorded": false,
+              "hpRetentionAdvisory": false,
+              "hpRetentionPassed": null,
+              "advisoryCodes": [],
+              "failedAdvisoryCodes": []
+            },
+            "bandAccuracy": null
+          }
+        ],
+        "summary": {
+          "rates": {
+            "validity": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            },
+            "solvability": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            },
+            "servedWithoutFallback": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            },
+            "fallback": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "bandAccuracy": {
+              "count": 0,
+              "passed": 0,
+              "percent": 0
+            }
+          },
+          "latencyMs": {
+            "count": 1,
+            "min": 10,
+            "p50": 10,
+            "avg": 10,
+            "max": 10
+          },
+          "repairDistribution": {
+            "zero": 1,
+            "one": 0,
+            "two": 0,
+            "threeOrMore": 0,
+            "byRepairCount": [
+              {
+                "repairCount": 0,
+                "count": 1
+              }
+            ]
+          },
+          "tokens": {
+            "recordCountWithTokens": 1,
+            "totals": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            },
+            "averagePerRecordWithTokens": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            }
+          },
+          "byBand": {
+            "shallows": {
+              "band": "shallows",
+              "count": 0,
+              "rates": {
+                "validity": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 0,
+                "min": 0,
+                "p50": 0,
+                "avg": 0,
+                "max": 0
+              },
+              "repairDistribution": {
+                "zero": 0,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": []
+              },
+              "tokens": {
+                "recordCountWithTokens": 0,
+                "totals": null,
+                "averagePerRecordWithTokens": null
+              }
+            },
+            "middle": {
+              "band": "middle",
+              "count": 1,
+              "rates": {
+                "validity": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 1,
+                "min": 10,
+                "p50": 10,
+                "avg": 10,
+                "max": 10
+              },
+              "repairDistribution": {
+                "zero": 1,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": [
+                  {
+                    "repairCount": 0,
+                    "count": 1
+                  }
+                ]
+              },
+              "tokens": {
+                "recordCountWithTokens": 1,
+                "totals": {
+                  "inputTokens": 100,
+                  "outputTokens": 50,
+                  "totalTokens": 150
+                },
+                "averagePerRecordWithTokens": {
+                  "inputTokens": 100,
+                  "outputTokens": 50,
+                  "totalTokens": 150
+                }
+              }
+            },
+            "lowest": {
+              "band": "lowest",
+              "count": 0,
+              "rates": {
+                "validity": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 0,
+                "min": 0,
+                "p50": 0,
+                "avg": 0,
+                "max": 0
+              },
+              "repairDistribution": {
+                "zero": 0,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": []
+              },
+              "tokens": {
+                "recordCountWithTokens": 0,
+                "totals": null,
+                "averagePerRecordWithTokens": null
+              }
+            }
+          }
+        },
+        "comparability": {
+          "segmentId": "middle:completionist"
+        }
+      }
+    },
+    {
+      "cellId": "lowest:completionist",
+      "persona": "completionist",
+      "band": "lowest",
+      "depth": 11,
+      "generationRunIds": [
+        "eval-2026-06-12T07-05-47-754Z-lowest-completionist-1"
+      ],
+      "bankSeeds": [
+        "persona-bank-1"
+      ],
+      "scores": {
+        "recordType": "eval-scores",
+        "metricVersion": "phase-40b-core-v1",
+        "recordCount": 1,
+        "generations": [
+          {
+            "runId": "eval-2026-06-12T07-05-47-754Z-lowest-completionist-1",
+            "depth": 11,
+            "band": "lowest",
+            "attemptCount": 1,
+            "validity": true,
+            "solvability": true,
+            "servedWithoutFallback": true,
+            "repairCount": 0,
+            "fallback": false,
+            "latencyMs": 10,
+            "tokens": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            },
+            "gate2": {
+              "recorded": true,
+              "passed": true,
+              "blockingCodes": []
+            },
+            "advisoryFlags": {
+              "hpRetentionRecorded": true,
+              "hpRetentionAdvisory": true,
+              "hpRetentionPassed": false,
+              "advisoryCodes": [
+                "G2_HP_RETENTION"
+              ],
+              "failedAdvisoryCodes": [
+                "G2_HP_RETENTION"
+              ]
+            },
+            "bandAccuracy": {
+              "band": "lowest",
+              "clearRatePercent": 100,
+              "clearRateTargetPercent": 70,
+              "clearRateMet": true,
+              "medianHpRetentionPercent": 100,
+              "medianHpRetentionTargetPercent": {
+                "min": 15,
+                "max": 60
+              },
+              "hpRetentionInBand": false,
+              "accurate": false
+            }
+          }
+        ],
+        "summary": {
+          "rates": {
+            "validity": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "solvability": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "servedWithoutFallback": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "fallback": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            },
+            "bandAccuracy": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            }
+          },
+          "latencyMs": {
+            "count": 1,
+            "min": 10,
+            "p50": 10,
+            "avg": 10,
+            "max": 10
+          },
+          "repairDistribution": {
+            "zero": 1,
+            "one": 0,
+            "two": 0,
+            "threeOrMore": 0,
+            "byRepairCount": [
+              {
+                "repairCount": 0,
+                "count": 1
+              }
+            ]
+          },
+          "tokens": {
+            "recordCountWithTokens": 1,
+            "totals": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            },
+            "averagePerRecordWithTokens": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            }
+          },
+          "byBand": {
+            "shallows": {
+              "band": "shallows",
+              "count": 0,
+              "rates": {
+                "validity": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 0,
+                "min": 0,
+                "p50": 0,
+                "avg": 0,
+                "max": 0
+              },
+              "repairDistribution": {
+                "zero": 0,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": []
+              },
+              "tokens": {
+                "recordCountWithTokens": 0,
+                "totals": null,
+                "averagePerRecordWithTokens": null
+              }
+            },
+            "middle": {
+              "band": "middle",
+              "count": 0,
+              "rates": {
+                "validity": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 0,
+                "min": 0,
+                "p50": 0,
+                "avg": 0,
+                "max": 0
+              },
+              "repairDistribution": {
+                "zero": 0,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": []
+              },
+              "tokens": {
+                "recordCountWithTokens": 0,
+                "totals": null,
+                "averagePerRecordWithTokens": null
+              }
+            },
+            "lowest": {
+              "band": "lowest",
+              "count": 1,
+              "rates": {
+                "validity": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "solvability": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "servedWithoutFallback": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "fallback": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 1,
+                "min": 10,
+                "p50": 10,
+                "avg": 10,
+                "max": 10
+              },
+              "repairDistribution": {
+                "zero": 1,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": [
+                  {
+                    "repairCount": 0,
+                    "count": 1
+                  }
+                ]
+              },
+              "tokens": {
+                "recordCountWithTokens": 1,
+                "totals": {
+                  "inputTokens": 100,
+                  "outputTokens": 50,
+                  "totalTokens": 150
+                },
+                "averagePerRecordWithTokens": {
+                  "inputTokens": 100,
+                  "outputTokens": 50,
+                  "totalTokens": 150
+                }
+              }
+            }
+          }
+        },
+        "comparability": {
+          "segmentId": "lowest:completionist"
+        }
+      }
+    },
+    {
+      "cellId": "shallows:chaos",
+      "persona": "chaos",
+      "band": "shallows",
+      "depth": 3,
+      "generationRunIds": [
+        "eval-2026-06-12T07-05-47-754Z-shallows-chaos-1"
+      ],
+      "bankSeeds": [
+        "persona-bank-1"
+      ],
+      "scores": {
+        "recordType": "eval-scores",
+        "metricVersion": "phase-40b-core-v1",
+        "recordCount": 1,
+        "generations": [
+          {
+            "runId": "eval-2026-06-12T07-05-47-754Z-shallows-chaos-1",
+            "depth": 3,
+            "band": "shallows",
+            "attemptCount": 1,
+            "validity": true,
+            "solvability": true,
+            "servedWithoutFallback": true,
+            "repairCount": 0,
+            "fallback": false,
+            "latencyMs": 10,
+            "tokens": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            },
+            "gate2": {
+              "recorded": true,
+              "passed": true,
+              "blockingCodes": []
+            },
+            "advisoryFlags": {
+              "hpRetentionRecorded": true,
+              "hpRetentionAdvisory": true,
+              "hpRetentionPassed": false,
+              "advisoryCodes": [
+                "G2_HP_RETENTION"
+              ],
+              "failedAdvisoryCodes": [
+                "G2_HP_RETENTION"
+              ]
+            },
+            "bandAccuracy": {
+              "band": "shallows",
+              "clearRatePercent": 100,
+              "clearRateTargetPercent": 95,
+              "clearRateMet": true,
+              "medianHpRetentionPercent": 100,
+              "medianHpRetentionTargetPercent": {
+                "min": 55,
+                "max": 90
+              },
+              "hpRetentionInBand": false,
+              "accurate": false
+            }
+          }
+        ],
+        "summary": {
+          "rates": {
+            "validity": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "solvability": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "servedWithoutFallback": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "fallback": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            },
+            "bandAccuracy": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            }
+          },
+          "latencyMs": {
+            "count": 1,
+            "min": 10,
+            "p50": 10,
+            "avg": 10,
+            "max": 10
+          },
+          "repairDistribution": {
+            "zero": 1,
+            "one": 0,
+            "two": 0,
+            "threeOrMore": 0,
+            "byRepairCount": [
+              {
+                "repairCount": 0,
+                "count": 1
+              }
+            ]
+          },
+          "tokens": {
+            "recordCountWithTokens": 1,
+            "totals": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            },
+            "averagePerRecordWithTokens": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            }
+          },
+          "byBand": {
+            "shallows": {
+              "band": "shallows",
+              "count": 1,
+              "rates": {
+                "validity": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "solvability": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "servedWithoutFallback": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "fallback": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 1,
+                "min": 10,
+                "p50": 10,
+                "avg": 10,
+                "max": 10
+              },
+              "repairDistribution": {
+                "zero": 1,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": [
+                  {
+                    "repairCount": 0,
+                    "count": 1
+                  }
+                ]
+              },
+              "tokens": {
+                "recordCountWithTokens": 1,
+                "totals": {
+                  "inputTokens": 100,
+                  "outputTokens": 50,
+                  "totalTokens": 150
+                },
+                "averagePerRecordWithTokens": {
+                  "inputTokens": 100,
+                  "outputTokens": 50,
+                  "totalTokens": 150
+                }
+              }
+            },
+            "middle": {
+              "band": "middle",
+              "count": 0,
+              "rates": {
+                "validity": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 0,
+                "min": 0,
+                "p50": 0,
+                "avg": 0,
+                "max": 0
+              },
+              "repairDistribution": {
+                "zero": 0,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": []
+              },
+              "tokens": {
+                "recordCountWithTokens": 0,
+                "totals": null,
+                "averagePerRecordWithTokens": null
+              }
+            },
+            "lowest": {
+              "band": "lowest",
+              "count": 0,
+              "rates": {
+                "validity": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 0,
+                "min": 0,
+                "p50": 0,
+                "avg": 0,
+                "max": 0
+              },
+              "repairDistribution": {
+                "zero": 0,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": []
+              },
+              "tokens": {
+                "recordCountWithTokens": 0,
+                "totals": null,
+                "averagePerRecordWithTokens": null
+              }
+            }
+          }
+        },
+        "comparability": {
+          "segmentId": "shallows:chaos"
+        }
+      }
+    },
+    {
+      "cellId": "middle:chaos",
+      "persona": "chaos",
+      "band": "middle",
+      "depth": 6,
+      "generationRunIds": [
+        "eval-2026-06-12T07-05-47-754Z-middle-chaos-1"
+      ],
+      "bankSeeds": [
+        "persona-bank-1"
+      ],
+      "scores": {
+        "recordType": "eval-scores",
+        "metricVersion": "phase-40b-core-v1",
+        "recordCount": 1,
+        "generations": [
+          {
+            "runId": "eval-2026-06-12T07-05-47-754Z-middle-chaos-1",
+            "depth": 6,
+            "band": "middle",
+            "attemptCount": 1,
+            "validity": false,
+            "solvability": false,
+            "servedWithoutFallback": false,
+            "repairCount": 0,
+            "fallback": true,
+            "latencyMs": 10,
+            "tokens": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            },
+            "gate2": {
+              "recorded": false,
+              "passed": false,
+              "blockingCodes": []
+            },
+            "advisoryFlags": {
+              "hpRetentionRecorded": false,
+              "hpRetentionAdvisory": false,
+              "hpRetentionPassed": null,
+              "advisoryCodes": [],
+              "failedAdvisoryCodes": []
+            },
+            "bandAccuracy": null
+          }
+        ],
+        "summary": {
+          "rates": {
+            "validity": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            },
+            "solvability": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            },
+            "servedWithoutFallback": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            },
+            "fallback": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "bandAccuracy": {
+              "count": 0,
+              "passed": 0,
+              "percent": 0
+            }
+          },
+          "latencyMs": {
+            "count": 1,
+            "min": 10,
+            "p50": 10,
+            "avg": 10,
+            "max": 10
+          },
+          "repairDistribution": {
+            "zero": 1,
+            "one": 0,
+            "two": 0,
+            "threeOrMore": 0,
+            "byRepairCount": [
+              {
+                "repairCount": 0,
+                "count": 1
+              }
+            ]
+          },
+          "tokens": {
+            "recordCountWithTokens": 1,
+            "totals": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            },
+            "averagePerRecordWithTokens": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            }
+          },
+          "byBand": {
+            "shallows": {
+              "band": "shallows",
+              "count": 0,
+              "rates": {
+                "validity": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 0,
+                "min": 0,
+                "p50": 0,
+                "avg": 0,
+                "max": 0
+              },
+              "repairDistribution": {
+                "zero": 0,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": []
+              },
+              "tokens": {
+                "recordCountWithTokens": 0,
+                "totals": null,
+                "averagePerRecordWithTokens": null
+              }
+            },
+            "middle": {
+              "band": "middle",
+              "count": 1,
+              "rates": {
+                "validity": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 1,
+                "min": 10,
+                "p50": 10,
+                "avg": 10,
+                "max": 10
+              },
+              "repairDistribution": {
+                "zero": 1,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": [
+                  {
+                    "repairCount": 0,
+                    "count": 1
+                  }
+                ]
+              },
+              "tokens": {
+                "recordCountWithTokens": 1,
+                "totals": {
+                  "inputTokens": 100,
+                  "outputTokens": 50,
+                  "totalTokens": 150
+                },
+                "averagePerRecordWithTokens": {
+                  "inputTokens": 100,
+                  "outputTokens": 50,
+                  "totalTokens": 150
+                }
+              }
+            },
+            "lowest": {
+              "band": "lowest",
+              "count": 0,
+              "rates": {
+                "validity": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 0,
+                "min": 0,
+                "p50": 0,
+                "avg": 0,
+                "max": 0
+              },
+              "repairDistribution": {
+                "zero": 0,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": []
+              },
+              "tokens": {
+                "recordCountWithTokens": 0,
+                "totals": null,
+                "averagePerRecordWithTokens": null
+              }
+            }
+          }
+        },
+        "comparability": {
+          "segmentId": "middle:chaos"
+        }
+      }
+    },
+    {
+      "cellId": "lowest:chaos",
+      "persona": "chaos",
+      "band": "lowest",
+      "depth": 11,
+      "generationRunIds": [
+        "eval-2026-06-12T07-05-47-754Z-lowest-chaos-1"
+      ],
+      "bankSeeds": [
+        "persona-bank-1"
+      ],
+      "scores": {
+        "recordType": "eval-scores",
+        "metricVersion": "phase-40b-core-v1",
+        "recordCount": 1,
+        "generations": [
+          {
+            "runId": "eval-2026-06-12T07-05-47-754Z-lowest-chaos-1",
+            "depth": 11,
+            "band": "lowest",
+            "attemptCount": 1,
+            "validity": true,
+            "solvability": true,
+            "servedWithoutFallback": true,
+            "repairCount": 0,
+            "fallback": false,
+            "latencyMs": 10,
+            "tokens": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            },
+            "gate2": {
+              "recorded": true,
+              "passed": true,
+              "blockingCodes": []
+            },
+            "advisoryFlags": {
+              "hpRetentionRecorded": true,
+              "hpRetentionAdvisory": true,
+              "hpRetentionPassed": false,
+              "advisoryCodes": [
+                "G2_HP_RETENTION"
+              ],
+              "failedAdvisoryCodes": [
+                "G2_HP_RETENTION"
+              ]
+            },
+            "bandAccuracy": {
+              "band": "lowest",
+              "clearRatePercent": 100,
+              "clearRateTargetPercent": 70,
+              "clearRateMet": true,
+              "medianHpRetentionPercent": 100,
+              "medianHpRetentionTargetPercent": {
+                "min": 15,
+                "max": 60
+              },
+              "hpRetentionInBand": false,
+              "accurate": false
+            }
+          }
+        ],
+        "summary": {
+          "rates": {
+            "validity": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "solvability": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "servedWithoutFallback": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "fallback": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            },
+            "bandAccuracy": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            }
+          },
+          "latencyMs": {
+            "count": 1,
+            "min": 10,
+            "p50": 10,
+            "avg": 10,
+            "max": 10
+          },
+          "repairDistribution": {
+            "zero": 1,
+            "one": 0,
+            "two": 0,
+            "threeOrMore": 0,
+            "byRepairCount": [
+              {
+                "repairCount": 0,
+                "count": 1
+              }
+            ]
+          },
+          "tokens": {
+            "recordCountWithTokens": 1,
+            "totals": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            },
+            "averagePerRecordWithTokens": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            }
+          },
+          "byBand": {
+            "shallows": {
+              "band": "shallows",
+              "count": 0,
+              "rates": {
+                "validity": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 0,
+                "min": 0,
+                "p50": 0,
+                "avg": 0,
+                "max": 0
+              },
+              "repairDistribution": {
+                "zero": 0,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": []
+              },
+              "tokens": {
+                "recordCountWithTokens": 0,
+                "totals": null,
+                "averagePerRecordWithTokens": null
+              }
+            },
+            "middle": {
+              "band": "middle",
+              "count": 0,
+              "rates": {
+                "validity": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 0,
+                "min": 0,
+                "p50": 0,
+                "avg": 0,
+                "max": 0
+              },
+              "repairDistribution": {
+                "zero": 0,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": []
+              },
+              "tokens": {
+                "recordCountWithTokens": 0,
+                "totals": null,
+                "averagePerRecordWithTokens": null
+              }
+            },
+            "lowest": {
+              "band": "lowest",
+              "count": 1,
+              "rates": {
+                "validity": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "solvability": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "servedWithoutFallback": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "fallback": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 1,
+                "min": 10,
+                "p50": 10,
+                "avg": 10,
+                "max": 10
+              },
+              "repairDistribution": {
+                "zero": 1,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": [
+                  {
+                    "repairCount": 0,
+                    "count": 1
+                  }
+                ]
+              },
+              "tokens": {
+                "recordCountWithTokens": 1,
+                "totals": {
+                  "inputTokens": 100,
+                  "outputTokens": 50,
+                  "totalTokens": 150
+                },
+                "averagePerRecordWithTokens": {
+                  "inputTokens": 100,
+                  "outputTokens": 50,
+                  "totalTokens": 150
+                }
+              }
+            }
+          }
+        },
+        "comparability": {
+          "segmentId": "lowest:chaos"
+        }
+      }
+    }
+  ],
+  "overall": {
+    "recordType": "eval-scores",
+    "metricVersion": "phase-40b-core-v1",
+    "recordCount": 15,
+    "generations": [
+      {
+        "runId": "eval-2026-06-12T07-05-47-754Z-shallows-hoarder-1",
+        "depth": 3,
+        "band": "shallows",
+        "attemptCount": 1,
+        "validity": true,
+        "solvability": true,
+        "servedWithoutFallback": true,
+        "repairCount": 0,
+        "fallback": false,
+        "latencyMs": 10,
+        "tokens": {
+          "inputTokens": 100,
+          "outputTokens": 50,
+          "totalTokens": 150
+        },
+        "gate2": {
+          "recorded": true,
+          "passed": true,
+          "blockingCodes": []
+        },
+        "advisoryFlags": {
+          "hpRetentionRecorded": true,
+          "hpRetentionAdvisory": true,
+          "hpRetentionPassed": false,
+          "advisoryCodes": [
+            "G2_HP_RETENTION"
+          ],
+          "failedAdvisoryCodes": [
+            "G2_HP_RETENTION"
+          ]
+        },
+        "bandAccuracy": {
+          "band": "shallows",
+          "clearRatePercent": 100,
+          "clearRateTargetPercent": 95,
+          "clearRateMet": true,
+          "medianHpRetentionPercent": 100,
+          "medianHpRetentionTargetPercent": {
+            "min": 55,
+            "max": 90
+          },
+          "hpRetentionInBand": false,
+          "accurate": false
+        }
+      },
+      {
+        "runId": "eval-2026-06-12T07-05-47-754Z-middle-hoarder-1",
+        "depth": 6,
+        "band": "middle",
+        "attemptCount": 1,
+        "validity": false,
+        "solvability": false,
+        "servedWithoutFallback": false,
+        "repairCount": 0,
+        "fallback": true,
+        "latencyMs": 10,
+        "tokens": {
+          "inputTokens": 100,
+          "outputTokens": 50,
+          "totalTokens": 150
+        },
+        "gate2": {
+          "recorded": false,
+          "passed": false,
+          "blockingCodes": []
+        },
+        "advisoryFlags": {
+          "hpRetentionRecorded": false,
+          "hpRetentionAdvisory": false,
+          "hpRetentionPassed": null,
+          "advisoryCodes": [],
+          "failedAdvisoryCodes": []
+        },
+        "bandAccuracy": null
+      },
+      {
+        "runId": "eval-2026-06-12T07-05-47-754Z-lowest-hoarder-1",
+        "depth": 11,
+        "band": "lowest",
+        "attemptCount": 1,
+        "validity": true,
+        "solvability": true,
+        "servedWithoutFallback": true,
+        "repairCount": 0,
+        "fallback": false,
+        "latencyMs": 10,
+        "tokens": {
+          "inputTokens": 100,
+          "outputTokens": 50,
+          "totalTokens": 150
+        },
+        "gate2": {
+          "recorded": true,
+          "passed": true,
+          "blockingCodes": []
+        },
+        "advisoryFlags": {
+          "hpRetentionRecorded": true,
+          "hpRetentionAdvisory": true,
+          "hpRetentionPassed": false,
+          "advisoryCodes": [
+            "G2_HP_RETENTION"
+          ],
+          "failedAdvisoryCodes": [
+            "G2_HP_RETENTION"
+          ]
+        },
+        "bandAccuracy": {
+          "band": "lowest",
+          "clearRatePercent": 100,
+          "clearRateTargetPercent": 70,
+          "clearRateMet": true,
+          "medianHpRetentionPercent": 100,
+          "medianHpRetentionTargetPercent": {
+            "min": 15,
+            "max": 60
+          },
+          "hpRetentionInBand": false,
+          "accurate": false
+        }
+      },
+      {
+        "runId": "eval-2026-06-12T07-05-47-754Z-shallows-pacifist-1",
+        "depth": 3,
+        "band": "shallows",
+        "attemptCount": 1,
+        "validity": true,
+        "solvability": true,
+        "servedWithoutFallback": true,
+        "repairCount": 0,
+        "fallback": false,
+        "latencyMs": 10,
+        "tokens": {
+          "inputTokens": 100,
+          "outputTokens": 50,
+          "totalTokens": 150
+        },
+        "gate2": {
+          "recorded": true,
+          "passed": true,
+          "blockingCodes": []
+        },
+        "advisoryFlags": {
+          "hpRetentionRecorded": true,
+          "hpRetentionAdvisory": true,
+          "hpRetentionPassed": false,
+          "advisoryCodes": [
+            "G2_HP_RETENTION"
+          ],
+          "failedAdvisoryCodes": [
+            "G2_HP_RETENTION"
+          ]
+        },
+        "bandAccuracy": {
+          "band": "shallows",
+          "clearRatePercent": 100,
+          "clearRateTargetPercent": 95,
+          "clearRateMet": true,
+          "medianHpRetentionPercent": 100,
+          "medianHpRetentionTargetPercent": {
+            "min": 55,
+            "max": 90
+          },
+          "hpRetentionInBand": false,
+          "accurate": false
+        }
+      },
+      {
+        "runId": "eval-2026-06-12T07-05-47-754Z-middle-pacifist-1",
+        "depth": 6,
+        "band": "middle",
+        "attemptCount": 1,
+        "validity": false,
+        "solvability": false,
+        "servedWithoutFallback": false,
+        "repairCount": 0,
+        "fallback": true,
+        "latencyMs": 10,
+        "tokens": {
+          "inputTokens": 100,
+          "outputTokens": 50,
+          "totalTokens": 150
+        },
+        "gate2": {
+          "recorded": false,
+          "passed": false,
+          "blockingCodes": []
+        },
+        "advisoryFlags": {
+          "hpRetentionRecorded": false,
+          "hpRetentionAdvisory": false,
+          "hpRetentionPassed": null,
+          "advisoryCodes": [],
+          "failedAdvisoryCodes": []
+        },
+        "bandAccuracy": null
+      },
+      {
+        "runId": "eval-2026-06-12T07-05-47-754Z-lowest-pacifist-1",
+        "depth": 11,
+        "band": "lowest",
+        "attemptCount": 1,
+        "validity": true,
+        "solvability": true,
+        "servedWithoutFallback": true,
+        "repairCount": 0,
+        "fallback": false,
+        "latencyMs": 10,
+        "tokens": {
+          "inputTokens": 100,
+          "outputTokens": 50,
+          "totalTokens": 150
+        },
+        "gate2": {
+          "recorded": true,
+          "passed": true,
+          "blockingCodes": []
+        },
+        "advisoryFlags": {
+          "hpRetentionRecorded": true,
+          "hpRetentionAdvisory": true,
+          "hpRetentionPassed": false,
+          "advisoryCodes": [
+            "G2_HP_RETENTION"
+          ],
+          "failedAdvisoryCodes": [
+            "G2_HP_RETENTION"
+          ]
+        },
+        "bandAccuracy": {
+          "band": "lowest",
+          "clearRatePercent": 93.33333333333333,
+          "clearRateTargetPercent": 70,
+          "clearRateMet": true,
+          "medianHpRetentionPercent": 100,
+          "medianHpRetentionTargetPercent": {
+            "min": 15,
+            "max": 60
+          },
+          "hpRetentionInBand": false,
+          "accurate": false
+        }
+      },
+      {
+        "runId": "eval-2026-06-12T07-05-47-754Z-shallows-speedrunner-1",
+        "depth": 3,
+        "band": "shallows",
+        "attemptCount": 1,
+        "validity": true,
+        "solvability": true,
+        "servedWithoutFallback": true,
+        "repairCount": 0,
+        "fallback": false,
+        "latencyMs": 10,
+        "tokens": {
+          "inputTokens": 100,
+          "outputTokens": 50,
+          "totalTokens": 150
+        },
+        "gate2": {
+          "recorded": true,
+          "passed": true,
+          "blockingCodes": []
+        },
+        "advisoryFlags": {
+          "hpRetentionRecorded": true,
+          "hpRetentionAdvisory": true,
+          "hpRetentionPassed": false,
+          "advisoryCodes": [
+            "G2_HP_RETENTION"
+          ],
+          "failedAdvisoryCodes": [
+            "G2_HP_RETENTION"
+          ]
+        },
+        "bandAccuracy": {
+          "band": "shallows",
+          "clearRatePercent": 100,
+          "clearRateTargetPercent": 95,
+          "clearRateMet": true,
+          "medianHpRetentionPercent": 100,
+          "medianHpRetentionTargetPercent": {
+            "min": 55,
+            "max": 90
+          },
+          "hpRetentionInBand": false,
+          "accurate": false
+        }
+      },
+      {
+        "runId": "eval-2026-06-12T07-05-47-754Z-middle-speedrunner-1",
+        "depth": 6,
+        "band": "middle",
+        "attemptCount": 1,
+        "validity": false,
+        "solvability": false,
+        "servedWithoutFallback": false,
+        "repairCount": 0,
+        "fallback": true,
+        "latencyMs": 10,
+        "tokens": {
+          "inputTokens": 100,
+          "outputTokens": 50,
+          "totalTokens": 150
+        },
+        "gate2": {
+          "recorded": false,
+          "passed": false,
+          "blockingCodes": []
+        },
+        "advisoryFlags": {
+          "hpRetentionRecorded": false,
+          "hpRetentionAdvisory": false,
+          "hpRetentionPassed": null,
+          "advisoryCodes": [],
+          "failedAdvisoryCodes": []
+        },
+        "bandAccuracy": null
+      },
+      {
+        "runId": "eval-2026-06-12T07-05-47-754Z-lowest-speedrunner-1",
+        "depth": 11,
+        "band": "lowest",
+        "attemptCount": 1,
+        "validity": true,
+        "solvability": true,
+        "servedWithoutFallback": true,
+        "repairCount": 0,
+        "fallback": false,
+        "latencyMs": 10,
+        "tokens": {
+          "inputTokens": 100,
+          "outputTokens": 50,
+          "totalTokens": 150
+        },
+        "gate2": {
+          "recorded": true,
+          "passed": true,
+          "blockingCodes": []
+        },
+        "advisoryFlags": {
+          "hpRetentionRecorded": true,
+          "hpRetentionAdvisory": true,
+          "hpRetentionPassed": false,
+          "advisoryCodes": [
+            "G2_HP_RETENTION"
+          ],
+          "failedAdvisoryCodes": [
+            "G2_HP_RETENTION"
+          ]
+        },
+        "bandAccuracy": {
+          "band": "lowest",
+          "clearRatePercent": 100,
+          "clearRateTargetPercent": 70,
+          "clearRateMet": true,
+          "medianHpRetentionPercent": 100,
+          "medianHpRetentionTargetPercent": {
+            "min": 15,
+            "max": 60
+          },
+          "hpRetentionInBand": false,
+          "accurate": false
+        }
+      },
+      {
+        "runId": "eval-2026-06-12T07-05-47-754Z-shallows-completionist-1",
+        "depth": 3,
+        "band": "shallows",
+        "attemptCount": 1,
+        "validity": true,
+        "solvability": true,
+        "servedWithoutFallback": true,
+        "repairCount": 0,
+        "fallback": false,
+        "latencyMs": 10,
+        "tokens": {
+          "inputTokens": 100,
+          "outputTokens": 50,
+          "totalTokens": 150
+        },
+        "gate2": {
+          "recorded": true,
+          "passed": true,
+          "blockingCodes": []
+        },
+        "advisoryFlags": {
+          "hpRetentionRecorded": true,
+          "hpRetentionAdvisory": true,
+          "hpRetentionPassed": false,
+          "advisoryCodes": [
+            "G2_HP_RETENTION"
+          ],
+          "failedAdvisoryCodes": [
+            "G2_HP_RETENTION"
+          ]
+        },
+        "bandAccuracy": {
+          "band": "shallows",
+          "clearRatePercent": 100,
+          "clearRateTargetPercent": 95,
+          "clearRateMet": true,
+          "medianHpRetentionPercent": 100,
+          "medianHpRetentionTargetPercent": {
+            "min": 55,
+            "max": 90
+          },
+          "hpRetentionInBand": false,
+          "accurate": false
+        }
+      },
+      {
+        "runId": "eval-2026-06-12T07-05-47-754Z-middle-completionist-1",
+        "depth": 6,
+        "band": "middle",
+        "attemptCount": 1,
+        "validity": false,
+        "solvability": false,
+        "servedWithoutFallback": false,
+        "repairCount": 0,
+        "fallback": true,
+        "latencyMs": 10,
+        "tokens": {
+          "inputTokens": 100,
+          "outputTokens": 50,
+          "totalTokens": 150
+        },
+        "gate2": {
+          "recorded": false,
+          "passed": false,
+          "blockingCodes": []
+        },
+        "advisoryFlags": {
+          "hpRetentionRecorded": false,
+          "hpRetentionAdvisory": false,
+          "hpRetentionPassed": null,
+          "advisoryCodes": [],
+          "failedAdvisoryCodes": []
+        },
+        "bandAccuracy": null
+      },
+      {
+        "runId": "eval-2026-06-12T07-05-47-754Z-lowest-completionist-1",
+        "depth": 11,
+        "band": "lowest",
+        "attemptCount": 1,
+        "validity": true,
+        "solvability": true,
+        "servedWithoutFallback": true,
+        "repairCount": 0,
+        "fallback": false,
+        "latencyMs": 10,
+        "tokens": {
+          "inputTokens": 100,
+          "outputTokens": 50,
+          "totalTokens": 150
+        },
+        "gate2": {
+          "recorded": true,
+          "passed": true,
+          "blockingCodes": []
+        },
+        "advisoryFlags": {
+          "hpRetentionRecorded": true,
+          "hpRetentionAdvisory": true,
+          "hpRetentionPassed": false,
+          "advisoryCodes": [
+            "G2_HP_RETENTION"
+          ],
+          "failedAdvisoryCodes": [
+            "G2_HP_RETENTION"
+          ]
+        },
+        "bandAccuracy": {
+          "band": "lowest",
+          "clearRatePercent": 100,
+          "clearRateTargetPercent": 70,
+          "clearRateMet": true,
+          "medianHpRetentionPercent": 100,
+          "medianHpRetentionTargetPercent": {
+            "min": 15,
+            "max": 60
+          },
+          "hpRetentionInBand": false,
+          "accurate": false
+        }
+      },
+      {
+        "runId": "eval-2026-06-12T07-05-47-754Z-shallows-chaos-1",
+        "depth": 3,
+        "band": "shallows",
+        "attemptCount": 1,
+        "validity": true,
+        "solvability": true,
+        "servedWithoutFallback": true,
+        "repairCount": 0,
+        "fallback": false,
+        "latencyMs": 10,
+        "tokens": {
+          "inputTokens": 100,
+          "outputTokens": 50,
+          "totalTokens": 150
+        },
+        "gate2": {
+          "recorded": true,
+          "passed": true,
+          "blockingCodes": []
+        },
+        "advisoryFlags": {
+          "hpRetentionRecorded": true,
+          "hpRetentionAdvisory": true,
+          "hpRetentionPassed": false,
+          "advisoryCodes": [
+            "G2_HP_RETENTION"
+          ],
+          "failedAdvisoryCodes": [
+            "G2_HP_RETENTION"
+          ]
+        },
+        "bandAccuracy": {
+          "band": "shallows",
+          "clearRatePercent": 100,
+          "clearRateTargetPercent": 95,
+          "clearRateMet": true,
+          "medianHpRetentionPercent": 100,
+          "medianHpRetentionTargetPercent": {
+            "min": 55,
+            "max": 90
+          },
+          "hpRetentionInBand": false,
+          "accurate": false
+        }
+      },
+      {
+        "runId": "eval-2026-06-12T07-05-47-754Z-middle-chaos-1",
+        "depth": 6,
+        "band": "middle",
+        "attemptCount": 1,
+        "validity": false,
+        "solvability": false,
+        "servedWithoutFallback": false,
+        "repairCount": 0,
+        "fallback": true,
+        "latencyMs": 10,
+        "tokens": {
+          "inputTokens": 100,
+          "outputTokens": 50,
+          "totalTokens": 150
+        },
+        "gate2": {
+          "recorded": false,
+          "passed": false,
+          "blockingCodes": []
+        },
+        "advisoryFlags": {
+          "hpRetentionRecorded": false,
+          "hpRetentionAdvisory": false,
+          "hpRetentionPassed": null,
+          "advisoryCodes": [],
+          "failedAdvisoryCodes": []
+        },
+        "bandAccuracy": null
+      },
+      {
+        "runId": "eval-2026-06-12T07-05-47-754Z-lowest-chaos-1",
+        "depth": 11,
+        "band": "lowest",
+        "attemptCount": 1,
+        "validity": true,
+        "solvability": true,
+        "servedWithoutFallback": true,
+        "repairCount": 0,
+        "fallback": false,
+        "latencyMs": 10,
+        "tokens": {
+          "inputTokens": 100,
+          "outputTokens": 50,
+          "totalTokens": 150
+        },
+        "gate2": {
+          "recorded": true,
+          "passed": true,
+          "blockingCodes": []
+        },
+        "advisoryFlags": {
+          "hpRetentionRecorded": true,
+          "hpRetentionAdvisory": true,
+          "hpRetentionPassed": false,
+          "advisoryCodes": [
+            "G2_HP_RETENTION"
+          ],
+          "failedAdvisoryCodes": [
+            "G2_HP_RETENTION"
+          ]
+        },
+        "bandAccuracy": {
+          "band": "lowest",
+          "clearRatePercent": 100,
+          "clearRateTargetPercent": 70,
+          "clearRateMet": true,
+          "medianHpRetentionPercent": 100,
+          "medianHpRetentionTargetPercent": {
+            "min": 15,
+            "max": 60
+          },
+          "hpRetentionInBand": false,
+          "accurate": false
+        }
+      }
+    ],
+    "summary": {
+      "rates": {
+        "validity": {
+          "count": 15,
+          "passed": 10,
+          "percent": 66.66666666666666
+        },
+        "solvability": {
+          "count": 15,
+          "passed": 10,
+          "percent": 66.66666666666666
+        },
+        "servedWithoutFallback": {
+          "count": 15,
+          "passed": 10,
+          "percent": 66.66666666666666
+        },
+        "fallback": {
+          "count": 15,
+          "passed": 5,
+          "percent": 33.33333333333333
+        },
+        "bandAccuracy": {
+          "count": 10,
+          "passed": 0,
+          "percent": 0
+        }
+      },
+      "latencyMs": {
+        "count": 15,
+        "min": 10,
+        "p50": 10,
+        "avg": 10,
+        "max": 10
+      },
+      "repairDistribution": {
+        "zero": 15,
+        "one": 0,
+        "two": 0,
+        "threeOrMore": 0,
+        "byRepairCount": [
+          {
+            "repairCount": 0,
+            "count": 15
+          }
+        ]
+      },
+      "tokens": {
+        "recordCountWithTokens": 15,
+        "totals": {
+          "inputTokens": 1500,
+          "outputTokens": 750,
+          "totalTokens": 2250
+        },
+        "averagePerRecordWithTokens": {
+          "inputTokens": 100,
+          "outputTokens": 50,
+          "totalTokens": 150
+        }
+      },
+      "byBand": {
+        "shallows": {
+          "band": "shallows",
+          "count": 5,
+          "rates": {
+            "validity": {
+              "count": 5,
+              "passed": 5,
+              "percent": 100
+            },
+            "solvability": {
+              "count": 5,
+              "passed": 5,
+              "percent": 100
+            },
+            "servedWithoutFallback": {
+              "count": 5,
+              "passed": 5,
+              "percent": 100
+            },
+            "fallback": {
+              "count": 5,
+              "passed": 0,
+              "percent": 0
+            },
+            "bandAccuracy": {
+              "count": 5,
+              "passed": 0,
+              "percent": 0
+            }
+          },
+          "latencyMs": {
+            "count": 5,
+            "min": 10,
+            "p50": 10,
+            "avg": 10,
+            "max": 10
+          },
+          "repairDistribution": {
+            "zero": 5,
+            "one": 0,
+            "two": 0,
+            "threeOrMore": 0,
+            "byRepairCount": [
+              {
+                "repairCount": 0,
+                "count": 5
+              }
+            ]
+          },
+          "tokens": {
+            "recordCountWithTokens": 5,
+            "totals": {
+              "inputTokens": 500,
+              "outputTokens": 250,
+              "totalTokens": 750
+            },
+            "averagePerRecordWithTokens": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            }
+          }
+        },
+        "middle": {
+          "band": "middle",
+          "count": 5,
+          "rates": {
+            "validity": {
+              "count": 5,
+              "passed": 0,
+              "percent": 0
+            },
+            "solvability": {
+              "count": 5,
+              "passed": 0,
+              "percent": 0
+            },
+            "servedWithoutFallback": {
+              "count": 5,
+              "passed": 0,
+              "percent": 0
+            },
+            "fallback": {
+              "count": 5,
+              "passed": 5,
+              "percent": 100
+            },
+            "bandAccuracy": {
+              "count": 0,
+              "passed": 0,
+              "percent": 0
+            }
+          },
+          "latencyMs": {
+            "count": 5,
+            "min": 10,
+            "p50": 10,
+            "avg": 10,
+            "max": 10
+          },
+          "repairDistribution": {
+            "zero": 5,
+            "one": 0,
+            "two": 0,
+            "threeOrMore": 0,
+            "byRepairCount": [
+              {
+                "repairCount": 0,
+                "count": 5
+              }
+            ]
+          },
+          "tokens": {
+            "recordCountWithTokens": 5,
+            "totals": {
+              "inputTokens": 500,
+              "outputTokens": 250,
+              "totalTokens": 750
+            },
+            "averagePerRecordWithTokens": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            }
+          }
+        },
+        "lowest": {
+          "band": "lowest",
+          "count": 5,
+          "rates": {
+            "validity": {
+              "count": 5,
+              "passed": 5,
+              "percent": 100
+            },
+            "solvability": {
+              "count": 5,
+              "passed": 5,
+              "percent": 100
+            },
+            "servedWithoutFallback": {
+              "count": 5,
+              "passed": 5,
+              "percent": 100
+            },
+            "fallback": {
+              "count": 5,
+              "passed": 0,
+              "percent": 0
+            },
+            "bandAccuracy": {
+              "count": 5,
+              "passed": 0,
+              "percent": 0
+            }
+          },
+          "latencyMs": {
+            "count": 5,
+            "min": 10,
+            "p50": 10,
+            "avg": 10,
+            "max": 10
+          },
+          "repairDistribution": {
+            "zero": 5,
+            "one": 0,
+            "two": 0,
+            "threeOrMore": 0,
+            "byRepairCount": [
+              {
+                "repairCount": 0,
+                "count": 5
+              }
+            ]
+          },
+          "tokens": {
+            "recordCountWithTokens": 5,
+            "totals": {
+              "inputTokens": 500,
+              "outputTokens": 250,
+              "totalTokens": 750
+            },
+            "averagePerRecordWithTokens": {
+              "inputTokens": 100,
+              "outputTokens": 50,
+              "totalTokens": 150
+            }
+          }
+        }
+      }
+    },
+    "comparability": {
+      "candidateId": "eval-2026-06-12T07-05-47-754Z"
+    }
+  }
+}

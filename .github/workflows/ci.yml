@@ -39,3 +39,9 @@ jobs:
 
       - name: Test
         run: pnpm test
+
+      - name: Mocked eval smoke
+        run: pnpm run evals -- --mode mock --n 1 --eval-id ci-mock-baseline
+
+      - name: Eval threshold check
+        run: pnpm dlx tsx tests/eval-baselines/compare.ts tests/eval-baselines/mock-baseline.json runs/evals/ci-mock-baseline/report.json

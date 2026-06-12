@@ -1,0 +1,45 @@
+{
+  "recordType": "generation",
+  "protocolVersion": "1.2.0",
+  "engineVersion": "0.0.0",
+  "modelId": "director:mock",
+  "seed": "wave-e-nullfix-fallback-mock-shallows-hoarder-1:seed",
+  "createdAt": "2026-06-12T08:36:08.325Z",
+  "runId": "wave-e-nullfix-fallback-mock-shallows-hoarder-1",
+  "depth": 3,
+  "attempts": [
+    {
+      "attemptIndex": 0,
+      "promptHash": "2ef974024ff180faf6268dc8db0c11460ce79dc31cb2f355df98648bc99470b9",
+      "rawOutputPath": "floors/3/attempts/0/raw.txt",
+      "provider": {
+        "ok": false,
+        "usage": {
+          "latencyMs": 5,
+          "tokens": null
+        },
+        "error": {
+          "code": "parse_fail",
+          "message": "mock parse_fail"
+        }
+      },
+      "gateReports": {
+        "gate0": {
+          "gate": 0,
+          "pass": false,
+          "checks": [
+            {
+              "code": "G0_NO_JSON",
+              "pass": false,
+              "detail": "$: no JSON object found"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "outcome": {
+    "kind": "fallback",
+    "fallbackId": "fallback:old-stock:shallows-3"
+  }
+}

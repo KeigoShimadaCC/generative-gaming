@@ -1,0 +1,774 @@
+{
+  "recordType": "eval-report",
+  "reportVersion": "phase-41-eval-report-v1",
+  "evalId": "wave-e-nullfix-fallback-mock",
+  "status": "complete",
+  "startedAt": "2026-06-12T08:36:08.313Z",
+  "completedAt": "2026-06-12T08:36:08.326Z",
+  "config": {
+    "evalId": "wave-e-nullfix-fallback-mock",
+    "rootDir": "runs/evals",
+    "n": 1,
+    "maxCalls": 1,
+    "cells": [
+      {
+        "persona": "hoarder",
+        "band": "shallows",
+        "depth": 3
+      }
+    ]
+  },
+  "provider": {
+    "mode": "mock",
+    "modelId": "director:mock"
+  },
+  "bank": {
+    "version": "persona-bank:d2132458d87a",
+    "fixtures": [
+      {
+        "persona": "hoarder",
+        "seed": "persona-bank-1",
+        "relativePath": "tests/eval-bank/hoarder-persona-bank-1.ndjson"
+      },
+      {
+        "persona": "hoarder",
+        "seed": "persona-bank-2",
+        "relativePath": "tests/eval-bank/hoarder-persona-bank-2.ndjson"
+      },
+      {
+        "persona": "hoarder",
+        "seed": "persona-bank-3",
+        "relativePath": "tests/eval-bank/hoarder-persona-bank-3.ndjson"
+      }
+    ]
+  },
+  "git": {
+    "rev": "81f1b9fa8b2ec3c9184d3eb60a71658d6f578ccc"
+  },
+  "calls": {
+    "attempted": 1,
+    "completed": 1,
+    "cap": 1
+  },
+  "cells": [
+    {
+      "cellId": "shallows:hoarder",
+      "persona": "hoarder",
+      "band": "shallows",
+      "depth": 3,
+      "generationRunIds": [
+        "wave-e-nullfix-fallback-mock-shallows-hoarder-1"
+      ],
+      "bankSeeds": [
+        "persona-bank-1"
+      ],
+      "scores": {
+        "recordType": "eval-scores",
+        "metricVersion": "phase-40b-core-v1",
+        "recordCount": 1,
+        "generations": [
+          {
+            "runId": "wave-e-nullfix-fallback-mock-shallows-hoarder-1",
+            "depth": 3,
+            "band": "shallows",
+            "attemptCount": 1,
+            "validity": false,
+            "solvability": false,
+            "servedWithoutFallback": false,
+            "repairCount": 0,
+            "fallback": true,
+            "latencyMs": 5,
+            "tokens": null,
+            "gate2": {
+              "recorded": false,
+              "passed": false,
+              "blockingCodes": []
+            },
+            "advisoryFlags": {
+              "hpRetentionRecorded": false,
+              "hpRetentionAdvisory": false,
+              "hpRetentionPassed": null,
+              "advisoryCodes": [],
+              "failedAdvisoryCodes": []
+            },
+            "bandAccuracy": null
+          }
+        ],
+        "summary": {
+          "rates": {
+            "validity": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            },
+            "solvability": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            },
+            "servedWithoutFallback": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            },
+            "fallback": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "bandAccuracy": {
+              "count": 0,
+              "passed": 0,
+              "percent": 0
+            }
+          },
+          "latencyMs": {
+            "count": 1,
+            "min": 5,
+            "p50": 5,
+            "avg": 5,
+            "max": 5
+          },
+          "repairDistribution": {
+            "zero": 1,
+            "one": 0,
+            "two": 0,
+            "threeOrMore": 0,
+            "byRepairCount": [
+              {
+                "repairCount": 0,
+                "count": 1
+              }
+            ]
+          },
+          "tokens": {
+            "recordCountWithTokens": 0,
+            "totals": null,
+            "averagePerRecordWithTokens": null
+          },
+          "byBand": {
+            "shallows": {
+              "band": "shallows",
+              "count": 1,
+              "rates": {
+                "validity": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 1,
+                "min": 5,
+                "p50": 5,
+                "avg": 5,
+                "max": 5
+              },
+              "repairDistribution": {
+                "zero": 1,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": [
+                  {
+                    "repairCount": 0,
+                    "count": 1
+                  }
+                ]
+              },
+              "tokens": {
+                "recordCountWithTokens": 0,
+                "totals": null,
+                "averagePerRecordWithTokens": null
+              }
+            },
+            "middle": {
+              "band": "middle",
+              "count": 0,
+              "rates": {
+                "validity": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 0,
+                "min": 0,
+                "p50": 0,
+                "avg": 0,
+                "max": 0
+              },
+              "repairDistribution": {
+                "zero": 0,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": []
+              },
+              "tokens": {
+                "recordCountWithTokens": 0,
+                "totals": null,
+                "averagePerRecordWithTokens": null
+              }
+            },
+            "lowest": {
+              "band": "lowest",
+              "count": 0,
+              "rates": {
+                "validity": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 0,
+                "min": 0,
+                "p50": 0,
+                "avg": 0,
+                "max": 0
+              },
+              "repairDistribution": {
+                "zero": 0,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": []
+              },
+              "tokens": {
+                "recordCountWithTokens": 0,
+                "totals": null,
+                "averagePerRecordWithTokens": null
+              }
+            }
+          }
+        },
+        "comparability": {
+          "segmentId": "shallows:hoarder"
+        }
+      },
+      "thesis": {
+        "generations": [
+          {
+            "generationIndex": 0,
+            "novelty": {
+              "scored": false,
+              "reason": "fallback"
+            },
+            "responsiveness": {
+              "scored": false,
+              "reason": "fallback"
+            }
+          }
+        ],
+        "summary": {
+          "novelty": {
+            "averageScore": 0,
+            "nearDuplicateCount": 0,
+            "sampleCount": 0
+          },
+          "responsiveness": {
+            "samePersonaHitRate": 0,
+            "crossPersonaHitRate": 0,
+            "sampleCount": 0
+          },
+          "detectorProposal": [
+            {
+              "id": "hoarder_item_density",
+              "persona": "hoarder",
+              "description": "Floor offers above-minimum item count or multiple coin pickups."
+            },
+            {
+              "id": "hoarder_thief_pressure",
+              "persona": "hoarder",
+              "description": "Roster includes a thief behavior enemy."
+            },
+            {
+              "id": "hoarder_inventory_narration",
+              "persona": "hoarder",
+              "description": "Narration references hoarding or carrying burden.",
+              "uncertain": true
+            },
+            {
+              "id": "pacifist_open_routes",
+              "persona": "pacifist",
+              "description": "Layout flavor or room span suggests alternate routes (open/halls or wide room span)."
+            },
+            {
+              "id": "pacifist_soft_threats",
+              "persona": "pacifist",
+              "description": "Few enemies are placed near the entrance; more keep-range/flee behaviors."
+            },
+            {
+              "id": "pacifist_caution_narration",
+              "persona": "pacifist",
+              "description": "Narration acknowledges caution or non-violence."
+            },
+            {
+              "id": "speedrunner_compact_floor",
+              "persona": "speedrunner",
+              "description": "Compact room span or open/halls flavor for fast routing."
+            },
+            {
+              "id": "speedrunner_near_entrance_loot",
+              "persona": "speedrunner",
+              "description": "High-value entities placed near entrance for grab-and-go."
+            },
+            {
+              "id": "speedrunner_pace_narration",
+              "persona": "speedrunner",
+              "description": "Narration references stairs, exits, or urgency.",
+              "uncertain": true
+            },
+            {
+              "id": "completionist_npc_present",
+              "persona": "completionist",
+              "description": "At least one NPC is authored on the floor."
+            },
+            {
+              "id": "completionist_quest_present",
+              "persona": "completionist",
+              "description": "A quest hook is present."
+            },
+            {
+              "id": "completionist_rich_callbacks",
+              "persona": "completionist",
+              "description": "Multiple narration observations or callback tags."
+            },
+            {
+              "id": "chaos_behavior_diversity",
+              "persona": "chaos",
+              "description": "Three or more distinct enemy behavior kinds.",
+              "uncertain": true
+            },
+            {
+              "id": "chaos_trap_variety",
+              "persona": "chaos",
+              "description": "Multiple traps or mixed trap/item effect verbs.",
+              "uncertain": true
+            },
+            {
+              "id": "chaos_mixed_origins",
+              "persona": "chaos",
+              "description": "Origin tag summary shows mixed made/old_stock/kept content.",
+              "uncertain": true
+            },
+            {
+              "id": "chaos_varied_engagement",
+              "persona": "chaos",
+              "description": "Trace shows mixed fight/avoid patterns and manifest offers diverse threats.",
+              "uncertain": true
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "overall": {
+    "recordType": "eval-scores",
+    "metricVersion": "phase-40b-core-v1",
+    "recordCount": 1,
+    "generations": [
+      {
+        "runId": "wave-e-nullfix-fallback-mock-shallows-hoarder-1",
+        "depth": 3,
+        "band": "shallows",
+        "attemptCount": 1,
+        "validity": false,
+        "solvability": false,
+        "servedWithoutFallback": false,
+        "repairCount": 0,
+        "fallback": true,
+        "latencyMs": 5,
+        "tokens": null,
+        "gate2": {
+          "recorded": false,
+          "passed": false,
+          "blockingCodes": []
+        },
+        "advisoryFlags": {
+          "hpRetentionRecorded": false,
+          "hpRetentionAdvisory": false,
+          "hpRetentionPassed": null,
+          "advisoryCodes": [],
+          "failedAdvisoryCodes": []
+        },
+        "bandAccuracy": null
+      }
+    ],
+    "summary": {
+      "rates": {
+        "validity": {
+          "count": 1,
+          "passed": 0,
+          "percent": 0
+        },
+        "solvability": {
+          "count": 1,
+          "passed": 0,
+          "percent": 0
+        },
+        "servedWithoutFallback": {
+          "count": 1,
+          "passed": 0,
+          "percent": 0
+        },
+        "fallback": {
+          "count": 1,
+          "passed": 1,
+          "percent": 100
+        },
+        "bandAccuracy": {
+          "count": 0,
+          "passed": 0,
+          "percent": 0
+        }
+      },
+      "latencyMs": {
+        "count": 1,
+        "min": 5,
+        "p50": 5,
+        "avg": 5,
+        "max": 5
+      },
+      "repairDistribution": {
+        "zero": 1,
+        "one": 0,
+        "two": 0,
+        "threeOrMore": 0,
+        "byRepairCount": [
+          {
+            "repairCount": 0,
+            "count": 1
+          }
+        ]
+      },
+      "tokens": {
+        "recordCountWithTokens": 0,
+        "totals": null,
+        "averagePerRecordWithTokens": null
+      },
+      "byBand": {
+        "shallows": {
+          "band": "shallows",
+          "count": 1,
+          "rates": {
+            "validity": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            },
+            "solvability": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            },
+            "servedWithoutFallback": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            },
+            "fallback": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "bandAccuracy": {
+              "count": 0,
+              "passed": 0,
+              "percent": 0
+            }
+          },
+          "latencyMs": {
+            "count": 1,
+            "min": 5,
+            "p50": 5,
+            "avg": 5,
+            "max": 5
+          },
+          "repairDistribution": {
+            "zero": 1,
+            "one": 0,
+            "two": 0,
+            "threeOrMore": 0,
+            "byRepairCount": [
+              {
+                "repairCount": 0,
+                "count": 1
+              }
+            ]
+          },
+          "tokens": {
+            "recordCountWithTokens": 0,
+            "totals": null,
+            "averagePerRecordWithTokens": null
+          }
+        },
+        "middle": {
+          "band": "middle",
+          "count": 0,
+          "rates": {
+            "validity": {
+              "count": 0,
+              "passed": 0,
+              "percent": 0
+            },
+            "solvability": {
+              "count": 0,
+              "passed": 0,
+              "percent": 0
+            },
+            "servedWithoutFallback": {
+              "count": 0,
+              "passed": 0,
+              "percent": 0
+            },
+            "fallback": {
+              "count": 0,
+              "passed": 0,
+              "percent": 0
+            },
+            "bandAccuracy": {
+              "count": 0,
+              "passed": 0,
+              "percent": 0
+            }
+          },
+          "latencyMs": {
+            "count": 0,
+            "min": 0,
+            "p50": 0,
+            "avg": 0,
+            "max": 0
+          },
+          "repairDistribution": {
+            "zero": 0,
+            "one": 0,
+            "two": 0,
+            "threeOrMore": 0,
+            "byRepairCount": []
+          },
+          "tokens": {
+            "recordCountWithTokens": 0,
+            "totals": null,
+            "averagePerRecordWithTokens": null
+          }
+        },
+        "lowest": {
+          "band": "lowest",
+          "count": 0,
+          "rates": {
+            "validity": {
+              "count": 0,
+              "passed": 0,
+              "percent": 0
+            },
+            "solvability": {
+              "count": 0,
+              "passed": 0,
+              "percent": 0
+            },
+            "servedWithoutFallback": {
+              "count": 0,
+              "passed": 0,
+              "percent": 0
+            },
+            "fallback": {
+              "count": 0,
+              "passed": 0,
+              "percent": 0
+            },
+            "bandAccuracy": {
+              "count": 0,
+              "passed": 0,
+              "percent": 0
+            }
+          },
+          "latencyMs": {
+            "count": 0,
+            "min": 0,
+            "p50": 0,
+            "avg": 0,
+            "max": 0
+          },
+          "repairDistribution": {
+            "zero": 0,
+            "one": 0,
+            "two": 0,
+            "threeOrMore": 0,
+            "byRepairCount": []
+          },
+          "tokens": {
+            "recordCountWithTokens": 0,
+            "totals": null,
+            "averagePerRecordWithTokens": null
+          }
+        }
+      }
+    },
+    "comparability": {
+      "candidateId": "wave-e-nullfix-fallback-mock"
+    }
+  },
+  "thesis": {
+    "novelty": {
+      "averageScore": 0,
+      "nearDuplicateCount": 0,
+      "sampleCount": 0
+    },
+    "responsiveness": {
+      "samePersonaHitRate": 0,
+      "crossPersonaHitRate": 0,
+      "sampleCount": 0
+    },
+    "detectorProposal": [
+      {
+        "id": "hoarder_item_density",
+        "persona": "hoarder",
+        "description": "Floor offers above-minimum item count or multiple coin pickups."
+      },
+      {
+        "id": "hoarder_thief_pressure",
+        "persona": "hoarder",
+        "description": "Roster includes a thief behavior enemy."
+      },
+      {
+        "id": "hoarder_inventory_narration",
+        "persona": "hoarder",
+        "description": "Narration references hoarding or carrying burden.",
+        "uncertain": true
+      },
+      {
+        "id": "pacifist_open_routes",
+        "persona": "pacifist",
+        "description": "Layout flavor or room span suggests alternate routes (open/halls or wide room span)."
+      },
+      {
+        "id": "pacifist_soft_threats",
+        "persona": "pacifist",
+        "description": "Few enemies are placed near the entrance; more keep-range/flee behaviors."
+      },
+      {
+        "id": "pacifist_caution_narration",
+        "persona": "pacifist",
+        "description": "Narration acknowledges caution or non-violence."
+      },
+      {
+        "id": "speedrunner_compact_floor",
+        "persona": "speedrunner",
+        "description": "Compact room span or open/halls flavor for fast routing."
+      },
+      {
+        "id": "speedrunner_near_entrance_loot",
+        "persona": "speedrunner",
+        "description": "High-value entities placed near entrance for grab-and-go."
+      },
+      {
+        "id": "speedrunner_pace_narration",
+        "persona": "speedrunner",
+        "description": "Narration references stairs, exits, or urgency.",
+        "uncertain": true
+      },
+      {
+        "id": "completionist_npc_present",
+        "persona": "completionist",
+        "description": "At least one NPC is authored on the floor."
+      },
+      {
+        "id": "completionist_quest_present",
+        "persona": "completionist",
+        "description": "A quest hook is present."
+      },
+      {
+        "id": "completionist_rich_callbacks",
+        "persona": "completionist",
+        "description": "Multiple narration observations or callback tags."
+      },
+      {
+        "id": "chaos_behavior_diversity",
+        "persona": "chaos",
+        "description": "Three or more distinct enemy behavior kinds.",
+        "uncertain": true
+      },
+      {
+        "id": "chaos_trap_variety",
+        "persona": "chaos",
+        "description": "Multiple traps or mixed trap/item effect verbs.",
+        "uncertain": true
+      },
+      {
+        "id": "chaos_mixed_origins",
+        "persona": "chaos",
+        "description": "Origin tag summary shows mixed made/old_stock/kept content.",
+        "uncertain": true
+      },
+      {
+        "id": "chaos_varied_engagement",
+        "persona": "chaos",
+        "description": "Trace shows mixed fight/avoid patterns and manifest offers diverse threats.",
+        "uncertain": true
+      }
+    ]
+  }
+}

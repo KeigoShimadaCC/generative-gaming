@@ -1,0 +1,14 @@
+{
+  "_comment": "PR mock-smoke regression tolerances. Quality rates use zero slack; latency uses zero for deterministic mock provider.",
+  "default": {
+    "percent": 0,
+    "ms": 50
+  },
+  "validity": { "percent": 0 },
+  "solvability": { "percent": 0 },
+  "servedWithoutFallback": { "percent": 0 },
+  "fallback": { "percent": 0 },
+  "bandAccuracy": { "percent": 0 },
+  "latency.avg": { "ms": 0 },
+  "latency.p50": { "ms": 0 }
+}
