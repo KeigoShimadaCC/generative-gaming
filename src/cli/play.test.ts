@@ -16,10 +16,12 @@ import {
   DEFAULT_DEV_SEED,
   parsePlayArgs,
 } from "./input-util.js";
+import { traceRunId } from "../harness/trace/recorder.js";
 import {
   createStringOutput,
   formatRunSummary,
   keyToDirection,
+  PLAY_HINT_BAR,
   runPlay,
 } from "./play.js";
 
@@ -65,10 +67,41 @@ describe("cli play", () => {
     expect(rendered).toContain("KEYMAP");
     expect(rendered).toMatch(/moved|wait|pickup|cannot pickup|entered d2|descend/i);
     expect(rendered).toContain("=== RUN SUMMARY ===");
+    expect(rendered).toContain(PLAY_HINT_BAR);
     expect(result.summary.depth).toBeGreaterThanOrEqual(1);
     expect(result.tracePath).toMatch(/trace\.ndjson$/);
+    expect(result.tracePath).toBe(
+      `runs/${traceRunId(FIXTURE_SEED, CREATED_AT)}/trace.ndjson`,
+    );
     expect(fs.read(result.tracePath ?? "")).toContain('"recordType":"header"');
+  });
 
+  it("uses unique trace runIds for repeated same-seed sessions", async () => {
+    const fs = new MemoryTraceFs();
+    const seed = FIXTURE_SEED;
+    const createdAtA = "2026-06-12T12:00:00.000Z";
+    const createdAtB = "2026-06-12T12:00:01.000Z";
+
+    const first = await runPlay({
+      seed,
+      input: createScriptedInputSource("\u001b"),
+      traceFs: fs,
+      createdAt: createdAtA,
+      interactive: false,
+    });
+    const second = await runPlay({
+      seed,
+      input: createScriptedInputSource("\u001b"),
+      traceFs: fs,
+      createdAt: createdAtB,
+      interactive: false,
+    });
+
+    expect(first.tracePath).toBe(`runs/${traceRunId(seed, createdAtA)}/trace.ndjson`);
+    expect(second.tracePath).toBe(`runs/${traceRunId(seed, createdAtB)}/trace.ndjson`);
+    expect(first.tracePath).not.toBe(second.tracePath);
+    expect(fs.read(first.tracePath ?? "")).toContain('"recordType":"header"');
+    expect(fs.read(second.tracePath ?? "")).toContain('"recordType":"header"');
   });
 
   it("aborts cleanly with Esc and reports ABORTED", async () => {

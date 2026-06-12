@@ -54,6 +54,7 @@ import { createFallbackFloorContentProvider } from "../harness/fallback-provider
 import {
   createFileTraceWriter,
   record,
+  traceRunId,
   type RecordedSession,
   type TraceContentRef,
   type TraceFsAdapter,
@@ -78,6 +79,9 @@ export const FALLBACK_CONTENT_REF = {
 } as const satisfies TraceContentRef;
 
 const LOG_LINES = 6;
+
+export const PLAY_HINT_BAR =
+  "arrows move · g get · i inv · q quests · x inspect · . wait · > down · ? help · Esc quit";
 
 export type PlayOutput = {
   readonly write: (line: string) => void;
@@ -296,7 +300,7 @@ const createSession = (options: {
     modelId: "none",
     contentRef: FALLBACK_CONTENT_REF,
     writer: createFileTraceWriter({
-      runId: `run-${options.seed}`,
+      runId: traceRunId(options.seed, options.createdAt),
       rootDir: options.traceRootDir,
       ...(options.traceFs === undefined ? {} : { fs: options.traceFs }),
     }),
@@ -391,7 +395,7 @@ const renderFrame = (
     sections.push(...logLines);
   }
 
-  sections.push("", renderHudLine(state));
+  sections.push("", renderHudLine(state), PLAY_HINT_BAR);
   return sections.join("\n");
 };
 
@@ -416,7 +420,7 @@ const renderContextPanel = (state: GameState, mode: UiMode): string => {
     case "throw_direction":
       return `Throw direction? (arrows / WASD / hjkl, Esc cancel)`;
     case "play":
-      return "(press ? for keys)";
+      return "(exploring)";
   }
 };
 

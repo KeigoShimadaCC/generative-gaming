@@ -86,7 +86,7 @@ Use [docs/demo-script.md](./docs/demo-script.md) for exact keys, expected outcom
 
 | Command | What it does |
 |---|---|
-| `pnpm run play -- --seed <name>` | Play in the terminal, fully offline (one seed per run; traces are append-only) |
+| `pnpm run play` | Play in the terminal, fully offline (`-- --seed <name>` to name a run) |
 | `PORT=3001 pnpm run dev` | Browser game; ambient Director if `codex login` is active |
 | `pnpm run simulate -- --policy balanced --seed s1` | A bot plays a full run headlessly |
 | `pnpm run simulate -- --policy balanced --seed s1 --director ambient` | A bot plays on live AI-generated floors |

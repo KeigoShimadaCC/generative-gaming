@@ -143,3 +143,6 @@ timestamp	label	agent	model	effort	seconds	input_tokens	output_tokens	total_toke
 2026-06-12T14:15:47Z	phase5960-polish	codex	default	default	30	36123	1179	37302	0
 2026-06-12T14:17:14Z	phase5960-polish-r2	codex	default	default	678	6309753	28672	6338425	0
 2026-06-12T14:30:41Z	phase61-close	codex	default	default	728	5725804	34334	5760138	0
+2026-06-12T14:50:15Z	full-plan-audit	codex	default	default	309	0	0	0	137
+2026-06-12T14:55:24Z	full-plan-audit-r2	codex	default	default	640	6818286	29408	6847694	0
+2026-06-12T15:05:43Z	play-polish	cursor	composer-2.5	default	63	NA	NA	NA	0

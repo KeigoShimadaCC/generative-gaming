@@ -1,0 +1,7 @@
+Done. Report is at [runs/analysis/plan-audit/report.md](/Users/keigoshimada/Documents/generative-gaming/runs/analysis/plan-audit/report.md).
+
+Summary: 73 plans audited; 49 fulfilled, 10 fulfilled-as-amended, 5 human-pending, 9 gaps. Main gaps are current CI failures/timeouts, missing CI/e2e evidence, one failing diary component config, and missing red-path CI smoke evidence.
+
+Verification included targeted milestone, golden, determinism, Director/eval, and app component suites plus current GitHub Actions status/logs. No commit made.
+
+Actual time: about 55m vs 45m.
