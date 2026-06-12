@@ -5,13 +5,16 @@ import {
   attackEnemy,
   descendIfAvailable,
   fallbackAction,
-  moveTowardHoard,
+  isFinalFloor,
   moveTowardNearestEnemy,
   moveTowardStairs,
   pickupIfAvailable,
+  pursueHoardOnFinalFloor,
   takeHoardIfAvailable,
+  useEquipmentUpgrade,
   useHealingItem,
-  weakestEnemy,
+  useThrowableAgainstEnemy,
+  weakestEnemy
 } from "./helpers.js";
 
 export const aggressivePolicy: BotPolicy = {
@@ -21,17 +24,35 @@ export const aggressivePolicy: BotPolicy = {
   decide: (view) => {
     const adjacent = adjacentEnemies(view);
 
+    if (isFinalFloor(view)) {
+      return (
+        takeHoardIfAvailable(view) ??
+        (view.player.hp.ratio < 0.5 ? useHealingItem(view, true) : null) ??
+        useThrowableAgainstEnemy(
+          view,
+          adjacent.length > 0 ? adjacent : view.visible.enemies
+        ) ??
+        attackEnemy(view, weakestEnemy(adjacent)) ??
+        pursueHoardOnFinalFloor(view, 600) ??
+        abortIfFloorBudgetExceeded(view, 200) ??
+        fallbackAction(view)
+      );
+    }
+
     return (
-      takeHoardIfAvailable(view) ??
-      (view.player.hp.ratio <= 0.22 ? useHealingItem(view, true) : null) ??
+      (view.player.hp.ratio < 0.5 ? useHealingItem(view, true) : null) ??
+      useEquipmentUpgrade(view) ??
+      useThrowableAgainstEnemy(
+        view,
+        adjacent.length > 0 ? adjacent : view.visible.enemies
+      ) ??
       attackEnemy(view, weakestEnemy(adjacent)) ??
       pickupIfAvailable(view) ??
       (view.floor.turn < 72 ? moveTowardNearestEnemy(view, 14) : null) ??
       abortIfFloorBudgetExceeded(view, 100) ??
       descendIfAvailable(view) ??
-      moveTowardHoard(view) ??
       moveTowardStairs(view) ??
       fallbackAction(view)
     );
-  },
+  }
 };

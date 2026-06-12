@@ -52,11 +52,12 @@ export const createBotStateView = (
   const knowledge = floorKnowledge(state);
   const rememberedFeatures =
     options.memory?.knownFeaturesByDepth.get(state.run.depth) ?? [];
+  const inspectableFeatures = readInspectableFeatures(state, fog);
   const visibleFeatures = mergeFeatures([
     ...rememberedFeatures,
-    ...readInspectableFeatures(state, fog),
+    ...inspectableFeatures,
   ]);
-  const availableActions = availableRunActions(state, visibleFeatures);
+  const availableActions = availableRunActions(state, inspectableFeatures);
   const inventory = state.player.inventory
     .filter((slot): slot is PlayerItemStack => slot !== null)
     .map((stack) => itemViewFromStack(state, stack, null));
@@ -244,12 +245,12 @@ export const updateBotMemory = (
 
 const availableRunActions = (
   state: GameState,
-  knownFeatures: readonly BotKnownFeature[],
+  liveFeatures: readonly BotKnownFeature[],
 ): readonly RunAction[] => {
   const actions: RunAction[] = [...getAvailableActions(state)];
 
   if (
-    knownFeatures.some(
+    liveFeatures.some(
       (feature) =>
         feature.kind === "hoard" &&
         feature.depth === state.run.depth &&
