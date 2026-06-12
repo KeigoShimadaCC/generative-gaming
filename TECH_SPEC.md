@@ -112,10 +112,17 @@ Rules:
 
 ## 6. AI / Director Stack
 
-- **Provider seam: Vercel AI SDK** (`generateObject`/structured output) as the
-  abstraction over providers. Swapping models is a config + eval run, not a refactor
-  (NORTH_STAR §8). Direct provider SDKs are allowed only inside the seam if the AI
-  SDK blocks a needed capability.
+- **Provider seam with two adapter classes** (swapping is config + eval run, not
+  a refactor — NORTH_STAR §8):
+  1. **Ambient-CLI adapter (default for dev/demo):** shells out to a locally
+     authenticated coding CLI (`codex exec`, ambient ChatGPT login — effectively
+     $0 marginal cost) with a JSON-demanding prompt; no provider-side schema
+     enforcement — Gate 0 + the repair loop are the structured-output guarantee.
+     Latency hides behind the prefetch window by design.
+  2. **API adapter (Vercel AI SDK `generateObject`)** when keys are present;
+     provider-side schema acceptance applies only to this path.
+  Direct provider SDKs are allowed only inside the seam if the AI SDK blocks a
+  needed capability.
 - **Default models**: a frontier model for the Director (quality-critical, low call
   volume — one call per floor), a cheap/fast model for LLM-judge gates and bot
   players. Exact ids live in config, never in code, and are chosen by eval results.

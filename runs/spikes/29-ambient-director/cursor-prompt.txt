@@ -1,0 +1,1 @@
+Judge the tone fit of this one-floor Director concept for Everdeep in exactly one JSON object: "A shallow-floor dungeon notices a cautious hoarder and answers with damp dead ends, small skittish enemies, and useful food placed just beyond mildly risky paths." Return only {"verdict":"go"|"no-go","toneFit":0-100,"reason":"100 words or fewer"}. No prose, no markdown fences.

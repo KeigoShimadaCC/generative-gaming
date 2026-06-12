@@ -1,0 +1,14 @@
+Completed the spike and stopped with no commit.
+
+Findings are in [findings.md](/Users/keigoshimada/Documents/generative-gaming/runs/spikes/29-ambient-director/findings.md).
+
+Verdict: **NO-GO for direct `codex exec` as the ambient Director path from this worker sandbox**. All 5 Codex attempts failed before inference with empty stdout, so JSON parse was `0/5` and Zod validation was `0/5`. The failure was launch/environmental: `failed to initialize in-process app-server client: Operation not permitted`.
+
+Cursor judge probe also failed before inference: `EPERM` writing `/Users/keigoshimada/.cursor/cli-config.json.tmp`, parse `0/1`.
+
+Verification run:
+- `node runs/spikes/29-ambient-director/run-probe.mjs` completed and captured all raw outputs under `runs/spikes/29-ambient-director/attempts/`.
+- `pnpm exec vitest run --config runs/spikes/29-ambient-director/vitest.config.ts --reporter verbose` passed: 1 test file, 1 test.
+- Wrote `validation-results.json` and `run-summary.json`.
+
+Scope note: I did not edit `PROGRESS.md` or `ENVIRONMENT.md` because the brief owned only `runs/spikes/29-ambient-director/**`.

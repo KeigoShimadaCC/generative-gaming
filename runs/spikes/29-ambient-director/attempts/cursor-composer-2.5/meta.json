@@ -1,0 +1,17 @@
+{
+  "label": "cursor-composer-2.5",
+  "command": "cursor-agent",
+  "args": [
+    "--print",
+    "--model",
+    "composer-2.5",
+    "Judge the tone fit of this one-floor Director concept for Everdeep in exactly one JSON object: \"A shallow-floor dungeon notices a cautious hoarder and answers with damp dead ends, small skittish enemies, and useful food placed just beyond mildly risky paths.\" Return only {\"verdict\":\"go\"|\"no-go\",\"toneFit\":0-100,\"reason\":\"100 words or fewer\"}. No prose, no markdown fences.\n"
+  ],
+  "startedAt": "2026-06-12T02:46:03.329Z",
+  "endedAt": "2026-06-12T02:46:05.586Z",
+  "latencyMs": 2257.294166,
+  "exitCode": 1,
+  "signal": null,
+  "timedOut": false,
+  "error": null
+}

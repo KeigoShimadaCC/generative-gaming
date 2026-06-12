@@ -1,0 +1,1 @@
+Error: EPERM: operation not permitted, open '/Users/keigoshimada/.cursor/cli-config.json.tmp'

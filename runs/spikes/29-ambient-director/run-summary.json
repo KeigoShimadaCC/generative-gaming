@@ -1,0 +1,56 @@
+[
+  {
+    "label": "codex-1",
+    "latencyMs": 227.165333,
+    "exitCode": 1,
+    "signal": null,
+    "timedOut": false,
+    "stdoutBytes": 0,
+    "stderrBytes": 230
+  },
+  {
+    "label": "codex-2",
+    "latencyMs": 229.642417,
+    "exitCode": 1,
+    "signal": null,
+    "timedOut": false,
+    "stdoutBytes": 0,
+    "stderrBytes": 230
+  },
+  {
+    "label": "codex-3",
+    "latencyMs": 225.657959,
+    "exitCode": 1,
+    "signal": null,
+    "timedOut": false,
+    "stdoutBytes": 0,
+    "stderrBytes": 230
+  },
+  {
+    "label": "codex-4",
+    "latencyMs": 227.084084,
+    "exitCode": 1,
+    "signal": null,
+    "timedOut": false,
+    "stdoutBytes": 0,
+    "stderrBytes": 230
+  },
+  {
+    "label": "codex-5",
+    "latencyMs": 223.664666,
+    "exitCode": 1,
+    "signal": null,
+    "timedOut": false,
+    "stdoutBytes": 0,
+    "stderrBytes": 230
+  },
+  {
+    "label": "cursor-composer-2.5",
+    "latencyMs": 2257.294166,
+    "exitCode": 1,
+    "signal": null,
+    "timedOut": false,
+    "stdoutBytes": 0,
+    "stderrBytes": 94
+  }
+]
