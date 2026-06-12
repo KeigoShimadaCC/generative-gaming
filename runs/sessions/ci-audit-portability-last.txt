@@ -1,0 +1,20 @@
+Implemented the portability fix with no commit.
+
+Changed:
+- [determinism-audit.test.ts](/Users/keigoshimada/Documents/generative-gaming/tests/determinism-audit/determinism-audit.test.ts): replaced `rg` subprocess greps with pure Node `src/engine` walking + JS regex matching.
+- [replay-hash-spot.ts](/Users/keigoshimada/Documents/generative-gaming/tests/determinism-audit/replay-hash-spot.ts): exported `replayHashSpot()` so the test no longer shells out through `npx tsx`.
+
+Verification:
+```text
+pnpm exec vitest run --config tests/determinism-audit/vitest.config.ts --reporter verbose
+exit code 0
+1 file passed, 3 tests passed
+```
+
+Requested grep:
+```text
+rg -n "child_process|execFileSync|spawnSync|spawn\(|exec\(|npx|tsx|\brg\b|ripgrep|external-binary" tests/determinism-audit/determinism-audit.test.ts
+exit code 1, no matches
+```
+
+I also checked the helper with the same pattern: no matches. Scoped ESLint exited 0 but reported these test files are ignored by the current ESLint config. No environment discoveries; actual time spent was about 8 minutes.

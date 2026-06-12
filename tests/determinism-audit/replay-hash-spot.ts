@@ -1,4 +1,6 @@
 import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+import { pathToFileURL } from "node:url";
 
 import "../../src/engine/effects/core.js";
 import "../../src/engine/effects/spatial.js";
@@ -18,32 +20,38 @@ import {
   resolveContentProvider,
 } from "../../src/harness/replay/index.js";
 
-const tracePath = process.argv[2];
-if (tracePath === undefined) {
-  throw new Error("usage: replay-hash-spot.ts <trace.ndjson>");
-}
+const DEFAULT_TRACE_PATH = "tests/golden/persona-balanced.ndjson";
 
-const trace = parseTraceNdjson(readFileSync(tracePath, "utf8"));
-const provider = resolveContentProvider(trace.header.contentRef);
-const started = startRun(trace.header.seed, provider);
-if (!started.ok) {
-  throw new Error(started.error.message);
-}
-
-let state = started.state;
-for (const record of trace.turns) {
-  const stepped = stepRun(state, record.action, provider);
-  if (!stepped.ok) {
-    throw new Error(stepped.error.message);
+export const replayHashSpot = (tracePath = DEFAULT_TRACE_PATH): string => {
+  const trace = parseTraceNdjson(readFileSync(tracePath, "utf8"));
+  const provider = resolveContentProvider(trace.header.contentRef);
+  const started = startRun(trace.header.seed, provider);
+  if (!started.ok) {
+    throw new Error(started.error.message);
   }
-  state = stepped.state;
-}
 
-process.stdout.write(
-  `${JSON.stringify({
+  let state = started.state;
+  for (const record of trace.turns) {
+    const stepped = stepRun(state, record.action, provider);
+    if (!stepped.ok) {
+      throw new Error(stepped.error.message);
+    }
+    state = stepped.state;
+  }
+
+  return JSON.stringify({
     tracePath,
     turns: state.run.turn,
     terminalStatus: state.run.terminalStatus,
     hash: computeStateHash(state),
-  })}\n`,
-);
+  });
+};
+
+const isCliEntry = (): boolean => {
+  const entry = process.argv[1];
+  return entry !== undefined && import.meta.url === pathToFileURL(resolve(entry)).href;
+};
+
+if (isCliEntry()) {
+  process.stdout.write(`${replayHashSpot(process.argv[2])}\n`);
+}

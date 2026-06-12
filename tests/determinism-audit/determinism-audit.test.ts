@@ -1,13 +1,15 @@
-import { execFileSync, spawnSync } from "node:child_process";
-import { tmpdir } from "node:os";
+import { readdirSync, readFileSync } from "node:fs";
+import { join, relative, sep } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
+import { replayHashSpot } from "./replay-hash-spot.js";
+
 const ENGINE_PATH = "src/engine";
 const TIME_AND_RANDOM_PATTERN =
-  "Math\\.random|Date\\.now|new Date\\(|performance\\.now";
+  /Math\.random|Date\.now|new Date\(|performance\.now/;
 const OBJECT_ITERATION_PATTERN =
-  "Object\\.(keys|values|entries)|for \\(const .* in ";
+  /Object\.(keys|values|entries)|for \(const .* in /;
 
 const KNOWN_ENGINE_OBJECT_ITERATION_SITES = [
   "src/engine/npc/barter.ts:280:  for (const entity of Object.values(state.entities)) {",
@@ -48,21 +50,18 @@ const KNOWN_ENGINE_OBJECT_ITERATION_SITES = [
 
 describe("determinism audit", () => {
   it("keeps engine code free of ambient time and process random APIs", () => {
-    expect(rgLines([TIME_AND_RANDOM_PATTERN, ENGINE_PATH])).toEqual([]);
+    expect(engineLinesMatching(TIME_AND_RANDOM_PATTERN)).toEqual([]);
   });
 
   it("pins engine object-iteration sites for deterministic review", () => {
     expect(
-      rgLines([
-        "-g",
-        "!*.test.ts",
-        OBJECT_ITERATION_PATTERN,
-        ENGINE_PATH,
-      ]).toSorted(),
+      engineLinesMatching(OBJECT_ITERATION_PATTERN, {
+        includeTestFiles: false,
+      }).toSorted(),
     ).toEqual([...KNOWN_ENGINE_OBJECT_ITERATION_SITES].toSorted());
   });
 
-  it("replays a golden trace in two fresh processes to the same final hash", () => {
+  it("replays a golden trace twice to the same final hash", () => {
     const first = replayHashSpot();
     const second = replayHashSpot();
 
@@ -73,38 +72,52 @@ describe("determinism audit", () => {
   }, 120_000);
 });
 
-const rgLines = (args: readonly string[]): readonly string[] => {
-  const result = spawnSync("rg", ["-n", ...args], {
-    encoding: "utf8",
-  });
+const engineLinesMatching = (
+  pattern: RegExp,
+  options: { readonly includeTestFiles?: boolean } = {},
+): readonly string[] =>
+  engineFiles({ includeTestFiles: options.includeTestFiles ?? true }).flatMap(
+    (path) => {
+      const relativePath = toPosixPath(relative(process.cwd(), path));
+      return readFileSync(path, "utf8")
+        .split("\n")
+        .flatMap((rawLine, index) => {
+          const line = rawLine.endsWith("\r") ? rawLine.slice(0, -1) : rawLine;
+          return pattern.test(line)
+            ? [`${relativePath}:${index + 1}:${line}`]
+            : [];
+        });
+    },
+  );
 
-  if (result.status === 1) {
-    return [];
-  }
-  if (result.status !== 0) {
-    throw new Error(result.stderr.trim() || `rg exited ${result.status}`);
-  }
+const engineFiles = (options: {
+  readonly includeTestFiles: boolean;
+}): readonly string[] => {
+  const root = join(process.cwd(), ENGINE_PATH);
+  const files: string[] = [];
+  const visit = (directory: string): void => {
+    for (const entry of readdirSync(directory, { withFileTypes: true }).toSorted(
+      (left, right) => left.name.localeCompare(right.name),
+    )) {
+      const path = join(directory, entry.name);
+      if (entry.isDirectory()) {
+        visit(path);
+        continue;
+      }
+      if (!entry.isFile()) {
+        continue;
+      }
 
-  return result.stdout.trim().length === 0
-    ? []
-    : result.stdout.trim().split("\n");
+      const relativePath = toPosixPath(relative(process.cwd(), path));
+      if (!options.includeTestFiles && relativePath.endsWith(".test.ts")) {
+        continue;
+      }
+      files.push(path);
+    }
+  };
+
+  visit(root);
+  return files;
 };
 
-const replayHashSpot = (): string =>
-  execFileSync(
-    "npx",
-    [
-      "--yes",
-      "tsx",
-      "tests/determinism-audit/replay-hash-spot.ts",
-      "tests/golden/persona-balanced.ndjson",
-    ],
-    {
-      encoding: "utf8",
-      env: {
-        ...process.env,
-        npm_config_cache:
-          process.env.npm_config_cache ?? `${tmpdir()}/gg-npm-cache`,
-      },
-    },
-  ).trim();
+const toPosixPath = (path: string): string => path.split(sep).join("/");
