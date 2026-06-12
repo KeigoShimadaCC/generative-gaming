@@ -196,7 +196,9 @@ describe("step triggers", () => {
       },
     ]);
 
-    expect(playerMoved.state.player.hp.current).toBe(16);
+    expect(playerMoved.state.player.hp.current).toBe(
+      config.playerCharacter.stats.hp.start - 4
+    );
     expect(
       playerMoved.events.some((event) => event.type === "trap_step_triggered"),
     ).toBe(true);
@@ -254,6 +256,7 @@ describe("placement lethality", () => {
     const lethalShallows = trapDefinition("lethal-shallows", [
       damage(bounds.effectVocabulary.verbs.damage.amount.max),
       burn(bounds.statusVocabulary.durationTurns.burn.max),
+      damage(3),
     ]);
     expect(placementLethalityCheck(lethalShallows, "shallows").ok).toBe(false);
     expect(

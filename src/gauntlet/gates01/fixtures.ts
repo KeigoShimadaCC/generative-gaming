@@ -134,6 +134,9 @@ const lethalTrap = {
         status: "burn",
         duration: bounds.statusVocabulary.durationTurns.burn.max,
       }),
+      makeEffectFixture("damage", "damage", {
+        amount: 3,
+      }),
     ],
     makeTriggerFixture("step", "step", {}),
     validSelfTargetingFixture,

@@ -87,7 +87,7 @@ describe("XP and level growth", () => {
         2 * config.playerCharacter.stats.hp.growthPerLevel,
       attack:
         config.playerCharacter.stats.baseAttack.start +
-        config.playerCharacter.stats.baseAttack.growthAmount,
+        2 * config.playerCharacter.stats.baseAttack.growthAmount,
       defense: config.playerCharacter.stats.baseDefense.start
     });
     expect(derivePlayerBaseStats(4)).toEqual({
@@ -96,7 +96,7 @@ describe("XP and level growth", () => {
         3 * config.playerCharacter.stats.hp.growthPerLevel,
       attack:
         config.playerCharacter.stats.baseAttack.start +
-        config.playerCharacter.stats.baseAttack.growthAmount,
+        3 * config.playerCharacter.stats.baseAttack.growthAmount,
       defense:
         config.playerCharacter.stats.baseDefense.start +
         config.playerCharacter.stats.baseDefense.growthAmount
@@ -104,18 +104,23 @@ describe("XP and level growth", () => {
   });
 
   it("increases current HP by the max-HP delta on level-up", () => {
-    const damaged = withPlayerHp(createInitialState("xp-hp-delta"), 5, 20);
+    const maxHpBefore = config.playerCharacter.stats.hp.start;
+    const damaged = withPlayerHp(
+      createInitialState("xp-hp-delta"),
+      5,
+      maxHpBefore
+    );
     const result = applyXp(damaged, xpToNextLevel(1));
 
     expect(result.state.player.hp).toEqual({
       current: 5 + config.playerCharacter.stats.hp.growthPerLevel,
-      max: 20 + config.playerCharacter.stats.hp.growthPerLevel
+      max: maxHpBefore + config.playerCharacter.stats.hp.growthPerLevel
     });
     expect(eventOfType(result.events, "level_up").data).toMatchObject({
       currentHpBefore: 5,
-      currentHpAfter: 9,
-      maxHpBefore: 20,
-      maxHpAfter: 24,
+      currentHpAfter: 5 + config.playerCharacter.stats.hp.growthPerLevel,
+      maxHpBefore,
+      maxHpAfter: maxHpBefore + config.playerCharacter.stats.hp.growthPerLevel,
       hud: {
         pulse: true
       }

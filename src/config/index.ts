@@ -96,7 +96,7 @@ export const config = deepFreeze({
   playerCharacter: {
     stats: {
       hp: {
-        start: 20, // GAME_DESIGN §4
+        start: 24, // PHASE-58 balance target: shallows deaths rare
         growthPerLevel: 4 // GAME_DESIGN §4
       },
       level: {
@@ -104,9 +104,9 @@ export const config = deepFreeze({
         xpThresholdPolicy: "steadyKillsPerLevel" // GAME_DESIGN §4
       },
       baseAttack: {
-        start: 2, // GAME_DESIGN §4
+        start: 3, // PHASE-58 balance target: 3-5 hit at-band kills
         growthAmount: 1, // GAME_DESIGN §4
-        growthEveryLevels: 2 // GAME_DESIGN §4
+        growthEveryLevels: 1 // PHASE-58 balance target: offense keeps pace by band
       },
       baseDefense: {
         start: 0, // GAME_DESIGN §4
@@ -139,7 +139,7 @@ export const config = deepFreeze({
       armor: 1, // GAME_DESIGN §4
       charms: 2 // GAME_DESIGN §4
     },
-    xpToNextLevelFactor: 8 // GAME_DESIGN §4
+    xpToNextLevelFactor: 6 // PHASE-58 balance target: leveling keeps pace by band
   },
   combatMath: {
     minimumDamage: 1, // GAME_DESIGN §5

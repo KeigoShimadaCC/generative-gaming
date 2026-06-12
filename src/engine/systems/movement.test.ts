@@ -87,7 +87,7 @@ describe("movement resolver", () => {
 
     const result = bumpUntilEnemyDies(state, "east");
 
-    expect(result.hits).toBeGreaterThanOrEqual(2);
+    expect(result.hits).toBeGreaterThanOrEqual(1);
     expect(result.state.entities["enemy#1"]).toBeUndefined();
     expect(result.state.player.position).toEqual({ x: 0, y: 0 });
   });
@@ -106,7 +106,7 @@ describe("movement resolver", () => {
 
     const result = bumpUntilEnemyDies(state, "northeast");
 
-    expect(result.hits).toBeGreaterThanOrEqual(2);
+    expect(result.hits).toBeGreaterThanOrEqual(1);
     expect(result.state.entities["enemy#1"]).toBeUndefined();
     expect(result.state.player.position).toEqual({ x: 0, y: 1 });
   });

@@ -9,7 +9,7 @@
       "hp": 4,
       "attack": 2,
       "defense": 0,
-      "xpYield": 2
+      "xpYield": 3
     },
     "behaviors": [
       {
@@ -40,7 +40,7 @@
       "hp": 5,
       "attack": 3,
       "defense": 0,
-      "xpYield": 3
+      "xpYield": 4
     },
     "behaviors": [
       {
@@ -86,7 +86,7 @@
       "hp": 5,
       "attack": 2,
       "defense": 0,
-      "xpYield": 2
+      "xpYield": 3
     },
     "behaviors": [
       {
@@ -134,7 +134,7 @@
       "hp": 4,
       "attack": 2,
       "defense": 0,
-      "xpYield": 2
+      "xpYield": 3
     },
     "behaviors": [
       {
@@ -182,7 +182,7 @@
       "hp": 6,
       "attack": 3,
       "defense": 1,
-      "xpYield": 3
+      "xpYield": 4
     },
     "behaviors": [
       {
@@ -230,7 +230,7 @@
       "hp": 8,
       "attack": 3,
       "defense": 1,
-      "xpYield": 4
+      "xpYield": 5
     },
     "behaviors": [
       {
@@ -329,7 +329,7 @@
       "hp": 6,
       "attack": 3,
       "defense": 0,
-      "xpYield": 3
+      "xpYield": 4
     },
     "behaviors": [
       {
@@ -379,7 +379,7 @@
       "hp": 8,
       "attack": 3,
       "defense": 1,
-      "xpYield": 5
+      "xpYield": 6
     },
     "behaviors": [
       {
@@ -474,7 +474,7 @@
       "hp": 12,
       "attack": 5,
       "defense": 1,
-      "xpYield": 5
+      "xpYield": 8
     },
     "behaviors": [
       {
@@ -502,10 +502,10 @@
     "origin": "old_stock",
     "stats": {
       "band": "middle",
-      "hp": 14,
-      "attack": 6,
+      "hp": 12,
+      "attack": 5,
       "defense": 1,
-      "xpYield": 6
+      "xpYield": 8
     },
     "behaviors": [
       {
@@ -601,10 +601,10 @@
     "origin": "old_stock",
     "stats": {
       "band": "middle",
-      "hp": 16,
-      "attack": 7,
-      "defense": 2,
-      "xpYield": 7
+      "hp": 12,
+      "attack": 5,
+      "defense": 1,
+      "xpYield": 8
     },
     "behaviors": [
       {
@@ -649,9 +649,9 @@
     "origin": "old_stock",
     "stats": {
       "band": "middle",
-      "hp": 18,
+      "hp": 12,
       "attack": 5,
-      "defense": 2,
+      "defense": 1,
       "xpYield": 8
     },
     "behaviors": [
@@ -796,9 +796,9 @@
     "origin": "old_stock",
     "stats": {
       "band": "middle",
-      "hp": 20,
-      "attack": 7,
-      "defense": 3,
+      "hp": 12,
+      "attack": 5,
+      "defense": 1,
       "xpYield": 8
     },
     "behaviors": [
@@ -845,10 +845,10 @@
     "origin": "old_stock",
     "stats": {
       "band": "middle",
-      "hp": 22,
-      "attack": 8,
-      "defense": 2,
-      "xpYield": 10
+      "hp": 12,
+      "attack": 5,
+      "defense": 1,
+      "xpYield": 8
     },
     "behaviors": [
       {
@@ -942,10 +942,10 @@
     "origin": "old_stock",
     "stats": {
       "band": "middle",
-      "hp": 24,
-      "attack": 8,
-      "defense": 4,
-      "xpYield": 11
+      "hp": 14,
+      "attack": 6,
+      "defense": 2,
+      "xpYield": 10
     },
     "behaviors": [
       {
@@ -1006,8 +1006,8 @@
     "origin": "old_stock",
     "stats": {
       "band": "lowest",
-      "hp": 28,
-      "attack": 10,
+      "hp": 24,
+      "attack": 9,
       "defense": 3,
       "xpYield": 14
     },
@@ -1054,9 +1054,9 @@
     "origin": "old_stock",
     "stats": {
       "band": "lowest",
-      "hp": 32,
-      "attack": 11,
-      "defense": 4,
+      "hp": 24,
+      "attack": 9,
+      "defense": 3,
       "xpYield": 16
     },
     "behaviors": [
@@ -1195,10 +1195,10 @@
     "origin": "old_stock",
     "stats": {
       "band": "lowest",
-      "hp": 40,
-      "attack": 13,
-      "defense": 5,
-      "xpYield": 18
+      "hp": 24,
+      "attack": 9,
+      "defense": 3,
+      "xpYield": 16
     },
     "behaviors": [
       {

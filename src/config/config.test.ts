@@ -46,15 +46,17 @@ describe("game config", () => {
     }
   });
 
-  it("transcribes doc values verbatim", () => {
+  it("transcribes fixed design values and tuned balance levers", () => {
     expect(config.runStructure.depthFloors).toBe(12);
     expect(config.runStructure.perFloorSoftCapTurns).toBe(800);
     expect(config.runStructure.floorGeometry.shallows.grid.width).toBe(32);
     expect(config.runStructure.floorGeometry.middle.rooms.max).toBe(9);
-    expect(config.playerCharacter.stats.hp.start).toBe(20);
+    expect(config.playerCharacter.stats.hp.start).toBe(24);
+    expect(config.playerCharacter.stats.baseAttack.start).toBe(3);
+    expect(config.playerCharacter.stats.baseAttack.growthEveryLevels).toBe(1);
     expect(config.playerCharacter.stats.fullness.decay.everyTurns).toBe(10);
     expect(config.playerCharacter.naturalRegen.everyTurns).toBe(6);
-    expect(config.playerCharacter.xpToNextLevelFactor).toBe(8);
+    expect(config.playerCharacter.xpToNextLevelFactor).toBe(6);
     expect(config.combatMath.hitChancePercent).toBe(95);
     expect(config.combatMath.varianceMultiplier.min).toBe(0.85);
     expect(config.statusMagnitudes.poisonHpPerTurn).toBe(-1);

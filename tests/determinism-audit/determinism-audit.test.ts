@@ -67,7 +67,7 @@ describe("determinism audit", () => {
 
     expect(first).toBe(second);
     expect(JSON.parse(first) as { terminalStatus: string }).toMatchObject({
-      terminalStatus: "LOSS",
+      terminalStatus: "ABORTED",
     });
   }, 120_000);
 });

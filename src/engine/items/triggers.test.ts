@@ -262,7 +262,9 @@ describe("item trigger dispatch", () => {
 
     const result = expectSuccess(dispatchStepTrigger(state, "trap#1"));
 
-    expect(result.state.player.hp.current).toBe(18);
+    expect(result.state.player.hp.current).toBe(
+      config.playerCharacter.stats.hp.start - 2
+    );
     expect(eventOfType(result.events, "trap_step_triggered").data).toMatchObject({
       trapId: "trap#1",
       definitionId: "needle-trap",

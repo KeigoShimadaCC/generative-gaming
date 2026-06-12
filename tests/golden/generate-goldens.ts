@@ -1,5 +1,11 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 
+import "../../src/engine/items/triggers.js";
+import "../../src/engine/npc/dialogue.js";
+import "../../src/engine/systems/combat.js";
+import "../../src/engine/systems/inventory.js";
+import "../../src/engine/systems/movement.js";
+
 import { validShallowsManifestFixture } from "../../src/schemas/fixtures/manifest.js";
 import type {
   FloorManifest,
@@ -95,8 +101,8 @@ const main = async (): Promise<void> => {
   generated.push(
     writeScriptedFallbackTrace(
       "band-lowest.ndjson",
-      "golden-band-lowest",
-      [...actionsToDepth("golden-band-lowest", 10), { kind: "wait" }],
+      "golden-band-lowest-v2-3",
+      [...actionsToDepth("golden-band-lowest-v2-3", 10), { kind: "wait" }],
     ),
   );
 

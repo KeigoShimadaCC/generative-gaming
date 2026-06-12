@@ -81,7 +81,7 @@ describe("combat formula and stat derivation", () => {
     };
 
     expect(deriveCombatStats(state, "player")).toEqual({
-      attack: 7,
+      attack: 10,
       defense: 6,
     });
   });

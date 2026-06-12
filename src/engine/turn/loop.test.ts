@@ -71,7 +71,7 @@ describe("turn loop public contract", () => {
 
   it("renders a minimal deterministic debug string", () => {
     expect(render(start("render-contract"))).toBe(
-      "run=run#render-contract turn=0 depth=1 status=ACTIVE player=(0,0) hp=20/20",
+      `run=run#render-contract turn=0 depth=1 status=ACTIVE player=(0,0) hp=${config.playerCharacter.stats.hp.start}/${config.playerCharacter.stats.hp.start}`,
     );
   });
 
