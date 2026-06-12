@@ -400,6 +400,80 @@ What we would change in each artifact, ranked by pain saved:
 17. Schedule the human checkpoints as a standing checklist file from day one
     and append to it continuously, instead of assembling it at the end.
 
+## 13. The Full-Clear Campaign (post-completion, 2026-06-13)
+
+The user asked one question — "have you tried clearing the full game in a
+browser?" — and the answer invalidated more of the system than any gate had.
+24 campaign runs found **11 real defects** behind 543 green tests, then
+cleared the game twice (seeds fullclear-1 in 2.9m, fullclear-4 in 2.5m).
+
+**Findings, in causal order:**
+
+1. **Behavioral truth beats gate truth, again and harder.** The reference
+   runs shipped 4 defects through green gates; this campaign found 11 —
+   including combat that had NEVER resolved on bump (movement emitted
+   `attack_intent` with unchanged state), which silently invalidated every
+   balance number in the project. A game where bots take zero damage passed
+   530+ tests for days. The campaign is now the only acceptance evidence we
+   trust for "the game works."
+
+2. **Call-site opt-in is a bug factory.** Enemy-behavior hooks were opt-in
+   per stepRun call site; the same omission recurred in THREE places (CLI
+   simulate, Gate 2 simulator, web session). The fix that ended the class
+   was inverting the API: hooks default-on, explicit `hooks:"none"` escape
+   hatch. Rule: when forgetting a parameter produces silently-wrong (not
+   broken) behavior, the default must be the correct behavior.
+
+3. **Don't hand-roll a second brain.** Browser bot v1–v3 reimplemented
+   policy logic by parsing the DOM and died to bugs the CLI policies had
+   already solved. v4 bridged the real policy over a dev-only serialized
+   state window and immediately played at CLI strength. Reuse the brain;
+   bridge the senses.
+
+4. **Diagnostics-on-abort paid for themselves every single round.** The
+   screenshot + page HTML + console + bot-state JSON dumps (added in v3)
+   turned every failure into a one-read diagnosis: the CSS-module selector
+   miss, the arrival one-shot timer, the spawn-budget throw, the L3-at-d7
+   under-leveling, the drop-instead-of-use inventory loop. Cost: ~30 lines.
+
+5. **Artifact persistence must never be control flow.** A fixed
+   seed+createdAt in the web transport made every second session collide
+   with append-only generation records (10,953 errors in one run), and the
+   same error class later failed verification as unhandled prefetch
+   rejections. Evidence writes should no-op on conflict, never throw into
+   game logic.
+
+6. **Fixture content is not the calibrated game.** Balance was calibrated
+   on the fallback pack; the e2e transport served hand-made fixtures (2
+   enemies, no heals) — so the browser game was a different, unwinnable
+   game (L3 with shallows gear at depth 7). DIRECTOR=fallback mode aligned
+   the campaign with the calibrated content. Rule: behavioral tests must
+   run the same content distribution you tuned.
+
+7. **The campaign found a real player-facing engine bug nothing else
+   could:** opening a door rebuilt floor geometry and wiped
+   decorativeFeatures — players lose the Hoard marker. Three layers of
+   tests missed it; the CLI driver had silently worked around it; only the
+   un-workaround-ed browser path exposed it.
+
+8. **Stall protocol matured:** 4 codex no-event stalls (101-byte jsonl
+   signature); kill+relaunch recovered 2; a double-stall on one brief was
+   rerouted to Cursor per the two-stall rule and delivered. Lanes are
+   redundant, not ranked.
+
+9. **Kill process GROUPS.** Killing a Playwright parent orphaned its
+   `next dev` webServer at 117% CPU, which silently wedged the NEXT run on
+   the occupied port for 25 minutes. Campaign runners now get pkill by
+   pattern, then verify zero survivors.
+
+10. **The balance chain was an investigation, not a tuning pass:** 0-WIN →
+    extreme-lever STOP (proved levers insufficient) → turn-ledger (proved
+    1-vs-5 exchange) → kit-usage audit (bots never equipped) → calibration
+    v2 with player offense as a lever (29/45 WIN) → take_hoard legality fix.
+    Each STOP was correct and each escalation carried numbers. Budget
+    real calibration as a multi-task chain with diagnosis gates, never as
+    one "tune the numbers" task.
+
 ## Append Log
 
 | Date | Finding added | Trigger |
@@ -409,3 +483,4 @@ What we would change in each artifact, ranked by pain saved:
 | 2026-06-12 | §10: watchdog mechanization, concurrency root cause, ambient backend, timebox salvage, advisory-mode staging, prompt forensics | Waves C–D close |
 | 2026-06-12 | §11: lane outage, live watchdog gap, orchestrator shell bugs, merge-gate erosion + events barrel, constitutional refusal, e2e's UX catch, honest no-ops, ops duties | Waves E–H close |
 | 2026-06-12 | §12: the next-time blueprint (17 items across harness, AGENTS, CLAUDE, NORTH_STAR/planning, process) | human request at project close |
+| 2026-06-13 | §13: full-clear campaign — 24 runs, 11 defects behind green gates, two browser full clears; default-on APIs, policy-bridge pattern, diagnostics-on-abort, artifact-write hygiene, fixture-vs-calibrated content, process-group kills | human request ("clear the full game") |
