@@ -1,0 +1,52 @@
+STOP condition hit: v2 tuning improved survival, but acceptance remains unreachable inside the brief’s owned levers because the 45-run batch still had `0 WIN`.
+
+Changed:
+- Player/config tuning in [src/config/index.ts](/Users/keigoshimada/Documents/generative-gaming/src/config/index.ts:98): HP `20→24`, base ATK `2→3`, ATK growth every `2→1` levels, XP factor `8→6`.
+- Content tuning in [content/fallback/enemies.json](/Users/keigoshimada/Documents/generative-gaming/content/fallback/enemies.json:468), [content/fallback/items.json](/Users/keigoshimada/Documents/generative-gaming/content/fallback/items.json:452), and fallback floor loot files.
+- Tests/goldens updated for the new stats, including Gate 2 fixture drift and regenerated golden traces.
+- Closed the task in [PROGRESS.md](/Users/keigoshimada/Documents/generative-gaming/PROGRESS.md:30) with validation evidence and a backlog item for the Hoard blocker.
+
+Paper math before → after:
+- Brief case before: player ATK 2 vs HP 12 / DEF 1 dealt `1` damage per turn, needed `12` hits, and died in `5`.
+- Middle after: expected L4 player ATK `6` naked / `10` with hook spear; common middle enemies HP `12` / ATK `5` / DEF `1` die in `3` naked or `2` geared hits, kill no-armor player in about `9` hits.
+- Lowest after: expected L7 player ATK `9` naked / `13` geared; lowest enemies HP `24` / ATK `9` / DEF `3` die in `4` naked or `3` geared hits, kill no-armor player in about `7` hits.
+- Added heal coverage: shallows `12`, middle `14`, lowest `18` per tuned floor band.
+
+Main number changes:
+- Hook spear ATK bonus `3→4`; sour cordial heal `6→12`; bitter purge gained heal `14`; added deep cordial heal `18`.
+- Shallow XP increased across the pack: `2→3`, `3→4`, `4→5`, `5→6` depending enemy.
+- Middle enemies mostly tuned to `12/5/1 xp8`; brood keeper `24/8/4 xp11→14/6/2 xp10`.
+- Lowest enemies tuned from `28/10/3`, `32/11/4`, `40/13/5` down to `24/9/3`; false coffer XP `18→16`.
+
+Batch evidence:
+```text
+before balanced-5: 0 WIN / 1 ABORTED / 4 LOSS
+after balanced-5:  0 WIN / 5 ABORTED / 0 LOSS
+final 45:          0 WIN / 40 ABORTED / 5 LOSS
+```
+
+Final distribution:
+```text
+policy      WIN  ABORTED  LOSS  terminal depths                 d12 illegal Hoard ABORTs
+cautious    0    14       1     d2x2 d5x1 d7x1 d12x11          10
+balanced    0    13       2     d2x2 d5x1 d7x1 d11x1 d12x10    9
+aggressive  0    13       2     d2x2 d5x1 d7x2 d11x1 d12x9     8
+overall     0    40       5     shallow deaths 0, median loss depth 12, d12 Hoard ABORTs 27/27
+```
+
+Verification run:
+- `pnpm run simulate ... --policies balanced --seeds 5 ... /tmp/balance-v2-before-balanced5.json` → exit 0.
+- `pnpm run simulate ... --policies balanced --seeds 5 ... /tmp/balance-v2-iter1-balanced5.json` → exit 0.
+- `pnpm run simulate ... --policies cautious,balanced,aggressive --seeds 15 ... /tmp/balance-v2-final-45.json` → exit 0.
+- `pnpm exec vitest run src/gauntlet --reporter verbose` → exit 0, 45 passed / 1 skipped.
+- `npx --yes tsx tests/golden/generate-goldens.ts` → exit 0.
+- Golden suite → exit 0, 9 passed.
+- Determinism audit → exit 0, 3 passed.
+- `pnpm run check` → exit 0, typecheck pass, lint pass, 541 passed / 2 skipped.
+
+Scope notes:
+- No commits or branches, per brief.
+- I did not edit forbidden `src/harness/bots/**`, `src/schemas/vocab/statuses.ts`, `e2e/**`, `GAME_DESIGN.md`, Gate 2 thresholds, or the combat formula.
+- Residual blocker: depth-12 runs issue `take_hoard` while not standing on the Hoard. That is bot/action-availability work and was forbidden here.
+- Environment discoveries: none new.
+- Actual time: ~90m vs 50m estimate, within 100m timebox.

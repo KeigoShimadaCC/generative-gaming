@@ -1,0 +1,48 @@
+**STOP: NEEDS ORCHESTRATOR DECISION**
+
+I hit the brief’s STOP condition. Even with the allowed levers pushed to extremes, the real 45-run batch still produced **0 WIN**, so GAME_DESIGN §11 is not reachable within this brief’s constraints.
+
+**Baseline**
+Command:
+`npm_config_cache=/private/tmp/gg-npm-cache pnpm run simulate -- --batch --policies cautious,balanced,aggressive --seeds 15 --max-turns 8000 --out /tmp/balance-baseline.json` → exit 0
+
+Result: **0 WIN / 6 ABORTED / 39 LOSS**
+By policy:
+- cautious: 0 WIN / 4 ABORTED / 11 LOSS
+- balanced: 0 WIN / 1 ABORTED / 14 LOSS
+- aggressive: 0 WIN / 1 ABORTED / 14 LOSS
+
+Diagnosis:
+- Deaths by depth: d2=4, d3=6, d4=2, d5=19, d6=7, d7=1
+- Baseline damage: shallows 632 enemy hits / 1411 damage; middle 166 hits / 826 damage
+- Loss profile: 30 single-attacker death floors, 9 multi-attacker death floors
+- Dominant pressure: repeated 1v1 melee attrition, especially middle attack-5 enemies; heals were too sparse, only 78 total healing across baseline traces.
+
+**Extreme Allowed-Lever Batch**
+Applied minimum legal enemy stats, stronger/more frequent healing, near-cap HP, and one middle/lowest threat per tuned floor.
+
+Command:
+`npm_config_cache=/private/tmp/gg-npm-cache pnpm run simulate -- --batch --policies cautious,balanced,aggressive --seeds 15 --max-turns 8000 --out /tmp/balance-extreme-full.json` → exit 0
+
+Result: **0 WIN / 13 ABORTED / 32 LOSS**
+By policy:
+- cautious: 0 WIN / 5 ABORTED / 10 LOSS
+- balanced: 0 WIN / 4 ABORTED / 11 LOSS
+- aggressive: 0 WIN / 4 ABORTED / 11 LOSS
+
+This still fails the objective before Gate 2/check/determinism acceptance commands are meaningful, so I stopped per brief.
+
+**Changed Numbers In Worktree**
+- Player HP: start `20 -> 80`, growth `4 -> 10`
+- Sour cordial heal: `6 -> 12`
+- Bitter purge: added heal `10`
+- Shallow enemies lowered: beetle, cricket, fungal crawler to legal minima where above min
+- Middle enemies lowered to legal minima where above min
+- Lowest enemies lowered to legal minima where above min
+- Middle floors 5–9 reduced to one enemy each
+- Lowest floors 10–12 reduced to one enemy each
+- Spore warden burn was converted to direct damage `2` because surviving paths exposed an out-of-scope runtime status serialization crash.
+
+I updated [PROGRESS.md](/Users/keigoshimada/Documents/generative-gaming/PROGRESS.md) with the blocked status and backlog notes. No commits or branches were made, per brief. I did not touch `GAME_DESIGN.md`, Gate 2 thresholds, `e2e/**`, or `src/director`; the existing dirty `src/director/apply/materialize.test.ts` was already present and left alone.
+
+Actual time: ~35 min vs 45 min estimate.

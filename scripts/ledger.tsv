@@ -162,3 +162,7 @@ timestamp	label	agent	model	effort	seconds	input_tokens	output_tokens	total_toke
 2026-06-12T17:55:21Z	descend-throw-fallback	codex	default	default	658	8227456	31514	8258970	0
 2026-06-12T18:14:22Z	fullclear-bot-survival	codex	default	default	656	7939734	27554	7967288	0
 2026-06-12T18:30:09Z	sim-hooks-default	codex	default	default	1257	13640264	38584	13678848	0
+2026-06-12T18:55:46Z	balance-calibration	codex	default	default	826	8920805	33964	8954769	0
+2026-06-12T19:11:31Z	combat-math-investigation	codex	default	default	431	4430345	22459	4452804	0
+2026-06-12T19:20:27Z	status-duration-serialization	codex	default	default	282	1805374	11136	1816510	0
+2026-06-12T19:30:18Z	balance-calibration-v2	codex	default	default	1157	13276199	48373	13324572	0

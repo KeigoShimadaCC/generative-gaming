@@ -1,0 +1,55 @@
+Implemented the runtime status-duration split and left the authoring schema intact. No commits or branches created.
+
+**What Changed**
+- Reuse was in [serialize.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/state/serialize.ts:166) and [serialize.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/state/serialize.ts:190), where runtime `player.statuses` / entity `statuses` were validated with the authoring status schema during state serialization/hash.
+- Added `RuntimeStatusApplicationSchema` in [statuses.ts](/Users/keigoshimada/Documents/generative-gaming/src/schemas/vocab/statuses.ts:42): duration is nonnegative and still capped by the per-status max.
+- Authoring bounds are intact: `StatusApplicationSchema` still enforces per-status minimums at [statuses.ts](/Users/keigoshimada/Documents/generative-gaming/src/schemas/vocab/statuses.ts:17) and [statuses.ts](/Users/keigoshimada/Documents/generative-gaming/src/schemas/vocab/statuses.ts:25). Director/effect authoring still uses `StatusApplicationSchema` at [effects.ts](/Users/keigoshimada/Documents/generative-gaming/src/schemas/vocab/effects.ts:40).
+- Added regressions in [vocab.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/schemas/vocab/vocab.test.ts:73) and [recorder.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/harness/trace/recorder.test.ts:81).
+
+**Verification**
+`pnpm run check` → exit 0
+
+```text
+> generative-gaming@0.0.0 check
+> pnpm run typecheck && pnpm run lint && pnpm test
+
+> generative-gaming@0.0.0 typecheck
+> ... tsc --noEmit -p tsconfig.src.json && tsc --noEmit -p tsconfig.next.json
+
+> generative-gaming@0.0.0 lint
+> eslint .
+
+> generative-gaming@0.0.0 test
+> vitest run
+
+Test Files  79 passed (79)
+Tests       539 passed | 2 skipped (541)
+```
+
+Batch repro → exit 0
+
+```text
+policy   | seed        | terminal | depth | turns | kills | hp% | itemUses
+---------|-------------|----------|-------|-------|-------|-----|---------
+balanced | simulate-1  | LOSS     | 6     | 226   | 12    | 0   | 5
+balanced | simulate-2  | LOSS     | 6     | 202   | 9     | 0   | 3
+balanced | simulate-3  | LOSS     | 10    | 467   | 16    | 0   | 55
+balanced | simulate-4  | LOSS     | 11    | 499   | 18    | 0   | 3
+balanced | simulate-5  | ABORTED  | 5     | 317   | 11    | 100 | 2
+balanced | simulate-6  | ABORTED  | 9     | 519   | 15    | 100 | 5
+balanced | simulate-7  | LOSS     | 6     | 207   | 9     | 0   | 3
+balanced | simulate-8  | LOSS     | 6     | 218   | 9     | 0   | 5
+balanced | simulate-9  | LOSS     | 6     | 249   | 9     | 0   | 3
+balanced | simulate-10 | ABORTED  | 2     | 150   | 4     | 100 | 2
+balanced | simulate-11 | LOSS     | 5     | 1048  | 7     | 0   | 2726
+balanced | simulate-12 | LOSS     | 2     | 48    | 3     | 0   | 0
+balanced | simulate-13 | LOSS     | 4     | 118   | 9     | 0   | 3
+balanced | simulate-14 | LOSS     | 6     | 192   | 7     | 0   | 5
+balanced | simulate-15 | LOSS     | 5     | 1048  | 6     | 0   | 2626
+```
+
+Scope deviations: none. I did not touch `src/harness/bots/**`, `e2e/**`, `content/`, or `GAME_DESIGN.md`.  
+Residual risks: none identified for this fix.  
+Out-of-scope discoveries: none.  
+Environment discoveries: none.  
+Actual time: about 4 minutes vs 20 minute estimate / 40 minute timebox.

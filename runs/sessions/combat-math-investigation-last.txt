@@ -1,0 +1,67 @@
+Blocked, not done. I completed the ledger/spec comparison and made the harness kit-usage patch, but stopped before claiming completion because the required after-batch and `pnpm run check` hit an out-of-scope status/schema serialization bug.
+
+**1v1 Ledger**
+Trace: `runs/run-balanced-simulate-1-2026-06-12T19-12-39.515Z/trace.ndjson`, balanced `simulate-1`, depth 5 LOSS. Enemy `enemy#13`: HP 12, ATK 5, DEF 1. Player at exchange: ATK 2, DEF 0.
+
+| Turn | Player HP | Enemy HP | Player action | Dealt | Taken | Result |
+|---|---:|---:|---|---:|---:|---|
+| 166 | 21 | 12 | move east | 0 | 0 | enemy moves |
+| 167 | 21 | 12 | pickup | 0 | 0 | enemy moves adjacent |
+| 168 | 21→16 | 12→11 | attack `enemy#13` | 1 | 5 | hit / hit |
+| 169 | 17→12 | 11→10 | attack `enemy#13` | 1 | 5 | hit / hit |
+| 170 | 12→7 | 10→9 | attack `enemy#13` | 1 | 5 | hit / hit |
+| 171 | 7 | 9 | move northwest | 0 | 0 | enemy follows |
+| 172 | 7 | 9 | move east | 0 | 0 | enemy follows |
+| 173 | 7 | 9 | move east | 0 | 0 | enemy follows |
+| 174 | 7→2 | 9 | move southwest | 0 | 5 | enemy hit |
+| 175 | 2 | 9 | move southwest | 0 | 0 | enemy follows |
+| 176 | 2 | 9 | move south | 0 | 0 | enemy follows |
+| 177 | 2→3 | 9 | move southwest | 0 | 0 | regen before final hit |
+| 178 | 3→0 | 9 | move northeast | 0 | 5 | enemy hit; player dies |
+
+Exchange rate on attack turns: player 1 damage/turn, enemy 5 damage/turn. The player needs ~12 hits; the enemy needs ~5 hits.
+
+**Spec Comparison**
+No engine combat/turn bug found. GAME_DESIGN §5 formula matches [combat.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/systems/combat.ts:190). GAME_DESIGN §3 action economy matches [turn/loop.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/turn/loop.ts:260): every non-terminal player action is followed by every actor, then ticks. Enemy acting after pickup/move/use_item is deliberate spec behavior.
+
+Harness root cause fixed in WIP: policies picked up kit but did not equip gear, balanced/aggressive healed too late, and no policy preferred held throwables. Changes are in [helpers.ts](/Users/keigoshimada/Documents/generative-gaming/src/harness/bots/policies/helpers.ts:39), [balanced.ts](/Users/keigoshimada/Documents/generative-gaming/src/harness/bots/policies/balanced.ts:31), [cautious.ts](/Users/keigoshimada/Documents/generative-gaming/src/harness/bots/policies/cautious.ts:30), [aggressive.ts](/Users/keigoshimada/Documents/generative-gaming/src/harness/bots/policies/aggressive.ts:28), with tests in [bots.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/harness/bots/bots.test.ts:145).
+
+**Before Batch**
+`npm_config_cache=/private/tmp/gg-npm-cache pnpm run simulate -- --batch --policies balanced --seeds 15 --max-turns 8000 --out /tmp/combat-before-balanced15.json` → exit 0
+
+```text
+balanced simulate-1  LOSS    d5 178 kills=9  hp=0   itemUses=1
+balanced simulate-2  LOSS    d6 213 kills=8  hp=0   itemUses=0
+balanced simulate-3  LOSS    d6 228 kills=10 hp=0   itemUses=1
+balanced simulate-4  LOSS    d3 138 kills=8  hp=0   itemUses=0
+balanced simulate-5  LOSS    d4 173 kills=9  hp=0   itemUses=0
+balanced simulate-6  LOSS    d5 192 kills=7  hp=0   itemUses=0
+balanced simulate-7  LOSS    d3 126 kills=5  hp=0   itemUses=1
+balanced simulate-8  LOSS    d5 182 kills=7  hp=0   itemUses=0
+balanced simulate-9  LOSS    d5 160 kills=7  hp=0   itemUses=0
+balanced simulate-10 ABORTED d2 150 kills=4  hp=100 itemUses=1
+balanced simulate-11 LOSS    d3 61  kills=3  hp=0   itemUses=0
+balanced simulate-12 LOSS    d2 48  kills=3  hp=0   itemUses=0
+balanced simulate-13 LOSS    d2 79  kills=5  hp=0   itemUses=1
+balanced simulate-14 LOSS    d5 163 kills=6  hp=0   itemUses=0
+balanced simulate-15 LOSS    d6 302 kills=10 hp=0   itemUses=1
+```
+
+**After Attempt**
+Same command to `/tmp/combat-after-balanced15.json` → exit 1:
+
+```text
+player.statuses[0].duration: burn duration must be at least 2
+```
+
+Focused bot test: `pnpm exec vitest run src/harness/bots/bots.test.ts --reporter verbose` → exit 1. The new kit-usage test passed, but the existing 30-run batch failed on:
+
+```text
+entities.enemy#6.statuses[0].duration: slow duration must be at least 3
+```
+
+`pnpm run check` → exit 1. Typecheck and lint passed; Vitest was 78 files passed, 1 failed, 536 passed / 2 skipped, same slow-duration serialization failure.
+
+Golden suite: exit 0, 9 passed. Determinism audit: exit 0, 3 passed.
+
+Status updated in `PROGRESS.md` as blocked. No commits made per brief. Actual time spent: ~45 min vs 35 min estimate, within 70 min timebox. Environment discoveries: none new; the blocker is the already documented runtime-status serialization issue resurfacing once bots survive/use kit longer.

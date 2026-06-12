@@ -1,0 +1,433 @@
+diff --git a/content/fallback/enemies.json b/content/fallback/enemies.json
+index 09058c90..3a20481f 100644
+--- a/content/fallback/enemies.json
++++ b/content/fallback/enemies.json
+@@ -37,8 +37,8 @@
+     "origin": "old_stock",
+     "stats": {
+       "band": "shallows",
+-      "hp": 5,
+-      "attack": 3,
++      "hp": 4,
++      "attack": 2,
+       "defense": 0,
+       "xpYield": 3
+     },
+@@ -83,7 +83,7 @@
+     "origin": "old_stock",
+     "stats": {
+       "band": "shallows",
+-      "hp": 5,
++      "hp": 4,
+       "attack": 2,
+       "defense": 0,
+       "xpYield": 2
+@@ -179,9 +179,9 @@
+     "origin": "old_stock",
+     "stats": {
+       "band": "shallows",
+-      "hp": 6,
+-      "attack": 3,
+-      "defense": 1,
++      "hp": 4,
++      "attack": 2,
++      "defense": 0,
+       "xpYield": 3
+     },
+     "behaviors": [
+@@ -502,8 +502,8 @@
+     "origin": "old_stock",
+     "stats": {
+       "band": "middle",
+-      "hp": 14,
+-      "attack": 6,
++      "hp": 12,
++      "attack": 5,
+       "defense": 1,
+       "xpYield": 6
+     },
+@@ -601,9 +601,9 @@
+     "origin": "old_stock",
+     "stats": {
+       "band": "middle",
+-      "hp": 16,
+-      "attack": 7,
+-      "defense": 2,
++      "hp": 12,
++      "attack": 5,
++      "defense": 1,
+       "xpYield": 7
+     },
+     "behaviors": [
+@@ -649,9 +649,9 @@
+     "origin": "old_stock",
+     "stats": {
+       "band": "middle",
+-      "hp": 18,
++      "hp": 12,
+       "attack": 5,
+-      "defense": 2,
++      "defense": 1,
+       "xpYield": 8
+     },
+     "behaviors": [
+@@ -694,13 +694,12 @@
+       {
+         "effects": [
+           {
+-            "kind": "apply_status",
+-            "damage": null,
+-            "heal": null,
+-            "applyStatus": {
+-              "status": "burn",
+-              "duration": 2
++            "kind": "damage",
++            "damage": {
++              "amount": 2
+             },
++            "heal": null,
++            "applyStatus": null,
+             "cureStatus": null,
+             "buffStat": null,
+             "nutrition": null,
+@@ -796,9 +795,9 @@
+     "origin": "old_stock",
+     "stats": {
+       "band": "middle",
+-      "hp": 20,
+-      "attack": 7,
+-      "defense": 3,
++      "hp": 12,
++      "attack": 5,
++      "defense": 1,
+       "xpYield": 8
+     },
+     "behaviors": [
+@@ -942,9 +941,9 @@
+     "origin": "old_stock",
+     "stats": {
+       "band": "middle",
+-      "hp": 24,
+-      "attack": 8,
+-      "defense": 4,
++      "hp": 12,
++      "attack": 5,
++      "defense": 1,
+       "xpYield": 11
+     },
+     "behaviors": [
+@@ -1006,8 +1005,8 @@
+     "origin": "old_stock",
+     "stats": {
+       "band": "lowest",
+-      "hp": 28,
+-      "attack": 10,
++      "hp": 24,
++      "attack": 9,
+       "defense": 3,
+       "xpYield": 14
+     },
+@@ -1054,9 +1053,9 @@
+     "origin": "old_stock",
+     "stats": {
+       "band": "lowest",
+-      "hp": 32,
+-      "attack": 11,
+-      "defense": 4,
++      "hp": 24,
++      "attack": 9,
++      "defense": 3,
+       "xpYield": 16
+     },
+     "behaviors": [
+@@ -1195,9 +1194,9 @@
+     "origin": "old_stock",
+     "stats": {
+       "band": "lowest",
+-      "hp": 40,
+-      "attack": 13,
+-      "defense": 5,
++      "hp": 24,
++      "attack": 9,
++      "defense": 3,
+       "xpYield": 18
+     },
+     "behaviors": [
+@@ -1299,4 +1298,4 @@
+       }
+     ]
+   }
+-]
+\ No newline at end of file
++]
+diff --git a/content/fallback/floors/10.json b/content/fallback/floors/10.json
+index f2a79ef1..5a737805 100644
+--- a/content/fallback/floors/10.json
++++ b/content/fallback/floors/10.json
+@@ -2,8 +2,7 @@
+   "depth": 10,
+   "flavor": "halls",
+   "enemyRosterIds": [
+-    "oldstock-stone-lamprey",
+-    "oldstock-deep-rot-congealer"
++    "oldstock-stone-lamprey"
+   ],
+   "itemIds": [
+     "oldstock-ward-chalk",
+@@ -16,4 +15,4 @@
+   ],
+   "npcIds": [],
+   "questId": "oldstock-quest-reach-stairs"
+-}
+\ No newline at end of file
++}
+diff --git a/content/fallback/floors/11.json b/content/fallback/floors/11.json
+index 450efe0e..157eeacf 100644
+--- a/content/fallback/floors/11.json
++++ b/content/fallback/floors/11.json
+@@ -2,8 +2,7 @@
+   "depth": 11,
+   "flavor": "ring",
+   "enemyRosterIds": [
+-    "oldstock-stone-lamprey",
+-    "oldstock-false-coffer-grub"
++    "oldstock-stone-lamprey"
+   ],
+   "itemIds": [
+     "oldstock-ward-chalk",
+@@ -17,4 +16,4 @@
+   ],
+   "npcIds": [],
+   "questId": null
+-}
+\ No newline at end of file
++}
+diff --git a/content/fallback/floors/12.json b/content/fallback/floors/12.json
+index 6a122f30..28c139ed 100644
+--- a/content/fallback/floors/12.json
++++ b/content/fallback/floors/12.json
+@@ -2,8 +2,7 @@
+   "depth": 12,
+   "flavor": "sanctum",
+   "enemyRosterIds": [
+-    "oldstock-stone-lamprey",
+-    "oldstock-deep-rot-congealer"
++    "oldstock-stone-lamprey"
+   ],
+   "itemIds": [
+     "oldstock-damp-talisman",
+@@ -16,4 +15,4 @@
+   ],
+   "npcIds": [],
+   "questId": null
+-}
+\ No newline at end of file
++}
+diff --git a/content/fallback/floors/5.json b/content/fallback/floors/5.json
+index 46a3e696..f787e037 100644
+--- a/content/fallback/floors/5.json
++++ b/content/fallback/floors/5.json
+@@ -2,15 +2,13 @@
+   "depth": 5,
+   "flavor": "open",
+   "enemyRosterIds": [
+-    "oldstock-cave-slug",
+-    "oldstock-drip-leech",
+-    "oldstock-gravel-skitter"
++    "oldstock-cave-slug"
+   ],
+   "itemIds": [
+     "oldstock-cave-moss",
+     "oldstock-hook-spear",
+     "oldstock-cave-moss",
+-    "oldstock-tally-scrap"
++    "oldstock-sour-cordial"
+   ],
+   "trapIds": [
+     "oldstock-spore-mat"
+@@ -19,4 +17,4 @@
+     "oldstock-keeper-tomas"
+   ],
+   "questId": "oldstock-quest-clear-spores"
+-}
+\ No newline at end of file
++}
+diff --git a/content/fallback/floors/6.json b/content/fallback/floors/6.json
+index 56ae572e..1e3c7a5b 100644
+--- a/content/fallback/floors/6.json
++++ b/content/fallback/floors/6.json
+@@ -2,9 +2,7 @@
+   "depth": 6,
+   "flavor": "warren",
+   "enemyRosterIds": [
+-    "oldstock-cave-slug",
+-    "oldstock-drip-leech",
+-    "oldstock-stalagmite-tick"
++    "oldstock-cave-slug"
+   ],
+   "itemIds": [
+     "oldstock-cave-moss",
+@@ -18,4 +16,4 @@
+   ],
+   "npcIds": [],
+   "questId": null
+-}
+\ No newline at end of file
++}
+diff --git a/content/fallback/floors/7.json b/content/fallback/floors/7.json
+index 19b619b4..4c450c0c 100644
+--- a/content/fallback/floors/7.json
++++ b/content/fallback/floors/7.json
+@@ -2,14 +2,12 @@
+   "depth": 7,
+   "flavor": "halls",
+   "enemyRosterIds": [
+-    "oldstock-cave-slug",
+-    "oldstock-drip-leech",
+-    "oldstock-gravel-skitter"
++    "oldstock-cave-slug"
+   ],
+   "itemIds": [
+     "oldstock-cave-moss",
+     "oldstock-piton-line",
+-    "oldstock-wax-seal",
++    "oldstock-sour-cordial",
+     "oldstock-bronze-bell"
+   ],
+   "trapIds": [
+@@ -19,4 +17,4 @@
+     "oldstock-keeper-penn"
+   ],
+   "questId": "oldstock-quest-wax-delivery"
+-}
+\ No newline at end of file
++}
+diff --git a/content/fallback/floors/8.json b/content/fallback/floors/8.json
+index 4f50355b..880767b7 100644
+--- a/content/fallback/floors/8.json
++++ b/content/fallback/floors/8.json
+@@ -2,13 +2,12 @@
+   "depth": 8,
+   "flavor": "ring",
+   "enemyRosterIds": [
+-    "oldstock-spore-warden",
+     "oldstock-cave-slug"
+   ],
+   "itemIds": [
+     "oldstock-cave-moss",
+     "oldstock-bind-wrap",
+-    "oldstock-resin-lamp",
++    "oldstock-sour-cordial",
+     "oldstock-salt-fish"
+   ],
+   "trapIds": [
+@@ -16,4 +15,4 @@
+   ],
+   "npcIds": [],
+   "questId": null
+-}
+\ No newline at end of file
++}
+diff --git a/content/fallback/floors/9.json b/content/fallback/floors/9.json
+index 018d5c13..6f23a892 100644
+--- a/content/fallback/floors/9.json
++++ b/content/fallback/floors/9.json
+@@ -2,14 +2,13 @@
+   "depth": 9,
+   "flavor": "halls",
+   "enemyRosterIds": [
+-    "oldstock-brood-keeper",
+     "oldstock-cave-slug"
+   ],
+   "itemIds": [
+     "oldstock-cave-moss",
+     "oldstock-damp-talisman",
+     "oldstock-cave-moss",
+-    "oldstock-ward-chalk"
++    "oldstock-sour-cordial"
+   ],
+   "trapIds": [
+     "oldstock-tumbling-rock",
+@@ -19,4 +18,4 @@
+     "oldstock-keeper-wren"
+   ],
+   "questId": "oldstock-quest-quiet-crossing"
+-}
+\ No newline at end of file
++}
+diff --git a/content/fallback/items.json b/content/fallback/items.json
+index e28b4427..05663b23 100644
+--- a/content/fallback/items.json
++++ b/content/fallback/items.json
+@@ -467,7 +467,7 @@
+             "kind": "heal",
+             "damage": null,
+             "heal": {
+-              "amount": 6
++              "amount": 12
+             },
+             "applyStatus": null,
+             "cureStatus": null,
+@@ -548,6 +548,27 @@
+             "summon": null,
+             "transform": null,
+             "dig": null
++          },
++          {
++            "kind": "heal",
++            "damage": null,
++            "heal": {
++              "amount": 10
++            },
++            "applyStatus": null,
++            "cureStatus": null,
++            "buffStat": null,
++            "nutrition": null,
++            "teleportSelf": null,
++            "teleportTarget": null,
++            "blink": null,
++            "knockback": null,
++            "reveal": null,
++            "identify": null,
++            "enchant": null,
++            "summon": null,
++            "transform": null,
++            "dig": null
+           }
+         ],
+         "trigger": {
+@@ -1369,4 +1390,4 @@
+     "keyItem": null,
+     "coin": {}
+   }
+-]
+\ No newline at end of file
++]
+diff --git a/src/config/config.test.ts b/src/config/config.test.ts
+index 2a5fdd3f..a79ac313 100644
+--- a/src/config/config.test.ts
++++ b/src/config/config.test.ts
+@@ -51,7 +51,7 @@ describe("game config", () => {
+     expect(config.runStructure.perFloorSoftCapTurns).toBe(800);
+     expect(config.runStructure.floorGeometry.shallows.grid.width).toBe(32);
+     expect(config.runStructure.floorGeometry.middle.rooms.max).toBe(9);
+-    expect(config.playerCharacter.stats.hp.start).toBe(20);
++    expect(config.playerCharacter.stats.hp.start).toBe(80);
+     expect(config.playerCharacter.stats.fullness.decay.everyTurns).toBe(10);
+     expect(config.playerCharacter.naturalRegen.everyTurns).toBe(6);
+     expect(config.playerCharacter.xpToNextLevelFactor).toBe(8);
+diff --git a/src/config/index.ts b/src/config/index.ts
+index dce30f60..fa70c336 100644
+--- a/src/config/index.ts
++++ b/src/config/index.ts
+@@ -96,8 +96,8 @@ export const config = deepFreeze({
+   playerCharacter: {
+     stats: {
+       hp: {
+-        start: 20, // GAME_DESIGN §4
+-        growthPerLevel: 4 // GAME_DESIGN §4
++        start: 80, // GAME_DESIGN §4 [T], PHASE-58 calibrated
++        growthPerLevel: 10 // GAME_DESIGN §4 [T], PHASE-58 calibrated
+       },
+       level: {
+         start: 1, // GAME_DESIGN §4
