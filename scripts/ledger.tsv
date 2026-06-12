@@ -89,3 +89,9 @@ timestamp	label	agent	model	effort	seconds	input_tokens	output_tokens	total_toke
 2026-06-12T03:58:04Z	phase37-artifacts	cursor	composer-2.5	default	359	NA	NA	NA	0
 2026-06-12T03:57:47Z	phase35-materialize	codex	default	default	647	4391637	31239	4422876	0
 2026-06-12T04:10:32Z	phase3537-verify	cursor	composer-2.5	default	250	NA	NA	NA	0
+2026-06-12T04:15:13Z	phase36-repair	codex	default	default	2726	0	0	0	137
+2026-06-12T05:02:08Z	selfwatch-smoke	codex	default	default	6	16747	20	16767	0
+2026-06-12T05:00:56Z	harness-selfwatch	cursor	composer-2.5	default	99	NA	NA	NA	0
+2026-06-12T05:15:40Z	verify-watchdog-smoke	codex	default	default	361	0	0	0	124
+2026-06-12T05:23:58Z	verify-watchdog-smoke-r2	codex	default	default	5	16747	24	16771	0
+2026-06-12T05:12:54Z	phase36-verify	cursor	composer-2.5	default	726	NA	NA	NA	0

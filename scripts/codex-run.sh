@@ -37,11 +37,30 @@ session_dir='runs/sessions'
 jsonl_file="$session_dir/$label.jsonl"
 last_file="$session_dir/$label-last.txt"
 status_file="$session_dir/.$label.status.$$"
+stall_flag="$session_dir/.$label.stall.$$"
 ledger_file='scripts/ledger.tsv'
 agent='codex'
 temp_codex_home=''
+watchdog_pid=''
+pipeline_pid=''
 
 mkdir -p "$session_dir" || exit 1
+
+jsonl_size_bytes() {
+  if [ -f "$1" ]; then
+    wc -c < "$1" | tr -d '[:space:]'
+  else
+    printf '0'
+  fi
+}
+
+stop_stall_watchdog() {
+  if [ -n "$watchdog_pid" ] && kill -0 "$watchdog_pid" 2>/dev/null; then
+    kill "$watchdog_pid" 2>/dev/null
+    wait "$watchdog_pid" 2>/dev/null
+  fi
+  watchdog_pid=''
+}
 
 cleanup_temp_codex_home() {
   if [ -n "$temp_codex_home" ] && [ -d "$temp_codex_home" ]; then
@@ -54,7 +73,12 @@ PY
   fi
 }
 
-trap cleanup_temp_codex_home EXIT
+cleanup_on_exit() {
+  stop_stall_watchdog
+  cleanup_temp_codex_home
+}
+
+trap cleanup_on_exit EXIT
 
 codex_home=${CODEX_HOME:-}
 if [ -z "$codex_home" ] && [ -n "${HOME:-}" ]; then
@@ -68,6 +92,71 @@ if [ -n "$codex_home" ] && [ ! -w "$codex_home" ] && [ -r "$codex_home/auth.json
   chmod 600 "$temp_codex_home/auth.json" || exit 1
   export CODEX_HOME="$temp_codex_home"
 fi
+
+start_stall_watchdog() {
+  local target_pid=$1
+  (
+    grace_secs=60
+    check_secs=10
+    stall_secs=300
+    size_threshold=500
+    last_size=-1
+    unchanged_secs=0
+    size=0
+    pgid=''
+
+    sleep "$grace_secs"
+
+    while kill -0 "$target_pid" 2>/dev/null; do
+      size=$(jsonl_size_bytes "$jsonl_file")
+
+      if [ "$size" -lt "$size_threshold" ]; then
+        if [ "$size" -eq "$last_size" ]; then
+          unchanged_secs=$((unchanged_secs + check_secs))
+        else
+          unchanged_secs=0
+        fi
+        last_size=$size
+      else
+        last_size=$size
+        unchanged_secs=0
+      fi
+
+      if [ "$unchanged_secs" -ge "$stall_secs" ]; then
+        printf 'STALL-DETECTED label=%s\n' "$label" >&2
+        : > "$stall_flag"
+
+        end_seconds=$(date +%s)
+        stall_seconds=$((end_seconds - start_seconds))
+        if [ ! -s "$ledger_file" ]; then
+          printf 'timestamp\tlabel\tagent\tmodel\teffort\tseconds\tinput_tokens\toutput_tokens\ttotal_tokens\texit_code\n' > "$ledger_file"
+        fi
+        printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' \
+          "$timestamp" \
+          "$label" \
+          "$agent" \
+          "$model" \
+          "$effort" \
+          "$stall_seconds" \
+          '0' \
+          '0' \
+          '0' \
+          '124' >> "$ledger_file"
+
+        pgid=$(ps -o pgid= -p "$target_pid" 2>/dev/null | tr -d '[:space:]')
+        if [ -n "$pgid" ]; then
+          kill -TERM -"$pgid" 2>/dev/null || kill -TERM "$target_pid" 2>/dev/null
+        else
+          kill -TERM "$target_pid" 2>/dev/null
+        fi
+        exit 0
+      fi
+
+      sleep "$check_secs"
+    done
+  ) &
+  watchdog_pid=$!
+}
 
 run_codex() {
   if [ "$model" != 'default' ] && [ "$effort" != 'default' ]; then
@@ -100,10 +189,21 @@ start_seconds=$(date +%s)
 {
   run_codex
   printf '%s\n' "$?" > "$status_file"
-} < /dev/null | tee "$jsonl_file"
+} < /dev/null | tee "$jsonl_file" &
+pipeline_pid=$!
+
+start_stall_watchdog "$pipeline_pid"
+
+wait "$pipeline_pid" 2>/dev/null
+stop_stall_watchdog
 
 end_seconds=$(date +%s)
 seconds=$((end_seconds - start_seconds))
+
+if [ -f "$stall_flag" ]; then
+  rm -f "$stall_flag" "$status_file"
+  exit 124
+fi
 
 if [ -f "$status_file" ]; then
   IFS= read -r exit_code < "$status_file"

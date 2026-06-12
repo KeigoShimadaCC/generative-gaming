@@ -45,9 +45,13 @@ tools and must be re-verified by the Phase 01 environment spike; facts marked
   is briefly copied to a temp dir — local-only, deleted on exit.
 - **[verified 2026-06-11, phase 02]** `rm -f` against `/private/tmp` paths is
   policy-rejected in-sandbox; use Node/Python fs cleanup.
-- **[inherited]** Shared ambient auth does not reliably tolerate concurrent
-  `codex` sessions — **one Codex session at a time** (not re-tested; keep until
-  a deliberate probe says otherwise).
+- **[upgraded 2026-06-12, phase 36 verify]** Concurrent codex sessions are the
+  probable cause of ALL five no-event stalls: a watchdog-instrumented smoke
+  stalled exactly while a concurrent live ambient call ran, and completed in 5s
+  when re-run alone. **One codex process at a time, period — including the
+  game's runtime ambient Director calls.** Build dispatches and ambient
+  generation must never overlap; the watchdog (exit 124) is the enforcement
+  backstop.
 - **[verified 2026-06-11]** Stall rule works as written: no-event stall →
   relaunch identical brief once (with root cause fixed) → completed in ~7m.
 - **[observed 2026-06-11, n=2]** Codex no-event stalls (2-event JSONL, then

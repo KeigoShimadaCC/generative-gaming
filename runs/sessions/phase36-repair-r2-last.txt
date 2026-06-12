@@ -1,0 +1,51 @@
+Implemented Phase 36 repair loop. No commit made.
+
+Changed:
+- [repair.ts](/Users/keigoshimada/Documents/generative-gaming/src/gauntlet/repair.ts:98): `generateFloor(ctx)` runs provider → Gate 0 → Gate 1 → Gate 2, builds reason-coded repair prompts, caps repairs at 2, immediately falls back on `timeout` / `process_error`, serves Old Stock fallback, and writes the full generation attempt chain.
+- [repair.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/gauntlet/repair.test.ts:35): mocked matrix for happy path, malformed→repair, unrepairable→fallback, timeout→fallback, cap enforcement, and artifact readback.
+- [PROGRESS.md](/Users/keigoshimada/Documents/generative-gaming/PROGRESS.md:27): coordination + validation log update.
+
+Repair prompt snapshot:
+
+```text
+Generate floor 3 for repair test.
+
+Your previous output failed these checks:
+- Gate 0 G0_NO_JSON: $: no JSON object found
+
+Fix only these checks; preserve valid content when possible.
+
+Offending JSON fragment(s):
+```json
+not a manifest at all
+```
+
+Return the corrected complete JSON manifest only.
+```
+
+Verification:
+- `pnpm exec vitest run src/gauntlet/repair.test.ts` → 1 file passed, 5 tests passed.
+- `pnpm run typecheck` → passed.
+- `pnpm run lint` → passed.
+- `pnpm run check` → 65 files passed; 466 tests passed, 1 skipped.
+
+**Phase Completion Check**
+Status: Complete
+
+Plan checked: `phase-plans/PHASE-36-REPAIR-FALLBACK.md`
+
+What matches:
+- Gate order, repair prompting, cap 2, fallback, and full attempt-chain artifacts are implemented in `src/gauntlet/repair.ts`.
+- Failure matrix and prompt snapshot are covered in `src/gauntlet/repair.test.ts`.
+
+Gaps: none found.
+
+Scope / invariants:
+- No commit made.
+- No implementation files outside `src/gauntlet/repair.ts` and its test were changed; `PROGRESS.md` was updated per worker contract.
+- Existing/unrelated dirty state remains in `scripts/codex-run.sh`, `scripts/ledger.tsv`, and `runs/**`; left untouched.
+
+Environment discoveries:
+- Full `pnpm run check` emits untracked `runs/bot-*` trace artifacts in this worktree.
+
+Actual time: ~29m vs 30m estimate.
