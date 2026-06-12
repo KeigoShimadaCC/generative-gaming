@@ -1,0 +1,46 @@
+Implemented the default-on gameplay hook path.
+
+**What changed**
+- `stepRun` now defaults to `runGameplayTurnHooks()` unless callers pass `hooks: "none"` or a deliberate override: [loop.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/run/loop.ts:246).
+- Removed redundant explicit default hook wiring from web session and replay; normal steps now pass nothing.
+- CLI play now also uses defaults during normal play, with only paused dialogue using frozen hooks.
+- Bot/sim batch trace run IDs now use timestamped recorder IDs so preserved run evidence is not overwritten.
+- Fixed a keep-range enemy behavior bug exposed by default hooks: `bestCandidates` no longer aliases the array being iterated.
+- Regenerated golden traces and eval-bank traces.
+
+**Call-Site Inventory**
+- `src/cli/simulate.ts` → `src/harness/bots/batch.ts` → [driver.ts](/Users/keigoshimada/Documents/generative-gaming/src/harness/bots/driver.ts:126): before no hooks, after no hooks, now default gameplay hooks.
+- Gate 2 simulator [run.ts](/Users/keigoshimada/Documents/generative-gaming/src/gauntlet/gate2/run.ts:330): before no hooks, after no hooks, now default gameplay hooks.
+- Web session [game-session.ts](/Users/keigoshimada/Documents/generative-gaming/app/input/game-session.ts:204): before explicit gameplay hooks except frozen pause, after default for normal play and explicit frozen override only while paused.
+- Run-index replay [replay.ts](/Users/keigoshimada/Documents/generative-gaming/app/components/runindex/replay.ts:100): before explicit gameplay hooks, after no hooks, now default gameplay hooks.
+- CLI play [play.ts](/Users/keigoshimada/Documents/generative-gaming/src/cli/play.ts:357): before explicit dialogue hook override, after default for normal play and frozen override only while paused.
+- Harness/CLI replay `src/harness/replay/replay.ts:32`, `src/harness/replay/golden.ts:93`, `src/cli/replay.ts:133`: before no hooks, after no hooks, now default gameplay hooks.
+- Tests/goldens/determinism/integration call sites now default unless explicitly hook-free. Explicit `hooks: "none"` only appears in the run-loop escape-hatch test and the golden generator’s internal scripted path planner.
+
+**Verification**
+- `pnpm run check` → exit 0  
+  `Test Files 79 passed (79); Tests 536 passed | 2 skipped (538)`
+- `pnpm exec vitest run --config tests/determinism-audit/vitest.config.ts --reporter verbose` → exit 0  
+  `1 file / 3 tests passed`
+- `pnpm exec vitest run --config tests/golden/vitest.config.ts --reporter verbose` → exit 0  
+  `1 file / 9 tests passed`
+- `pnpm exec vitest run src/gauntlet --reporter verbose` → exit 0  
+  `6 files / 45 passed / 1 skipped`
+
+**5-Seed Batch**
+Exact command without cache override hit the known root-owned npm cache EPERM. Rerun with `npm_config_cache=/private/tmp/gg-npm-cache`:
+
+```text
+policy   | seed       | terminal | depth | turns | kills | hp% | itemUses
+---------|------------|----------|-------|-------|-------|-----|---------
+balanced | simulate-1 | LOSS     | 5     | 178   | 9     | 0   | 1
+balanced | simulate-2 | LOSS     | 6     | 213   | 8     | 0   | 0
+balanced | simulate-3 | LOSS     | 6     | 228   | 10    | 0   | 1
+balanced | simulate-4 | LOSS     | 3     | 138   | 8     | 0   | 0
+balanced | simulate-5 | LOSS     | 4     | 173   | 9     | 0   | 0
+```
+
+**Gate 2 Report**
+Default-on hooks changed Gate 2 behavior as expected: the small materialization ensemble now clears shallows but not middle/lowest fixtures under real enemy damage. HP-retention tests were updated to force the judge branch directly; no Gate 2 thresholds were retuned.
+
+No commits made, per branch assignment. Actual time: ~28 min vs 30 min estimate.

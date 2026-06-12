@@ -1,0 +1,45 @@
+Implemented the brief on `main` with no commits.
+
+Changed:
+- [e2e/browser-bot.ts](/Users/keigoshimada/Documents/generative-gaming/e2e/browser-bot.ts): low-HP heal/retreat now runs before adjacent attacks, stairs/Hoard routing is prioritized over fighting, route selection prefers equally short paths not adjacent to enemies, and LOSS diagnostics use `run lost at depth ... turn ...`.
+- [e2e/full-clear.spec.ts](/Users/keigoshimada/Documents/generative-gaming/e2e/full-clear.spec.ts): avoids adding a second generic dump after the bot already wrote the LOSS diagnostic.
+- [PROGRESS.md](/Users/keigoshimada/Documents/generative-gaming/PROGRESS.md): task marked `ready-for-verify` with validation evidence.
+
+Old retreat failure:
+- The low-HP branch was after unconditional adjacent-enemy attack, so it was unreachable once adjacent to an enemy.
+- `tryHeal` also had the inventory-open condition inverted: from normal `inspect` mode it did not press `i`, so it usually searched a hidden inventory panel.
+
+Inventory key contract:
+- `i/I` toggles inventory.
+- Inventory panel: `ArrowUp/ArrowDown` selects entries, `ArrowLeft/ArrowRight` selects actions, `Enter` runs selected action.
+- Number keys are zero-based menu shortcuts.
+- `Escape` closes the panel back to inspect.
+
+Verification:
+```text
+pnpm run typecheck
+exit 0
+> node ... && tsc --noEmit -p tsconfig.src.json && tsc --noEmit -p tsconfig.next.json
+```
+
+```text
+pnpm run lint
+exit 0
+> eslint .
+```
+
+```text
+pnpm run check
+exit 0
+Test Files  79 passed (79)
+Tests       535 passed | 2 skipped (537)
+```
+
+Balance finding:
+- No balance escalation proven locally. Step 0 says no Chromium/Playwright in this sandbox, so the orchestrator still needs to run the browser campaign to confirm WIN.
+- Grounding numbers: player starts at 20 HP (+4/level), `oldstock-sour-cordial` heals 6, middle fallback enemies have 12-24 HP and 5-8 attack. The observed five-turn tanking death is policy-plausible, not yet proof of impossible balance.
+
+Environment discoveries:
+- Brief said tree clean, but the worktree already had untracked `runs/**` artifacts and the brief file. `pnpm run check` generated additional untracked run artifacts; I left all generated evidence untouched.
+
+Actual time: ~40 min vs 20 min estimate, mainly from contract reading plus rerunning gates after the spec-side LOSS cleanup.

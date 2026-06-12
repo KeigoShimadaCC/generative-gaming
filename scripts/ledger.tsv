@@ -160,3 +160,5 @@ timestamp	label	agent	model	effort	seconds	input_tokens	output_tokens	total_toke
 2026-06-12T17:36:25Z	fullclear-transition-wait	codex	default	default	269	1371744	16261	1388005	0
 2026-06-12T17:44:24Z	arrival-wedge-fix	codex	default	default	433	1721511	22383	1743894	0
 2026-06-12T17:55:21Z	descend-throw-fallback	codex	default	default	658	8227456	31514	8258970	0
+2026-06-12T18:14:22Z	fullclear-bot-survival	codex	default	default	656	7939734	27554	7967288	0
+2026-06-12T18:30:09Z	sim-hooks-default	codex	default	default	1257	13640264	38584	13678848	0
