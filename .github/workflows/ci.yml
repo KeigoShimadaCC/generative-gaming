@@ -83,10 +83,75 @@ jobs:
         run: pnpm exec vitest run --config tests/determinism-audit/vitest.config.ts --reporter verbose
 
       - name: Mocked eval smoke
-        run: pnpm run evals -- --mode mock --n 1 --eval-id ci-mock-baseline
+        env:
+          EVAL_ID: ci-smoke-${{ github.run_id }}
+        run: |
+          pnpm dlx tsx <<'TS'
+          import { createMockDirectorProvider } from "./src/director/provider/index.ts";
+          import {
+            defaultEvalRunnerConfig,
+            formatEvalSmokeOutput,
+            runEvalSuite,
+          } from "./src/evals/runner/run.ts";
+          import type { DepthBand } from "./src/schemas/entities/index.ts";
+          import {
+            validLowestManifestFixture,
+            validMiddleManifestFixture,
+            validShallowsManifestFixture,
+          } from "./src/schemas/fixtures/manifest.ts";
+          import type { FloorManifest } from "./src/schemas/manifest.ts";
+
+          const evalId = process.env.EVAL_ID;
+          if (evalId === undefined || evalId.length === 0) {
+            throw new Error("EVAL_ID is required");
+          }
+
+          const baselineEvalId = "ci-mock-baseline";
+          const fixtureForBand = (band: DepthBand): FloorManifest => {
+            switch (band) {
+              case "shallows":
+                return validShallowsManifestFixture;
+              case "middle":
+                return validMiddleManifestFixture;
+              case "lowest":
+                return validLowestManifestFixture;
+            }
+          };
+
+          const result = await runEvalSuite({
+            ...defaultEvalRunnerConfig({ mode: "mock", n: 1, evalId }),
+            providerFactory: ({ band, depth, persona, generationIndex }) => {
+              const generationRunId = `${baselineEvalId}-${band}-${persona}-${generationIndex + 1}`;
+              const fixture = fixtureForBand(band);
+              const manifest = {
+                ...fixture,
+                depth,
+                params: {
+                  ...fixture.params,
+                  seed: `${generationRunId}:seed`,
+                },
+              };
+
+              return createMockDirectorProvider({
+                manifest,
+                raw: JSON.stringify(manifest),
+                latencyMs: 10 + generationIndex,
+                tokens: {
+                  inputTokens: 100 + generationIndex,
+                  outputTokens: 50 + generationIndex,
+                  totalTokens: 150 + (generationIndex * 2),
+                },
+              });
+            },
+          });
+
+          process.stdout.write(`${formatEvalSmokeOutput(result)}\n`);
+          TS
 
       - name: Eval threshold check
-        run: pnpm dlx tsx tests/eval-baselines/compare.ts tests/eval-baselines/mock-baseline.json runs/evals/ci-mock-baseline/report.json
+        env:
+          EVAL_ID: ci-smoke-${{ github.run_id }}
+        run: pnpm dlx tsx tests/eval-baselines/compare.ts tests/eval-baselines/mock-baseline.json runs/evals/${EVAL_ID}/report.json
 
   e2e:
     runs-on: ubuntu-latest

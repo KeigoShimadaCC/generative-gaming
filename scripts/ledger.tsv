@@ -153,3 +153,5 @@ timestamp	label	agent	model	effort	seconds	input_tokens	output_tokens	total_toke
 2026-06-12T15:38:42Z	ci-m0-timeout	codex	default	default	183	297608	5644	303252	0
 2026-06-12T15:50:28Z	ci-perf-budget	codex	default	default	65	337228	2423	339651	0
 2026-06-12T16:00:29Z	ci-audit-portability	codex	default	default	162	482288	10568	492856	0
+2026-06-12T16:10:13Z	fullclear-bot-v2	codex	default	default	350	1799199	22790	1821989	0
+2026-06-12T16:16:17Z	ci-eval-id	codex	default	default	310	1194937	18774	1213711	0

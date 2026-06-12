@@ -1,0 +1,49 @@
+Implemented in [.github/workflows/ci.yml](/Users/keigoshimada/Documents/generative-gaming/.github/workflows/ci.yml:85). No commit.
+
+The CI smoke now uses `EVAL_ID=ci-smoke-${{ github.run_id }}` and writes/comparares `runs/evals/${EVAL_ID}/report.json`, not `runs/evals/ci-mock-baseline/report.json`. I also kept the mock manifest seeds aligned to the committed baseline inside the smoke step, because the runner currently couples `evalId` to generation seeds and arbitrary fresh ids can change gate results.
+
+Verification:
+
+```text
+pnpm run evals -- --mode mock --n 1 --eval-id ci-smoke-test-1
+exit 0
+Eval ci-smoke-test-1: complete
+Report: runs/evals/ci-smoke-test-1/report.json
+Records: 15
+Validity: 66.67%
+Solvability: 60%
+Fallback: 40%
+```
+
+```text
+pnpm dlx tsx tests/eval-baselines/compare.ts tests/eval-baselines/mock-baseline.json runs/evals/ci-smoke-test-1/report.json
+exit 1
+eval threshold check failed — regressions beyond tolerance:
+  overall/solvability: 66.66666666666666% -> 60%
+  overall/servedWithoutFallback: 66.66666666666666% -> 60%
+  overall/fallback: 33.33333333333333% -> 40%
+  lowest:speedrunner/solvability: 100% -> 0%
+```
+
+That exposed the seed-coupling issue, so I verified the updated CI smoke logic with a fresh id:
+
+```text
+EVAL_ID=ci-smoke-test-2 <ci smoke heredoc now in ci.yml>
+exit 0
+Eval ci-smoke-test-2: complete
+Report: runs/evals/ci-smoke-test-2/report.json
+Records: 15
+Validity: 66.67%
+Solvability: 66.67%
+Fallback: 33.33%
+```
+
+```text
+pnpm dlx tsx tests/eval-baselines/compare.ts tests/eval-baselines/mock-baseline.json runs/evals/ci-smoke-test-2/report.json
+exit 0
+eval threshold check passed (112 metrics compared, 0 regressions beyond tolerance)
+```
+
+Also ran `git diff --check -- .github/workflows/ci.yml` → exit 0.
+
+Local generated evidence dirs left uncommitted: `runs/evals/ci-smoke-test-1/` and `runs/evals/ci-smoke-test-2/`. Existing unrelated dirty files were left untouched. Environment discoveries: none. Actual time: ~25m; estimate not provided.
