@@ -5,6 +5,7 @@ import type {
   EffectBundle,
   StatusApplication,
 } from "../../schemas/vocab/index.js";
+import type {} from "../behaviors/movement.js";
 import { getTile, type TileGrid } from "../map/index.js";
 import { Terrain } from "../map/terrain.js";
 import { createRng, type Rng } from "../rng/index.js";

@@ -1,0 +1,33 @@
+Implemented the repair in [endings.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/run/endings.ts) and [traps.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/systems/traps.ts). No commit made.
+
+Root cause: event declarations are module-augmented, but these consumers did not import the modules that own the quest and enemy movement augmentations, so TypeScript narrowed those event cases to `never`.
+
+Movement check:
+```text
+rg -n "enemy_moved|moved" src/engine/systems/movement.ts src/engine/state
+src/engine/systems/movement.ts:34:    readonly moved: {
+src/engine/systems/movement.ts:73:  | "moved"
+src/engine/systems/movement.ts:164:    movementEvent(state, "moved", {
+```
+
+Verification:
+```text
+pnpm run typecheck
+
+> generative-gaming@0.0.0 typecheck /Users/keigoshimada/Documents/generative-gaming
+> node --input-type=module -e "import{rmSync}from'node:fs';try{rmSync('.next',{recursive:true,force:true})}catch{}" && tsc --noEmit -p tsconfig.src.json && tsc --noEmit -p tsconfig.next.json
+```
+
+```text
+pnpm run check
+
+> pnpm run typecheck && pnpm run lint && pnpm test
+
+> tsc --noEmit -p tsconfig.src.json && tsc --noEmit -p tsconfig.next.json
+> eslint .
+> vitest run
+
+Test Files  78 passed (78)
+Tests       529 passed | 2 skipped (531)
+Duration    81.16s
+```

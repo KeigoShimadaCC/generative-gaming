@@ -124,3 +124,8 @@ timestamp	label	agent	model	effort	seconds	input_tokens	output_tokens	total_toke
 2026-06-12T09:33:10Z	phase47-tuning	codex	default	default	2320	13558422	51074	13609496	0
 2026-06-12T10:13:56Z	phase48-nextjs	cursor	composer-2.5	default	185	NA	NA	NA	137
 2026-06-12T10:17:01Z	phase48-nextjs-codex	codex	default	default	782	8774098	33588	8807686	0
+2026-06-12T10:30:45Z	phase49a-grid	codex	default	default	1006	9771640	51547	9823187	0
+2026-06-12T10:47:53Z	tree-repair-eventunion	codex	default	default	273	0	0	0	137
+2026-06-12T10:52:27Z	tree-repair-r2	codex	default	default	235	896164	9279	905443	0
+2026-06-12T10:56:46Z	phaseG1-verify	codex	default	default	448	2166234	16836	2183070	0
+2026-06-12T11:04:28Z	phaseG1-boundary-fix	codex	default	default	176	836217	11281	847498	0

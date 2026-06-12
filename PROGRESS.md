@@ -30,6 +30,7 @@ This file records *state*, never *design* — design lives in the doc spine
 | 46-1 | Ambient judge gate + signature moment | Codex | main (gate3/prompt/config/tests) | ready-for-verify | full gate green; ambient live judge test env-gated/skipped by default; no commit per brief |
 | 47-TUNE | Responsiveness detector revision + ambient tuning round | Codex | main (ambient path) | ready-for-verify | Stage 0 frozen; iteration 1 hit target but validity regressed 1 cell, stopped per brief; summary in `runs/evals/tuning-02/summary.md`; full gate green; no commit |
 | 48-1 | Next.js scaffold & API transport | Codex | main (app/config) | blocked | scaffold/routes/dev smokes pass; full gate blocked by out-of-scope `src/**` event-union type errors; no commit |
+| 49A-1 | Grid renderer & fog | Codex | main (app/components/grid, game route wiring) | blocked | implementation complete; explicit grid tests/perf, lint, root tests green; full check blocked by existing out-of-scope `src/**` event-union type errors; no commit |
 | 26-1 | Fallback content pack (Old Stock) | Cursor | main (content/, loader) | in-progress | |
 | 21/26-I | Wire fallback pack to run loop + unified events | Codex | main (integration) | ready-for-verify | fallback provider wired; full-run smoke over real fallback content; full gate green; no commit |
 | — | Wave B merged through 16/20 (b1ccd1d): 06–20,22 all verified | — | — | merged | engine complete except run loop |
@@ -74,6 +75,7 @@ Format: `YYYY-MM-DD · phase/task · who · what was verified · evidence (comma
 | 2026-06-12 | 45-1 | Codex | Narration beat evaluator, Deep log event, Gate 3 heuristics, banned vocab, and repair hook complete | `pnpm exec vitest run src/director/narration src/gauntlet/gate3 src/gauntlet/repair.test.ts` → 3 files, 15 tests passed; `pnpm run check` → 76 files, 517 passed, 1 skipped |
 | 2026-06-12 | 46-1 | Codex | Ambient judge gate default-off/advisory, mock calibration corpus, and once-per-run signature prompt complete | `pnpm run typecheck` → pass; `pnpm run lint` → pass; `pnpm exec vitest run src/director/prompt/assemble.test.ts src/director/prompt/signature.test.ts -u` → 2 files, 7 passed, 2 snapshots updated; `pnpm exec vitest run src/gauntlet/gate3` → 2 files, 10 passed, 1 skipped; `pnpm run check` → 78 files, 526 passed, 2 skipped |
 | 2026-06-12 | 47-TUNE | Codex | Detector revision + ambient tuning round complete; iteration 1 met responsiveness target (same 54.76%, cross 17.86%) but regressed validity 100%→93.33%, so tuning stopped; mock baseline regenerated | `pnpm run check` → typecheck pass, lint pass, Vitest 78 files / 529 passed / 2 skipped; evidence: `runs/evals/tuning-02/summary.md`, `runs/evals/tuning-02/iteration-1.md`, `runs/evals/tuning-02-baseline-envfix/report.json`, `runs/evals/tuning-02-iteration-1/report.json`, `tests/eval-baselines/mock-baseline.json` |
+| 2026-06-12 | 49A-1 | Codex | Grid renderer/fog implementation complete; explicit component/perf suite green; lint and root tests green; dev route smoke returns 200; full check blocked before lint/tests by out-of-scope event-union type errors | `pnpm exec vitest run --config app/components/grid/vitest.config.ts --reporter verbose` → 1 file / 4 tests passed, largest-band static render 7.97ms/update (796.6ms/100); `pnpm run lint` → pass; `pnpm test` → 78 files / 529 passed / 2 skipped; `PORT=3001 pnpm run dev` + `curl -I http://localhost:3001/` → 200 OK; `pnpm run check` → fails in `src/director/prompt/summarize.ts`, `src/engine/run/endings.ts`, `src/engine/systems/traps.ts` event-union errors |
 | 2026-06-12 | 48-1 | Codex | Next scaffold/routes implemented; dev server and three transport route smokes pass; full gate blocked before lint/tests by out-of-scope `src/**` type errors | `pnpm run dev` → `GET /` 200, start-generation 200, poll-status 200, get-floor 200; post-dev `pnpm run typecheck` cleaned `.next` then failed in `src/director/prompt/summarize.ts`, `src/engine/run/endings.ts`, `src/engine/systems/traps.ts`; `pnpm run lint` → pass; `pnpm test` → 78 files / 529 passed / 2 skipped; final `pnpm run check` → same typecheck blocker |
 
 ## Worktrees & Branches
@@ -104,6 +106,7 @@ spike ≤ 15 min (hard).
 | Wave D (29–38) | mixed | both | ~5h plan | — | ~2.7h real | ambient pivot; watchdog mechanized; stall cause found (concurrency) |
 | 45-1 | implement | Codex | 40m | 40m | ~15m | clean; full suite generated run artifacts as existing tests do |
 | 46-1 | implement | Codex | 40m | 40m | ~37m | async judge hook required because provider seam judge is promise-based; full gate green |
+| 49A-1 | implement | Codex | 40m | 50m | ~15m | grid implementation clean; full gate blocked by pre-existing out-of-scope event-union type errors |
 
 ## Future Backlog (out-of-scope discoveries land here, not in code)
 
@@ -118,6 +121,7 @@ spike ≤ 15 min (hard).
 | 2026-06-12 | worker | Root vitest config doesn't discover tests/integration/** (explicit config workaround in place) — consider root include | PHASE-57 hygiene |
 | 2026-06-12 | orchestrator | In-script stall watchdogs unreliable in live use (fired only in own smoke); cron-loop is the dependable net — debug both scripts | PHASE-57 hygiene |
 | 2026-06-12 | orchestrator | Cursor lane degraded ~17:00 JST (3 silent hangs, host auth fine) — re-test before Wave G; if persistent, Wave G goes Codex-serial | before PHASE-48 |
+| 2026-06-12 | worker | Root Vitest `include` excludes `app/**/*.test.ts`; 49A uses a grid-local Vitest config for explicit component tests | PHASE-57 hygiene |
 
 ## Phase Rotation Procedure
 

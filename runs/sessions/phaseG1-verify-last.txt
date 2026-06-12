@@ -1,0 +1,1 @@
+NEEDS WORK: 1. Client import boundary is not clean: `app/components/grid/model.ts` uses an eslint-disabled `@engine/render/grid` subpath import, while the app-client rule allows only engine/harness public surfaces.

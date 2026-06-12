@@ -1,0 +1,29 @@
+Implemented the boundary fix.
+
+Changed:
+- [src/engine/render/index.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/render/index.ts:1): added public render exports for fog/runtime helpers and glyph helpers.
+- [app/components/grid/model.ts](/Users/keigoshimada/Documents/generative-gaming/app/components/grid/model.ts:1): now imports from `@engine/render`; removed the eslint-disable/subpath import.
+
+Verification:
+```sh
+$ rg 'eslint-disable.*@engine' app/
+# no output
+```
+
+```sh
+$ pnpm run check
+...
+src/engine/render/log.ts(85,10): error TS2678: Type '"enemy_ability_used"' is not comparable to type ...
+src/engine/render/log.ts(87,10): error TS2678: Type '"thief_item_stolen"' is not comparable to type ...
+src/engine/render/log.ts(135,10): error TS2678: Type '"quest_escort_moved"' is not comparable to type ...
+...
+ELIFECYCLE Command failed with exit code 2.
+```
+
+`pnpm run check` is not green because source typecheck is blocked in unowned [src/engine/render/log.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/render/log.ts:85) event-union errors. I did not edit that file per scope.
+
+Extra scoped checks:
+- `pnpm run lint` passed.
+- `pnpm exec vitest run --config app/components/grid/vitest.config.ts --reporter verbose` passed: 4 tests.
+
+No commit made.

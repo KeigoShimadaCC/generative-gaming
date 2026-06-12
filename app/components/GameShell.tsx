@@ -1,9 +1,11 @@
 "use client";
 
 import { useGameStore } from "@/store/game-store";
+import { GridRegion } from "@/components/grid";
 
 const regionClass =
   "rounded border border-gg-border bg-gg-surface text-gg-muted flex items-center justify-center text-sm uppercase tracking-wide";
+const gridRegionClass = "min-h-0";
 
 export function GameShell() {
   const gameState = useGameStore((state) => state.gameState);
@@ -12,17 +14,7 @@ export function GameShell() {
   return (
     <main className="grid h-screen grid-rows-[minmax(0,1fr)_7rem] gap-2 overflow-hidden p-3">
       <div className="grid min-h-0 grid-cols-[minmax(0,1fr)_minmax(18rem,24rem)] gap-2">
-        <section
-          className={`${regionClass} min-h-0`}
-          aria-label="The grid"
-        >
-          The grid
-          {gameState !== null ? (
-            <span className="ml-2 text-gg-text">
-              d{gameState.run.depth} · t{gameState.run.turn}
-            </span>
-          ) : null}
-        </section>
+        <GridRegion className={gridRegionClass} state={gameState} />
 
         <div className="grid min-h-0 grid-rows-[minmax(7rem,auto)_minmax(0,1fr)] gap-2">
           <section className={regionClass} aria-label="HUD">

@@ -1,4 +1,5 @@
 import { config } from "../../config/index.js";
+import type {} from "../quests/machine.js";
 import type {
   GameState,
   SerializableRecord,

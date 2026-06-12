@@ -1,0 +1,283 @@
+.region {
+  position: relative;
+  display: grid;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid var(--gg-border);
+  border-radius: 8px;
+  background: #0d1117;
+}
+
+.stage {
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+  place-items: center;
+  overflow: hidden;
+  padding: 0.75rem;
+}
+
+.empty {
+  color: var(--gg-muted);
+  font-size: 0.875rem;
+}
+
+.grid {
+  --gg-grid-cell-size: 1.45rem;
+  --gg-grid-glyph-size: 0.98rem;
+  display: grid;
+  grid-auto-rows: var(--gg-grid-cell-size);
+  gap: 2px;
+  align-content: center;
+  justify-content: center;
+  inline-size: max-content;
+  max-inline-size: 100%;
+  max-block-size: 100%;
+}
+
+.row {
+  display: contents;
+}
+
+.cell {
+  position: relative;
+  display: grid;
+  width: var(--gg-grid-cell-size);
+  height: var(--gg-grid-cell-size);
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.035);
+  border-radius: 4px;
+  background: #111820;
+  color: #aeb8c4;
+  font-size: var(--gg-grid-glyph-size);
+  line-height: 1;
+  letter-spacing: 0;
+  transition:
+    background-color 50ms ease-out,
+    border-color 50ms ease-out,
+    color 50ms ease-out,
+    opacity 50ms ease-out;
+}
+
+.glyph {
+  position: relative;
+  z-index: 1;
+  font-weight: 700;
+  text-shadow: 0 0 0.55rem currentColor;
+}
+
+.badge {
+  position: absolute;
+  z-index: 2;
+  right: 1px;
+  bottom: 1px;
+  min-width: 0.78rem;
+  padding: 0 1px;
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.55);
+  color: currentColor;
+  font-size: 0.36rem;
+  font-weight: 800;
+  line-height: 1.18;
+  letter-spacing: 0;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.shape::before {
+  position: absolute;
+  z-index: 0;
+  top: 3px;
+  left: 3px;
+  width: 0.42rem;
+  height: 0.42rem;
+  border: 1px solid currentColor;
+  content: "";
+  opacity: 0.88;
+}
+
+.shapeCircle::before {
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.shapeDiamond::before {
+  transform: rotate(45deg);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.shapeSquare::before {
+  border-radius: 1px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.shapeDot::before {
+  width: 0.34rem;
+  height: 0.34rem;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.shapeTriangle::before {
+  width: 0.48rem;
+  height: 0.42rem;
+  border: 0;
+  background: currentColor;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+
+.visible {
+  opacity: 1;
+}
+
+.remembered {
+  border-color: rgba(134, 151, 171, 0.08);
+  background: #0b0f14;
+  color: #566171;
+  opacity: 0.78;
+  text-shadow: none;
+}
+
+.unseen {
+  border-color: rgba(255, 255, 255, 0.01);
+  background: #05070a;
+  color: transparent;
+  opacity: 1;
+}
+
+.player {
+  border-color: rgba(255, 231, 128, 0.42);
+  background: #1b1a12;
+  color: #ffe680;
+}
+
+.enemy {
+  border-color: rgba(255, 106, 106, 0.35);
+  background: #211213;
+  color: #ff7474;
+}
+
+.npc {
+  border-color: rgba(113, 224, 150, 0.32);
+  background: #102019;
+  color: #86e6a7;
+}
+
+.item {
+  border-color: rgba(117, 212, 255, 0.3);
+  background: #0e1b23;
+  color: #77d8ff;
+}
+
+.trap {
+  border-color: rgba(245, 166, 82, 0.38);
+  background: #22170d;
+  color: #f3ae63;
+}
+
+.terrain {
+  color: #aeb8c4;
+}
+
+.emptyLayer {
+  color: transparent;
+}
+
+.hitFlash {
+  animation: gg-hit-flash 70ms steps(1, end);
+}
+
+.moveArrive {
+  animation: gg-move-arrive 50ms ease-out;
+}
+
+.pulse {
+  position: absolute;
+  z-index: 3;
+  top: -0.18rem;
+  left: 50%;
+  pointer-events: none;
+  font-size: 0.58rem;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0;
+  text-shadow:
+    0 1px 0 #000,
+    0 0 0.45rem #000;
+  transform: translateX(-50%);
+  animation: gg-float-number 420ms ease-out forwards;
+}
+
+.damagePulse {
+  color: #ff8c8c;
+}
+
+.healPulse {
+  color: #87efad;
+}
+
+.fixtureBar {
+  position: absolute;
+  z-index: 4;
+  top: 0.5rem;
+  left: 0.5rem;
+  display: flex;
+  gap: 0.35rem;
+  padding: 0.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  background: rgba(10, 13, 17, 0.86);
+  backdrop-filter: blur(8px);
+}
+
+.fixtureButton {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  background: #171d26;
+  color: var(--gg-text);
+  font: inherit;
+  font-size: 0.68rem;
+  line-height: 1;
+  padding: 0.34rem 0.42rem;
+}
+
+.fixtureButton:hover,
+.fixtureButton:focus-visible {
+  border-color: var(--gg-accent);
+  outline: none;
+}
+
+@keyframes gg-hit-flash {
+  0% {
+    background: #f5e6c8;
+    color: #21130f;
+  }
+  100% {
+    background: #f5e6c8;
+    color: #21130f;
+  }
+}
+
+@keyframes gg-move-arrive {
+  0% {
+    transform: translate(
+      calc(var(--gg-move-x, 0) * var(--gg-grid-cell-size)),
+      calc(var(--gg-move-y, 0) * var(--gg-grid-cell-size))
+    );
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes gg-float-number {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -0.72rem);
+  }
+}
