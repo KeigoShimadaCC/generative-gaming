@@ -1,0 +1,31 @@
+Implemented PHASE-49B and did not commit.
+
+**Changed**
+- HUD: [Hud.tsx](/Users/keigoshimada/Documents/generative-gaming/app/components/hud/Hud.tsx:1), [model.ts](/Users/keigoshimada/Documents/generative-gaming/app/components/hud/model.ts:1), styles, tests, local Vitest config.
+- Log: [MessageLog.tsx](/Users/keigoshimada/Documents/generative-gaming/app/components/log/MessageLog.tsx:1), [model.ts](/Users/keigoshimada/Documents/generative-gaming/app/components/log/model.ts:1), styles, tests, local Vitest config.
+- Shell wiring: [GameShell.tsx](/Users/keigoshimada/Documents/generative-gaming/app/components/GameShell.tsx:1).
+- PROGRESS marked `49B-1` ready-for-verify.
+
+**Verification**
+- Clean `.next` + full gate:
+  `pnpm run check > /tmp/phase49b-check.log`
+  Result: `PNPM_CHECK_EXIT=0`
+  Vitest tail: `Test Files 78 passed (78)`, `Tests 529 passed | 2 skipped (531)`.
+
+- HUD component tests:
+  `pnpm exec vitest run --config app/components/hud/vitest.config.ts --reporter verbose`
+  Result: `HUD_VITEST_EXIT=0`, `1 file / 2 tests passed`.
+
+- Log component tests:
+  `pnpm exec vitest run --config app/components/log/vitest.config.ts --reporter verbose`
+  Result: `LOG_VITEST_EXIT=0`, `1 file / 3 tests passed`.
+
+- Dev smoke:
+  `PORT=3001 pnpm run dev` + `curl http://localhost:3001/`
+  Result: `DEV_HTTP_STATUS=200`.
+
+**Notes**
+- Screenshot capture was attempted via Browser, but the in-app browser returned `Browser is not available: iab`; HTTP smoke passed instead.
+- Full Vitest generated untracked `runs/bot-*1781263581054/` artifacts; I left them intact.
+- Environment discoveries: in-app Browser `iab` unavailable in this session; `ps` was sandbox-blocked; zsh `status` is readonly, so exit-code variables should avoid that name.
+- Actual time: ~9 minutes vs 30 minute estimate.

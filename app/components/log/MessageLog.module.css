@@ -1,0 +1,114 @@
+.region {
+  position: relative;
+  display: grid;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid var(--gg-border);
+  border-radius: 8px;
+  background: var(--gg-surface);
+  color: var(--gg-text);
+}
+
+.panel {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 0.35rem;
+  min-width: 0;
+  min-height: 0;
+  padding: 0.55rem 0.7rem;
+}
+
+.meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.6rem;
+  min-width: 0;
+  color: var(--gg-muted);
+  font-size: 0.62rem;
+  letter-spacing: 0;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.metaCount {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lines {
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  color: var(--gg-text);
+  font-size: 0.78rem;
+  line-height: 1.28;
+  user-select: text;
+}
+
+.historyLines {
+  overflow: auto;
+  padding-right: 0.25rem;
+}
+
+.group {
+  min-width: 0;
+}
+
+.lineList {
+  display: grid;
+  gap: 0.08rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.line {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.historyLines .line {
+  overflow: visible;
+  text-overflow: clip;
+  white-space: pre-wrap;
+}
+
+.empty {
+  display: grid;
+  min-height: 0;
+  place-items: center start;
+  color: var(--gg-muted);
+  font-size: 0.78rem;
+}
+
+.historyOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+  border-radius: inherit;
+  background: rgba(10, 13, 17, 0.96);
+}
+
+.historyPanel {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 0.45rem;
+  min-width: 0;
+  min-height: 0;
+  padding: 0.6rem 0.7rem;
+}
+
+.historyTitle {
+  color: var(--gg-muted);
+  font-size: 0.64rem;
+  letter-spacing: 0;
+  line-height: 1;
+  text-transform: uppercase;
+}

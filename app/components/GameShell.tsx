@@ -2,6 +2,8 @@
 
 import { useGameStore } from "@/store/game-store";
 import { GridRegion } from "@/components/grid";
+import { HudRegion } from "@/components/hud";
+import { MessageLogRegion } from "@/components/log";
 
 const regionClass =
   "rounded border border-gg-border bg-gg-surface text-gg-muted flex items-center justify-center text-sm uppercase tracking-wide";
@@ -17,14 +19,7 @@ export function GameShell() {
         <GridRegion className={gridRegionClass} state={gameState} />
 
         <div className="grid min-h-0 grid-rows-[minmax(7rem,auto)_minmax(0,1fr)] gap-2">
-          <section className={regionClass} aria-label="HUD">
-            HUD
-            {gameState !== null ? (
-              <span className="ml-2 text-gg-text">
-                HP {gameState.player.hp.current}/{gameState.player.hp.max}
-              </span>
-            ) : null}
-          </section>
+          <HudRegion state={gameState} />
 
           <section className={regionClass} aria-label="Context panel">
             Context · {ui.contextPanelMode}
@@ -32,14 +27,7 @@ export function GameShell() {
         </div>
       </div>
 
-      <section className={regionClass} aria-label="Message log">
-        Message log
-        {gameState !== null && gameState.log.length > 0 ? (
-          <span className="ml-2 truncate text-gg-text">
-            {gameState.log.length} events
-          </span>
-        ) : null}
-      </section>
+      <MessageLogRegion state={gameState} />
     </main>
   );
 }

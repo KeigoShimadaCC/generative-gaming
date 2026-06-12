@@ -1,0 +1,230 @@
+.region {
+  display: grid;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid var(--gg-border);
+  border-radius: 8px;
+  background: var(--gg-surface);
+  color: var(--gg-text);
+}
+
+.panel {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  gap: 0.55rem;
+  min-width: 0;
+  min-height: 0;
+  padding: 0.7rem;
+}
+
+.empty {
+  display: grid;
+  min-height: 6rem;
+  place-items: center;
+  color: var(--gg-muted);
+  font-size: 0.82rem;
+}
+
+.topline {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.stat,
+.meter,
+.levelXp {
+  min-width: 0;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 6px;
+  background: #10151d;
+}
+
+.stat {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: baseline;
+  gap: 0.45rem;
+  padding: 0.4rem 0.5rem;
+}
+
+.meter {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.5rem;
+}
+
+.meterHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.label {
+  color: var(--gg-muted);
+  font-size: 0.64rem;
+  letter-spacing: 0;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.value {
+  min-width: 0;
+  color: var(--gg-text);
+  font-size: 0.94rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  line-height: 1;
+  text-align: right;
+}
+
+.bar {
+  height: 0.48rem;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  background: #080b10;
+}
+
+.barFill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #79d39f, #d9c96c);
+}
+
+.fullnessFill {
+  background: linear-gradient(90deg, #6ea8fe, #9ed0ff);
+}
+
+.levelXp {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.52rem;
+}
+
+.levelValue {
+  color: #ffe680;
+}
+
+.xpValue {
+  color: #9ed0ff;
+}
+
+.statuses {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  align-content: start;
+  gap: 0.35rem;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+  gap: 0.32rem;
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 999px;
+  background: #0f141b;
+  color: var(--gg-text);
+  font-size: 0.69rem;
+  line-height: 1;
+  padding: 0.28rem 0.44rem;
+}
+
+.chipIcon {
+  position: relative;
+  flex: 0 0 auto;
+  width: 0.58rem;
+  height: 0.58rem;
+  color: #d6deea;
+}
+
+.chipIcon::before,
+.chipIcon::after {
+  position: absolute;
+  content: "";
+}
+
+.shapeCircle::before {
+  inset: 0.08rem;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+}
+
+.shapeDiamond::before {
+  inset: 0.12rem;
+  border: 1px solid currentColor;
+  transform: rotate(45deg);
+}
+
+.shapeSquare::before {
+  inset: 0.1rem;
+  border: 1px solid currentColor;
+  border-radius: 1px;
+}
+
+.shapeDot::before {
+  inset: 0.17rem;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.shapeTriangle::before {
+  inset: 0.08rem;
+  background: currentColor;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+
+.shapeBar::before {
+  top: 0.25rem;
+  right: 0.03rem;
+  left: 0.03rem;
+  height: 0.08rem;
+  background: currentColor;
+}
+
+.shapeCross::before,
+.shapeCross::after {
+  top: 0.25rem;
+  right: 0.04rem;
+  left: 0.04rem;
+  height: 0.08rem;
+  background: currentColor;
+}
+
+.shapeCross::before {
+  transform: rotate(45deg);
+}
+
+.shapeCross::after {
+  transform: rotate(-45deg);
+}
+
+.chipDuration {
+  color: var(--gg-muted);
+}
+
+.noStatus {
+  color: var(--gg-muted);
+}
+
+.pulse {
+  animation: gg-hud-pulse 520ms ease-out;
+}
+
+@keyframes gg-hud-pulse {
+  0% {
+    border-color: rgba(255, 230, 128, 0.86);
+    box-shadow: 0 0 0 0 rgba(255, 230, 128, 0.34);
+  }
+  100% {
+    border-color: rgba(255, 255, 255, 0.07);
+    box-shadow: 0 0 0 0.55rem rgba(255, 230, 128, 0);
+  }
+}
