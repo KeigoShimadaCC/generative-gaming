@@ -44,6 +44,7 @@ export function HudRegion({ state, className }: HudRegionProps) {
     <section
       className={[styles.region, className].filter(Boolean).join(" ")}
       aria-label="HUD"
+      data-testid="hud"
     >
       <HudFrame model={model} />
     </section>

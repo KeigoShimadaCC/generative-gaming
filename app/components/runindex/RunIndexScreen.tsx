@@ -24,7 +24,7 @@ export function RunIndexScreen({ runs, onBack }: RunIndexScreenProps) {
     runs.find((run) => run.runId === selectedRunId) ?? runs[0] ?? null;
 
   return (
-    <section className={styles.screen} aria-label="Run index">
+    <section className={styles.screen} aria-label="Run index" data-testid="run-index">
       <div className={styles.header}>
         <div>
           <div className={styles.eyebrow}>The Last Lantern</div>
@@ -43,7 +43,10 @@ export function RunIndexScreen({ runs, onBack }: RunIndexScreenProps) {
             runs.map((run) => (
               <button
                 className={run.runId === selectedRun?.runId ? styles.selected : ""}
+                data-outcome={run.outcome}
+                data-run-id={run.runId}
                 data-selected={run.runId === selectedRun?.runId ? "true" : "false"}
+                data-testid="run-index-entry"
                 key={run.runId}
                 type="button"
                 onClick={() => setSelectedRunId(run.runId)}

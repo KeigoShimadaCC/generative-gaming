@@ -17,7 +17,10 @@ export function QuestPanel({
   const completed = view.completed;
 
   return (
-    <div className="grid h-full min-h-0 grid-rows-[auto_minmax(0,1fr)_auto] gap-3 p-3 text-left">
+    <div
+      className="grid h-full min-h-0 grid-rows-[auto_minmax(0,1fr)_auto] gap-3 p-3 text-left"
+      data-testid="quest-panel"
+    >
       <header>
         <h2 className="text-sm font-semibold normal-case tracking-normal text-gg-text">
           Quest Log

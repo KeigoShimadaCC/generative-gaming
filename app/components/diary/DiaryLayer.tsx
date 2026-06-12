@@ -26,7 +26,11 @@ export function DiaryLayer({
   onClose,
 }: DiaryLayerProps) {
   return (
-    <div className={styles.scrim} aria-label="Diary and artifacts layer">
+    <div
+      className={styles.scrim}
+      aria-label="Diary and artifacts layer"
+      data-testid="diary-layer"
+    >
       <section className={styles.layer} role="dialog" aria-modal="false">
         <header className={styles.header}>
           <div>
@@ -42,6 +46,7 @@ export function DiaryLayer({
                 role="tab"
                 aria-selected={activeTab === "diary"}
                 data-selected={activeTab === "diary" ? "true" : "false"}
+                data-testid="diary-tab"
                 onClick={() => onSelectTab("diary")}
               >
                 Diary
@@ -51,6 +56,7 @@ export function DiaryLayer({
                 role="tab"
                 aria-selected={activeTab === "artifacts"}
                 data-selected={activeTab === "artifacts" ? "true" : "false"}
+                data-testid="artifacts-tab"
                 onClick={() => onSelectTab("artifacts")}
               >
                 Artifacts

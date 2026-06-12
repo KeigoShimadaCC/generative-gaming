@@ -60,15 +60,23 @@ export function TitleScreen({
 
   if (terminal !== null && terminalDiary !== null) {
     return (
-      <section className={styles.screen} aria-label="Run diary">
+      <section
+        className={styles.screen}
+        aria-label="Run diary"
+        data-testid="summary-screen"
+      >
         <div className={styles.surface}>The Last Lantern</div>
         <DiaryPanel diary={terminalDiary} variant="final" />
         <p className={styles.terminalNote}>{nextRunMemoryNote(terminal)}</p>
         <div className={styles.actions}>
-          <button type="button" onClick={() => onNewRun(seed)}>
+          <button
+            type="button"
+            data-testid="new-run-button"
+            onClick={() => onNewRun(seed)}
+          >
             New run
           </button>
-          <button type="button" onClick={onRunIndex}>
+          <button type="button" data-testid="run-index-button" onClick={onRunIndex}>
             Run index
           </button>
         </div>
@@ -77,30 +85,35 @@ export function TitleScreen({
   }
 
   return (
-    <section className={styles.screen} aria-label="Title">
+    <section className={styles.screen} aria-label="Title" data-testid="title-screen">
       <div className={styles.surface}>The Last Lantern</div>
       <div className={styles.titleBlock}>
         <h1>Everdeep</h1>
-        <p>Seed {model.seed}</p>
+        <p data-testid="title-seed">Seed {model.seed}</p>
       </div>
       <div className={styles.actions}>
         {model.actions.includes("continue") ? (
-          <button type="button" onClick={onContinue}>
+          <button type="button" data-testid="continue-button" onClick={onContinue}>
             Continue
           </button>
         ) : null}
-        <button type="button" onClick={() => onNewRun(seed)}>
+        <button
+          type="button"
+          data-testid="new-run-button"
+          onClick={() => onNewRun(seed)}
+        >
           New run
         </button>
-        <button type="button" onClick={onRunIndex}>
+        <button type="button" data-testid="run-index-button" onClick={onRunIndex}>
           Run index
         </button>
-        <button type="button" onClick={onSettings}>
+        <button type="button" data-testid="settings-button" onClick={onSettings}>
           Settings
         </button>
       </div>
       <button
         className={styles.seedButton}
+        data-testid="reroll-seed-button"
         type="button"
         onClick={() => setSeed(createTitleSeed(Date.now() + 1))}
       >

@@ -33,7 +33,10 @@ export function InventoryPanel({
   const allEntries = [...view.slots, ...view.equipment];
 
   return (
-    <div className="grid h-full min-h-0 grid-rows-[auto_minmax(0,1fr)_auto] gap-3 p-3 text-left">
+    <div
+      className="grid h-full min-h-0 grid-rows-[auto_minmax(0,1fr)_auto] gap-3 p-3 text-left"
+      data-testid="inventory-panel"
+    >
       <div>
         <h2 className="text-sm font-semibold normal-case tracking-normal text-gg-text">
           Inventory

@@ -70,6 +70,7 @@ export function FloorTransitionOverlay({
       data-transition-phase={presentation.phase}
       data-shimmer={presentation.shimmerVisible ? "true" : "false"}
       data-skip-enabled={presentation.skipEnabled ? "true" : "false"}
+      data-testid="transition-overlay"
       aria-live="polite"
     >
       <div className={styles.panel}>

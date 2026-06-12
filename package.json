@@ -12,6 +12,7 @@
     "lint": "eslint .",
     "test": "vitest run",
     "check": "pnpm run typecheck && pnpm run lint && pnpm test",
+    "e2e": "XDG_CACHE_HOME=${XDG_CACHE_HOME:-.cache} PLAYWRIGHT_BROWSERS_PATH=${PLAYWRIGHT_BROWSERS_PATH:-.cache/ms-playwright} playwright test",
     "dev": "WATCHPACK_POLLING=true CHOKIDAR_USEPOLLING=true next dev -p ${PORT:-3001}",
     "build": "next build",
     "evals": "pnpm dlx tsx src/evals/runner/run.ts",
@@ -34,17 +35,18 @@
     ]
   },
   "devDependencies": {
+    "@playwright/test": "1.58.2",
     "@types/better-sqlite3": "7.6.13",
     "@types/react": "19.2.7",
     "@types/react-dom": "19.2.3",
-    "autoprefixer": "10.4.21",
-    "postcss": "8.5.3",
-    "tailwindcss": "3.4.17",
     "@typescript-eslint/eslint-plugin": "8.61.0",
     "@typescript-eslint/parser": "8.61.0",
+    "autoprefixer": "10.4.21",
     "eslint": "10.4.1",
     "eslint-config-prettier": "10.1.8",
+    "postcss": "8.5.3",
     "prettier": "3.8.4",
+    "tailwindcss": "3.4.17",
     "typescript": "6.0.3",
     "vitest": "4.1.8"
   }

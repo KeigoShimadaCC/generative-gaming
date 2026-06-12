@@ -69,7 +69,7 @@ export function GameShell() {
 
   if (screen === "settings") {
     return (
-      <div style={shellStyle}>
+      <div data-screen="settings" data-testid="game-state" style={shellStyle}>
         <SettingsScreen
           settings={settings}
           onBack={openTitle}
@@ -81,7 +81,7 @@ export function GameShell() {
 
   if (screen === "run-index") {
     return (
-      <div style={shellStyle}>
+      <div data-screen="run-index" data-testid="game-state" style={shellStyle}>
         <RunIndexScreen runs={runIndex} onBack={openTitle} />
       </div>
     );
@@ -89,7 +89,12 @@ export function GameShell() {
 
   if (screen !== "playing" || gameState === null) {
     return (
-      <div style={shellStyle}>
+      <div
+        data-screen={terminalRun === null ? "title" : "summary"}
+        data-terminal-status={terminalRun?.run.terminalStatus ?? "none"}
+        data-testid="game-state"
+        style={shellStyle}
+      >
         <TitleScreen
           activeRun={activeRun?.gameState ?? null}
           terminalRun={terminalRun}
@@ -105,6 +110,15 @@ export function GameShell() {
   return (
     <main
       className="grid h-screen grid-rows-[minmax(0,1fr)_7rem] gap-2 overflow-hidden p-3"
+      data-depth={gameState.run.depth}
+      data-diary-open={ui.diaryOpen ? "true" : "false"}
+      data-input-locked={ui.inputLocked ? "true" : "false"}
+      data-panel-mode={ui.contextPanelMode}
+      data-screen="playing"
+      data-terminal-status={gameState.run.terminalStatus}
+      data-testid="game-state"
+      data-transition-phase={transition?.phase ?? "none"}
+      data-turn={gameState.run.turn}
       style={shellStyle}
     >
       <GameInputOwner />

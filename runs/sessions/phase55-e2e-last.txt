@@ -1,0 +1,43 @@
+Implemented the Phase 55 e2e surface, but I cannot honestly mark the task done: `pnpm run e2e` cannot launch Chromium from this Codex sandbox, so the required 5 consecutive green runs were not achieved.
+
+Changed:
+- Added one Playwright spec: `e2e/happy-path.spec.ts`
+- Added `playwright.config.ts`
+- Added `package.json` `e2e` script and pinned `@playwright/test@1.58.2`
+- Added the CI e2e job in `.github/workflows/ci.yml`
+- Added marker `data-testid`/state attributes for stable waits
+- Added `F10` abort binding to the existing structured `{ kind: "abort" }` action because the UI had no abort path
+
+Verification:
+- `pnpm run check` → exit 0, `79 passed`, `532 passed | 2 skipped`
+- `pnpm run e2e` → exit 1 before test body:
+  `browserType.launch ... MachPortRendezvousServer ... Permission denied (1100)`
+- Retried with full Chromium and `--single-process`; same sandbox browser-launch failure.
+- 5× green e2e runs: not achieved.
+
+CI diff added:
+
+```diff
++  e2e:
++    runs-on: ubuntu-latest
++    needs: check
++    env:
++      PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/.cache/ms-playwright
++      XDG_CACHE_HOME: ${{ github.workspace }}/.cache
++    steps:
++      - uses: actions/checkout@v4.2.2
++      - uses: pnpm/action-setup@v4.1.0
++        with: { version: 10.28.2 }
++      - uses: actions/setup-node@v4.4.0
++        with: { node-version: "24", cache: pnpm }
++      - run: pnpm install --frozen-lockfile
++      - run: pnpm exec playwright install --with-deps chromium
++      - run: pnpm run e2e
+```
+
+Environment discoveries:
+- `pnpm dlx` also needs `XDG_CACHE_HOME` inside the workspace here.
+- Playwright browser install needs `PLAYWRIGHT_BROWSERS_PATH` inside the workspace.
+- Chromium launch is blocked by the Codex macOS sandbox Mach-port permissions.
+
+Actual time: ~65m vs 25m, mostly browser install/cache and sandbox launch diagnosis. No commit made.

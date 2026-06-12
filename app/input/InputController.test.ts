@@ -46,6 +46,13 @@ describe("keyboard input dispatch", () => {
             case "close_top":
               expect(result.status, binding.id).toBe("handled");
               break;
+            case "request_abort":
+              expect(result.status, binding.id).toBe("confirm_required");
+              expect(harness.ui.pendingConfirm, binding.id).toMatchObject({
+                action: { kind: "abort" },
+                prompt: "Abandon the run? y/n",
+              });
+              break;
             case "confirm_yes":
               expect(harness.actions.at(-1), binding.id).toEqual({ kind: "wait" });
               break;
@@ -92,6 +99,35 @@ describe("keyboard input dispatch", () => {
     expect(session.parsedTrace.turns).toHaveLength(2);
     expect(session.traceContent.split("\n").filter(Boolean)).toHaveLength(3);
     expect(buildReplayFrames(session.traceContent).status).toBe("identical");
+  });
+
+  it("confirms top-level Esc before dispatching engine abort to ABORTED", () => {
+    const session = createClientGameSession({ seed: "phase-55-abort-confirm" });
+    const harness = createHarness(session.state);
+    const request = harness.press("Escape");
+
+    expect(request.status).toBe("confirm_required");
+    expect(harness.actions).toEqual([]);
+    expect(harness.ui.pendingConfirm).toMatchObject({
+      action: { kind: "abort" },
+      prompt: "Abandon the run? y/n",
+    });
+
+    const yes = harness.press("y");
+    expect(yes.status).toBe("action_dispatched");
+    expect(harness.actions).toEqual([{ kind: "abort" }]);
+
+    const aborted = session.step(harness.actions[0]!);
+    expect(aborted.state.run.terminalStatus).toBe("ABORTED");
+
+    const panelHarness = createHarness(session.state, {
+      ...defaultUi,
+      contextPanelMode: "inventory",
+    });
+    expect(inputFocusContext(panelHarness.ui)).toBe("play");
+    expect(panelHarness.press("Escape").status).toBe("handled");
+    expect(panelHarness.ui.contextPanelMode).toBe("inspect");
+    expect(panelHarness.ui.pendingConfirm).toBeNull();
   });
 
   it("intercepts descend next to an enemy until y/Enter confirms or n/Esc cancels", () => {

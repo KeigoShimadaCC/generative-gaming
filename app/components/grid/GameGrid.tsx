@@ -59,6 +59,7 @@ export function GridRegion({
     <section
       className={[styles.region, className].filter(Boolean).join(" ")}
       aria-label="The grid"
+      data-testid="game-grid-region"
     >
       <GameGrid state={state} glyphSizeRem={glyphSizeRem} markers={markers} />
       {devFixtureMode ? <GridFixtureControls /> : null}
@@ -108,6 +109,7 @@ export function GridFrame({ model, glyphSizeRem }: {
         role="grid"
         aria-rowcount={model.height}
         aria-colcount={model.width}
+        data-testid="game-grid"
         data-width={model.width}
         data-height={model.height}
         style={style}

@@ -135,6 +135,8 @@ export const dispatchGameKey = (
         intent: intent.kind,
         preventDefault: true,
       };
+    case "request_abort":
+      return requestAbortConfirm(snapshot, deps);
     case "confirm_yes":
       return confirmPending(snapshot, deps);
     case "confirm_no":
@@ -261,6 +263,47 @@ const confirmPending = (
   return {
     status: "action_dispatched",
     action: pending.action,
+    preventDefault: true,
+  };
+};
+
+const requestAbortConfirm = (
+  snapshot: InputDispatchSnapshot,
+  deps: InputDispatchDeps,
+): InputDispatchResult => {
+  if (snapshot.ui.contextPanelMode !== "inspect") {
+    deps.patchUi({ contextPanelMode: "inspect" });
+    return {
+      status: "handled",
+      intent: "request_abort",
+      preventDefault: true,
+    };
+  }
+
+  if (snapshot.ui.inputLocked) {
+    return { status: "input_locked", preventDefault: true };
+  }
+
+  if (
+    snapshot.gameState === null ||
+    snapshot.gameState.run.terminalStatus !== "ACTIVE"
+  ) {
+    return {
+      status: "ignored",
+      reason: "game state not ready",
+      preventDefault: false,
+    };
+  }
+
+  const confirm = {
+    action: { kind: "abort" },
+    prompt: "Abandon the run? y/n",
+  } as const satisfies PendingConfirm;
+
+  deps.patchUi({ pendingConfirm: confirm });
+  return {
+    status: "confirm_required",
+    confirm,
     preventDefault: true,
   };
 };

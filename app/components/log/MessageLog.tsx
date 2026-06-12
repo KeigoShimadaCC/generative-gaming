@@ -43,6 +43,7 @@ export function MessageLogRegion({
     <section
       className={[styles.region, className].filter(Boolean).join(" ")}
       aria-label="Message log"
+      data-testid="message-log"
     >
       <MessageLogFrame model={model} historyOpen={historyOpen} />
     </section>

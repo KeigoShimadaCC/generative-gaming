@@ -21,4 +21,16 @@ describe("KeymapOverlay", () => {
 
     console.info(`keymap overlay rows rendered from table: ${rows.length}`);
   });
+
+  it("includes the top-level Esc abandon-run row from the shared table", () => {
+    const rows = keymapOverlayRows();
+
+    expect(rows).toContainEqual(
+      expect.objectContaining({
+        id: "abandon-run",
+        keys: "Esc",
+        action: "Abandon run",
+      }),
+    );
+  });
 });

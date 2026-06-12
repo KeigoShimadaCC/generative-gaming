@@ -17,6 +17,7 @@ export function DiaryPanel({ diary, variant }: DiaryPanelProps) {
         .join(" ")}
       aria-label="Dungeon diary"
       data-diary-mode={diary.mode}
+      data-testid="dungeon-diary"
     >
       <SummaryStrip diary={diary} />
 

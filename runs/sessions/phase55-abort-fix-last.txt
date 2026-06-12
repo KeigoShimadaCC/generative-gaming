@@ -1,0 +1,20 @@
+Implemented the abort round-trip path, no commit created.
+
+Changed:
+- [app/input/keys.ts](/Users/keigoshimada/Documents/generative-gaming/app/input/keys.ts:215): `Esc` top-level keymap row now maps to `Abandon run`.
+- [app/input/dispatcher.ts](/Users/keigoshimada/Documents/generative-gaming/app/input/dispatcher.ts:267): top-level `Esc` opens inline `Abandon the run? y/n`; `y` dispatches engine `{ kind: "abort" }`.
+- [app/components/panels/frame.tsx](/Users/keigoshimada/Documents/generative-gaming/app/components/panels/frame.tsx:276): inspect cursor `Esc` is consumed so it does not leak into abort.
+- [app/input/InputController.test.ts](/Users/keigoshimada/Documents/generative-gaming/app/input/InputController.test.ts:104): added abort confirm flow test through `ABORTED`.
+- [app/components/keymap-overlay/KeymapOverlay.test.ts](/Users/keigoshimada/Documents/generative-gaming/app/components/keymap-overlay/KeymapOverlay.test.ts:25): added shared-table row assertion.
+- [e2e/happy-path.spec.ts](/Users/keigoshimada/Documents/generative-gaming/e2e/happy-path.spec.ts:98): e2e now closes the quest panel, presses `Esc`, confirms with `y`, then expects summary `ABORTED`.
+
+Verification:
+- `pnpm exec vitest run --config app/input/vitest.config.ts --reporter verbose` → exit 0, 2 files / 9 tests passed.
+- `pnpm exec vitest run --config app/components/panels/vitest.config.ts --reporter verbose` → exit 0, 1 file / 5 tests passed.
+- `pnpm run check` → exit 0, 79 files passed, 532 passed / 2 skipped.
+
+Not run: Playwright/browser e2e, per brief and documented sandbox limitation.
+
+Scope deviations: none. Residual risk: host-side e2e x5 still needs orchestration. Environment discoveries: none new. `pnpm run check` generated untracked `runs/bot-*` artifacts; I left them intact.
+
+Actual time: ~23m vs 20m estimate.

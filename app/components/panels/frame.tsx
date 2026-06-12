@@ -221,7 +221,12 @@ export function ContextPanelFrame({
   };
 
   return (
-    <section className={panelClass} aria-label="Context panel" data-panel-mode={mode}>
+    <section
+      className={panelClass}
+      aria-label="Context panel"
+      data-panel-mode={mode}
+      data-testid="context-panel"
+    >
       {mode === "inspect" ? (
         <InspectPanel
           card={inspectCard}
@@ -269,8 +274,9 @@ export function ContextPanelFrame({
     }
 
     if (key === "Escape") {
+      const wasCursorActive = inspectCursorActive;
       setInspectCursorActive(false);
-      return false;
+      return wasCursorActive;
     }
 
     if (!inspectCursorActive) {

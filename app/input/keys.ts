@@ -3,7 +3,11 @@ import type { MoveDirection } from "@engine/turn";
 
 import type { ContextPanelMode } from "@/store/game-store";
 
-export type KeyBindingContext = "play" | "confirm" | "overlay" | "paused-layer";
+export type KeyBindingContext =
+  | "play"
+  | "confirm"
+  | "overlay"
+  | "paused-layer";
 
 export type KeyIntent =
   | {
@@ -25,6 +29,9 @@ export type KeyIntent =
     }
   | {
       readonly kind: "close_top";
+    }
+  | {
+      readonly kind: "request_abort";
     }
   | {
       readonly kind: "confirm_yes";
@@ -205,6 +212,15 @@ export const KEYMAP_BINDINGS: readonly KeymapBinding[] = [
     intent: { kind: "open_keymap" },
   },
   {
+    id: "abandon-run",
+    contexts: ["play"],
+    keys: ["Escape"],
+    keyLabel: "Esc",
+    helpGroup: "Universal",
+    helpAction: "Abandon run",
+    intent: { kind: "request_abort" },
+  },
+  {
     id: "close-keymap-escape",
     contexts: ["overlay"],
     keys: ["Escape"],
@@ -243,7 +259,7 @@ export const KEYMAP_BINDINGS: readonly KeymapBinding[] = [
   },
   {
     id: "cancel-escape",
-    contexts: ["play", "confirm", "paused-layer"],
+    contexts: ["confirm", "paused-layer"],
     keys: ["Escape"],
     keyLabel: "Esc",
     helpGroup: "Universal",
