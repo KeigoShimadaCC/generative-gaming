@@ -274,6 +274,132 @@ reconstruction. **Start the decision log at minute zero.**
   error paths and hardening exactly those — with an honest recorded trade
   (conservative content) and a capped iteration count to prevent thrash.
 
+## 11. Late-Run Findings (Waves E–H)
+
+- **Single-vendor lanes fail whole.** Cursor hung silently five times in one
+  afternoon (0-byte output, process alive, host auth fine before and after) —
+  a service-side bad day. The reroute protocol (two hangs on one brief →
+  switch executor) kept the project moving at the cost of parallelism;
+  verification degraded from cross-CLI to fresh-session-same-CLI, which
+  preserved the independence that matters (no authorship stake) but not
+  vendor diversity. Plan for lane outage as a normal mode, not an exception.
+- **The watchdogs we built didn't fire in live use.** Both in-script watchdogs
+  worked in their own smoke tests and then missed real stalls — because real
+  stalls also happen MID-session (file >500B, then static), a variant the
+  size-threshold logic ignores. The dependable net ended up being the dumbest
+  mechanism available: a 1–3 minute cron loop re-invoking the orchestrator,
+  plus ScheduleWakeup as belt-and-braces. Lesson: watchdog on *growth*, not
+  size; and never trust a guard that has only passed its own smoke.
+- **The orchestrator's shell is part of the system, and it had bugs.** Two
+  self-inflicted incidents: (1) `pnpm run check | tail -1 && git commit` —
+  the pipe made `tail`'s exit code the gate, and a red tree got merged;
+  (2) `git add -A` swept 1.9GB of `.pnpm-store/` and browser binaries into a
+  commit and the push bounced off GitHub's file-size limit. Fixes that stuck:
+  redirect-then-`echo EXIT:$?` (never pipe a gate), and a status-scan before
+  staging whenever workers touched dependency tooling. Orchestrator habits
+  need mechanizing exactly like worker norms — this is §10's lesson applied
+  to one's own shell.
+- **Cadence pressure erodes the merge gate; structure erodes back.** Under
+  serial throughput the orchestrator merged PHASE-48 on the worker's claimed
+  green without its own gate run — HEAD went red for an hour (latent
+  declaration-merging errors surfaced by 48's tsconfig restructure). Three
+  ad-hoc patches later, the structural cure: an events barrel that pins the
+  union's scope, with a header rule for future declarers. Two morals:
+  declaration-merged types are build-config-fragile (prefer explicit barrel
+  registration), and a rule that erodes twice under pressure needs to become
+  a script (see §12's merge.sh).
+- **Workers enforce the constitution literally — keep it true.** A worker
+  refused to start because AGENTS.md says "never write in main" while the
+  serial-lane practice (orchestrator merges, no worktrees) had quietly made
+  main the de facto workspace. The refusal was CORRECT; the constitution had
+  drifted from practice. Silent divergence between the contract and the
+  operating mode produces refusals at best and rule-rot at worst — amend the
+  doc or waive explicitly per-brief, never rely on workers "getting it."
+- **One e2e journey catches what 500 unit tests can't.** The single Playwright
+  happy path failed on its first honest run because the web UI had NO way to
+  abandon a run — a missing player affordance invisible to every layer that
+  tests components in isolation. Budget the e2e early enough to act on what
+  it finds.
+- **Honest no-ops are deliverables.** The balance pass (58) measured, found
+  the blocker non-config (bot simulation never wires the enemy-behavior hook;
+  bots take literally zero damage), skipped its tuning iterations with
+  written rationale, and changed nothing. That report is worth more than any
+  numbers-moved theater — and it exposed that Gate 2's ensemble judges floors
+  against passive enemies, a real finding three layers deep.
+- **The orchestrator is also the ops layer.** Host-side acts workers cannot
+  do in a sandbox: installing Playwright browsers, killing stranded dev
+  servers on port 3001, cleaning process pile-ups. Budget orchestrator turns
+  for provisioning, not just dispatching.
+- **Verifier scrutiny items work.** Pointing the verifier at a specific
+  worker-confessed deviation ("read the async hook diff; confirm strictly
+  additive via empty test diff") converts a worry into a machine-checked
+  fact. Workers' honest deviation confessions + targeted verification is a
+  reliable two-step.
+
+## 12. Next-Time Blueprint (do these before the first dispatch)
+
+What we would change in each artifact, ranked by pain saved:
+
+**The harness (`codex-run.sh` / `cursor-run.sh`) — highest leverage:**
+1. Watchdog v2: trigger on *no file growth for N minutes at any size* (not
+   size<500B), since real stalls are mid-session too; heartbeat line to
+   stderr every minute so an outer loop can distinguish alive-quiet from dead.
+2. A global codex lockfile in the script itself — one-codex-at-a-time
+   enforced by `flock`-style mutual exclusion, not orchestrator discipline
+   (the #1 stall cause should be unrepresentable).
+3. Auto-retry-once on the startup stall signature (2-event JSONL at 60s)
+   before surfacing exit 124 — it recovered 100% of the time manually.
+4. A `preflight` subcommand: 10-second echo-smoke per lane before a wave
+   begins; detects vendor outage in seconds instead of via silent hangs.
+5. Ship `merge.sh`: gate-with-real-exit-code → staging scan (reject
+   `node_modules|.pnpm-store|.cache|.next` and >50MB files) → commit with
+   co-authors → push. The orchestrator's merge ritual as one atomic script.
+
+**`AGENTS.md`:**
+6. Make the workspace rule brief-driven: "work in the workspace your brief
+   assigns (default: an isolated worktree)" — kills the constitution-vs-
+   practice refusal class while keeping the safety default.
+7. Fold in the gate-scope amendments discovered live: scoped gates include
+   owned-path lint; `pnpm exec vitest run <path>` (never `pnpm test -- <path>`,
+   which runs everything).
+8. Simplify commits to what actually happened: workers never commit; the
+   orchestrator commits everything with co-author attribution. The two-path
+   rule was dead weight once practice settled.
+
+**`CLAUDE.md`:**
+9. Describe BOTH operating modes (parallel-worktree and serial-main-tree) and
+   when to switch — the doc assumed parallel PRs; the run was 80% serial on
+   main, and every divergence cost a small consistency tax.
+10. Add the orchestrator shell-hygiene rules as hard text: no piped exit
+    codes; no blind `git add -A`; dispatch+watch is one atomic act; pre-read
+    the integration surface before writing a brief's owned-files fence (two
+    STOPs were brief defects from fencing without reading insertion points).
+11. Mechanize-on-second-failure as an explicit rule: any orchestrator
+    discipline that fails twice must move into a script/tool before work
+    continues.
+
+**`NORTH_STAR.md` / planning:**
+12. Name ambient-CLI inference as a first-class provider path from day one
+    (it became the project's headline; the API-key path never ran) — and
+    write milestone bars as numbers up front (the ≥8/10 served bar was
+    invented mid-run).
+13. PHASE-00 additions: every brief must carry an explicit branch/workspace
+    assignment; producer/consumer pairs must share a machine-checkable frozen
+    artifact or be serialized (Trap 2b as planning law); schema phases get
+    "author these 3–5 concrete entities as pure data" probes in their
+    completion criteria (authorability ≠ table coverage).
+14. Pre-seed `.gitignore` with the tooling dirs a worker fleet WILL create:
+    `.pnpm-store/`, `.cache/`, `.next/`, browser caches, temp stores.
+
+**Process:**
+15. Start the orchestrator decision log at minute zero (backfilling cost an
+    hour and reconstruction accuracy).
+16. Stand up the keepalive loop (`/loop` or equivalent) BEFORE any unattended
+    stretch — the "overnight run" that ran zero phases was a mechanism gap,
+    not a planning gap; the cron-tick loop later carried whole waves.
+17. Schedule the human checkpoints as a standing checklist file from day one
+    and append to it continuously, instead of assembling it at the end.
+
 ## Append Log
 
 | Date | Finding added | Trigger |
@@ -281,3 +407,5 @@ reconstruction. **Start the decision log at minute zero.**
 | 2026-06-11 | Initial document: §1–§9 from the first day's run (Waves A + half of B: 16 phases, 35+ sessions, 5 failures recovered, 3 doc ambiguities adjudicated) | human request |
 | 2026-06-12 | Trap 2b (prose spec ≠ frozen interface); authorability vs table coverage (§4) | 23 reconciliation; 14 STOPs |
 | 2026-06-12 | §10: watchdog mechanization, concurrency root cause, ambient backend, timebox salvage, advisory-mode staging, prompt forensics | Waves C–D close |
+| 2026-06-12 | §11: lane outage, live watchdog gap, orchestrator shell bugs, merge-gate erosion + events barrel, constitutional refusal, e2e's UX catch, honest no-ops, ops duties | Waves E–H close |
+| 2026-06-12 | §12: the next-time blueprint (17 items across harness, AGENTS, CLAUDE, NORTH_STAR/planning, process) | human request at project close |
