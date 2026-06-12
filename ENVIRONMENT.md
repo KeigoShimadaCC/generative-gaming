@@ -81,6 +81,13 @@ tools and must be re-verified by the Phase 01 environment spike; facts marked
   with elevated access; record the occurrence here.
 - Cursor sessions may run concurrently (separate worktrees); Cursor is the fan-out
   tool, Codex is the depth tool.
+- **[verified 2026-06-12]** `cursor-agent` CANNOT run inside a Codex sandbox —
+  auth is keychain-bound and not portable ("authentication required" hang).
+  Cursor dispatches are host-only; never nest cursor under codex.
+- **[observed 2026-06-12, n=2]** Cursor sessions can hang silently at 0 output
+  (transient service trouble, same family as the earlier 502) — host auth fine
+  before and after. cursor-run.sh now has the same watchdog as codex-run.sh
+  (exit 124). After two hangs on the same brief, reroute to Codex.
 
 ## Worktrees & repo facts
 
