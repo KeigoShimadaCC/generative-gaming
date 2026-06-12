@@ -4,11 +4,11 @@ import "@/api/director/engine-runtime-web";
 
 import { createFallbackFloorContentProvider } from "@/api/director/fallback-provider-web";
 import {
-  dialogueTurnHooks,
   freezeTurnCount,
   isWorldPaused,
 } from "@engine/npc";
 import {
+  runGameplayTurnHooks,
   startRun,
   stepRun,
   type FloorContentProvider,
@@ -20,6 +20,7 @@ import {
   serialize,
   type GameState,
 } from "@engine/state";
+import type { TurnHooks } from "@engine/turn";
 
 type RunEvent = Extract<RunLoopResult, { readonly ok: true }>["events"][number];
 
@@ -199,9 +200,13 @@ const stepPlayerAction = (
   provider: FloorContentProvider,
 ): RunLoopResult => {
   const turnBefore = state.run.turn;
-  const result = stepRun(state, action, provider, {
-    hooks: dialogueTurnHooks(),
-  });
+  const shouldFreezeWorld = action.kind === "talk" || isWorldPaused(state);
+  const result = stepRun(
+    state,
+    action,
+    provider,
+    { hooks: shouldFreezeWorld ? frozenWorldTurnHooks() : runGameplayTurnHooks() },
+  );
 
   if (!result.ok) {
     return result;
@@ -220,6 +225,16 @@ const stepPlayerAction = (
     events,
   };
 };
+
+const frozenWorldTurnHooks = (): TurnHooks => ({
+  actorTurn: ({ state }) => state,
+  ticks: {
+    damageOverTime: ({ state }) => state,
+    durations: ({ state }) => state,
+    hunger: ({ state }) => state,
+    regen: ({ state }) => state,
+  },
+});
 
 const appendMissingReturnedEvents = (
   before: GameState,

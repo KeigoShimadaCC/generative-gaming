@@ -43,6 +43,7 @@ import {
 } from "../floorgen/place.js";
 import { costOf, rosterAffordable, rosterCost } from "../enemies/index.js";
 import { assembleEnemy } from "../enemies/index.js";
+import { specialBehaviorActorTurnHook } from "../behaviors/special.js";
 import { createFloorGeometrySlot, type TileGrid } from "../map/index.js";
 import { createRng, type Rng } from "../rng/index.js";
 import {
@@ -102,6 +103,10 @@ export type RunStepOptions = {
 export type RunStartOptions = {
   readonly config?: GameConfig;
 };
+
+export const runGameplayTurnHooks = (): TurnHooks => ({
+  actorTurn: specialBehaviorActorTurnHook,
+});
 
 export type RunLoopErrorCode =
   | "provider_threw"

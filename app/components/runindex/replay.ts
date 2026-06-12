@@ -2,6 +2,7 @@ import "@/api/director/engine-runtime-web";
 
 import { createFallbackFloorContentProvider } from "@/api/director/fallback-provider-web";
 import {
+  runGameplayTurnHooks,
   startRun,
   stepRun,
   type RunAction,
@@ -97,7 +98,9 @@ export const buildReplayFrames = (content: string): ReplayBuildResult => {
   ];
 
   for (const [index, record] of trace.turns.entries()) {
-    const stepped = stepRun(state, record.action, provider);
+    const stepped = stepRun(state, record.action, provider, {
+      hooks: runGameplayTurnHooks(),
+    });
     if (!stepped.ok) {
       return {
         status: "unreadable",

@@ -101,6 +101,33 @@ describe("keyboard input dispatch", () => {
     expect(buildReplayFrames(session.traceContent).status).toBe("identical");
   });
 
+  it("runs enemy behavior turns through the web session holder", () => {
+    const session = createClientGameSession({ seed: "fullclear-combat-web" });
+    const initial = withAdjacentEnemy(withFullHp(session.state));
+    session.replaceState(initial);
+    let current = initial;
+    const events: ReturnType<typeof session.step>["events"][number][] = [];
+
+    for (let attempt = 0; attempt < 10; attempt += 1) {
+      const result = session.step({ kind: "wait" });
+      current = result.state;
+      events.push(...result.events);
+
+      if (current.player.hp.current < initial.player.hp.current) {
+        break;
+      }
+    }
+
+    expect(events.some((event) => event.type === "actor_turn")).toBe(true);
+    expect(
+      events.some(
+        (event) =>
+          event.type === "attack_hit" && event.data.defenderId === "player",
+      ),
+    ).toBe(true);
+    expect(current.player.hp.current).toBeLessThan(initial.player.hp.current);
+  });
+
   it("confirms top-level Esc before dispatching engine abort to ABORTED", () => {
     const session = createClientGameSession({ seed: "phase-55-abort-confirm" });
     const harness = createHarness(session.state);
@@ -323,6 +350,17 @@ const lowHpState = (state: GameState): GameState => ({
     hp: {
       ...state.player.hp,
       current: 1,
+    },
+  },
+});
+
+const withFullHp = (state: GameState): GameState => ({
+  ...state,
+  player: {
+    ...state.player,
+    hp: {
+      ...state.player.hp,
+      current: state.player.hp.max,
     },
   },
 });

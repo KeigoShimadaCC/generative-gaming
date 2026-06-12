@@ -57,7 +57,7 @@ describe("movement resolver", () => {
     });
   });
 
-  it("routes move-into-enemy to an attack intent without moving the player", () => {
+  it("resolves move-into-enemy as a cardinal bump-attack without moving the player", () => {
     const state = stateFromFixture("move-into-enemy", `@E`);
 
     const result = step(state, { kind: "move", direction: "east" });
@@ -65,6 +65,10 @@ describe("movement resolver", () => {
     expect(result.state.run.turn).toBe(1);
     expect(result.state.player.position).toEqual({ x: 0, y: 0 });
     expect(result.state.entities["enemy#1"]?.position).toEqual({ x: 1, y: 0 });
+    expect(result.events.some(isAttackResolutionEvent)).toBe(true);
+    expect(result.state.entities["enemy#1"]?.currentHP).toBeLessThan(
+      state.entities["enemy#1"]?.currentHP ?? 0,
+    );
     expect(eventOfType(result.events, "attack_intent")).toEqual({
       turn: 0,
       type: "attack_intent",
@@ -74,6 +78,37 @@ describe("movement resolver", () => {
         direction: "east",
       },
     });
+  });
+
+  it("kills an enemy through repeated cardinal bump-attack hits", () => {
+    const state = withEntities(stateFromFixture("cardinal-bump-kill", `@E`), [
+      enemy("enemy#1", { x: 1, y: 0 }, { hp: 3, defense: 0 }),
+    ]);
+
+    const result = bumpUntilEnemyDies(state, "east");
+
+    expect(result.hits).toBeGreaterThanOrEqual(2);
+    expect(result.state.entities["enemy#1"]).toBeUndefined();
+    expect(result.state.player.position).toEqual({ x: 0, y: 0 });
+  });
+
+  it("kills an enemy through repeated diagonal bump-attack hits", () => {
+    const state = withEntities(
+      stateFromFixture(
+        "diagonal-bump-kill",
+        `
+.E
+@.
+`,
+      ),
+      [enemy("enemy#1", { x: 1, y: 0 }, { hp: 3, defense: 0 })],
+    );
+
+    const result = bumpUntilEnemyDies(state, "northeast");
+
+    expect(result.hits).toBeGreaterThanOrEqual(2);
+    expect(result.state.entities["enemy#1"]).toBeUndefined();
+    expect(result.state.player.position).toEqual({ x: 0, y: 1 });
   });
 
   it("routes move-into-NPC to a talk intent without moving the player", () => {
@@ -155,7 +190,7 @@ describe("movement resolver", () => {
     });
   });
 
-  it("keeps one actor per tile over 1000 seeded random legal move attempts", () => {
+  it("keeps actors from sharing tiles over 1000 seeded random legal move attempts", () => {
     let state = withEntities(
       withGrid(
         createInitialState("movement-occupancy-property"),
@@ -184,7 +219,7 @@ describe("movement resolver", () => {
         type: "action_resolved",
         data: { actionKind: "move" },
       });
-      expect(actorEntities(state)).toHaveLength(initialActorEntityCount);
+      expect(actorEntities(state).length).toBeLessThanOrEqual(initialActorEntityCount);
       expect(hasActorCollision(state)).toBe(false);
     }
   });
@@ -291,16 +326,29 @@ const withEntities = (
   entities: Object.fromEntries(entities.map((entity) => [entity.id, entity])),
 });
 
-const enemy = (id: EntityId, position: Position): EnemyEntityInstance => ({
-  id,
-  kind: "enemy",
-  definition:
-    validEnemyDefinitionFixture as unknown as EnemyEntityInstance["definition"],
-  position,
-  currentHP: validEnemyDefinitionFixture.stats.hp,
-  statuses: [],
-  behaviorRuntime: {},
-});
+const enemy = (
+  id: EntityId,
+  position: Position,
+  statOverrides: Partial<EnemyEntityInstance["definition"]["stats"]> = {},
+): EnemyEntityInstance => {
+  const stats = {
+    ...validEnemyDefinitionFixture.stats,
+    ...statOverrides,
+  };
+
+  return {
+    id,
+    kind: "enemy",
+    definition: {
+      ...validEnemyDefinitionFixture,
+      stats,
+    } as unknown as EnemyEntityInstance["definition"],
+    position,
+    currentHP: statOverrides.hp ?? stats.hp,
+    statuses: [],
+    behaviorRuntime: {},
+  };
+};
 
 const npc = (id: EntityId, position: Position): NpcEntityInstance => ({
   id,
@@ -351,6 +399,39 @@ const eventOfType = <Type extends TurnEvent["type"]>(
 
   return event;
 };
+
+const bumpUntilEnemyDies = (
+  initialState: GameState,
+  direction: MoveAction["direction"],
+): { readonly state: GameState; readonly hits: number } => {
+  let state = initialState;
+  let hits = 0;
+
+  for (let attempt = 0; attempt < 10; attempt += 1) {
+    if (state.entities["enemy#1"] === undefined) {
+      return { state, hits };
+    }
+
+    const result = step(state, { kind: "move", direction });
+    expect(eventOfType(result.events, "attack_intent").data.targetId).toBe(
+      "enemy#1",
+    );
+    hits += result.events.filter(isAttackHitEvent).length;
+    state = result.state;
+  }
+
+  throw new Error("enemy#1 survived repeated bump attacks");
+};
+
+const isAttackResolutionEvent = (
+  event: TurnEvent,
+): event is Extract<TurnEvent, { readonly type: "attack_hit" | "attack_missed" }> =>
+  event.type === "attack_hit" || event.type === "attack_missed";
+
+const isAttackHitEvent = (
+  event: TurnEvent,
+): event is Extract<TurnEvent, { readonly type: "attack_hit" }> =>
+  event.type === "attack_hit";
 
 const expectResolverSuccess = (
   result: ReturnType<typeof resolveMoveAction>,

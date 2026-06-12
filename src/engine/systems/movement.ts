@@ -17,6 +17,7 @@ import type {
   Position,
   SerializableRecord,
 } from "../state/index.js";
+import { resolveAttack } from "./combat.js";
 import {
   destinationForMove,
   registerActionResolver,
@@ -126,14 +127,21 @@ export const resolveMoveAction: ActionResolver<MoveAction> = (
 
   const occupant = actorAt(state, destination);
   if (occupant?.kind === "enemy") {
+    const attackResult = resolveAttack(state, PLAYER_ACTOR_ID, occupant.id);
+
+    if ("illegal" in attackResult) {
+      return attackResult;
+    }
+
     return {
-      state,
+      state: attackResult.state,
       events: [
         movementEvent(state, "attack_intent", {
           actorId: PLAYER_ACTOR_ID,
           targetId: occupant.id,
           direction: action.direction,
         }),
+        ...attackResult.events,
       ],
     };
   }
