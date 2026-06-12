@@ -4,6 +4,7 @@ import { bounds } from "../../config/index.js";
 import {
   EffectBundleSchema,
   EffectSchema,
+  RuntimeStatusApplicationSchema,
   STATUS_IDS,
   StatusApplicationSchema,
   TargetingShapeSchema,
@@ -70,6 +71,31 @@ describe("status vocabulary schemas", () => {
       status: "poison",
       duration: bounds.statusVocabulary.durationTurns.poison.min,
       extra: true,
+    });
+  });
+
+  it("keeps authoring minimums while runtime status durations may decay", () => {
+    const burnBounds = bounds.statusVocabulary.durationTurns.burn;
+
+    expectFails(StatusApplicationSchema, {
+      status: "burn",
+      duration: burnBounds.min - 1,
+    });
+    expectPasses(RuntimeStatusApplicationSchema, {
+      status: "burn",
+      duration: burnBounds.min - 1,
+    });
+    expectPasses(RuntimeStatusApplicationSchema, {
+      status: "burn",
+      duration: 0,
+    });
+    expectFails(RuntimeStatusApplicationSchema, {
+      status: "burn",
+      duration: -1,
+    });
+    expectFails(RuntimeStatusApplicationSchema, {
+      status: "burn",
+      duration: burnBounds.max + 1,
     });
   });
 });

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { config } from "../../config/index.js";
+import { bounds, config } from "../../config/index.js";
 import {
   currentFloorRuntime,
   startRun,
@@ -9,6 +9,7 @@ import {
   type RunAction
 } from "../../engine/run/loop.js";
 import type { RunEvent } from "../../engine/run/events.js";
+import { applyStatus } from "../../engine/systems/status.js";
 import {
   deserialize,
   serialize,
@@ -75,6 +76,53 @@ describe("trace recorder", () => {
       turnLines.every((line) => /^[0-9a-f]{8}$/.test(line.stateHash))
     ).toBe(true);
     expect(turnLines.flatMap((line) => line.events).length).toBeGreaterThan(0);
+  });
+
+  it("records decayed status durations through trace serialization until expiry", () => {
+    const seed = "trace-status-duration-decay";
+    const fs = new MemoryTraceFs();
+    const runId = traceRunId(seed, CREATED_AT);
+    const baseSession = createFallbackRunSession(seed);
+    const burnDuration = bounds.statusVocabulary.durationTurns.burn.min;
+    const burned = applyStatus(
+      baseSession.state,
+      "player",
+      "burn",
+      burnDuration
+    );
+    baseSession.replaceState(burned.state);
+
+    const session = record(baseSession, {
+      seed,
+      createdAt: CREATED_AT,
+      modelId: "none",
+      contentRef: CONTENT_REF,
+      runId,
+      writer: createFileTraceWriter({ runId, fs })
+    });
+    const observedDurations: Array<number | "expired"> = [];
+
+    for (let turn = 0; turn < burnDuration; turn += 1) {
+      const result = session.step({ kind: "wait" });
+      expect(deserialize(serialize(result.state))).toEqual(result.state);
+      observedDurations.push(
+        result.state.player.statuses.find((entry) => entry.status === "burn")
+          ?.duration ?? "expired"
+      );
+    }
+
+    expect(observedDurations).toEqual([
+      ...Array.from({ length: burnDuration - 1 }, (_value, index) =>
+        burnDuration - 1 - index
+      ),
+      "expired"
+    ]);
+
+    const turnLines = readTraceLines(fs, runId).slice(1).map(expectTurnLine);
+    expect(turnLines).toHaveLength(burnDuration);
+    expect(
+      turnLines.every((line) => /^[0-9a-f]{8}$/.test(line.stateHash))
+    ).toBe(true);
   });
 
   it("hashes stable serialized state deterministically", () => {

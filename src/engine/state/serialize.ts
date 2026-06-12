@@ -14,7 +14,7 @@ import {
   ENGINE_VERSION,
   PROTOCOL_VERSION,
 } from "../../schemas/protocol.js";
-import { StatusApplicationSchema } from "../../schemas/vocab/index.js";
+import { RuntimeStatusApplicationSchema } from "../../schemas/vocab/index.js";
 import { depthBandForDepth } from "./init.js";
 import {
   ACTIVE_TERMINAL_STATUS,
@@ -163,7 +163,7 @@ const PlayerStateSchema = z
         .array(PlayerItemStackSchema.nullable())
         .length(config.playerCharacter.equipmentSlots.charms),
     }),
-    statuses: z.array(StatusApplicationSchema),
+    statuses: z.array(RuntimeStatusApplicationSchema),
   })
   .superRefine((player, ctx) => {
     if (player.hp.current > player.hp.max) {
@@ -187,7 +187,7 @@ const EntityRuntimeFieldsSchema = {
   id: EntityIdSchema,
   position: PositionSchema,
   currentHP: z.number().int().nonnegative().nullable(),
-  statuses: z.array(StatusApplicationSchema),
+  statuses: z.array(RuntimeStatusApplicationSchema),
   behaviorRuntime: SerializableRecordSchema,
 } as const;
 

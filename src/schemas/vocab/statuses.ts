@@ -39,4 +39,21 @@ export const StatusApplicationSchema = z
     }
   });
 
+export const RuntimeStatusApplicationSchema = z
+  .strictObject({
+    status: StatusIdSchema,
+    duration: z.number().int().nonnegative(),
+  })
+  .superRefine((application, ctx) => {
+    const durationBounds = STATUS_DURATION_BOUNDS[application.status];
+
+    if (application.duration > durationBounds.max) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["duration"],
+        message: `${application.status} duration must be at most ${durationBounds.max}`,
+      });
+    }
+  });
+
 export type StatusApplication = z.infer<typeof StatusApplicationSchema>;
