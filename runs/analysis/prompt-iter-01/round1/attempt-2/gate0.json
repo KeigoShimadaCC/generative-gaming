@@ -1,0 +1,11 @@
+{
+  "gate": 0,
+  "pass": true,
+  "checks": [
+    {
+      "code": "G0_SCHEMA",
+      "pass": true,
+      "detail": "manifest schema valid"
+    }
+  ]
+}

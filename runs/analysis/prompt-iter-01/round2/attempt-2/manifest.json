@@ -1,0 +1,265 @@
+{
+  "protocolVersion": "1.2.0",
+  "depth": 4,
+  "band": "shallows",
+  "params": {
+    "bandOrSize": "shallows",
+    "roomCountRange": {
+      "min": 4,
+      "max": 7
+    },
+    "flavor": "open",
+    "seed": "prompt-iter-round2-2"
+  },
+  "roster": [
+    {
+      "id": "chalk-scrabbler",
+      "name": "chalk scrabbler",
+      "glyph": "s",
+      "origin": "old_stock",
+      "stats": {
+        "band": "shallows",
+        "hp": 4,
+        "attack": 2,
+        "defense": 0,
+        "xpYield": 2
+      },
+      "behaviors": [
+        {
+          "kind": "approach_melee",
+          "approachMelee": {},
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": null,
+          "ambusher": null,
+          "territorial": null,
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": null
+    },
+    {
+      "id": "mud-button-man",
+      "name": "mud-button man",
+      "glyph": "m",
+      "origin": "made",
+      "stats": {
+        "band": "shallows",
+        "hp": 4,
+        "attack": 2,
+        "defense": 0,
+        "xpYield": 2
+      },
+      "behaviors": [
+        {
+          "kind": "approach_melee",
+          "approachMelee": {},
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": null,
+          "ambusher": null,
+          "territorial": null,
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "notched-copper-knife",
+      "name": "notched copper knife",
+      "glyph": ")",
+      "kind": "weapon",
+      "value": {
+        "band": "shallows",
+        "coin": 8
+      },
+      "weapon": {
+        "attackBonus": 1,
+        "cursed": false,
+        "onHit": null
+      },
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "near_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "patched-bark-vest",
+      "name": "patched bark vest",
+      "glyph": "[",
+      "kind": "armor",
+      "value": {
+        "band": "shallows",
+        "coin": 7
+      },
+      "weapon": null,
+      "armor": {
+        "defenseBonus": 1,
+        "cursed": false,
+        "onStruck": null
+      },
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": null
+    },
+    {
+      "id": "wrapped-root-cake",
+      "name": "wrapped root cake",
+      "glyph": "%",
+      "kind": "food",
+      "value": {
+        "band": "shallows",
+        "coin": 5
+      },
+      "weapon": null,
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": {
+        "effect": {
+          "effects": [
+            {
+              "kind": "nutrition",
+              "damage": null,
+              "heal": null,
+              "applyStatus": null,
+              "cureStatus": null,
+              "buffStat": null,
+              "nutrition": {
+                "fullness": 20
+              },
+              "teleportSelf": null,
+              "teleportTarget": null,
+              "blink": null,
+              "knockback": null,
+              "reveal": null,
+              "identify": null,
+              "enchant": null,
+              "summon": null,
+              "transform": null,
+              "dig": null
+            }
+          ],
+          "trigger": {
+            "kind": "quaff",
+            "quaff": {},
+            "read": null,
+            "throwHit": null,
+            "equipPassive": null,
+            "onHit": null,
+            "onStruck": null,
+            "step": null,
+            "use": null
+          },
+          "targeting": {
+            "kind": "self",
+            "self": {},
+            "melee": null,
+            "bolt": null,
+            "burst": null,
+            "floor": null
+          }
+        }
+      },
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "green-crusted-coins",
+      "name": "green-crusted coins",
+      "glyph": "$",
+      "kind": "coin",
+      "value": {
+        "band": "shallows",
+        "coin": 12
+      },
+      "weapon": null,
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": {},
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    }
+  ],
+  "traps": [],
+  "npcs": [],
+  "quest": null,
+  "narration": {
+    "floorIntro": "The rooms open like a slack hand. Something small has already forgotten you.",
+    "observations": [
+      {
+        "id": "coin-heap-glance",
+        "triggerTag": "coin-hoard-mirrored",
+        "text": "A few coins wait past old trouble, as if the dark has noticed what your hand keeps."
+      },
+      {
+        "id": "wide-floor-warning",
+        "triggerTag": "open-crossing-warning",
+        "text": "The floor is broad here. Anything crossing it will be seen before it reaches you."
+      }
+    ]
+  },
+  "metadata": {
+    "originTags": {
+      "made": 1,
+      "old_stock": 1,
+      "kept": 0
+    },
+    "callbacks": [
+      "coin-hoard-mirrored",
+      "open-crossing-warning"
+    ],
+    "signature": false
+  }
+}

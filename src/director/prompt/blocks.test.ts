@@ -48,25 +48,23 @@ describe("prompt blocks", () => {
     expect(task).toContain("placementHint");
     expect(task).toContain("packHunter");
     expect(task).toContain("ambusher");
-    for (const kind of [
-      "weapon",
-      "armor",
-      "charm",
-      "draught",
-      "note",
-      "throwable",
-      "food",
-      "tool",
-      "key_item",
-      "coin",
-    ]) {
+    expect(task).toContain("Use exactly 2 roster entries");
+    expect(task).toContain("copy these exact low-cost stats");
+    expect(task).toContain("Use exactly 4 items");
+    expect(task).toContain("Use traps:[], npcs:[], and quest:null");
+    for (const kind of ["weapon", "armor", "food", "coin"]) {
       expect(task).toContain(`"kind": "${kind}"`);
     }
+    expect(task).toContain("Do not emit charm, draught, note, throwable, tool, or key_item");
     expect(task).toContain('"onHit": null');
     expect(task).toContain('"onStruck": null');
     expect(task).toContain('"cursed": false');
-    expect(task).toContain('"kind": "step"');
-    expect(task).toContain('"step": {}');
+    expect(task).toContain('"traps": []');
+    expect(task).toContain("nutrition uses nutrition:{fullness}");
+    expect(task).toContain("reveal uses reveal:{target}");
+    expect(task).toContain("identify uses identify:{mode:");
+    expect(task).toContain('apply_status uses applyStatus:{status,duration}');
+    expect(task).toContain("never nutrition.amount");
     expect(task).toContain("Common mistakes to avoid");
     expect(task).toContain("ONLY the JSON manifest");
     expect(task).toContain(

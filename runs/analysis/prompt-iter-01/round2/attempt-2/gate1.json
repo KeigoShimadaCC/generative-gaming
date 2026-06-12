@@ -1,0 +1,61 @@
+{
+  "gate": 1,
+  "pass": true,
+  "checks": [
+    {
+      "code": "G1_PROTOCOL_VERSION",
+      "pass": true,
+      "detail": "protocolVersion 1.2.0"
+    },
+    {
+      "code": "G1_REF_INTEGRITY",
+      "pass": true,
+      "detail": "entity references resolve within manifest"
+    },
+    {
+      "code": "G1_CALLBACK_REF",
+      "pass": true,
+      "detail": "callback tags match narration observation triggerTags"
+    },
+    {
+      "code": "G1_PLACEMENT_HINT",
+      "pass": true,
+      "detail": "placement hint room indexes fit params.roomCountRange"
+    },
+    {
+      "code": "G1_ENEMY_STATS",
+      "pass": true,
+      "detail": "all roster stats within shallows band"
+    },
+    {
+      "code": "G1_ROSTER_BUDGET",
+      "pass": true,
+      "detail": "roster cost 4 within shallows spawn budget 20"
+    },
+    {
+      "code": "G1_ITEM_VALUE",
+      "pass": true,
+      "detail": "all item values match shallows economy band"
+    },
+    {
+      "code": "G1_TRAP_LETHALITY",
+      "pass": true,
+      "detail": "trap bundles are non-lethal from band-typical full HP"
+    },
+    {
+      "code": "G1_ENTITY_CAP",
+      "pass": true,
+      "detail": "entity counts within configured caps"
+    },
+    {
+      "code": "G1_TEXT_CAP",
+      "pass": true,
+      "detail": "text fields within configured caps"
+    },
+    {
+      "code": "G1_SIGNATURE",
+      "pass": true,
+      "detail": "signature flag not set"
+    }
+  ]
+}

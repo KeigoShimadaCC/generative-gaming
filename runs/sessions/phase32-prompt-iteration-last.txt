@@ -1,0 +1,23 @@
+Implemented the prompt hardening and stopped without committing.
+
+Changed:
+- [blocks.ts](/Users/keigoshimada/Documents/generative-gaming/src/director/prompt/blocks.ts): narrowed live manifest recipe to a Gate 0/1-safe subset, added strict payload spelling guidance, then tightened roster budget behavior to exactly 2 low-cost `approach_melee` enemies with minimum band stats.
+- [blocks.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/director/prompt/blocks.test.ts) and [assemble.test.ts.snap](/Users/keigoshimada/Documents/generative-gaming/src/director/prompt/__snapshots__/assemble.test.ts.snap): updated tests/snapshots deliberately.
+- [results.md](/Users/keigoshimada/Documents/generative-gaming/runs/analysis/prompt-iter-01/results.md): forensic error grouping, before/round1/round2 rates, artifact paths, verification, residual risk.
+
+Measurement:
+- Brief heartbeat before: `0/3`, all `G0_SCHEMA`.
+- Fresh baseline before edits: `0/1` Gate 0+1, `G0_SCHEMA`.
+- Round 1: `5/5` Gate 0, `0/5` Gate 0+1, all failed `G1_ROSTER_BUDGET`.
+- Round 2: `5/5` Gate 0+1. Target `>=4/5` met.
+
+Verification:
+- `pnpm exec eslint src/director/prompt` -> passed.
+- `pnpm exec vitest run src/director/prompt` -> 3 files, 12 tests passed.
+- `pnpm run check` -> typecheck passed, lint passed, 67 test files passed; 473 tests passed, 1 skipped.
+
+Scope notes:
+- No commit made.
+- Unrelated/concurrent `scripts/ledger.tsv` change for `phase38-prefetch` was left untouched.
+- Full check generated new untracked `runs/bot-*` artifacts; left intact.
+- Environment discoveries: none new. Actual time: ~70m vs 40m estimate.

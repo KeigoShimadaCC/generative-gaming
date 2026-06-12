@@ -95,3 +95,7 @@ timestamp	label	agent	model	effort	seconds	input_tokens	output_tokens	total_toke
 2026-06-12T05:15:40Z	verify-watchdog-smoke	codex	default	default	361	0	0	0	124
 2026-06-12T05:23:58Z	verify-watchdog-smoke-r2	codex	default	default	5	16747	24	16771	0
 2026-06-12T05:12:54Z	phase36-verify	cursor	composer-2.5	default	726	NA	NA	NA	0
+2026-06-12T05:26:30Z	phase38-prefetch	cursor	composer-2.5	default	470	NA	NA	NA	0
+2026-06-12T05:25:58Z	phase32-prompt-iteration	codex	default	default	1240	11774003	36200	11810203	0
+2026-06-12T05:47:19Z	phase38iter-verify	cursor	composer-2.5	default	168	NA	NA	NA	0
+2026-06-12T05:50:24Z	phase38-fixes	cursor	composer-2.5	default	187	NA	NA	NA	0

@@ -1,0 +1,607 @@
+{
+  "protocolVersion": "1.2.0",
+  "depth": 3,
+  "band": "shallows",
+  "params": {
+    "bandOrSize": "shallows",
+    "roomCountRange": {
+      "min": 5,
+      "max": 6
+    },
+    "flavor": "open",
+    "seed": "prompt-iter-baseline-1"
+  },
+  "roster": [
+    {
+      "id": "pale-moss-bit",
+      "name": "pale moss-bit",
+      "glyph": "m",
+      "origin": "old_stock",
+      "stats": {
+        "band": "shallows",
+        "hp": 4,
+        "attack": 2,
+        "defense": 0,
+        "xpYield": 2
+      },
+      "behaviors": [
+        {
+          "kind": "pack_hunter",
+          "approachMelee": null,
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": {
+            "allyCount": 2
+          },
+          "ambusher": null,
+          "territorial": null,
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "near_entrance",
+        "spread": true
+      }
+    },
+    {
+      "id": "silt-guard-young",
+      "name": "young silt-guard",
+      "glyph": "s",
+      "origin": "old_stock",
+      "stats": {
+        "band": "shallows",
+        "hp": 8,
+        "attack": 3,
+        "defense": 1,
+        "xpYield": 4
+      },
+      "behaviors": [
+        {
+          "kind": "territorial",
+          "approachMelee": null,
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": null,
+          "ambusher": null,
+          "territorial": {
+            "radiusTiles": 3
+          },
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "hollow-root-lurker",
+      "name": "hollow root lurker",
+      "glyph": "r",
+      "origin": "old_stock",
+      "stats": {
+        "band": "shallows",
+        "hp": 6,
+        "attack": 3,
+        "defense": 0,
+        "xpYield": 3
+      },
+      "behaviors": [
+        {
+          "kind": "ambusher",
+          "approachMelee": null,
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": null,
+          "ambusher": {
+            "wakeRadiusTiles": 1
+          },
+          "territorial": null,
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    },
+    {
+      "id": "coin-eyed-thing",
+      "name": "coin-eyed thing",
+      "glyph": "c",
+      "origin": "made",
+      "stats": {
+        "band": "shallows",
+        "hp": 5,
+        "attack": 2,
+        "defense": 0,
+        "xpYield": 3
+      },
+      "behaviors": [
+        {
+          "kind": "flee_low_hp",
+          "approachMelee": null,
+          "keepRange": null,
+          "fleeLowHp": {},
+          "packHunter": null,
+          "ambusher": null,
+          "territorial": null,
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": false
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "dull-crook-knife",
+      "name": "dull crook-knife",
+      "glyph": ")",
+      "kind": "weapon",
+      "value": {
+        "band": "shallows",
+        "coin": 12
+      },
+      "weapon": {
+        "attackBonus": 1,
+        "cursed": false,
+        "onHit": null
+      },
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "near_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "stitched-bark-vest",
+      "name": "stitched bark vest",
+      "glyph": "[",
+      "kind": "armor",
+      "value": {
+        "band": "shallows",
+        "coin": 18
+      },
+      "weapon": null,
+      "armor": {
+        "defenseBonus": 1,
+        "cursed": false,
+        "onStruck": null
+      },
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "cool-root-bread",
+      "name": "cool root bread",
+      "glyph": "%",
+      "kind": "food",
+      "value": {
+        "band": "shallows",
+        "coin": 7
+      },
+      "weapon": null,
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": {
+        "effect": {
+          "effects": [
+            {
+              "kind": "nutrition",
+              "damage": null,
+              "heal": null,
+              "applyStatus": null,
+              "cureStatus": null,
+              "buffStat": null,
+              "nutrition": {
+                "amount": 6
+              },
+              "teleportSelf": null,
+              "teleportTarget": null,
+              "blink": null,
+              "knockback": null,
+              "reveal": null,
+              "identify": null,
+              "enchant": null,
+              "summon": null,
+              "transform": null,
+              "dig": null
+            }
+          ],
+          "trigger": {
+            "kind": "quaff",
+            "quaff": {},
+            "read": null,
+            "throwHit": null,
+            "equipPassive": null,
+            "onHit": null,
+            "onStruck": null,
+            "step": null,
+            "use": null
+          },
+          "targeting": {
+            "kind": "self",
+            "self": {},
+            "melee": null,
+            "bolt": null,
+            "burst": null,
+            "floor": null
+          }
+        }
+      },
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "near_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "tinless-coin-knot",
+      "name": "damp coin knot",
+      "glyph": "$",
+      "kind": "coin",
+      "value": {
+        "band": "shallows",
+        "coin": 24
+      },
+      "weapon": null,
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": {},
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "spent-wick-lens",
+      "name": "spent-wick lens",
+      "glyph": ";",
+      "kind": "tool",
+      "value": {
+        "band": "shallows",
+        "coin": 16
+      },
+      "weapon": null,
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": {
+        "effect": {
+          "effects": [
+            {
+              "kind": "reveal",
+              "damage": null,
+              "heal": null,
+              "applyStatus": null,
+              "cureStatus": null,
+              "buffStat": null,
+              "nutrition": null,
+              "teleportSelf": null,
+              "teleportTarget": null,
+              "blink": null,
+              "knockback": null,
+              "reveal": {
+                "radiusTiles": 3
+              },
+              "identify": null,
+              "enchant": null,
+              "summon": null,
+              "transform": null,
+              "dig": null
+            }
+          ],
+          "trigger": {
+            "kind": "use",
+            "quaff": null,
+            "read": null,
+            "throwHit": null,
+            "equipPassive": null,
+            "onHit": null,
+            "onStruck": null,
+            "step": null,
+            "use": {
+              "charges": 1
+            }
+          },
+          "targeting": {
+            "kind": "self",
+            "self": {},
+            "melee": null,
+            "bolt": null,
+            "burst": null,
+            "floor": null
+          }
+        }
+      },
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "near_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "scratched-threshold-note",
+      "name": "scratched threshold note",
+      "glyph": "?",
+      "kind": "note",
+      "value": {
+        "band": "shallows",
+        "coin": 5
+      },
+      "weapon": null,
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": {
+        "effect": {
+          "effects": [
+            {
+              "kind": "identify",
+              "damage": null,
+              "heal": null,
+              "applyStatus": null,
+              "cureStatus": null,
+              "buffStat": null,
+              "nutrition": null,
+              "teleportSelf": null,
+              "teleportTarget": null,
+              "blink": null,
+              "knockback": null,
+              "reveal": null,
+              "identify": {},
+              "enchant": null,
+              "summon": null,
+              "transform": null,
+              "dig": null
+            }
+          ],
+          "trigger": {
+            "kind": "read",
+            "quaff": null,
+            "read": {},
+            "throwHit": null,
+            "equipPassive": null,
+            "onHit": null,
+            "onStruck": null,
+            "step": null,
+            "use": null
+          },
+          "targeting": {
+            "kind": "self",
+            "self": {},
+            "melee": null,
+            "bolt": null,
+            "burst": null,
+            "floor": null
+          }
+        }
+      },
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": false
+      }
+    }
+  ],
+  "traps": [
+    {
+      "id": "soft-silt-drop",
+      "name": "soft silt drop",
+      "hidden": false,
+      "effectBundle": {
+        "effects": [
+          {
+            "kind": "damage",
+            "damage": {
+              "amount": 2
+            },
+            "heal": null,
+            "applyStatus": null,
+            "cureStatus": null,
+            "buffStat": null,
+            "nutrition": null,
+            "teleportSelf": null,
+            "teleportTarget": null,
+            "blink": null,
+            "knockback": null,
+            "reveal": null,
+            "identify": null,
+            "enchant": null,
+            "summon": null,
+            "transform": null,
+            "dig": null
+          }
+        ],
+        "trigger": {
+          "kind": "step",
+          "quaff": null,
+          "read": null,
+          "throwHit": null,
+          "equipPassive": null,
+          "onHit": null,
+          "onStruck": null,
+          "step": {},
+          "use": null
+        },
+        "targeting": {
+          "kind": "self",
+          "self": {},
+          "melee": null,
+          "bolt": null,
+          "burst": null,
+          "floor": null
+        }
+      },
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "thorn-sleep-snare",
+      "name": "thorn sleep snare",
+      "hidden": true,
+      "effectBundle": {
+        "effects": [
+          {
+            "kind": "apply_status",
+            "damage": null,
+            "heal": null,
+            "applyStatus": {
+              "status": "sleep",
+              "turns": 1
+            },
+            "cureStatus": null,
+            "buffStat": null,
+            "nutrition": null,
+            "teleportSelf": null,
+            "teleportTarget": null,
+            "blink": null,
+            "knockback": null,
+            "reveal": null,
+            "identify": null,
+            "enchant": null,
+            "summon": null,
+            "transform": null,
+            "dig": null
+          }
+        ],
+        "trigger": {
+          "kind": "step",
+          "quaff": null,
+          "read": null,
+          "throwHit": null,
+          "equipPassive": null,
+          "onHit": null,
+          "onStruck": null,
+          "step": {},
+          "use": null
+        },
+        "targeting": {
+          "kind": "self",
+          "self": {},
+          "melee": null,
+          "bolt": null,
+          "burst": null,
+          "floor": null
+        }
+      },
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    }
+  ],
+  "npcs": [],
+  "quest": null,
+  "narration": {
+    "floorIntro": "The Deep opens a few dry rooms and lets the damp things keep their corners.",
+    "observations": [
+      {
+        "id": "coin-habit-mirrored",
+        "triggerTag": "coin-cache-seen",
+        "text": "A small pile waits in plain sight. Nothing reaches for it first."
+      },
+      {
+        "id": "old-kills-stir",
+        "triggerTag": "moss-bit-room",
+        "text": "Moss-bits worry the cracks, smaller than the ones you ended above."
+      },
+      {
+        "id": "warning-silt-drop",
+        "triggerTag": "trap-nearby",
+        "text": "The silt ahead has no skin of dust. It has been opened recently."
+      }
+    ]
+  },
+  "metadata": {
+    "originTags": {
+      "made": 1,
+      "old_stock": 3,
+      "kept": 0
+    },
+    "callbacks": [
+      "coin-cache-seen",
+      "moss-bit-room",
+      "trap-nearby"
+    ],
+    "signature": false
+  }
+}

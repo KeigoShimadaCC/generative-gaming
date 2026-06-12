@@ -1,0 +1,321 @@
+{
+  "protocolVersion": "1.2.0",
+  "depth": 6,
+  "band": "middle",
+  "params": {
+    "bandOrSize": "middle",
+    "roomCountRange": {
+      "min": 6,
+      "max": 8
+    },
+    "flavor": "ring",
+    "seed": "prompt-iter-round1-3"
+  },
+  "roster": [
+    {
+      "id": "counting-silt-guard",
+      "name": "counting silt-guard",
+      "glyph": "s",
+      "origin": "kept",
+      "stats": {
+        "band": "middle",
+        "hp": 24,
+        "attack": 8,
+        "defense": 3,
+        "xpYield": 12
+      },
+      "behaviors": [
+        {
+          "kind": "territorial",
+          "approachMelee": null,
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": null,
+          "ambusher": null,
+          "territorial": {
+            "radiusTiles": 3
+          },
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    },
+    {
+      "id": "moss-bit-twain",
+      "name": "moss-bit twain",
+      "glyph": "m",
+      "origin": "made",
+      "stats": {
+        "band": "middle",
+        "hp": 14,
+        "attack": 6,
+        "defense": 1,
+        "xpYield": 6
+      },
+      "behaviors": [
+        {
+          "kind": "pack_hunter",
+          "approachMelee": null,
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": {
+            "allyCount": 2
+          },
+          "ambusher": null,
+          "territorial": null,
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "near_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "quiet-toll-knife",
+      "name": "quiet toll-knife",
+      "glyph": "k",
+      "origin": "made",
+      "stats": {
+        "band": "middle",
+        "hp": 18,
+        "attack": 7,
+        "defense": 2,
+        "xpYield": 9
+      },
+      "behaviors": [
+        {
+          "kind": "ambusher",
+          "approachMelee": null,
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": null,
+          "ambusher": {
+            "wakeRadiusTiles": 1
+          },
+          "territorial": null,
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "thin-taker-blade",
+      "name": "thin taker blade",
+      "glyph": ")",
+      "kind": "weapon",
+      "value": {
+        "band": "middle",
+        "coin": 54
+      },
+      "weapon": {
+        "attackBonus": 2,
+        "cursed": false,
+        "onHit": null
+      },
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    },
+    {
+      "id": "green-rivet-coat",
+      "name": "green rivet coat",
+      "glyph": "[",
+      "kind": "armor",
+      "value": {
+        "band": "middle",
+        "coin": 48
+      },
+      "weapon": null,
+      "armor": {
+        "defenseBonus": 2,
+        "cursed": false,
+        "onStruck": null
+      },
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "salted-root-bundle",
+      "name": "salted root bundle",
+      "glyph": "%",
+      "kind": "food",
+      "value": {
+        "band": "middle",
+        "coin": 26
+      },
+      "weapon": null,
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": {
+        "effect": {
+          "effects": [
+            {
+              "kind": "nutrition",
+              "damage": null,
+              "heal": null,
+              "applyStatus": null,
+              "cureStatus": null,
+              "buffStat": null,
+              "nutrition": {
+                "fullness": 45
+              },
+              "teleportSelf": null,
+              "teleportTarget": null,
+              "blink": null,
+              "knockback": null,
+              "reveal": null,
+              "identify": null,
+              "enchant": null,
+              "summon": null,
+              "transform": null,
+              "dig": null
+            }
+          ],
+          "trigger": {
+            "kind": "quaff",
+            "quaff": {},
+            "read": null,
+            "throwHit": null,
+            "equipPassive": null,
+            "onHit": null,
+            "onStruck": null,
+            "step": null,
+            "use": null
+          },
+          "targeting": {
+            "kind": "self",
+            "self": {},
+            "melee": null,
+            "bolt": null,
+            "burst": null,
+            "floor": null
+          }
+        }
+      },
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "near_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "watching-copper-pile",
+      "name": "watching copper pile",
+      "glyph": "$",
+      "kind": "coin",
+      "value": {
+        "band": "middle",
+        "coin": 72
+      },
+      "weapon": null,
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": {},
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    }
+  ],
+  "traps": [],
+  "npcs": [],
+  "quest": null,
+  "narration": {
+    "floorIntro": "The ring of rooms waits with its hands folded, counting what you carry and what you leave alive.",
+    "observations": [
+      {
+        "id": "hoard-weight",
+        "triggerTag": "coin-heavy-pack",
+        "text": "Your purse gives a small answer at every step. The Deep has learned that sound."
+      },
+      {
+        "id": "old-kill-callback",
+        "triggerTag": "moss-bit-memory",
+        "text": "Moss stirs from cracks, shy of your blade and not shy enough."
+      },
+      {
+        "id": "close-call-door",
+        "triggerTag": "wounded-threshold",
+        "text": "The next door is narrow. It offers you room to turn back before it offers teeth."
+      }
+    ]
+  },
+  "metadata": {
+    "originTags": {
+      "made": 2,
+      "old_stock": 0,
+      "kept": 1
+    },
+    "callbacks": [
+      "coin-heavy-pack",
+      "moss-bit-memory",
+      "wounded-threshold"
+    ],
+    "signature": true
+  }
+}

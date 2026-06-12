@@ -1,0 +1,25 @@
+{
+  "ok": false,
+  "error": {
+    "code": "validate_fail",
+    "message": "manifest output did not parse or validate",
+    "details": [
+      "$.roster[3].behaviors[0].fleeLowHp.thresholdPercent: Invalid input: expected number, received undefined",
+      "$.items[2].food.effect.effects[0].nutrition.fullness: Invalid input: expected number, received undefined",
+      "$.items[2].food.effect.effects[0].nutrition: Unrecognized key: \"amount\"",
+      "$.items[4].tool.effect.effects[0].reveal.target: Invalid option: expected one of \"map\"|\"items\"|\"enemies\"|\"traps\"",
+      "$.items[4].tool.effect.effects[0].reveal: Unrecognized key: \"radiusTiles\"",
+      "$.items[5].note.effect.effects[0].identify.mode: Invalid option: expected one of \"carried_item\"|\"category\"",
+      "$.items[5].note.effect.effects[0].identify.carriedItemId: Invalid input: expected string, received undefined",
+      "$.items[5].note.effect.effects[0].identify.category: Invalid input: expected string, received undefined",
+      "$.traps[0].hidden: Invalid input: expected true",
+      "$.traps[1].effectBundle.effects[0].applyStatus.status: Invalid option: expected one of \"poison\"|\"burn\"|\"regen\"|\"stun\"|\"confusion\"|\"slow\"|\"haste\"|\"blind\"|\"shield\"|\"weaken\"",
+      "$.traps[1].effectBundle.effects[0].applyStatus.duration: Invalid input: expected number, received undefined",
+      "$.traps[1].effectBundle.effects[0].applyStatus: Unrecognized key: \"turns\""
+    ]
+  },
+  "usage": {
+    "latencyMs": 79149,
+    "tokens": null
+  }
+}

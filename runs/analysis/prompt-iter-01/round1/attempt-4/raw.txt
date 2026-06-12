@@ -1,0 +1,321 @@
+{
+  "protocolVersion": "1.2.0",
+  "depth": 8,
+  "band": "middle",
+  "params": {
+    "bandOrSize": "middle",
+    "roomCountRange": {
+      "min": 6,
+      "max": 8
+    },
+    "flavor": "ring",
+    "seed": "prompt-iter-round1-4"
+  },
+  "roster": [
+    {
+      "id": "ledger-silt-guard",
+      "name": "ledger silt-guard",
+      "glyph": "s",
+      "origin": "made",
+      "stats": {
+        "band": "middle",
+        "hp": 22,
+        "attack": 7,
+        "defense": 3,
+        "xpYield": 10
+      },
+      "behaviors": [
+        {
+          "kind": "territorial",
+          "approachMelee": null,
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": null,
+          "ambusher": null,
+          "territorial": {
+            "radiusTiles": 3
+          },
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": 2,
+        "distance": "near_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "moss-bit-witness",
+      "name": "moss-bit witness",
+      "glyph": "m",
+      "origin": "kept",
+      "stats": {
+        "band": "middle",
+        "hp": 16,
+        "attack": 6,
+        "defense": 2,
+        "xpYield": 8
+      },
+      "behaviors": [
+        {
+          "kind": "pack_hunter",
+          "approachMelee": null,
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": {
+            "allyCount": 3
+          },
+          "ambusher": null,
+          "territorial": null,
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    },
+    {
+      "id": "purse-shadow",
+      "name": "purse shadow",
+      "glyph": "p",
+      "origin": "made",
+      "stats": {
+        "band": "middle",
+        "hp": 18,
+        "attack": 8,
+        "defense": 1,
+        "xpYield": 9
+      },
+      "behaviors": [
+        {
+          "kind": "ambusher",
+          "approachMelee": null,
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": null,
+          "ambusher": {
+            "wakeRadiusTiles": 2
+          },
+          "territorial": null,
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": false
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "counting-knife",
+      "name": "counting knife",
+      "glyph": ")",
+      "kind": "weapon",
+      "value": {
+        "band": "middle",
+        "coin": 54
+      },
+      "weapon": {
+        "attackBonus": 2,
+        "cursed": false,
+        "onHit": null
+      },
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": 3,
+        "distance": "far_from_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "quiet-ringmail",
+      "name": "quiet ringmail",
+      "glyph": "[",
+      "kind": "armor",
+      "value": {
+        "band": "middle",
+        "coin": 61
+      },
+      "weapon": null,
+      "armor": {
+        "defenseBonus": 2,
+        "cursed": false,
+        "onStruck": null
+      },
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    },
+    {
+      "id": "shared-root",
+      "name": "shared root",
+      "glyph": "%",
+      "kind": "food",
+      "value": {
+        "band": "middle",
+        "coin": 28
+      },
+      "weapon": null,
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": {
+        "effect": {
+          "effects": [
+            {
+              "kind": "nutrition",
+              "damage": null,
+              "heal": null,
+              "applyStatus": null,
+              "cureStatus": null,
+              "buffStat": null,
+              "nutrition": {
+                "fullness": 40
+              },
+              "teleportSelf": null,
+              "teleportTarget": null,
+              "blink": null,
+              "knockback": null,
+              "reveal": null,
+              "identify": null,
+              "enchant": null,
+              "summon": null,
+              "transform": null,
+              "dig": null
+            }
+          ],
+          "trigger": {
+            "kind": "quaff",
+            "quaff": {},
+            "read": null,
+            "throwHit": null,
+            "equipPassive": null,
+            "onHit": null,
+            "onStruck": null,
+            "step": null,
+            "use": null
+          },
+          "targeting": {
+            "kind": "self",
+            "self": {},
+            "melee": null,
+            "bolt": null,
+            "burst": null,
+            "floor": null
+          }
+        }
+      },
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": 1,
+        "distance": "near_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "hoarded-coppers",
+      "name": "hoarded coppers",
+      "glyph": "$",
+      "kind": "coin",
+      "value": {
+        "band": "middle",
+        "coin": 73
+      },
+      "weapon": null,
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": {},
+      "placementHint": {
+        "roomIndex": 5,
+        "distance": "far_from_entrance",
+        "spread": false
+      }
+    }
+  ],
+  "traps": [],
+  "npcs": [],
+  "quest": null,
+  "narration": {
+    "floorIntro": "The ring of rooms closes softly behind you, and the Deep counts what you keep.",
+    "observations": [
+      {
+        "id": "coin-hand-obs",
+        "triggerTag": "coin-hand",
+        "text": "Your pouch speaks before you do. The floor listens to every small metal answer."
+      },
+      {
+        "id": "moss-memory-obs",
+        "triggerTag": "moss-memory",
+        "text": "Something green remembers four endings under your hand, and gathers its little courage."
+      },
+      {
+        "id": "unused-feast-obs",
+        "triggerTag": "unused-feast",
+        "text": "Food waits where you can see it. The Deep has noticed how rarely you let need become use."
+      }
+    ]
+  },
+  "metadata": {
+    "originTags": {
+      "made": 2,
+      "old_stock": 0,
+      "kept": 1
+    },
+    "callbacks": [
+      "coin-hand",
+      "moss-memory",
+      "unused-feast"
+    ],
+    "signature": true
+  }
+}

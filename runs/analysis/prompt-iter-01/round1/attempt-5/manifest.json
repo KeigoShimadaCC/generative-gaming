@@ -1,0 +1,321 @@
+{
+  "protocolVersion": "1.2.0",
+  "depth": 10,
+  "band": "lowest",
+  "params": {
+    "bandOrSize": "lowest",
+    "roomCountRange": {
+      "min": 3,
+      "max": 6
+    },
+    "flavor": "sanctum",
+    "seed": "prompt-iter-round1-5"
+  },
+  "roster": [
+    {
+      "id": "last-silt-guard",
+      "name": "last silt guard",
+      "glyph": "g",
+      "origin": "made",
+      "stats": {
+        "band": "lowest",
+        "hp": 42,
+        "attack": 14,
+        "defense": 6,
+        "xpYield": 21
+      },
+      "behaviors": [
+        {
+          "kind": "territorial",
+          "approachMelee": null,
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": null,
+          "ambusher": null,
+          "territorial": {
+            "radiusTiles": 3
+          },
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": 1,
+        "distance": "near_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "moss-bit-remainder",
+      "name": "moss-bit remainder",
+      "glyph": "m",
+      "origin": "made",
+      "stats": {
+        "band": "lowest",
+        "hp": 28,
+        "attack": 10,
+        "defense": 4,
+        "xpYield": 14
+      },
+      "behaviors": [
+        {
+          "kind": "pack_hunter",
+          "approachMelee": null,
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": {
+            "allyCount": 2
+          },
+          "ambusher": null,
+          "territorial": null,
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    },
+    {
+      "id": "quiet-counting-shape",
+      "name": "quiet counting shape",
+      "glyph": "c",
+      "origin": "made",
+      "stats": {
+        "band": "lowest",
+        "hp": 36,
+        "attack": 12,
+        "defense": 5,
+        "xpYield": 18
+      },
+      "behaviors": [
+        {
+          "kind": "ambusher",
+          "approachMelee": null,
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": null,
+          "ambusher": {
+            "wakeRadiusTiles": 1
+          },
+          "territorial": null,
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": 2,
+        "distance": "far_from_entrance",
+        "spread": false
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "kept-edge",
+      "name": "kept edge",
+      "glyph": ")",
+      "kind": "weapon",
+      "value": {
+        "band": "lowest",
+        "coin": 150
+      },
+      "weapon": {
+        "attackBonus": 2,
+        "cursed": false,
+        "onHit": null
+      },
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": 2,
+        "distance": "far_from_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "patient-mail",
+      "name": "patient mail",
+      "glyph": "[",
+      "kind": "armor",
+      "value": {
+        "band": "lowest",
+        "coin": 140
+      },
+      "weapon": null,
+      "armor": {
+        "defenseBonus": 2,
+        "cursed": false,
+        "onStruck": null
+      },
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": 1,
+        "distance": "near_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "last-bread",
+      "name": "last bread",
+      "glyph": "%",
+      "kind": "food",
+      "value": {
+        "band": "lowest",
+        "coin": 80
+      },
+      "weapon": null,
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": {
+        "effect": {
+          "effects": [
+            {
+              "kind": "nutrition",
+              "damage": null,
+              "heal": null,
+              "applyStatus": null,
+              "cureStatus": null,
+              "buffStat": null,
+              "nutrition": {
+                "fullness": 70
+              },
+              "teleportSelf": null,
+              "teleportTarget": null,
+              "blink": null,
+              "knockback": null,
+              "reveal": null,
+              "identify": null,
+              "enchant": null,
+              "summon": null,
+              "transform": null,
+              "dig": null
+            }
+          ],
+          "trigger": {
+            "kind": "quaff",
+            "quaff": {},
+            "read": null,
+            "throwHit": null,
+            "equipPassive": null,
+            "onHit": null,
+            "onStruck": null,
+            "step": null,
+            "use": null
+          },
+          "targeting": {
+            "kind": "self",
+            "self": {},
+            "melee": null,
+            "bolt": null,
+            "burst": null,
+            "floor": null
+          }
+        }
+      },
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": 0,
+        "distance": "near_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "counted-coins",
+      "name": "counted coins",
+      "glyph": "$",
+      "kind": "coin",
+      "value": {
+        "band": "lowest",
+        "coin": 180
+      },
+      "weapon": null,
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": {},
+      "placementHint": {
+        "roomIndex": 3,
+        "distance": "far_from_entrance",
+        "spread": false
+      }
+    }
+  ],
+  "traps": [],
+  "npcs": [],
+  "quest": null,
+  "narration": {
+    "floorIntro": "The Deep has counted what you carried past hunger, past speech, past the small bodies you chose to kill.",
+    "observations": [
+      {
+        "id": "hoard-observed",
+        "triggerTag": "coin-hoard",
+        "text": "Gold waits in a clean heap. It does not hide from you. It only asks what else you meant to keep."
+      },
+      {
+        "id": "avoidance-observed",
+        "triggerTag": "paths-not-taken",
+        "text": "Two halls bend away without shame. You have spared many doors your blood, and I remember."
+      },
+      {
+        "id": "near-end-observed",
+        "triggerTag": "close-call",
+        "text": "Here is a narrow place like the one that almost took you. This time the warning is plain."
+      }
+    ]
+  },
+  "metadata": {
+    "originTags": {
+      "made": 3,
+      "old_stock": 0,
+      "kept": 0
+    },
+    "callbacks": [
+      "coin-hoard",
+      "paths-not-taken",
+      "close-call"
+    ],
+    "signature": false
+  }
+}

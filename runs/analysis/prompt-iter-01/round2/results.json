@@ -1,0 +1,303 @@
+{
+  "label": "round2",
+  "generatedAt": "2026-06-12T05:43:26.949Z",
+  "outDir": "/Users/keigoshimada/Documents/generative-gaming/runs/analysis/prompt-iter-01/round2",
+  "buildDir": "/private/tmp/prompt-iter-build.Je4qiG",
+  "tempCodexHomeUsed": true,
+  "includeAmbient": true,
+  "attempts": [
+    {
+      "attempt": 1,
+      "startedAt": "2026-06-12T05:40:31.355Z",
+      "band": "shallows",
+      "depth": 3,
+      "seed": "prompt-iter-round2-1",
+      "promptChars": 12051,
+      "providerOk": true,
+      "providerError": null,
+      "latencyMs": 32602,
+      "gate0Pass": true,
+      "gate1Pass": true,
+      "passGate01": true,
+      "gate0Failed": [],
+      "gate1Failed": [],
+      "parseErrors": []
+    },
+    {
+      "attempt": 2,
+      "startedAt": "2026-06-12T05:41:03.968Z",
+      "band": "shallows",
+      "depth": 4,
+      "seed": "prompt-iter-round2-2",
+      "promptChars": 12051,
+      "providerOk": true,
+      "providerError": null,
+      "latencyMs": 37120,
+      "gate0Pass": true,
+      "gate1Pass": true,
+      "passGate01": true,
+      "gate0Failed": [],
+      "gate1Failed": [],
+      "parseErrors": []
+    },
+    {
+      "attempt": 3,
+      "startedAt": "2026-06-12T05:41:41.093Z",
+      "band": "middle",
+      "depth": 6,
+      "seed": "prompt-iter-round2-3",
+      "promptChars": 12086,
+      "providerOk": true,
+      "providerError": null,
+      "latencyMs": 37798,
+      "gate0Pass": true,
+      "gate1Pass": true,
+      "passGate01": true,
+      "gate0Failed": [],
+      "gate1Failed": [],
+      "parseErrors": []
+    },
+    {
+      "attempt": 4,
+      "startedAt": "2026-06-12T05:42:18.896Z",
+      "band": "middle",
+      "depth": 8,
+      "seed": "prompt-iter-round2-4",
+      "promptChars": 12086,
+      "providerOk": true,
+      "providerError": null,
+      "latencyMs": 31410,
+      "gate0Pass": true,
+      "gate1Pass": true,
+      "passGate01": true,
+      "gate0Failed": [],
+      "gate1Failed": [],
+      "parseErrors": []
+    },
+    {
+      "attempt": 5,
+      "startedAt": "2026-06-12T05:42:50.312Z",
+      "band": "lowest",
+      "depth": 10,
+      "seed": "prompt-iter-round2-5",
+      "promptChars": 12009,
+      "providerOk": true,
+      "providerError": null,
+      "latencyMs": 36632,
+      "gate0Pass": true,
+      "gate1Pass": true,
+      "passGate01": true,
+      "gate0Failed": [],
+      "gate1Failed": [],
+      "parseErrors": []
+    }
+  ],
+  "fixtureResults": [
+    {
+      "file": "runs/spikes/29-ambient-director/attempts/host-1-stdout.txt",
+      "ok": false,
+      "errors": [
+        {
+          "path": "$.protocolVersion",
+          "message": "Invalid input: expected \"1.2.0\""
+        },
+        {
+          "path": "$.roster[0].behaviors[0].packHunter.allyCount",
+          "message": "Invalid input: expected number, received undefined"
+        },
+        {
+          "path": "$.roster[0].placementHint",
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "path": "$.roster[1].placementHint",
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "path": "$.roster[2].behaviors[0].ambusher.wakeRadiusTiles",
+          "message": "Invalid input: expected number, received undefined"
+        },
+        {
+          "path": "$.roster[2].placementHint",
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "path": "$.roster[3].behaviors[0].caster.cooldownTurns",
+          "message": "Invalid input: expected number, received undefined"
+        },
+        {
+          "path": "$.roster[3].placementHint",
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "path": "$.items[0].placementHint",
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "path": "$.items[1].placementHint",
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "path": "$.items[2].food.effect.trigger.use.charges",
+          "message": "Invalid input: expected number, received undefined"
+        },
+        {
+          "path": "$.items[2].placementHint",
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "path": "$.items[3].placementHint",
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "path": "$.items[4].placementHint",
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "path": "$.items[5].note.effect",
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "path": "$.items[5].note",
+          "message": "Unrecognized key: \"text\""
+        },
+        {
+          "path": "$.items[5].placementHint",
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "path": "$.metadata",
+          "message": "Invalid input: expected object, received undefined"
+        }
+      ]
+    },
+    {
+      "file": "runs/spikes/29-ambient-director/attempts/host-2-stdout.txt",
+      "ok": false,
+      "errors": [
+        {
+          "path": "$.protocolVersion",
+          "message": "Invalid input: expected \"1.2.0\""
+        },
+        {
+          "path": "$.roster[0].placementHint",
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "path": "$.roster[1].behaviors[0].ambusher.wakeRadiusTiles",
+          "message": "Invalid input: expected number, received undefined"
+        },
+        {
+          "path": "$.roster[1].placementHint",
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "path": "$.roster[2].behaviors[0].territorial.radiusTiles",
+          "message": "Invalid input: expected number, received undefined"
+        },
+        {
+          "path": "$.roster[2].placementHint",
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "path": "$.items[0].placementHint",
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "path": "$.items[1].placementHint",
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "path": "$.items[2].placementHint",
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "path": "$.items[3].placementHint",
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "path": "$.items[4].placementHint",
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "path": "$.items[5].placementHint",
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "path": "$.metadata",
+          "message": "Invalid input: expected object, received undefined"
+        }
+      ]
+    },
+    {
+      "file": "runs/spikes/29-ambient-director/attempts/host-3-stdout.txt",
+      "ok": false,
+      "errors": [
+        {
+          "path": "$.protocolVersion",
+          "message": "Invalid input: expected \"1.2.0\""
+        },
+        {
+          "path": "$.roster[0].behaviors[0].ambusher.wakeRadiusTiles",
+          "message": "Invalid input: expected number, received undefined"
+        },
+        {
+          "path": "$.roster[0].placementHint",
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "path": "$.roster[1].placementHint",
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "path": "$.roster[2].behaviors[0].packHunter.allyCount",
+          "message": "Invalid input: expected number, received undefined"
+        },
+        {
+          "path": "$.roster[2].placementHint",
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "path": "$.roster[3].behaviors[0].territorial.radiusTiles",
+          "message": "Invalid input: expected number, received undefined"
+        },
+        {
+          "path": "$.roster[3].placementHint",
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "path": "$.items[0].placementHint",
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "path": "$.items[1].placementHint",
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "path": "$.items[2].placementHint",
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "path": "$.items[3].placementHint",
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "path": "$.items[4].placementHint",
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "path": "$.items[5].placementHint",
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "path": "$.items[6].placementHint",
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "path": "$.metadata",
+          "message": "Invalid input: expected object, received undefined"
+        }
+      ]
+    }
+  ]
+}

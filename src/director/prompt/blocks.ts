@@ -2,23 +2,13 @@ import { bounds, config, type GameBounds, type GameConfig } from "../../config/i
 import { PROTOCOL_VERSION } from "../../schemas/protocol.js";
 import type { DepthBand } from "../../schemas/entities/index.js";
 import {
-  validAmbusherBehaviorFixture,
   validApproachMeleeBehaviorFixture,
   validArmorItemFixture,
-  validCharmItemFixture,
   validCoinItemFixture,
-  validDraughtItemFixture,
-  validFoodItemFixture,
-  validKeyItemFixture,
-  validNoteItemFixture,
-  validPackHunterBehaviorFixture,
-  validThrowableItemFixture,
-  validToolItemFixture,
-  validTrapDefinitionFixture,
   validWeaponItemFixture,
 } from "../../schemas/fixtures/entities.js";
 import { fingerprintText } from "./world-sync.js";
-import type { ManifestItemEntry, ManifestPlacementHint, ManifestTrapEntry } from "../../schemas/manifest.js";
+import type { ManifestItemEntry, ManifestPlacementHint } from "../../schemas/manifest.js";
 
 export const CANON_VERSION = "world-10-v1" as const;
 
@@ -90,35 +80,68 @@ const itemExamples = [
     placementHint: null,
   },
   {
-    fixture: validCharmItemFixture,
-    id: "example-charm",
-    name: "example charm",
-    glyph: "*",
-    placementHint: null,
-  },
-  {
-    fixture: validDraughtItemFixture,
-    id: "example-draught",
-    name: "example draught",
-    glyph: "!",
-    placementHint: null,
-  },
-  {
-    fixture: validNoteItemFixture,
-    id: "example-note",
-    name: "example note",
-    glyph: "?",
-    placementHint: null,
-  },
-  {
-    fixture: validThrowableItemFixture,
-    id: "example-stone",
-    name: "example stone",
-    glyph: "/",
-    placementHint: null,
-  },
-  {
-    fixture: validFoodItemFixture,
+    fixture: {
+      id: "food-1",
+      name: "food fixture",
+      glyph: "%",
+      kind: "food",
+      value: { band: "shallows", coin: 5 },
+      weapon: null,
+      armor: null,
+      charm: null,
+      draught: null,
+      note: null,
+      throwable: null,
+      food: {
+        effect: {
+          effects: [
+            {
+              kind: "nutrition",
+              damage: null,
+              heal: null,
+              applyStatus: null,
+              cureStatus: null,
+              buffStat: null,
+              nutrition: {
+                fullness: bounds.effectVocabulary.verbs.nutrition.fullness.min,
+              },
+              teleportSelf: null,
+              teleportTarget: null,
+              blink: null,
+              knockback: null,
+              reveal: null,
+              identify: null,
+              enchant: null,
+              summon: null,
+              transform: null,
+              dig: null,
+            },
+          ],
+          trigger: {
+            kind: "quaff",
+            quaff: {},
+            read: null,
+            throwHit: null,
+            equipPassive: null,
+            onHit: null,
+            onStruck: null,
+            step: null,
+            use: null,
+          },
+          targeting: {
+            kind: "self",
+            self: {},
+            melee: null,
+            bolt: null,
+            burst: null,
+            floor: null,
+          },
+        },
+      },
+      tool: null,
+      keyItem: null,
+      coin: null,
+    },
     id: "example-ration",
     name: "example ration",
     glyph: "%",
@@ -127,20 +150,6 @@ const itemExamples = [
       distance: "near_entrance",
       spread: false,
     },
-  },
-  {
-    fixture: validToolItemFixture,
-    id: "example-tool",
-    name: "example tool",
-    glyph: ";",
-    placementHint: null,
-  },
-  {
-    fixture: { ...validKeyItemFixture, keyItem: { questHookId: null } },
-    id: "example-key",
-    name: "example key",
-    glyph: "&",
-    placementHint: null,
   },
   {
     fixture: validCoinItemFixture,
@@ -162,17 +171,6 @@ const itemExampleForBand = (
   glyph: spec.glyph,
   value: { band, coin },
   placementHint: spec.placementHint,
-});
-
-const trapExample = (): ManifestTrapEntry => ({
-  ...validTrapDefinitionFixture,
-  id: "example-step-snare",
-  name: "example step snare",
-  placementHint: {
-    roomIndex: null,
-    distance: "far_from_entrance",
-    spread: false,
-  },
 });
 
 const fieldShapeExampleForBand = (
@@ -198,8 +196,8 @@ const fieldShapeExampleForBand = (
     },
     roster: [
       {
-        id: "example-melee",
-        name: "example melee",
+        id: "example-melee-a",
+        name: "example melee a",
         glyph: "m",
         origin: "made" as const,
         stats: {
@@ -214,29 +212,9 @@ const fieldShapeExampleForBand = (
         placementHint: null,
       },
       {
-        id: "example-ambusher",
-        name: "example ambusher",
-        glyph: "a",
-        origin: "made" as const,
-        stats: {
-          band,
-          hp: statBounds.hp.min + 1,
-          attack: statBounds.attack.min,
-          defense: statBounds.defense.min,
-          xpYield: statBounds.xpYield.min,
-        },
-        behaviors: [validAmbusherBehaviorFixture],
-        abilities: [],
-        placementHint: {
-          roomIndex: null,
-          distance: "far_from_entrance" as const,
-          spread: true,
-        },
-      },
-      {
-        id: "example-pack",
-        name: "example pack",
-        glyph: "p",
+        id: "example-melee-b",
+        name: "example melee b",
+        glyph: "b",
         origin: "made" as const,
         stats: {
           band,
@@ -245,15 +223,19 @@ const fieldShapeExampleForBand = (
           defense: statBounds.defense.min,
           xpYield: statBounds.xpYield.min,
         },
-        behaviors: [validPackHunterBehaviorFixture],
+        behaviors: [validApproachMeleeBehaviorFixture],
         abilities: [],
-        placementHint: null,
+        placementHint: {
+          roomIndex: null,
+          distance: "far_from_entrance" as const,
+          spread: true,
+        },
       },
     ],
     items: itemExamples.map((item) =>
       itemExampleForBand(item, band, valueBand.min),
     ),
-    traps: [trapExample()],
+    traps: [],
     npcs: [],
     quest: null,
     narration: {
@@ -267,29 +249,48 @@ const fieldShapeExampleForBand = (
       ],
     },
     metadata: {
-      originTags: { made: 3, old_stock: 0, kept: 0 },
+      originTags: { made: 2, old_stock: 0, kept: 0 },
       callbacks: ["first-room"],
       signature: band === bounds.directorManifest.signatureMomentBand,
     },
   };
 };
 
-const schemaDisciplineBlock = (): string => `MANIFEST SCHEMA DISCIPLINE
+const schemaDisciplineBlock = (band: DepthBand): string => `MANIFEST SCHEMA DISCIPLINE
 
 Root object MUST include protocolVersion "${PROTOCOL_VERSION}", depth, band, params, roster, items, traps, npcs, quest, narration, and metadata.
 params requires bandOrSize, roomCountRange {min,max}, flavor, and a non-empty seed string.
 Every roster/item/trap/npc entry MUST include placementHint (object with roomIndex, distance, spread) or null — never omit the field.
 metadata requires originTags {made, old_stock, kept}, callbacks string array, and signature boolean.
 
+Validity-first output recipe for this live pass:
+- Use exactly 2 roster entries, abilities:[] on every enemy, and only behavior kind approach_melee.
+- For both roster entries, copy these exact low-cost stats for the ${band} band: hp ${bounds.enemyDesign.statBudgetsByBand[band].hp.min}, attack ${bounds.enemyDesign.statBudgetsByBand[band].attack.min}, defense ${bounds.enemyDesign.statBudgetsByBand[band].defense.min}, xpYield ${bounds.enemyDesign.statBudgetsByBand[band].xpYield.min}. Do not choose larger in-range stats; Gate 1 prices stat increases and can reject the roster.
+- Use exactly 4 items: one weapon, one armor, one food, and one coin. Do not emit charm, draught, note, throwable, tool, or key_item unless a later prompt explicitly asks.
+- Use traps:[], npcs:[], and quest:null. Trap/NPC/quest richness is optional content; schema validity is mandatory.
+- Use metadata.callbacks as exactly the narration observation triggerTag values you emitted.
+
 Tagged vocabulary objects use nullable-payload style: include kind, include every payload field, set the active payload object on the matching field, and null on every inactive field.
-Behavior examples that MUST include their parameter objects when active:
+Behavior payloads that MUST include their parameter objects when active:
+- approach_melee → approachMelee:{} (no parameters)
+- keep_range → keepRange:{distanceTiles} (range ${bounds.enemyDesign.behaviorVocabulary.parameters.keepRangeDistanceTiles.min}-${bounds.enemyDesign.behaviorVocabulary.parameters.keepRangeDistanceTiles.max})
+- flee_low_hp → fleeLowHp:{thresholdPercent} (range ${bounds.enemyDesign.behaviorVocabulary.parameters.fleeLowHpThresholdPercent.min}-${bounds.enemyDesign.behaviorVocabulary.parameters.fleeLowHpThresholdPercent.max})
 - pack_hunter → packHunter:{allyCount} (range ${bounds.enemyDesign.behaviorVocabulary.parameters.packHunter.allyCountMin}-${bounds.enemyDesign.behaviorVocabulary.parameters.packHunter.allyCountMax})
 - ambusher → ambusher:{wakeRadiusTiles} (range ${bounds.enemyDesign.behaviorVocabulary.parameters.ambusherWakeRadiusTiles.min}-${bounds.enemyDesign.behaviorVocabulary.parameters.ambusherWakeRadiusTiles.max})
 - territorial → territorial:{radiusTiles} (range ${bounds.enemyDesign.behaviorVocabulary.parameters.territorialRadiusTiles.min}-${bounds.enemyDesign.behaviorVocabulary.parameters.territorialRadiusTiles.max})
+- guard → guard:{tetherId,tetherRadiusTiles} (avoid unless the tether exists)
+- patrol, thief, bodyguard, mimic → active payload is {}
 - caster → caster:{cooldownTurns} (range ${bounds.enemyDesign.behaviorVocabulary.parameters.casterCooldownTurns.min}-${bounds.enemyDesign.behaviorVocabulary.parameters.casterCooldownTurns.max})
+
+Effect payload spellings are strict:
+- nutrition uses nutrition:{fullness} (range ${bounds.effectVocabulary.verbs.nutrition.fullness.min}-${bounds.effectVocabulary.verbs.nutrition.fullness.max}); never nutrition.amount.
+- reveal uses reveal:{target} where target is one of: ${bounds.effectVocabulary.verbs.reveal.targetKinds.join(", ")}; never reveal.radiusTiles.
+- identify uses identify:{mode:"category", carriedItemId:null, category:"weapon"} or identify:{mode:"carried_item", carriedItemId:"some-item-id", category:null}; never identify:{}.
+- apply_status uses applyStatus:{status,duration}; status must be one of: ${bounds.statusVocabulary.closedList.join(", ")}; never "sleep", never "turns".
+- traps, if ever used, require hidden:true and trigger kind "step"; for this task prefer traps:[].
 Any effect bundle using trigger kind "use" MUST include use:{charges} within bounds.
 Note items MUST use note:{effect:{...}} — never invent note.text or other free-form fields.
-Common mistakes to avoid: do not omit protocolVersion, metadata, value, cursed, placementHint, inactive nullable payloads, behavior parameters, use.charges, or the full step trigger object; do not invent item proc or note.text fields — weapons use onHit, armor uses onStruck, and absent procs are null.`;
+Common mistakes to avoid: do not omit protocolVersion, metadata, value, cursed, placementHint, inactive nullable payloads, behavior parameters, use.charges, or the full step trigger object; do not raise enemy stats above the exact recipe, write hidden:false, nutrition.amount, reveal.radiusTiles, identify:{}, status:"sleep", applyStatus.turns, item proc, or note.text fields — weapons use onHit, armor uses onStruck, and absent procs are null.`;
 
 export const buildTaskBlock = (input: TaskBlockInput): string => {
   const { band, depth, config: gameConfig, bounds: gameBounds, seed, playerSummary } =
@@ -320,9 +321,9 @@ Band budgets (hard limits):
 - dialogue/description max chars: ${textCaps.descriptionDialogueLineMaxChars}
 - signature floors: metadata.signature true only in ${gameBounds.directorManifest.signatureMomentBand} band (${gameBounds.directorManifest.signatureMomentsPerRun} per run)
 
-${schemaDisciplineBlock()}
+${schemaDisciplineBlock(band)}
 
-Field-shape example manifest (shows every item category and a full step trap; actual output must obey the item/trap budgets above):
+Safe field-shape example manifest (copy this structural pattern; change names/text/ids, keep the same counts and nullable-payload discipline):
 ${JSON.stringify(example, null, 2)}
 
 Player summary (respond to this conduct in placement, narration, and quests):

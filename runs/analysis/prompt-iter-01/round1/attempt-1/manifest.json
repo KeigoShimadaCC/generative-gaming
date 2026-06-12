@@ -1,0 +1,315 @@
+{
+  "protocolVersion": "1.2.0",
+  "depth": 3,
+  "band": "shallows",
+  "params": {
+    "bandOrSize": "shallows",
+    "roomCountRange": {
+      "min": 5,
+      "max": 6
+    },
+    "flavor": "open",
+    "seed": "prompt-iter-round1-1"
+  },
+  "roster": [
+    {
+      "id": "pale-moss-bit",
+      "name": "pale moss-bit",
+      "glyph": "m",
+      "origin": "old_stock",
+      "stats": {
+        "band": "shallows",
+        "hp": 4,
+        "attack": 2,
+        "defense": 0,
+        "xpYield": 2
+      },
+      "behaviors": [
+        {
+          "kind": "pack_hunter",
+          "approachMelee": null,
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": {
+            "allyCount": 2
+          },
+          "ambusher": null,
+          "territorial": null,
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "near_entrance",
+        "spread": true
+      }
+    },
+    {
+      "id": "mud-lurker",
+      "name": "mud lurker",
+      "glyph": "l",
+      "origin": "old_stock",
+      "stats": {
+        "band": "shallows",
+        "hp": 6,
+        "attack": 3,
+        "defense": 0,
+        "xpYield": 3
+      },
+      "behaviors": [
+        {
+          "kind": "ambusher",
+          "approachMelee": null,
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": null,
+          "ambusher": {
+            "wakeRadiusTiles": 1
+          },
+          "territorial": null,
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    },
+    {
+      "id": "unready-silt-guard",
+      "name": "unready silt-guard",
+      "glyph": "g",
+      "origin": "made",
+      "stats": {
+        "band": "shallows",
+        "hp": 9,
+        "attack": 3,
+        "defense": 1,
+        "xpYield": 4
+      },
+      "behaviors": [
+        {
+          "kind": "territorial",
+          "approachMelee": null,
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": null,
+          "ambusher": null,
+          "territorial": {
+            "radiusTiles": 3
+          },
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": 4,
+        "distance": "far_from_entrance",
+        "spread": false
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "notched-iron-knife",
+      "name": "notched iron knife",
+      "glyph": ")",
+      "kind": "weapon",
+      "value": {
+        "band": "shallows",
+        "coin": 18
+      },
+      "weapon": {
+        "attackBonus": 1,
+        "cursed": false,
+        "onHit": null
+      },
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    },
+    {
+      "id": "patched-boiled-hide",
+      "name": "patched boiled hide",
+      "glyph": "[",
+      "kind": "armor",
+      "value": {
+        "band": "shallows",
+        "coin": 16
+      },
+      "weapon": null,
+      "armor": {
+        "defenseBonus": 1,
+        "cursed": false,
+        "onStruck": null
+      },
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "near_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "dry-root-cake",
+      "name": "dry root cake",
+      "glyph": "%",
+      "kind": "food",
+      "value": {
+        "band": "shallows",
+        "coin": 8
+      },
+      "weapon": null,
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": {
+        "effect": {
+          "effects": [
+            {
+              "kind": "nutrition",
+              "damage": null,
+              "heal": null,
+              "applyStatus": null,
+              "cureStatus": null,
+              "buffStat": null,
+              "nutrition": {
+                "fullness": 35
+              },
+              "teleportSelf": null,
+              "teleportTarget": null,
+              "blink": null,
+              "knockback": null,
+              "reveal": null,
+              "identify": null,
+              "enchant": null,
+              "summon": null,
+              "transform": null,
+              "dig": null
+            }
+          ],
+          "trigger": {
+            "kind": "quaff",
+            "quaff": {},
+            "read": null,
+            "throwHit": null,
+            "equipPassive": null,
+            "onHit": null,
+            "onStruck": null,
+            "step": null,
+            "use": null
+          },
+          "targeting": {
+            "kind": "self",
+            "self": {},
+            "melee": null,
+            "bolt": null,
+            "burst": null,
+            "floor": null
+          }
+        }
+      },
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "near_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "green-crust-coins",
+      "name": "green-crust coins",
+      "glyph": "$",
+      "kind": "coin",
+      "value": {
+        "band": "shallows",
+        "coin": 23
+      },
+      "weapon": null,
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": {},
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    }
+  ],
+  "traps": [],
+  "npcs": [],
+  "quest": null,
+  "narration": {
+    "floorIntro": "The Deep opens into low rooms and forgets to greet you.",
+    "observations": [
+      {
+        "id": "hoard-glint",
+        "triggerTag": "coin-held-back",
+        "text": "A few coins wait in a wet crack, dull as if they have watched full purses pass."
+      },
+      {
+        "id": "old-bite-mark",
+        "triggerTag": "moss-bit-reminder",
+        "text": "Moss-bit teeth have freckled the mud here. Nothing clever made the marks."
+      }
+    ]
+  },
+  "metadata": {
+    "originTags": {
+      "made": 1,
+      "old_stock": 2,
+      "kept": 0
+    },
+    "callbacks": [
+      "coin-held-back",
+      "moss-bit-reminder"
+    ],
+    "signature": false
+  }
+}

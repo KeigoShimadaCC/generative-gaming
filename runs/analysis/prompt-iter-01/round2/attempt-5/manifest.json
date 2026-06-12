@@ -1,0 +1,279 @@
+{
+  "protocolVersion": "1.2.0",
+  "depth": 10,
+  "band": "lowest",
+  "params": {
+    "bandOrSize": "lowest",
+    "roomCountRange": {
+      "min": 3,
+      "max": 6
+    },
+    "flavor": "sanctum",
+    "seed": "prompt-iter-round2-5"
+  },
+  "roster": [
+    {
+      "id": "kept-silt-witness",
+      "name": "kept silt witness",
+      "glyph": "s",
+      "origin": "kept",
+      "stats": {
+        "band": "lowest",
+        "hp": 24,
+        "attack": 9,
+        "defense": 3,
+        "xpYield": 12
+      },
+      "behaviors": [
+        {
+          "kind": "approach_melee",
+          "approachMelee": {},
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": null,
+          "ambusher": null,
+          "territorial": null,
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    },
+    {
+      "id": "made-moss-reckoner",
+      "name": "made moss reckoner",
+      "glyph": "m",
+      "origin": "made",
+      "stats": {
+        "band": "lowest",
+        "hp": 24,
+        "attack": 9,
+        "defense": 3,
+        "xpYield": 12
+      },
+      "behaviors": [
+        {
+          "kind": "approach_melee",
+          "approachMelee": {},
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": null,
+          "ambusher": null,
+          "territorial": null,
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "last-hush-knife",
+      "name": "last hush knife",
+      "glyph": ")",
+      "kind": "weapon",
+      "value": {
+        "band": "lowest",
+        "coin": 60
+      },
+      "weapon": {
+        "attackBonus": 1,
+        "cursed": false,
+        "onHit": null
+      },
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "near_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "patient-ash-vest",
+      "name": "patient ash vest",
+      "glyph": "[",
+      "kind": "armor",
+      "value": {
+        "band": "lowest",
+        "coin": 60
+      },
+      "weapon": null,
+      "armor": {
+        "defenseBonus": 1,
+        "cursed": false,
+        "onStruck": null
+      },
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "near_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "unspent-crust",
+      "name": "unspent crust",
+      "glyph": "%",
+      "kind": "food",
+      "value": {
+        "band": "lowest",
+        "coin": 60
+      },
+      "weapon": null,
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": {
+        "effect": {
+          "effects": [
+            {
+              "kind": "nutrition",
+              "damage": null,
+              "heal": null,
+              "applyStatus": null,
+              "cureStatus": null,
+              "buffStat": null,
+              "nutrition": {
+                "fullness": 10
+              },
+              "teleportSelf": null,
+              "teleportTarget": null,
+              "blink": null,
+              "knockback": null,
+              "reveal": null,
+              "identify": null,
+              "enchant": null,
+              "summon": null,
+              "transform": null,
+              "dig": null
+            }
+          ],
+          "trigger": {
+            "kind": "quaff",
+            "quaff": {},
+            "read": null,
+            "throwHit": null,
+            "equipPassive": null,
+            "onHit": null,
+            "onStruck": null,
+            "step": null,
+            "use": null
+          },
+          "targeting": {
+            "kind": "self",
+            "self": {},
+            "melee": null,
+            "bolt": null,
+            "burst": null,
+            "floor": null
+          }
+        }
+      },
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "near_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "counted-bottom-coin",
+      "name": "counted bottom coin",
+      "glyph": "$",
+      "kind": "coin",
+      "value": {
+        "band": "lowest",
+        "coin": 60
+      },
+      "weapon": null,
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": {},
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    }
+  ],
+  "traps": [],
+  "npcs": [],
+  "quest": null,
+  "narration": {
+    "floorIntro": "The Deep has kept count. It opens a last quiet hall and lets your pockets answer first.",
+    "observations": [
+      {
+        "id": "hoard-callback",
+        "triggerTag": "hoard-counted",
+        "text": "You have carried much and spent little. The stone does not blame you. It only remembers the weight."
+      },
+      {
+        "id": "moss-silt-callback",
+        "triggerTag": "old-kills-return",
+        "text": "Moss darkens one wall; silt pales another. The small dead have arrived before you."
+      },
+      {
+        "id": "bottom-warning",
+        "triggerTag": "bottom-honest-warning",
+        "text": "Past this room, the floor asks plainly. You may take one thing back only after you reach the bottom."
+      }
+    ]
+  },
+  "metadata": {
+    "originTags": {
+      "made": 1,
+      "old_stock": 0,
+      "kept": 1
+    },
+    "callbacks": [
+      "hoard-counted",
+      "old-kills-return",
+      "bottom-honest-warning"
+    ],
+    "signature": false
+  }
+}

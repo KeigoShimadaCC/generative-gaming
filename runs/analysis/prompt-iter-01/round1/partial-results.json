@@ -1,0 +1,120 @@
+{
+  "label": "round1",
+  "attempts": [
+    {
+      "attempt": 1,
+      "startedAt": "2026-06-12T05:35:40.297Z",
+      "band": "shallows",
+      "depth": 3,
+      "seed": "prompt-iter-round1-1",
+      "promptChars": 12631,
+      "providerOk": true,
+      "providerError": null,
+      "latencyMs": 46763,
+      "gate0Pass": true,
+      "gate1Pass": false,
+      "passGate01": false,
+      "gate0Failed": [],
+      "gate1Failed": [
+        {
+          "code": "G1_ROSTER_BUDGET",
+          "pass": false,
+          "detail": "roster cost 22 exceeds shallows spawn budget 20"
+        }
+      ],
+      "parseErrors": []
+    },
+    {
+      "attempt": 2,
+      "startedAt": "2026-06-12T05:36:27.068Z",
+      "band": "shallows",
+      "depth": 4,
+      "seed": "prompt-iter-round1-2",
+      "promptChars": 12631,
+      "providerOk": true,
+      "providerError": null,
+      "latencyMs": 29519,
+      "gate0Pass": true,
+      "gate1Pass": false,
+      "passGate01": false,
+      "gate0Failed": [],
+      "gate1Failed": [
+        {
+          "code": "G1_ROSTER_BUDGET",
+          "pass": false,
+          "detail": "roster cost 27 exceeds shallows spawn budget 20"
+        }
+      ],
+      "parseErrors": []
+    },
+    {
+      "attempt": 3,
+      "startedAt": "2026-06-12T05:36:56.592Z",
+      "band": "middle",
+      "depth": 6,
+      "seed": "prompt-iter-round1-3",
+      "promptChars": 12666,
+      "providerOk": true,
+      "providerError": null,
+      "latencyMs": 32160,
+      "gate0Pass": true,
+      "gate1Pass": false,
+      "passGate01": false,
+      "gate0Failed": [],
+      "gate1Failed": [
+        {
+          "code": "G1_ROSTER_BUDGET",
+          "pass": false,
+          "detail": "roster cost 51 exceeds middle spawn budget 45"
+        }
+      ],
+      "parseErrors": []
+    },
+    {
+      "attempt": 4,
+      "startedAt": "2026-06-12T05:37:28.759Z",
+      "band": "middle",
+      "depth": 8,
+      "seed": "prompt-iter-round1-4",
+      "promptChars": 12666,
+      "providerOk": true,
+      "providerError": null,
+      "latencyMs": 44113,
+      "gate0Pass": true,
+      "gate1Pass": false,
+      "passGate01": false,
+      "gate0Failed": [],
+      "gate1Failed": [
+        {
+          "code": "G1_ROSTER_BUDGET",
+          "pass": false,
+          "detail": "roster cost 51 exceeds middle spawn budget 45"
+        }
+      ],
+      "parseErrors": []
+    },
+    {
+      "attempt": 5,
+      "startedAt": "2026-06-12T05:38:12.878Z",
+      "band": "lowest",
+      "depth": 10,
+      "seed": "prompt-iter-round1-5",
+      "promptChars": 12589,
+      "providerOk": true,
+      "providerError": null,
+      "latencyMs": 50176,
+      "gate0Pass": true,
+      "gate1Pass": false,
+      "passGate01": false,
+      "gate0Failed": [],
+      "gate1Failed": [
+        {
+          "code": "G1_ROSTER_BUDGET",
+          "pass": false,
+          "detail": "roster cost 85 exceeds lowest spawn budget 70"
+        }
+      ],
+      "parseErrors": []
+    }
+  ]
+}
