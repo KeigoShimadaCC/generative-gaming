@@ -1,0 +1,279 @@
+{
+  "protocolVersion": "1.2.0",
+  "depth": 10,
+  "band": "lowest",
+  "params": {
+    "bandOrSize": "lowest",
+    "roomCountRange": {
+      "min": 3,
+      "max": 6
+    },
+    "flavor": "sanctum",
+    "seed": "m1-live-lowest-10"
+  },
+  "roster": [
+    {
+      "id": "counted-door",
+      "name": "counted door",
+      "glyph": "d",
+      "origin": "made",
+      "stats": {
+        "band": "lowest",
+        "hp": 24,
+        "attack": 9,
+        "defense": 3,
+        "xpYield": 12
+      },
+      "behaviors": [
+        {
+          "kind": "approach_melee",
+          "approachMelee": {},
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": null,
+          "ambusher": null,
+          "territorial": null,
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    },
+    {
+      "id": "quiet-tallyman",
+      "name": "quiet tallyman",
+      "glyph": "t",
+      "origin": "made",
+      "stats": {
+        "band": "lowest",
+        "hp": 24,
+        "attack": 9,
+        "defense": 3,
+        "xpYield": 12
+      },
+      "behaviors": [
+        {
+          "kind": "approach_melee",
+          "approachMelee": {},
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": null,
+          "ambusher": null,
+          "territorial": null,
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "plain-last-knife",
+      "name": "plain last knife",
+      "glyph": ")",
+      "kind": "weapon",
+      "value": {
+        "band": "lowest",
+        "coin": 60
+      },
+      "weapon": {
+        "attackBonus": 1,
+        "cursed": false,
+        "onHit": null
+      },
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "near_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "patient-ringmail",
+      "name": "patient ringmail",
+      "glyph": "[",
+      "kind": "armor",
+      "value": {
+        "band": "lowest",
+        "coin": 60
+      },
+      "weapon": null,
+      "armor": {
+        "defenseBonus": 1,
+        "cursed": false,
+        "onStruck": null
+      },
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "near_entrance",
+        "spread": true
+      }
+    },
+    {
+      "id": "kept-crust",
+      "name": "kept crust",
+      "glyph": "%",
+      "kind": "food",
+      "value": {
+        "band": "lowest",
+        "coin": 60
+      },
+      "weapon": null,
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": {
+        "effect": {
+          "effects": [
+            {
+              "kind": "nutrition",
+              "damage": null,
+              "heal": null,
+              "applyStatus": null,
+              "cureStatus": null,
+              "buffStat": null,
+              "nutrition": {
+                "fullness": 10
+              },
+              "teleportSelf": null,
+              "teleportTarget": null,
+              "blink": null,
+              "knockback": null,
+              "reveal": null,
+              "identify": null,
+              "enchant": null,
+              "summon": null,
+              "transform": null,
+              "dig": null
+            }
+          ],
+          "trigger": {
+            "kind": "quaff",
+            "quaff": {},
+            "read": null,
+            "throwHit": null,
+            "equipPassive": null,
+            "onHit": null,
+            "onStruck": null,
+            "step": null,
+            "use": null
+          },
+          "targeting": {
+            "kind": "self",
+            "self": {},
+            "melee": null,
+            "bolt": null,
+            "burst": null,
+            "floor": null
+          }
+        }
+      },
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "near_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "unspent-copper",
+      "name": "unspent copper",
+      "glyph": "$",
+      "kind": "coin",
+      "value": {
+        "band": "lowest",
+        "coin": 60
+      },
+      "weapon": null,
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": {},
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": false
+      }
+    }
+  ],
+  "traps": [],
+  "npcs": [],
+  "quest": null,
+  "narration": {
+    "floorIntro": "The Deep has counted what you carried past hunger and blade. Now it sets the count down gently.",
+    "observations": [
+      {
+        "id": "obs-hoard",
+        "triggerTag": "unspent-copper-seen",
+        "text": "You know how to keep a thing. The floor knows how long a kept thing waits."
+      },
+      {
+        "id": "obs-quiet",
+        "triggerTag": "quiet-room-entered",
+        "text": "No one asks you to speak. The stones have heard enough from your feet."
+      },
+      {
+        "id": "obs-door",
+        "triggerTag": "counted-door-met",
+        "text": "The doorway bears no malice. It only remembers each fight you chose and each one you let live."
+      }
+    ]
+  },
+  "metadata": {
+    "originTags": {
+      "made": 2,
+      "old_stock": 0,
+      "kept": 0
+    },
+    "callbacks": [
+      "unspent-copper-seen",
+      "quiet-room-entered",
+      "counted-door-met"
+    ],
+    "signature": false
+  }
+}

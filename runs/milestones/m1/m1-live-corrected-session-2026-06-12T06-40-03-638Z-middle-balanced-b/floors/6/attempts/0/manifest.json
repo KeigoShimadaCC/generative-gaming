@@ -1,0 +1,279 @@
+{
+  "protocolVersion": "1.2.0",
+  "depth": 6,
+  "band": "middle",
+  "params": {
+    "bandOrSize": "middle",
+    "roomCountRange": {
+      "min": 6,
+      "max": 8
+    },
+    "flavor": "ring",
+    "seed": "m1-live-middle-6"
+  },
+  "roster": [
+    {
+      "id": "made-hush-bearer",
+      "name": "hush bearer",
+      "glyph": "h",
+      "origin": "made",
+      "stats": {
+        "band": "middle",
+        "hp": 12,
+        "attack": 5,
+        "defense": 1,
+        "xpYield": 5
+      },
+      "behaviors": [
+        {
+          "kind": "approach_melee",
+          "approachMelee": {},
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": null,
+          "ambusher": null,
+          "territorial": null,
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    },
+    {
+      "id": "kept-door-widow",
+      "name": "door widow",
+      "glyph": "w",
+      "origin": "kept",
+      "stats": {
+        "band": "middle",
+        "hp": 12,
+        "attack": 5,
+        "defense": 1,
+        "xpYield": 5
+      },
+      "behaviors": [
+        {
+          "kind": "approach_melee",
+          "approachMelee": {},
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": null,
+          "ambusher": null,
+          "territorial": null,
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "made-listening-knife",
+      "name": "listening knife",
+      "glyph": ")",
+      "kind": "weapon",
+      "value": {
+        "band": "middle",
+        "coin": 20
+      },
+      "weapon": {
+        "attackBonus": 1,
+        "cursed": false,
+        "onHit": null
+      },
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "made-pocketed-jerkin",
+      "name": "pocketed jerkin",
+      "glyph": "[",
+      "kind": "armor",
+      "value": {
+        "band": "middle",
+        "coin": 20
+      },
+      "weapon": null,
+      "armor": {
+        "defenseBonus": 1,
+        "cursed": false,
+        "onStruck": null
+      },
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "near_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "oldstock-red-root",
+      "name": "red root",
+      "glyph": "%",
+      "kind": "food",
+      "value": {
+        "band": "middle",
+        "coin": 20
+      },
+      "weapon": null,
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": {
+        "effect": {
+          "effects": [
+            {
+              "kind": "nutrition",
+              "damage": null,
+              "heal": null,
+              "applyStatus": null,
+              "cureStatus": null,
+              "buffStat": null,
+              "nutrition": {
+                "fullness": 10
+              },
+              "teleportSelf": null,
+              "teleportTarget": null,
+              "blink": null,
+              "knockback": null,
+              "reveal": null,
+              "identify": null,
+              "enchant": null,
+              "summon": null,
+              "transform": null,
+              "dig": null
+            }
+          ],
+          "trigger": {
+            "kind": "quaff",
+            "quaff": {},
+            "read": null,
+            "throwHit": null,
+            "equipPassive": null,
+            "onHit": null,
+            "onStruck": null,
+            "step": null,
+            "use": null
+          },
+          "targeting": {
+            "kind": "self",
+            "self": {},
+            "melee": null,
+            "bolt": null,
+            "burst": null,
+            "floor": null
+          }
+        }
+      },
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "near_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "kept-mouth-coin",
+      "name": "mouth coin",
+      "glyph": "$",
+      "kind": "coin",
+      "value": {
+        "band": "middle",
+        "coin": 20
+      },
+      "weapon": null,
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": {},
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": false
+      }
+    }
+  ],
+  "traps": [],
+  "npcs": [],
+  "quest": null,
+  "narration": {
+    "floorIntro": "The ring of rooms listens before it opens. It has learned how lightly you pass by teeth.",
+    "observations": [
+      {
+        "id": "obs-unwalked-ring",
+        "triggerTag": "first-room",
+        "text": "You find more doors than footsteps. The Deep leaves each latch clean for your deciding hand."
+      },
+      {
+        "id": "obs-hoarded-mouth",
+        "triggerTag": "coin-found",
+        "text": "A coin waits where a tongue should be. It does not ask to be spent."
+      },
+      {
+        "id": "obs-silent-made",
+        "triggerTag": "enemy-sighted",
+        "text": "The Made come softly, made for the fights you keep walking around."
+      }
+    ]
+  },
+  "metadata": {
+    "originTags": {
+      "made": 4,
+      "old_stock": 1,
+      "kept": 2
+    },
+    "callbacks": [
+      "first-room",
+      "coin-found",
+      "enemy-sighted"
+    ],
+    "signature": true
+  }
+}

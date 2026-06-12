@@ -99,3 +99,5 @@ timestamp	label	agent	model	effort	seconds	input_tokens	output_tokens	total_toke
 2026-06-12T05:25:58Z	phase32-prompt-iteration	codex	default	default	1240	11774003	36200	11810203	0
 2026-06-12T05:47:19Z	phase38iter-verify	cursor	composer-2.5	default	168	NA	NA	NA	0
 2026-06-12T05:50:24Z	phase38-fixes	cursor	composer-2.5	default	187	NA	NA	NA	0
+2026-06-12T05:55:54Z	phase39-m1	codex	default	default	1256	9160434	39028	9199462	0
+2026-06-12T06:19:05Z	phase39-g2fix	codex	default	default	905	5979675	29945	6009620	0

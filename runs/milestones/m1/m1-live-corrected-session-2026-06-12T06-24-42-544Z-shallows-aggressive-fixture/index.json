@@ -1,0 +1,21 @@
+{
+  "recordType": "generation-index",
+  "protocolVersion": "1.2.0",
+  "engineVersion": "0.0.0",
+  "modelId": "ambient:codex",
+  "seed": "m1-live-shallows-1",
+  "createdAt": "2026-06-12T06:24:42.549Z",
+  "runId": "m1-live-corrected-session-2026-06-12T06-24-42-544Z-shallows-aggressive-fixture",
+  "updatedAt": "2026-06-12T06:24:42.549Z",
+  "floors": [
+    {
+      "depth": 1,
+      "recordPath": "floors/1/generation.json",
+      "outcome": {
+        "kind": "fallback",
+        "fallbackId": "fallback:old-stock:shallows-1"
+      },
+      "recordedAt": "2026-06-12T06:24:42.549Z"
+    }
+  ]
+}

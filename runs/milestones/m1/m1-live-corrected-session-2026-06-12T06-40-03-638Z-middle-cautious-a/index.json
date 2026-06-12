@@ -1,0 +1,20 @@
+{
+  "recordType": "generation-index",
+  "protocolVersion": "1.2.0",
+  "engineVersion": "0.0.0",
+  "modelId": "ambient:codex",
+  "seed": "m1-live-middle-5",
+  "createdAt": "2026-06-12T06:41:32.226Z",
+  "runId": "m1-live-corrected-session-2026-06-12T06-40-03-638Z-middle-cautious-a",
+  "updatedAt": "2026-06-12T06:41:32.226Z",
+  "floors": [
+    {
+      "depth": 5,
+      "recordPath": "floors/5/generation.json",
+      "outcome": {
+        "kind": "manifest"
+      },
+      "recordedAt": "2026-06-12T06:41:32.226Z"
+    }
+  ]
+}

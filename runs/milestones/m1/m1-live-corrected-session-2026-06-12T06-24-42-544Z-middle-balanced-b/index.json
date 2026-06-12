@@ -1,0 +1,21 @@
+{
+  "recordType": "generation-index",
+  "protocolVersion": "1.2.0",
+  "engineVersion": "0.0.0",
+  "modelId": "ambient:codex",
+  "seed": "m1-live-middle-6",
+  "createdAt": "2026-06-12T06:24:44.665Z",
+  "runId": "m1-live-corrected-session-2026-06-12T06-24-42-544Z-middle-balanced-b",
+  "updatedAt": "2026-06-12T06:24:44.665Z",
+  "floors": [
+    {
+      "depth": 6,
+      "recordPath": "floors/6/generation.json",
+      "outcome": {
+        "kind": "fallback",
+        "fallbackId": "fallback:old-stock:middle-6"
+      },
+      "recordedAt": "2026-06-12T06:24:44.665Z"
+    }
+  ]
+}

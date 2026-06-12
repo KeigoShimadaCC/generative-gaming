@@ -9,6 +9,14 @@ import "../engine/systems/combat.js";
 import "../engine/systems/inventory.js";
 import "../engine/systems/movement.js";
 
+import {
+  config,
+  type DirectorProviderSelection,
+  type GameConfig,
+} from "../config/index.js";
+import { createDirectorFloorProvider } from "../director/orchestration/prefetch.js";
+import { createDirectorProvider } from "../director/provider/index.js";
+import type { FloorContentProvider } from "../engine/run/loop.js";
 import { createFallbackFloorContentProvider } from "../harness/fallback-provider.js";
 import {
   botPolicies,
@@ -25,6 +33,11 @@ const policyByName = new Map<BotPolicyName, BotPolicy>(
   botPolicies.map((policy) => [policy.name, policy]),
 );
 
+export type SimulateDirectorSelection = Extract<
+  DirectorProviderSelection,
+  "mock" | "ambient"
+>;
+
 export type ParsedSimulateArgs =
   | { readonly help: true }
   | {
@@ -34,6 +47,7 @@ export type ParsedSimulateArgs =
       readonly seed: string;
       readonly maxTurns: number;
       readonly outPath: string | null;
+      readonly director?: SimulateDirectorSelection;
     }
   | {
       readonly help: false;
@@ -42,6 +56,7 @@ export type ParsedSimulateArgs =
       readonly seeds: readonly string[];
       readonly maxTurns: number;
       readonly outPath: string | null;
+      readonly director?: SimulateDirectorSelection;
     };
 
 export type SimulateResult = {
@@ -66,6 +81,7 @@ Options:
   --policies <list>     Comma-separated policy names (required with --batch)
   --seeds <N|list>      Seed count (simulate-1..N) or comma-separated seed list
   --max-turns <n>       Turn cap per run (default: ${DEFAULT_MAX_TURNS})
+  --director <kind>     Use DirectorFloorProvider with mock or ambient provider
   --out <path>          Write JSON outcome rows to this path
   --help, -h            Show this help
 
@@ -85,6 +101,7 @@ export const parseSimulateArgs = (
   let seeds: string[] = [];
   let maxTurns = DEFAULT_MAX_TURNS;
   let outPath: string | null = null;
+  let director: SimulateDirectorSelection | undefined;
 
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index];
@@ -157,6 +174,17 @@ export const parseSimulateArgs = (
       continue;
     }
 
+    if (arg === "--director") {
+      director = readDirectorSelection(argv, index, "--director");
+      index += 1;
+      continue;
+    }
+
+    if (arg.startsWith("--director=")) {
+      director = parseDirectorSelection(readInlineValue(arg, "--director"));
+      continue;
+    }
+
     if (arg === "--out") {
       outPath = readStringValue(argv, index, "--out");
       index += 1;
@@ -189,6 +217,7 @@ export const parseSimulateArgs = (
       seeds,
       maxTurns,
       outPath,
+      ...(director === undefined ? {} : { director }),
     };
   }
 
@@ -203,11 +232,14 @@ export const parseSimulateArgs = (
     seed,
     maxTurns,
     outPath,
+    ...(director === undefined ? {} : { director }),
   };
 };
 
 export const runSimulate = (args: Exclude<ParsedSimulateArgs, { help: true }>): SimulateResult => {
-  const providerFactory = () => createFallbackFloorContentProvider();
+  let providerCounter = 0;
+  const providerFactory = () =>
+    createSimulateProvider(args.director, providerCounter += 1);
 
   const batchResult = args.batch
     ? runBotBatch(
@@ -349,6 +381,21 @@ const readInlineValue = (arg: string, flag: string): string => {
   return value;
 };
 
+const readDirectorSelection = (
+  argv: readonly string[],
+  index: number,
+  flag: string,
+): SimulateDirectorSelection =>
+  parseDirectorSelection(readStringValue(argv, index, flag));
+
+const parseDirectorSelection = (value: string): SimulateDirectorSelection => {
+  if (value === "mock" || value === "ambient") {
+    return value;
+  }
+
+  throw new Error(`unknown director provider: ${value}`);
+};
+
 const readPositiveInt = (argv: readonly string[], index: number, flag: string): number =>
   parsePositiveInt(readStringValue(argv, index, flag), flag);
 
@@ -359,6 +406,34 @@ const parsePositiveInt = (value: string, flag: string): number => {
   }
   return parsed;
 };
+
+const createSimulateProvider = (
+  director: SimulateDirectorSelection | undefined,
+  providerIndex: number,
+): FloorContentProvider => {
+  if (director === undefined) {
+    return createFallbackFloorContentProvider();
+  }
+
+  return createDirectorFloorProvider({
+    runId: `simulate-${director}-${providerIndex}`,
+    seed: `simulate-${director}-${providerIndex}`,
+    modelId: `director:${director}`,
+    provider: createDirectorProvider({
+      config: configWithDirector(director),
+    }),
+  });
+};
+
+const configWithDirector = (
+  provider: SimulateDirectorSelection,
+): GameConfig => ({
+  ...config,
+  director: {
+    ...config.director,
+    provider,
+  },
+});
 
 const isMainModule = (): boolean => {
   const entry = process.argv[1];

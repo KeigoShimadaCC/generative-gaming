@@ -1,0 +1,275 @@
+{
+  "protocolVersion": "1.2.0",
+  "depth": 9,
+  "band": "middle",
+  "params": {
+    "bandOrSize": "middle",
+    "roomCountRange": {
+      "min": 6,
+      "max": 8
+    },
+    "flavor": "ring",
+    "seed": "m1-live-middle-9"
+  },
+  "roster": [
+    {
+      "id": "made-pocket-watcher",
+      "name": "pocket watcher",
+      "glyph": "w",
+      "origin": "made",
+      "stats": {
+        "band": "middle",
+        "hp": 12,
+        "attack": 5,
+        "defense": 1,
+        "xpYield": 5
+      },
+      "behaviors": [
+        {
+          "kind": "approach_melee",
+          "approachMelee": {},
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": null,
+          "ambusher": null,
+          "territorial": null,
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "near_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "made-threshold-knocker",
+      "name": "threshold knocker",
+      "glyph": "k",
+      "origin": "made",
+      "stats": {
+        "band": "middle",
+        "hp": 12,
+        "attack": 5,
+        "defense": 1,
+        "xpYield": 5
+      },
+      "behaviors": [
+        {
+          "kind": "approach_melee",
+          "approachMelee": {},
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": null,
+          "ambusher": null,
+          "territorial": null,
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "thin-counting-knife",
+      "name": "thin counting knife",
+      "glyph": ")",
+      "kind": "weapon",
+      "value": {
+        "band": "middle",
+        "coin": 20
+      },
+      "weapon": {
+        "attackBonus": 1,
+        "cursed": false,
+        "onHit": null
+      },
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    },
+    {
+      "id": "quiet-buckle-coat",
+      "name": "quiet buckle coat",
+      "glyph": "[",
+      "kind": "armor",
+      "value": {
+        "band": "middle",
+        "coin": 20
+      },
+      "weapon": null,
+      "armor": {
+        "defenseBonus": 1,
+        "cursed": false,
+        "onStruck": null
+      },
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": null
+    },
+    {
+      "id": "wrapped-hearth-cake",
+      "name": "wrapped hearth cake",
+      "glyph": "%",
+      "kind": "food",
+      "value": {
+        "band": "middle",
+        "coin": 20
+      },
+      "weapon": null,
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": {
+        "effect": {
+          "effects": [
+            {
+              "kind": "nutrition",
+              "damage": null,
+              "heal": null,
+              "applyStatus": null,
+              "cureStatus": null,
+              "buffStat": null,
+              "nutrition": {
+                "fullness": 10
+              },
+              "teleportSelf": null,
+              "teleportTarget": null,
+              "blink": null,
+              "knockback": null,
+              "reveal": null,
+              "identify": null,
+              "enchant": null,
+              "summon": null,
+              "transform": null,
+              "dig": null
+            }
+          ],
+          "trigger": {
+            "kind": "quaff",
+            "quaff": {},
+            "read": null,
+            "throwHit": null,
+            "equipPassive": null,
+            "onHit": null,
+            "onStruck": null,
+            "step": null,
+            "use": null
+          },
+          "targeting": {
+            "kind": "self",
+            "self": {},
+            "melee": null,
+            "bolt": null,
+            "burst": null,
+            "floor": null
+          }
+        }
+      },
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "near_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "unspent-copper-heap",
+      "name": "unspent copper heap",
+      "glyph": "$",
+      "kind": "coin",
+      "value": {
+        "band": "middle",
+        "coin": 20
+      },
+      "weapon": null,
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": {},
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    }
+  ],
+  "traps": [],
+  "npcs": [],
+  "quest": null,
+  "narration": {
+    "floorIntro": "The ring of rooms loosens around you, leaving small gifts where your hands will find them.",
+    "observations": [
+      {
+        "id": "obs-heavy-pockets",
+        "triggerTag": "heavy-pockets",
+        "text": "Your pack remembers every thing you took and none you spent."
+      },
+      {
+        "id": "obs-narrow-looking",
+        "triggerTag": "narrow-looking",
+        "text": "You look at little and pass much; the unseen rooms keep their faces turned."
+      },
+      {
+        "id": "obs-quiet-mouth",
+        "triggerTag": "quiet-mouth",
+        "text": "No one has heard your asking voice, so the floor answers with footsteps."
+      }
+    ]
+  },
+  "metadata": {
+    "originTags": {
+      "made": 2,
+      "old_stock": 0,
+      "kept": 0
+    },
+    "callbacks": [
+      "heavy-pockets",
+      "narrow-looking",
+      "quiet-mouth"
+    ],
+    "signature": true
+  }
+}

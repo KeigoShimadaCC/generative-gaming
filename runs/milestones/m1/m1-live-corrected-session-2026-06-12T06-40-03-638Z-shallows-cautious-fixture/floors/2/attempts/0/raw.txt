@@ -1,0 +1,255 @@
+{
+  "protocolVersion": "1.2.0",
+  "depth": 2,
+  "band": "shallows",
+  "params": {
+    "bandOrSize": "shallows",
+    "roomCountRange": {
+      "min": 4,
+      "max": 7
+    },
+    "flavor": "open",
+    "seed": "m1-live-shallows-2"
+  },
+  "roster": [
+    {
+      "id": "drip-grub",
+      "name": "drip grub",
+      "glyph": "g",
+      "origin": "old_stock",
+      "stats": {
+        "band": "shallows",
+        "hp": 4,
+        "attack": 2,
+        "defense": 0,
+        "xpYield": 2
+      },
+      "behaviors": [
+        {
+          "kind": "approach_melee",
+          "approachMelee": {},
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": null,
+          "ambusher": null,
+          "territorial": null,
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": null
+    },
+    {
+      "id": "chalk-handed-made",
+      "name": "chalk-handed made",
+      "glyph": "c",
+      "origin": "made",
+      "stats": {
+        "band": "shallows",
+        "hp": 4,
+        "attack": 2,
+        "defense": 0,
+        "xpYield": 2
+      },
+      "behaviors": [
+        {
+          "kind": "approach_melee",
+          "approachMelee": {},
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": null,
+          "ambusher": null,
+          "territorial": null,
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "nicked-knife",
+      "name": "nicked knife",
+      "glyph": ")",
+      "kind": "weapon",
+      "value": {
+        "band": "shallows",
+        "coin": 5
+      },
+      "weapon": {
+        "attackBonus": 1,
+        "cursed": false,
+        "onHit": null
+      },
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": null
+    },
+    {
+      "id": "mended-hide",
+      "name": "mended hide",
+      "glyph": "[",
+      "kind": "armor",
+      "value": {
+        "band": "shallows",
+        "coin": 5
+      },
+      "weapon": null,
+      "armor": {
+        "defenseBonus": 1,
+        "cursed": false,
+        "onStruck": null
+      },
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": null
+    },
+    {
+      "id": "cold-crust",
+      "name": "cold crust",
+      "glyph": "%",
+      "kind": "food",
+      "value": {
+        "band": "shallows",
+        "coin": 5
+      },
+      "weapon": null,
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": {
+        "effect": {
+          "effects": [
+            {
+              "kind": "nutrition",
+              "damage": null,
+              "heal": null,
+              "applyStatus": null,
+              "cureStatus": null,
+              "buffStat": null,
+              "nutrition": {
+                "fullness": 10
+              },
+              "teleportSelf": null,
+              "teleportTarget": null,
+              "blink": null,
+              "knockback": null,
+              "reveal": null,
+              "identify": null,
+              "enchant": null,
+              "summon": null,
+              "transform": null,
+              "dig": null
+            }
+          ],
+          "trigger": {
+            "kind": "quaff",
+            "quaff": {},
+            "read": null,
+            "throwHit": null,
+            "equipPassive": null,
+            "onHit": null,
+            "onStruck": null,
+            "step": null,
+            "use": null
+          },
+          "targeting": {
+            "kind": "self",
+            "self": {},
+            "melee": null,
+            "bolt": null,
+            "burst": null,
+            "floor": null
+          }
+        }
+      },
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "near_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "dull-penny",
+      "name": "dull penny",
+      "glyph": "$",
+      "kind": "coin",
+      "value": {
+        "band": "shallows",
+        "coin": 5
+      },
+      "weapon": null,
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": {},
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    }
+  ],
+  "traps": [],
+  "npcs": [],
+  "quest": null,
+  "narration": {
+    "floorIntro": "The next stone room waits without welcome.",
+    "observations": [
+      {
+        "id": "pocket-keepsake",
+        "triggerTag": "hoard-glint",
+        "text": "A dull coin lies where your hand might close before your thought does."
+      }
+    ]
+  },
+  "metadata": {
+    "originTags": {
+      "made": 1,
+      "old_stock": 1,
+      "kept": 0
+    },
+    "callbacks": [
+      "hoard-glint"
+    ],
+    "signature": false
+  }
+}

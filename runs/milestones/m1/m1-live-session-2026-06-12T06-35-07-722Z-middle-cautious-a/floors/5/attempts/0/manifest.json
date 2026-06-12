@@ -1,0 +1,279 @@
+{
+  "protocolVersion": "1.2.0",
+  "depth": 5,
+  "band": "middle",
+  "params": {
+    "bandOrSize": "middle",
+    "roomCountRange": {
+      "min": 6,
+      "max": 8
+    },
+    "flavor": "ring",
+    "seed": "m1-live-middle-5"
+  },
+  "roster": [
+    {
+      "id": "quiet-taker",
+      "name": "quiet taker",
+      "glyph": "t",
+      "origin": "made",
+      "stats": {
+        "band": "middle",
+        "hp": 12,
+        "attack": 5,
+        "defense": 1,
+        "xpYield": 5
+      },
+      "behaviors": [
+        {
+          "kind": "approach_melee",
+          "approachMelee": {},
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": null,
+          "ambusher": null,
+          "territorial": null,
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "near_entrance",
+        "spread": true
+      }
+    },
+    {
+      "id": "kept-footstep",
+      "name": "kept footstep",
+      "glyph": "k",
+      "origin": "made",
+      "stats": {
+        "band": "middle",
+        "hp": 12,
+        "attack": 5,
+        "defense": 1,
+        "xpYield": 5
+      },
+      "behaviors": [
+        {
+          "kind": "approach_melee",
+          "approachMelee": {},
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": null,
+          "ambusher": null,
+          "territorial": null,
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "notched-iron-knife",
+      "name": "notched iron knife",
+      "glyph": ")",
+      "kind": "weapon",
+      "value": {
+        "band": "middle",
+        "coin": 30
+      },
+      "weapon": {
+        "attackBonus": 1,
+        "cursed": false,
+        "onHit": null
+      },
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "mended-boiled-hide",
+      "name": "mended boiled hide",
+      "glyph": "[",
+      "kind": "armor",
+      "value": {
+        "band": "middle",
+        "coin": 35
+      },
+      "weapon": null,
+      "armor": {
+        "defenseBonus": 1,
+        "cursed": false,
+        "onStruck": null
+      },
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "near_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "salted-root-cake",
+      "name": "salted root cake",
+      "glyph": "%",
+      "kind": "food",
+      "value": {
+        "band": "middle",
+        "coin": 20
+      },
+      "weapon": null,
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": {
+        "effect": {
+          "effects": [
+            {
+              "kind": "nutrition",
+              "damage": null,
+              "heal": null,
+              "applyStatus": null,
+              "cureStatus": null,
+              "buffStat": null,
+              "nutrition": {
+                "fullness": 20
+              },
+              "teleportSelf": null,
+              "teleportTarget": null,
+              "blink": null,
+              "knockback": null,
+              "reveal": null,
+              "identify": null,
+              "enchant": null,
+              "summon": null,
+              "transform": null,
+              "dig": null
+            }
+          ],
+          "trigger": {
+            "kind": "quaff",
+            "quaff": {},
+            "read": null,
+            "throwHit": null,
+            "equipPassive": null,
+            "onHit": null,
+            "onStruck": null,
+            "step": null,
+            "use": null
+          },
+          "targeting": {
+            "kind": "self",
+            "self": {},
+            "melee": null,
+            "bolt": null,
+            "burst": null,
+            "floor": null
+          }
+        }
+      },
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "near_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "dull-coin-pile",
+      "name": "dull coin pile",
+      "glyph": "$",
+      "kind": "coin",
+      "value": {
+        "band": "middle",
+        "coin": 45
+      },
+      "weapon": null,
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": {},
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    }
+  ],
+  "traps": [],
+  "npcs": [],
+  "quest": null,
+  "narration": {
+    "floorIntro": "The ring of rooms waits with its hands open. It has seen how you gather and how little you spend.",
+    "observations": [
+      {
+        "id": "hoard-seen",
+        "triggerTag": "old-stock-hoard",
+        "text": "You pass another useful thing, or take it. The Deep remembers both weights in your pack."
+      },
+      {
+        "id": "quiet-path-seen",
+        "triggerTag": "fights-avoided",
+        "text": "The Made stand where a cautious foot might turn aside. Their patience is almost polite."
+      },
+      {
+        "id": "narrow-sight-seen",
+        "triggerTag": "few-cells-seen",
+        "text": "Most doors keep their dark. You have taught the Deep to make the seen rooms matter."
+      }
+    ]
+  },
+  "metadata": {
+    "originTags": {
+      "made": 2,
+      "old_stock": 0,
+      "kept": 0
+    },
+    "callbacks": [
+      "old-stock-hoard",
+      "fights-avoided",
+      "few-cells-seen"
+    ],
+    "signature": true
+  }
+}

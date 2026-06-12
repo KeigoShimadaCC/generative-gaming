@@ -7,18 +7,19 @@ import {
   type JudgeOptions,
   type JudgeResult,
   type ProviderFailureCode,
-  type ProviderResult,
+  type ProviderResult
 } from "../director/provider/index.js";
 import type { FloorContent } from "../engine/run/index.js";
-import { MemoryArtifactFs, loadGenerationChain } from "../harness/artifacts/index.js";
 import {
-  validShallowsManifestFixture,
-} from "../schemas/fixtures/manifest.js";
+  MemoryArtifactFs,
+  loadGenerationChain
+} from "../harness/artifacts/index.js";
+import { validShallowsManifestFixture } from "../schemas/fixtures/manifest.js";
 import type { FloorManifest } from "../schemas/manifest.js";
 import {
   defaultGate2Config,
   type Gate2Config,
-  type Gate2RunOptions,
+  type Gate2RunOptions
 } from "./gate2/run.js";
 import { generateFloor } from "./repair.js";
 
@@ -35,41 +36,91 @@ describe("repair loop and fallback degradation", () => {
   it("serves a generated floor and writes a one-shot attempt chain on the happy path", async () => {
     const fs = new MemoryArtifactFs();
     const provider = new SequenceDirectorProvider([
-      providerSuccess(validShallowsManifestFixture),
+      providerSuccess(validShallowsManifestFixture)
     ]);
     const result = await generateFloor(
       ctx("repair-happy", fs, provider, {
-        gate2: passingGate2(validShallowsManifestFixture),
-      }),
+        gate2: passingGate2(validShallowsManifestFixture)
+      })
     );
     const loaded = assertPersisted(fs, "repair-happy", result.record);
 
     expect(provider.prompts).toEqual([ORIGINAL_PROMPT]);
-    expect(provider.options[0]?.timeoutMs).toBe(config.director.manifestTimeoutMs);
-    expect("manifest" in result.floor ? result.floor.manifest.depth : null).toBe(
-      DEPTH,
+    expect(provider.options[0]?.timeoutMs).toBe(
+      config.director.manifestTimeoutMs
     );
+    expect(
+      "manifest" in result.floor ? result.floor.manifest.depth : null
+    ).toBe(DEPTH);
     expect(loaded.outcome.kind).toBe("manifest");
     expect(loaded.attempts).toHaveLength(1);
     expect(loaded.attempts[0]?.provider.ok).toBe(true);
     expect(loaded.attempts[0]?.provider.manifestPath).toBe(
-      "floors/3/attempts/0/manifest.json",
+      "floors/3/attempts/0/manifest.json"
     );
     expect(loaded.attempts[0]?.gateReports?.gate0?.pass).toBe(true);
     expect(loaded.attempts[0]?.gateReports?.gate1?.pass).toBe(true);
     expect(loaded.attempts[0]?.gateReports?.gate2?.pass).toBe(true);
   });
 
+  it("serves a generated floor when only advisory HP retention fails", async () => {
+    const fs = new MemoryArtifactFs();
+    const provider = new SequenceDirectorProvider([
+      providerSuccess(validShallowsManifestFixture)
+    ]);
+    const result = await generateFloor(
+      ctx("repair-advisory-hp", fs, provider, {
+        gate2: hpRetentionFailingGate2(validShallowsManifestFixture, "advisory")
+      })
+    );
+    const loaded = assertPersisted(fs, "repair-advisory-hp", result.record);
+    const hpCheck = loaded.attempts[0]?.gateReports?.gate2?.checks.find(
+      (check) => check.code === "G2_HP_RETENTION"
+    );
+
+    expect(loaded.outcome.kind).toBe("manifest");
+    expect(loaded.attempts).toHaveLength(1);
+    expect(loaded.attempts[0]?.gateReports?.gate2?.pass).toBe(true);
+    expect(hpCheck).toMatchObject({
+      pass: false,
+      advisory: true
+    });
+  });
+
+  it("falls back when blocking HP retention rejects and repair cap is exhausted", async () => {
+    const fs = new MemoryArtifactFs();
+    const provider = new SequenceDirectorProvider([
+      providerSuccess(validShallowsManifestFixture)
+    ]);
+    const result = await generateFloor(
+      ctx("repair-blocking-hp", fs, provider, {
+        gate2: hpRetentionFailingGate2(
+          validShallowsManifestFixture,
+          "blocking"
+        ),
+        repairCap: 0
+      })
+    );
+    const loaded = assertPersisted(fs, "repair-blocking-hp", result.record);
+
+    expect(loaded.outcome.kind).toBe("fallback");
+    expect(loaded.attempts).toHaveLength(1);
+    expect(loaded.attempts[0]?.gateReports?.gate2?.pass).toBe(false);
+    expect(loaded.attempts[0]?.gateReports?.gate2?.verdict.codes).toContain(
+      "G2_HP_RETENTION"
+    );
+  });
+
   it("repairs malformed output on the second attempt and snapshots the repair prompt", async () => {
     const fs = new MemoryArtifactFs();
     const provider = new SequenceDirectorProvider([
       providerFailure("parse_fail", "not a manifest at all"),
-      providerSuccess(validShallowsManifestFixture),
+      providerSuccess(validShallowsManifestFixture)
     ]);
     const result = await generateFloor(
       ctx("repair-malformed", fs, provider, {
-        gate2: passingGate2(validShallowsManifestFixture),
-      }),
+        gate2: passingGate2(validShallowsManifestFixture)
+      })
     );
     const loaded = assertPersisted(fs, "repair-malformed", result.record);
 
@@ -92,7 +143,7 @@ describe("repair loop and fallback degradation", () => {
     expect(loaded.outcome.kind).toBe("manifest");
     expect(loaded.attempts).toHaveLength(2);
     expect(loaded.attempts[0]?.gateReports?.gate0?.checks[0]?.code).toBe(
-      "G0_NO_JSON",
+      "G0_NO_JSON"
     );
     expect(loaded.attempts[1]?.gateReports?.gate2?.pass).toBe(true);
   });
@@ -101,21 +152,24 @@ describe("repair loop and fallback degradation", () => {
     const fs = new MemoryArtifactFs();
     const provider = new SequenceDirectorProvider(
       [],
-      providerFailure("parse_fail", "{broken"),
+      providerFailure("parse_fail", "{broken")
     );
-    const result = await generateFloor(ctx("repair-unrepairable", fs, provider));
+    const result = await generateFloor(
+      ctx("repair-unrepairable", fs, provider)
+    );
     const loaded = assertPersisted(fs, "repair-unrepairable", result.record);
 
     expect(provider.prompts).toHaveLength(bounds.gauntlet.repairRetriesMax + 1);
     expect(loaded.outcome).toEqual({
       kind: "fallback",
-      fallbackId: "fallback:old-stock:shallows-3",
+      fallbackId: "fallback:old-stock:shallows-3"
     });
     expect(loaded.attempts).toHaveLength(3);
     expect(
       loaded.attempts.every(
-        (attempt) => attempt.gateReports?.gate0?.checks[0]?.code === "G0_NO_JSON",
-      ),
+        (attempt) =>
+          attempt.gateReports?.gate0?.checks[0]?.code === "G0_NO_JSON"
+      )
     ).toBe(true);
     expect((result.floor as FloorContent).params.seed).toBe(SEED);
   });
@@ -123,7 +177,7 @@ describe("repair loop and fallback degradation", () => {
   it("degrades immediately to fallback on provider timeout", async () => {
     const fs = new MemoryArtifactFs();
     const provider = new SequenceDirectorProvider([
-      providerFailure("timeout", undefined),
+      providerFailure("timeout", undefined)
     ]);
     const result = await generateFloor(ctx("repair-timeout", fs, provider));
     const loaded = assertPersisted(fs, "repair-timeout", result.record);
@@ -131,7 +185,7 @@ describe("repair loop and fallback degradation", () => {
     expect(provider.prompts).toEqual([ORIGINAL_PROMPT]);
     expect(loaded.outcome).toEqual({
       kind: "fallback",
-      fallbackId: "fallback:old-stock:shallows-3",
+      fallbackId: "fallback:old-stock:shallows-3"
     });
     expect(loaded.attempts).toHaveLength(1);
     expect(loaded.attempts[0]?.provider.ok).toBe(false);
@@ -144,18 +198,23 @@ describe("repair loop and fallback degradation", () => {
     const fs = new MemoryArtifactFs();
     const provider = new SequenceDirectorProvider(
       [],
-      providerFailure("validate_fail", JSON.stringify({ protocolVersion: "bad" })),
+      providerFailure(
+        "validate_fail",
+        JSON.stringify({ protocolVersion: "bad" })
+      )
     );
     const result = await generateFloor(ctx("repair-cap", fs, provider));
     const loaded = assertPersisted(fs, "repair-cap", result.record);
 
     expect(provider.prompts).toHaveLength(3);
-    expect(provider.prompts.slice(1)).toHaveLength(bounds.gauntlet.repairRetriesMax);
+    expect(provider.prompts.slice(1)).toHaveLength(
+      bounds.gauntlet.repairRetriesMax
+    );
     expect(loaded.attempts).toHaveLength(3);
     expect(loaded.outcome.kind).toBe("fallback");
-    expect(result.record.attempts.map((attempt) => attempt.attemptIndex)).toEqual([
-      0, 1, 2,
-    ]);
+    expect(
+      result.record.attempts.map((attempt) => attempt.attemptIndex)
+    ).toEqual([0, 1, 2]);
   });
 });
 
@@ -167,7 +226,7 @@ class SequenceDirectorProvider implements DirectorProvider {
 
   constructor(
     results: readonly ProviderResult[],
-    defaultResult: ProviderResult = providerFailure("process_error", undefined),
+    defaultResult: ProviderResult = providerFailure("process_error", undefined)
   ) {
     this.results = [...results];
     this.defaultResult = defaultResult;
@@ -175,7 +234,7 @@ class SequenceDirectorProvider implements DirectorProvider {
 
   async generateManifest(
     prompt: string,
-    options: GenerateManifestOptions = {},
+    options: GenerateManifestOptions = {}
   ): Promise<ProviderResult> {
     this.prompts.push(prompt);
     this.options.push(options);
@@ -183,7 +242,10 @@ class SequenceDirectorProvider implements DirectorProvider {
     return this.results.shift() ?? this.defaultResult;
   }
 
-  async judge(prompt: string, options: JudgeOptions = {}): Promise<JudgeResult> {
+  async judge(
+    prompt: string,
+    options: JudgeOptions = {}
+  ): Promise<JudgeResult> {
     void prompt;
     void options;
 
@@ -191,9 +253,9 @@ class SequenceDirectorProvider implements DirectorProvider {
       ok: false,
       error: {
         code: "process_error",
-        message: "judge unused in repair tests",
+        message: "judge unused in repair tests"
       },
-      usage: USAGE,
+      usage: USAGE
     };
   }
 }
@@ -202,7 +264,10 @@ const ctx = (
   runId: string,
   fs: MemoryArtifactFs,
   provider: DirectorProvider,
-  options: { readonly gate2?: Gate2RunOptions } = {},
+  options: {
+    readonly gate2?: Gate2RunOptions;
+    readonly repairCap?: number;
+  } = {}
 ) => ({
   prompt: ORIGINAL_PROMPT,
   provider,
@@ -213,32 +278,56 @@ const ctx = (
   createdAt: CREATED_AT,
   recordedAt: RECORDED_AT,
   artifacts: { fs, rootDir: ROOT_DIR },
-  ...options,
+  ...options
 });
 
 const providerSuccess = (manifest: FloorManifest): ProviderResult => ({
   ok: true,
   raw: JSON.stringify(manifest),
   manifest,
-  usage: USAGE,
+  usage: USAGE
 });
 
 const providerFailure = (
   code: ProviderFailureCode,
-  raw: string | undefined,
+  raw: string | undefined
 ): ProviderResult => ({
   ok: false,
   ...(raw === undefined ? {} : { raw }),
   error: {
     code,
-    message: `mock ${code}`,
+    message: `mock ${code}`
   },
-  usage: USAGE,
+  usage: USAGE
 });
 
 const passingGate2 = (manifest: FloorManifest): Gate2RunOptions => ({
-  config: currentBotRealityConfig(manifest),
+  config: currentBotRealityConfig(manifest)
 });
+
+const hpRetentionFailingGate2 = (
+  manifest: FloorManifest,
+  hpRetentionMode: Gate2Config["hpRetentionMode"]
+): Gate2RunOptions => {
+  const base = currentBotRealityConfig(manifest);
+
+  return {
+    config: {
+      ...base,
+      hpRetentionMode,
+      thresholdsByBand: {
+        ...base.thresholdsByBand,
+        shallows: {
+          ...base.thresholdsByBand.shallows,
+          medianHpRetentionPercent: {
+            min: 0,
+            max: 50
+          }
+        }
+      }
+    }
+  };
+};
 
 const currentBotRealityConfig = (manifest: FloorManifest): Gate2Config => {
   const base = defaultGate2Config(manifest);
@@ -252,34 +341,34 @@ const currentBotRealityConfig = (manifest: FloorManifest): Gate2Config => {
     thresholdsByBand: {
       shallows: allowCurrentHpRetention(base.thresholdsByBand.shallows),
       middle: allowCurrentHpRetention(base.thresholdsByBand.middle),
-      lowest: allowCurrentHpRetention(base.thresholdsByBand.lowest),
-    },
+      lowest: allowCurrentHpRetention(base.thresholdsByBand.lowest)
+    }
   };
 };
 
 const allowCurrentHpRetention = (
-  threshold: Gate2Config["thresholdsByBand"]["shallows"],
+  threshold: Gate2Config["thresholdsByBand"]["shallows"]
 ): Gate2Config["thresholdsByBand"]["shallows"] => ({
   ...threshold,
   medianHpRetentionPercent: {
     ...threshold.medianHpRetentionPercent,
-    max: 100,
-  },
+    max: 100
+  }
 });
 
 const assertPersisted = (
   fs: MemoryArtifactFs,
   runId: string,
-  record: Awaited<ReturnType<typeof generateFloor>>["record"],
+  record: Awaited<ReturnType<typeof generateFloor>>["record"]
 ) => {
   const loaded = loadGenerationChain(runId, DEPTH, { fs, rootDir: ROOT_DIR });
 
   expect(loaded).toEqual(record);
   expect(loaded.attempts.map((attempt) => attempt.attemptIndex)).toEqual(
-    loaded.attempts.map((_, index) => index),
+    loaded.attempts.map((_, index) => index)
   );
   expect(
-    loaded.attempts.every((attempt) => attempt.rawOutputPath.length > 0),
+    loaded.attempts.every((attempt) => attempt.rawOutputPath.length > 0)
   ).toBe(true);
 
   return loaded;

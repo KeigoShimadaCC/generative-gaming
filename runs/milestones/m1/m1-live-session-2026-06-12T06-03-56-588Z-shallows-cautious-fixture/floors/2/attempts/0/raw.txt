@@ -1,0 +1,259 @@
+{
+  "protocolVersion": "1.2.0",
+  "depth": 2,
+  "band": "shallows",
+  "params": {
+    "bandOrSize": "shallows",
+    "roomCountRange": {
+      "min": 4,
+      "max": 7
+    },
+    "flavor": "open",
+    "seed": "m1-live-shallows-2"
+  },
+  "roster": [
+    {
+      "id": "ash-louse",
+      "name": "ash louse",
+      "glyph": "l",
+      "origin": "old_stock",
+      "stats": {
+        "band": "shallows",
+        "hp": 4,
+        "attack": 2,
+        "defense": 0,
+        "xpYield": 2
+      },
+      "behaviors": [
+        {
+          "kind": "approach_melee",
+          "approachMelee": {},
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": null,
+          "ambusher": null,
+          "territorial": null,
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": null
+    },
+    {
+      "id": "borrowed-bone",
+      "name": "borrowed bone",
+      "glyph": "b",
+      "origin": "made",
+      "stats": {
+        "band": "shallows",
+        "hp": 4,
+        "attack": 2,
+        "defense": 0,
+        "xpYield": 2
+      },
+      "behaviors": [
+        {
+          "kind": "approach_melee",
+          "approachMelee": {},
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": null,
+          "ambusher": null,
+          "territorial": null,
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "notched-knife",
+      "name": "notched knife",
+      "glyph": ")",
+      "kind": "weapon",
+      "value": {
+        "band": "shallows",
+        "coin": 5
+      },
+      "weapon": {
+        "attackBonus": 1,
+        "cursed": false,
+        "onHit": null
+      },
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "near_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "mended-cap",
+      "name": "mended cap",
+      "glyph": "[",
+      "kind": "armor",
+      "value": {
+        "band": "shallows",
+        "coin": 5
+      },
+      "weapon": null,
+      "armor": {
+        "defenseBonus": 1,
+        "cursed": false,
+        "onStruck": null
+      },
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": null
+    },
+    {
+      "id": "dry-root",
+      "name": "dry root",
+      "glyph": "%",
+      "kind": "food",
+      "value": {
+        "band": "shallows",
+        "coin": 5
+      },
+      "weapon": null,
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": {
+        "effect": {
+          "effects": [
+            {
+              "kind": "nutrition",
+              "damage": null,
+              "heal": null,
+              "applyStatus": null,
+              "cureStatus": null,
+              "buffStat": null,
+              "nutrition": {
+                "fullness": 10
+              },
+              "teleportSelf": null,
+              "teleportTarget": null,
+              "blink": null,
+              "knockback": null,
+              "reveal": null,
+              "identify": null,
+              "enchant": null,
+              "summon": null,
+              "transform": null,
+              "dig": null
+            }
+          ],
+          "trigger": {
+            "kind": "quaff",
+            "quaff": {},
+            "read": null,
+            "throwHit": null,
+            "equipPassive": null,
+            "onHit": null,
+            "onStruck": null,
+            "step": null,
+            "use": null
+          },
+          "targeting": {
+            "kind": "self",
+            "self": {},
+            "melee": null,
+            "bolt": null,
+            "burst": null,
+            "floor": null
+          }
+        }
+      },
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "dull-copper",
+      "name": "dull copper",
+      "glyph": "$",
+      "kind": "coin",
+      "value": {
+        "band": "shallows",
+        "coin": 5
+      },
+      "weapon": null,
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": {},
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    }
+  ],
+  "traps": [],
+  "npcs": [],
+  "quest": null,
+  "narration": {
+    "floorIntro": "The Deep opens a few bare rooms and lets the dust keep most of its names.",
+    "observations": [
+      {
+        "id": "kept-hand-obs",
+        "triggerTag": "hoard-mirrored",
+        "text": "A small heap waits in a corner, as if a careful hand set it down and forgot to spend it."
+      }
+    ]
+  },
+  "metadata": {
+    "originTags": {
+      "made": 1,
+      "old_stock": 5,
+      "kept": 0
+    },
+    "callbacks": [
+      "hoard-mirrored"
+    ],
+    "signature": false
+  }
+}

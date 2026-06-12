@@ -1,0 +1,32 @@
+{
+  "recordType": "generation",
+  "protocolVersion": "1.2.0",
+  "engineVersion": "0.0.0",
+  "modelId": "ambient:codex",
+  "seed": "m1-live-shallows-1",
+  "createdAt": "2026-06-12T06:24:42.549Z",
+  "runId": "m1-live-corrected-session-2026-06-12T06-24-42-544Z-shallows-aggressive-fixture",
+  "depth": 1,
+  "attempts": [
+    {
+      "attemptIndex": 0,
+      "promptHash": "4897bc3bcefecb232441114e74174ff7ef7ca307a8c664cdc4e98175d8cf537f",
+      "rawOutputPath": "floors/1/attempts/0/raw.txt",
+      "provider": {
+        "ok": false,
+        "usage": {
+          "latencyMs": 228,
+          "tokens": null
+        },
+        "error": {
+          "code": "process_error",
+          "message": "process exited with code 1 signal null: WARNING: proceeding, even though we could not update PATH: Operation not permitted (os error 1)\nReading additional input from stdin...\nError: failed to initialize in-process app-server client: Operation not permitted (os error 1)\n"
+        }
+      }
+    }
+  ],
+  "outcome": {
+    "kind": "fallback",
+    "fallbackId": "fallback:old-stock:shallows-1"
+  }
+}

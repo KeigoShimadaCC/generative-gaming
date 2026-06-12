@@ -1,0 +1,275 @@
+{
+  "protocolVersion": "1.2.0",
+  "depth": 6,
+  "band": "middle",
+  "params": {
+    "bandOrSize": "middle",
+    "roomCountRange": {
+      "min": 6,
+      "max": 8
+    },
+    "flavor": "ring",
+    "seed": "m1-live-middle-6"
+  },
+  "roster": [
+    {
+      "id": "made-listener-a",
+      "name": "listener in scraped mail",
+      "glyph": "l",
+      "origin": "made",
+      "stats": {
+        "band": "middle",
+        "hp": 12,
+        "attack": 5,
+        "defense": 1,
+        "xpYield": 5
+      },
+      "behaviors": [
+        {
+          "kind": "approach_melee",
+          "approachMelee": {},
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": null,
+          "ambusher": null,
+          "territorial": null,
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    },
+    {
+      "id": "made-doorcounter-b",
+      "name": "doorcounter with chalked palms",
+      "glyph": "d",
+      "origin": "made",
+      "stats": {
+        "band": "middle",
+        "hp": 12,
+        "attack": 5,
+        "defense": 1,
+        "xpYield": 5
+      },
+      "behaviors": [
+        {
+          "kind": "approach_melee",
+          "approachMelee": {},
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": null,
+          "ambusher": null,
+          "territorial": null,
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "quiet-counting-knife",
+      "name": "quiet counting knife",
+      "glyph": ")",
+      "kind": "weapon",
+      "value": {
+        "band": "middle",
+        "coin": 20
+      },
+      "weapon": {
+        "attackBonus": 1,
+        "cursed": false,
+        "onHit": null
+      },
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "coat-of-shut-doors",
+      "name": "coat of shut doors",
+      "glyph": "[",
+      "kind": "armor",
+      "value": {
+        "band": "middle",
+        "coin": 20
+      },
+      "weapon": null,
+      "armor": {
+        "defenseBonus": 1,
+        "cursed": false,
+        "onStruck": null
+      },
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "near_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "bread-with-four-scores",
+      "name": "bread with four scores",
+      "glyph": "%",
+      "kind": "food",
+      "value": {
+        "band": "middle",
+        "coin": 20
+      },
+      "weapon": null,
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": {
+        "effect": {
+          "effects": [
+            {
+              "kind": "nutrition",
+              "damage": null,
+              "heal": null,
+              "applyStatus": null,
+              "cureStatus": null,
+              "buffStat": null,
+              "nutrition": {
+                "fullness": 10
+              },
+              "teleportSelf": null,
+              "teleportTarget": null,
+              "blink": null,
+              "knockback": null,
+              "reveal": null,
+              "identify": null,
+              "enchant": null,
+              "summon": null,
+              "transform": null,
+              "dig": null
+            }
+          ],
+          "trigger": {
+            "kind": "quaff",
+            "quaff": {},
+            "read": null,
+            "throwHit": null,
+            "equipPassive": null,
+            "onHit": null,
+            "onStruck": null,
+            "step": null,
+            "use": null
+          },
+          "targeting": {
+            "kind": "self",
+            "self": {},
+            "melee": null,
+            "bolt": null,
+            "burst": null,
+            "floor": null
+          }
+        }
+      },
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "near_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "coin-for-the-untaken-talk",
+      "name": "coin for the untaken talk",
+      "glyph": "$",
+      "kind": "coin",
+      "value": {
+        "band": "middle",
+        "coin": 20
+      },
+      "weapon": null,
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": {},
+      "placementHint": null
+    }
+  ],
+  "traps": [],
+  "npcs": [],
+  "quest": null,
+  "narration": {
+    "floorIntro": "The Deep has counted your soft steps and saved a ring of rooms for them.",
+    "observations": [
+      {
+        "id": "obs-few-fights",
+        "triggerTag": "avoided-fights",
+        "text": "You have left many teeth unused behind you; the stone notices mercy and caution wearing one cloak."
+      },
+      {
+        "id": "obs-many-talks",
+        "triggerTag": "many-talks",
+        "text": "So many words have gone out of you, and none have been sworn into burden."
+      },
+      {
+        "id": "obs-small-map",
+        "triggerTag": "small-map-seen",
+        "text": "The dark keeps most of itself folded, because you have asked so little of the floor."
+      }
+    ]
+  },
+  "metadata": {
+    "originTags": {
+      "made": 2,
+      "old_stock": 0,
+      "kept": 0
+    },
+    "callbacks": [
+      "avoided-fights",
+      "many-talks",
+      "small-map-seen"
+    ],
+    "signature": true
+  }
+}

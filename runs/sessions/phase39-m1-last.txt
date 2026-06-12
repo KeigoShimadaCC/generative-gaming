@@ -1,0 +1,21 @@
+Implemented the Phase-39 M1 integration work and did not commit.
+
+Files changed:
+- [src/cli/simulate.ts](/Users/keigoshimada/Documents/generative-gaming/src/cli/simulate.ts): added `--director mock|ambient` parsing and `DirectorFloorProvider` wiring.
+- [tests/integration/m1.test.ts](/Users/keigoshimada/Documents/generative-gaming/tests/integration/m1.test.ts): added mocked full-loop M1 test plus explicit `@live` evidence harness.
+- [runs/milestones/m1/report.md](/Users/keigoshimada/Documents/generative-gaming/runs/milestones/m1/report.md): live session report and artifact links.
+
+Result: `M1 VERDICT (mechanical): NOT MET per NORTH_STAR §10-M1`.
+
+The live session served 10/10 without fallback, but all 10 live records have Gate 2 failing with `G2_HP_RETENTION`. The report calls out the out-of-scope pipeline finding: `generateFloor` is still recording/serving `outcome.kind: "manifest"` when Gate 2 reports `pass: false`; the fix is in `src/gauntlet/repair.ts`, which was outside this brief’s owned files.
+
+Verification run:
+- `pnpm exec vitest run --config tests/integration/vitest.config.ts tests/integration/m1.test.ts --reporter verbose` -> 1 passed, 1 skipped.
+- `CODEX_LIVE=1 ... vitest ... -t '@live'` -> Vitest passed, `@live` test 371897ms; wrapper exited after pass due zsh readonly variable `status`, temp Codex home was cleaned manually.
+- `pnpm run check` -> typecheck + lint + tests green: 67 test files passed, 474 tests passed, 1 skipped.
+
+Scope notes:
+- No commit made.
+- `PROGRESS.md` was not edited because the task’s owned files did not grant it.
+- Actual time: ~18m vs 45m estimate, recorded in the report.
+- Environment notes: re-hit documented `npx` cache EPERM; also hit `.git/index.lock` permission failure on `git restore`, restored accidentally deleted tracked trace files directly from `HEAD` content.

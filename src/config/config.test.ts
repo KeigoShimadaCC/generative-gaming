@@ -63,31 +63,40 @@ describe("game config", () => {
     expect(config.statusMagnitudes.weakenAtkPenalty).toBe(-2);
     expect(config.itemsEconomy.valueBandsCoin.lowest.max).toBe(200);
     expect(config.itemsEconomy.merchantMultipliers.buy).toBe(0.5);
-    expect(config.itemsEconomy.cursedRate).toBe(0.10);
+    expect(config.itemsEconomy.cursedRate).toBe(0.1);
     expect(config.enemyDesign.spawnBudgetPoints.middle).toBe(45);
     expect(config.trapsNpcsQuests.quests.maxPerRun).toBe(3);
     expect(config.difficultyGate.botEnsemble.policies).toHaveLength(3);
     expect(config.difficultyGate.botEnsemble.seedsPerPolicy).toBe(5);
-    expect(config.difficultyGate.thresholdsByBand.lowest.clearRateMinPercent).toBe(70);
-    expect(config.difficultyGate.thresholdsByBand.middle.medianHpRetentionPercent.min).toBe(30);
+    expect(config.difficultyGate.hpRetentionMode).toBe("advisory");
+    expect(
+      config.difficultyGate.thresholdsByBand.lowest.clearRateMinPercent
+    ).toBe(70);
+    expect(
+      config.difficultyGate.thresholdsByBand.middle.medianHpRetentionPercent.min
+    ).toBe(30);
     expect(config.directorManifest.signatureMoment.budgetRelaxPercent).toBe(25);
 
     expect(bounds.runStructure.perRunHardCapTurns).toBe(8000);
     expect(bounds.playerCharacter.overfedFullnessCap).toBe(200);
     expect(bounds.statusVocabulary.durationTurns.burn.max).toBe(5);
     expect(bounds.effectVocabulary.verbs.damage.amount.max).toBe(12);
-    expect(bounds.effectVocabulary.triggers.procChancePercent.onHit.max).toBe(30);
+    expect(bounds.effectVocabulary.triggers.procChancePercent.onHit.max).toBe(
+      30
+    );
     expect(bounds.itemsEconomy.weaponAtkBonus.max).toBe(6);
     expect(bounds.enemyDesign.statBudgetsByBand.middle.hp.max).toBe(30);
-    expect(bounds.enemyDesign.behaviorVocabulary.parameters.packHunter.allyCountMin).toBe(2);
+    expect(
+      bounds.enemyDesign.behaviorVocabulary.parameters.packHunter.allyCountMin
+    ).toBe(2);
     expect(bounds.trapsNpcsQuests.npcs.perFloor.max).toBe(2);
     expect(bounds.gauntlet.repairRetriesMax).toBe(2);
     expect(bounds.directorManifest.signatureMomentsPerRun).toBe(1);
     expect(bounds.directorManifest.textCaps.narrationLineMaxChars).toBe(160);
     expect(bounds.directorManifest.textCaps.nameMaxChars).toBe(40);
-    expect(bounds.directorManifest.textCaps.descriptionDialogueLineMaxChars).toBe(
-      200,
-    );
+    expect(
+      bounds.directorManifest.textCaps.descriptionDialogueLineMaxChars
+    ).toBe(200);
   });
 
   it("deep-freezes config and hard bounds", () => {

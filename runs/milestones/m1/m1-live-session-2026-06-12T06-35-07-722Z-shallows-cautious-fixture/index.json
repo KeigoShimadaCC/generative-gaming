@@ -1,0 +1,20 @@
+{
+  "recordType": "generation-index",
+  "protocolVersion": "1.2.0",
+  "engineVersion": "0.0.0",
+  "modelId": "ambient:codex",
+  "seed": "m1-live-shallows-2",
+  "createdAt": "2026-06-12T06:35:37.098Z",
+  "runId": "m1-live-session-2026-06-12T06-35-07-722Z-shallows-cautious-fixture",
+  "updatedAt": "2026-06-12T06:35:37.098Z",
+  "floors": [
+    {
+      "depth": 2,
+      "recordPath": "floors/2/generation.json",
+      "outcome": {
+        "kind": "manifest"
+      },
+      "recordedAt": "2026-06-12T06:35:37.098Z"
+    }
+  ]
+}

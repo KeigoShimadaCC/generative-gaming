@@ -1,0 +1,16 @@
+{
+  "caseId": "shallows-cautious-fixture",
+  "band": "shallows",
+  "depth": 2,
+  "policy": "cautious",
+  "tracePath": "/Users/keigoshimada/Documents/generative-gaming/runs/milestones/m1/traces/corrected-session-2026-06-12T06-40-03-638Z/shallows-cautious-fixture.ndjson",
+  "outcome": "generated",
+  "attempts": 1,
+  "latencyMs": 29028,
+  "gateFailures": [],
+  "gateAdvisories": [
+    "attempt0:G2_HP_RETENTION:recorded-fail"
+  ],
+  "recordPath": "/Users/keigoshimada/Documents/generative-gaming/runs/milestones/m1/m1-live-corrected-session-2026-06-12T06-40-03-638Z-shallows-cautious-fixture/floors/2/generation.json",
+  "manifestPath": "/Users/keigoshimada/Documents/generative-gaming/runs/milestones/m1/m1-live-corrected-session-2026-06-12T06-40-03-638Z-shallows-cautious-fixture/floors/2/attempts/0/manifest.json"
+}

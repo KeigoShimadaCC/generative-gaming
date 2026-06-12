@@ -1,0 +1,269 @@
+{
+  "protocolVersion": "1.2.0",
+  "depth": 2,
+  "band": "shallows",
+  "params": {
+    "bandOrSize": "shallows",
+    "roomCountRange": {
+      "min": 4,
+      "max": 7
+    },
+    "flavor": "open",
+    "seed": "m1-live-shallows-2"
+  },
+  "roster": [
+    {
+      "id": "cellar-gnawer",
+      "name": "cellar gnawer",
+      "glyph": "r",
+      "origin": "old_stock",
+      "stats": {
+        "band": "shallows",
+        "hp": 4,
+        "attack": 2,
+        "defense": 0,
+        "xpYield": 2
+      },
+      "behaviors": [
+        {
+          "kind": "approach_melee",
+          "approachMelee": {},
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": null,
+          "ambusher": null,
+          "territorial": null,
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "near_entrance",
+        "spread": true
+      }
+    },
+    {
+      "id": "loose-clay-man",
+      "name": "loose clay man",
+      "glyph": "c",
+      "origin": "made",
+      "stats": {
+        "band": "shallows",
+        "hp": 4,
+        "attack": 2,
+        "defense": 0,
+        "xpYield": 2
+      },
+      "behaviors": [
+        {
+          "kind": "approach_melee",
+          "approachMelee": {},
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": null,
+          "ambusher": null,
+          "territorial": null,
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "bent-supper-knife",
+      "name": "bent supper knife",
+      "glyph": ")",
+      "kind": "weapon",
+      "value": {
+        "band": "shallows",
+        "coin": 8
+      },
+      "weapon": {
+        "attackBonus": 1,
+        "cursed": false,
+        "onHit": null
+      },
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "mildewed-hide-vest",
+      "name": "mildewed hide vest",
+      "glyph": "[",
+      "kind": "armor",
+      "value": {
+        "band": "shallows",
+        "coin": 10
+      },
+      "weapon": null,
+      "armor": {
+        "defenseBonus": 1,
+        "cursed": false,
+        "onStruck": null
+      },
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": null
+    },
+    {
+      "id": "hard-black-bread",
+      "name": "hard black bread",
+      "glyph": "%",
+      "kind": "food",
+      "value": {
+        "band": "shallows",
+        "coin": 5
+      },
+      "weapon": null,
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": {
+        "effect": {
+          "effects": [
+            {
+              "kind": "nutrition",
+              "damage": null,
+              "heal": null,
+              "applyStatus": null,
+              "cureStatus": null,
+              "buffStat": null,
+              "nutrition": {
+                "fullness": 20
+              },
+              "teleportSelf": null,
+              "teleportTarget": null,
+              "blink": null,
+              "knockback": null,
+              "reveal": null,
+              "identify": null,
+              "enchant": null,
+              "summon": null,
+              "transform": null,
+              "dig": null
+            }
+          ],
+          "trigger": {
+            "kind": "quaff",
+            "quaff": {},
+            "read": null,
+            "throwHit": null,
+            "equipPassive": null,
+            "onHit": null,
+            "onStruck": null,
+            "step": null,
+            "use": null
+          },
+          "targeting": {
+            "kind": "self",
+            "self": {},
+            "melee": null,
+            "bolt": null,
+            "burst": null,
+            "floor": null
+          }
+        }
+      },
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "near_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "damp-copper-handful",
+      "name": "damp copper handful",
+      "glyph": "$",
+      "kind": "coin",
+      "value": {
+        "band": "shallows",
+        "coin": 12
+      },
+      "weapon": null,
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": {},
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    }
+  ],
+  "traps": [],
+  "npcs": [],
+  "quest": null,
+  "narration": {
+    "floorIntro": "The stair gives you to a colder room and forgets the courtesy.",
+    "observations": [
+      {
+        "id": "hoard-glance",
+        "triggerTag": "old-stock-pickup",
+        "text": "Another small thing waits where your hand may close on it."
+      },
+      {
+        "id": "wide-room",
+        "triggerTag": "first-open-room",
+        "text": "The room is broad enough to refuse you a secret."
+      }
+    ]
+  },
+  "metadata": {
+    "originTags": {
+      "made": 1,
+      "old_stock": 1,
+      "kept": 0
+    },
+    "callbacks": [
+      "old-stock-pickup",
+      "first-open-room"
+    ],
+    "signature": false
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "recordType": "generation-index",
+  "protocolVersion": "1.2.0",
+  "engineVersion": "0.0.0",
+  "modelId": "ambient:codex",
+  "seed": "m1-live-shallows-3",
+  "createdAt": "2026-06-12T06:41:06.384Z",
+  "runId": "m1-live-corrected-session-2026-06-12T06-40-03-638Z-shallows-balanced-a",
+  "updatedAt": "2026-06-12T06:41:06.384Z",
+  "floors": [
+    {
+      "depth": 3,
+      "recordPath": "floors/3/generation.json",
+      "outcome": {
+        "kind": "manifest"
+      },
+      "recordedAt": "2026-06-12T06:41:06.384Z"
+    }
+  ]
+}

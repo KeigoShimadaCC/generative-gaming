@@ -12,7 +12,7 @@ import { bounds, config as defaultConfig } from "../../config/index.js";
 import { type GeneratedFloor } from "../../engine/floorgen/index.js";
 import {
   type PlacementAllocation,
-  type PlacementDeviation,
+  type PlacementDeviation
 } from "../../engine/floorgen/place.js";
 import { getTile, Terrain, type TileGrid } from "../../engine/map/index.js";
 import { path } from "../../engine/map/path.js";
@@ -22,7 +22,7 @@ import {
   type EntityMap,
   type GameState,
   type Position,
-  type TerminalStatus,
+  type TerminalStatus
 } from "../../engine/state/index.js";
 import { materialize } from "../../director/apply/index.js";
 import type { DepthBand } from "../../schemas/entities/index.js";
@@ -33,17 +33,17 @@ import {
   updateBotMemory,
   type BotMemory,
   type BotPolicy,
-  type BotPolicyName,
+  type BotPolicyName
 } from "../../harness/bots/index.js";
 import {
   aggressivePolicy,
   balancedPolicy,
-  cautiousPolicy,
+  cautiousPolicy
 } from "../../harness/bots/policies/index.js";
 import {
   actionKey,
   fallbackAction,
-  hasAction,
+  hasAction
 } from "../../harness/bots/policies/helpers.js";
 import { judgeGate2, type Gate2Report } from "./judge.js";
 
@@ -59,7 +59,7 @@ export const createCounterClock = (start = 0): Gate2Clock => {
       const current = value;
       value += 1;
       return current;
-    },
+    }
   };
 };
 
@@ -75,10 +75,13 @@ export type Gate2Threshold = {
   };
 };
 
+export type Gate2HpRetentionMode = "advisory" | "blocking";
+
 export type Gate2Config = {
   readonly policies: readonly BotPolicyName[];
   readonly seeds: readonly string[];
   readonly maxTurns: number;
+  readonly hpRetentionMode: Gate2HpRetentionMode;
   readonly thresholdsByBand: Readonly<Record<DepthBand, Gate2Threshold>>;
   readonly zeroThreatRejectBelowDepth: number;
   readonly wallClockBudgetMs: number;
@@ -86,7 +89,7 @@ export type Gate2Config = {
 
 export type CandidateFloorTransform = (
   floor: GeneratedFloor,
-  manifest: FloorManifest,
+  manifest: FloorManifest
 ) => GeneratedFloor;
 
 export type Gate2RunOptions = {
@@ -148,6 +151,7 @@ export type Gate2Evaluation = {
   };
   readonly runs: readonly Gate2RunMetrics[];
   readonly aggregate: Gate2AggregateMetrics;
+  readonly hpRetentionMode: Gate2HpRetentionMode;
   readonly thresholds: Gate2Config["thresholdsByBand"];
   readonly zeroThreatRejectBelowDepth: number;
   readonly elapsedMs: number;
@@ -165,12 +169,14 @@ const DEFAULT_WALL_CLOCK_BUDGET_MS = 8_000;
 const POLICY_BY_NAME: Readonly<Record<BotPolicyName, BotPolicy>> = {
   cautious: cautiousPolicy,
   balanced: balancedPolicy,
-  aggressive: aggressivePolicy,
+  aggressive: aggressivePolicy
 };
 const UNUSED_PROVIDER: FloorContentProvider = {
   getFloor: (depth) => {
-    throw new Error(`Gate 2 single-floor evaluation cannot load depth ${depth}`);
-  },
+    throw new Error(
+      `Gate 2 single-floor evaluation cannot load depth ${depth}`
+    );
+  }
 };
 export const defaultGate2Config = (manifest: FloorManifest): Gate2Config => {
   const seedCount = defaultConfig.difficultyGate.botEnsemble.seedsPerPolicy;
@@ -179,41 +185,47 @@ export const defaultGate2Config = (manifest: FloorManifest): Gate2Config => {
     policies: defaultConfig.difficultyGate.botEnsemble.policies,
     seeds: Array.from(
       { length: seedCount },
-      (_, index) => `${manifest.params.seed}:gate2:${index + 1}`,
+      (_, index) => `${manifest.params.seed}:gate2:${index + 1}`
     ),
     maxTurns: defaultConfig.runStructure.perFloorSoftCapTurns,
+    hpRetentionMode: defaultConfig.difficultyGate.hpRetentionMode,
     thresholdsByBand: {
       shallows: widenThreshold(
-        defaultConfig.difficultyGate.thresholdsByBand.shallows,
+        defaultConfig.difficultyGate.thresholdsByBand.shallows
       ),
-      middle: widenThreshold(defaultConfig.difficultyGate.thresholdsByBand.middle),
-      lowest: widenThreshold(defaultConfig.difficultyGate.thresholdsByBand.lowest),
+      middle: widenThreshold(
+        defaultConfig.difficultyGate.thresholdsByBand.middle
+      ),
+      lowest: widenThreshold(
+        defaultConfig.difficultyGate.thresholdsByBand.lowest
+      )
     },
-    zeroThreatRejectBelowDepth: bounds.difficultyGate.rejectsZeroThreatBelowDepth,
-    wallClockBudgetMs: DEFAULT_WALL_CLOCK_BUDGET_MS,
+    zeroThreatRejectBelowDepth:
+      bounds.difficultyGate.rejectsZeroThreatBelowDepth,
+    wallClockBudgetMs: DEFAULT_WALL_CLOCK_BUDGET_MS
   };
 };
 
 export const runGate2 = (
   manifest: FloorManifest,
-  options: Gate2RunOptions = {},
+  options: Gate2RunOptions = {}
 ): Gate2Report => judgeGate2(evaluateGate2(manifest, options));
 
 export const evaluateGate2 = (
   manifest: FloorManifest,
-  options: Gate2RunOptions = {},
+  options: Gate2RunOptions = {}
 ): Gate2Evaluation => {
   const gateConfig = options.config ?? defaultGate2Config(manifest);
   const clock = options.clock ?? createCounterClock();
   const startedAt = clock.now();
   const candidate = makeCandidateFloor(manifest, {
-    transformFloor: options.transformFloor,
+    transformFloor: options.transformFloor
   });
   const policies = gateConfig.policies.map((name) => POLICY_BY_NAME[name]);
   const runs = policies.flatMap((policy) =>
     gateConfig.seeds.map((seed) =>
-      runSingleFloorBot(policy, seed, candidate, gateConfig.maxTurns),
-    ),
+      runSingleFloorBot(policy, seed, candidate, gateConfig.maxTurns)
+    )
   );
   const elapsedMs = Math.max(0, clock.now() - startedAt);
 
@@ -226,35 +238,36 @@ export const evaluateGate2 = (
       stairsReachable: candidate.pathToStairs !== null,
       pathLength: candidate.pathToStairs?.length ?? null,
       hasThreatOnPath: candidate.hasThreatOnPath,
-      placementDeviationCount: candidate.placementDeviations.length,
+      placementDeviationCount: candidate.placementDeviations.length
     },
     ensemble: {
       policies: gateConfig.policies,
       seeds: gateConfig.seeds,
-      maxTurns: gateConfig.maxTurns,
+      maxTurns: gateConfig.maxTurns
     },
     runs,
     aggregate: aggregateRuns(runs),
+    hpRetentionMode: gateConfig.hpRetentionMode,
     thresholds: gateConfig.thresholdsByBand,
     zeroThreatRejectBelowDepth: gateConfig.zeroThreatRejectBelowDepth,
     elapsedMs,
-    wallClockBudgetMs: gateConfig.wallClockBudgetMs,
+    wallClockBudgetMs: gateConfig.wallClockBudgetMs
   };
 };
 
 export const makeCandidateFloor = (
   manifest: FloorManifest,
-  options: Pick<Gate2RunOptions, "transformFloor"> = {},
+  options: Pick<Gate2RunOptions, "transformFloor"> = {}
 ): CandidateFloor => {
   const materialized = materialize(manifest, manifest.params.seed, {
     ...(options.transformFloor === undefined
       ? {}
       : { transformFloor: options.transformFloor }),
-    revealMap: true,
+    revealMap: true
   });
   const floor = materialized.floor.generated;
   const pathToStairs = path(floor.grid, floor.entrance, floor.stairsDown, {
-    openDoors: true,
+    openDoors: true
   });
 
   return {
@@ -268,8 +281,8 @@ export const makeCandidateFloor = (
       floor.grid,
       floor.entrance,
       pathToStairs,
-      materialized.floor.entities,
-    ),
+      materialized.floor.entities
+    )
   };
 };
 
@@ -277,7 +290,7 @@ const runSingleFloorBot = (
   policy: BotPolicy,
   seed: string,
   candidate: CandidateFloor,
-  maxTurns: number,
+  maxTurns: number
 ): Gate2RunMetrics => {
   assertMaxTurns(maxTurns);
 
@@ -286,7 +299,7 @@ const runSingleFloorBot = (
   let stall: StallTracker = {
     previousActionKey: null,
     previousProgressKey: null,
-    repeatCount: 0,
+    repeatCount: 0
   };
   let reachedStairs = false;
   let questCompleted = floorQuestCompleted(state, candidate.manifest.quest);
@@ -300,7 +313,7 @@ const runSingleFloorBot = (
   ) {
     const view = createBotStateView(state, {
       policyName: policy.name,
-      memory,
+      memory
     });
     memory = updateBotMemory(memory, view);
     const decided = legalizeDecision(view, policy.decide(view));
@@ -317,7 +330,7 @@ const runSingleFloorBot = (
     const stepped = stepRun(state, action, UNUSED_PROVIDER);
     if (!stepped.ok) {
       throw new Error(
-        `Gate 2 bot step failed at turn ${state.run.turn} for ${policy.name}: ${stepped.error.message}`,
+        `Gate 2 bot step failed at turn ${state.run.turn} for ${policy.name}: ${stepped.error.message}`
       );
     }
 
@@ -332,15 +345,19 @@ const runSingleFloorBot = (
     questCompleted,
     cleared: reachedStairs || questCompleted,
     hpRetention:
-      state.player.hp.max <= 0 ? 0 : state.player.hp.current / state.player.hp.max,
+      state.player.hp.max <= 0
+        ? 0
+        : state.player.hp.current / state.player.hp.max,
     turns,
-    died: state.run.terminalStatus === defaultConfig.runStructure.terminalStates.loss,
+    died:
+      state.run.terminalStatus ===
+      defaultConfig.runStructure.terminalStates.loss,
     terminal: state.run.terminalStatus,
     maxTurnsHit:
       turns >= maxTurns &&
       state.run.terminalStatus === "ACTIVE" &&
       !reachedStairs &&
-      !questCompleted,
+      !questCompleted
   };
 };
 
@@ -351,7 +368,7 @@ const stateForBotSeed = (state: GameState, seed: string): GameState => ({
     runId: `run#gate2-${seed}`,
     seed,
     turn: 0,
-    terminalStatus: "ACTIVE",
+    terminalStatus: "ACTIVE"
   },
   rng: {
     ...state.rng,
@@ -362,14 +379,14 @@ const stateForBotSeed = (state: GameState, seed: string): GameState => ({
         streamId: "root",
         seed,
         parentStreamId: null,
-        draws: 0,
-      },
-    },
-  },
+        draws: 0
+      }
+    }
+  }
 });
 
 const aggregateRuns = (
-  runs: readonly Gate2RunMetrics[],
+  runs: readonly Gate2RunMetrics[]
 ): Gate2AggregateMetrics => {
   const totalRuns = runs.length;
   const clearCount = runs.filter((run) => run.cleared).length;
@@ -385,7 +402,7 @@ const aggregateRuns = (
     clearRatePercent: totalRuns === 0 ? 0 : (clearCount / totalRuns) * 100,
     medianHpRetentionPercent: hpRetention,
     minTurns: turns.length === 0 ? 0 : Math.min(...turns),
-    maxTurns: turns.length === 0 ? 0 : Math.max(...turns),
+    maxTurns: turns.length === 0 ? 0 : Math.max(...turns)
   };
 };
 
@@ -393,7 +410,7 @@ const threatPossibleOnPath = (
   grid: TileGrid,
   entrance: Position,
   route: readonly Position[] | null,
-  entities: EntityMap,
+  entities: EntityMap
 ): boolean => {
   if (route === null) {
     return false;
@@ -418,12 +435,13 @@ const threatPossibleOnPath = (
 
 const floorQuestCompleted = (
   state: GameState,
-  quest: FloorManifest["quest"],
-): boolean => quest !== null && state.quests.completedQuestIds.includes(quest.id);
+  quest: FloorManifest["quest"]
+): boolean =>
+  quest !== null && state.quests.completedQuestIds.includes(quest.id);
 
 const legalizeDecision = (
   view: ReturnType<typeof createBotStateView>,
-  action: RunAction,
+  action: RunAction
 ): RunAction => {
   if (hasAction(view, action)) {
     return action;
@@ -435,7 +453,7 @@ const legalizeDecision = (
 const breakStall = (
   view: ReturnType<typeof createBotStateView>,
   action: RunAction,
-  stall: StallTracker,
+  stall: StallTracker
 ): { readonly action: RunAction; readonly stall: StallTracker } => {
   const progressKey = progressSignature(view);
   const key = actionKey(action);
@@ -450,8 +468,8 @@ const breakStall = (
       stall: {
         previousActionKey: key,
         previousProgressKey: progressKey,
-        repeatCount,
-      },
+        repeatCount
+      }
     };
   }
 
@@ -462,14 +480,14 @@ const breakStall = (
     stall: {
       previousActionKey: actionKey(alternative),
       previousProgressKey: progressKey,
-      repeatCount: 1,
-    },
+      repeatCount: 1
+    }
   };
 };
 
 const forcedAlternative = (
   view: ReturnType<typeof createBotStateView>,
-  repeatedActionKey: string,
+  repeatedActionKey: string
 ): RunAction => {
   const candidates = [
     ...view.availableActions.filter((action) => action.kind === "descend"),
@@ -478,14 +496,14 @@ const forcedAlternative = (
     ...view.availableActions.filter((action) => action.kind === "move"),
     ...view.availableActions.filter((action) => action.kind === "wait"),
     ...view.availableActions.filter((action) => action.kind === "use_item"),
-    ...view.availableActions.filter((action) => action.kind === "abort"),
+    ...view.availableActions.filter((action) => action.kind === "abort")
   ].filter((candidate) => actionKey(candidate) !== repeatedActionKey);
 
   return candidates[0] ?? { kind: "abort" };
 };
 
 const progressSignature = (
-  view: ReturnType<typeof createBotStateView>,
+  view: ReturnType<typeof createBotStateView>
 ): string =>
   JSON.stringify({
     depth: view.run.depth,
@@ -496,13 +514,13 @@ const progressSignature = (
     inventory: view.player.inventory.map((item) => [
       item.itemInstanceId,
       item.definitionId,
-      item.quantity,
+      item.quantity
     ]),
     enemies: view.visible.enemies.map((enemy) => [
       enemy.id,
       enemy.position,
-      enemy.hp.current,
-    ]),
+      enemy.hp.current
+    ])
   });
 
 const median = (values: readonly number[]): number => {
@@ -526,16 +544,16 @@ const median = (values: readonly number[]): number => {
 };
 
 const widenThreshold = (
-  threshold: (typeof defaultConfig.difficultyGate.thresholdsByBand)[DepthBand],
+  threshold: (typeof defaultConfig.difficultyGate.thresholdsByBand)[DepthBand]
 ): Gate2Threshold => ({
   clearRateMinPercent: threshold.clearRateMinPercent,
   medianHpRetentionPercent: {
     min: threshold.medianHpRetentionPercent.min,
-    max: threshold.medianHpRetentionPercent.max,
+    max: threshold.medianHpRetentionPercent.max
   },
   hardRejects: {
-    ...threshold.hardRejects,
-  },
+    ...threshold.hardRejects
+  }
 });
 
 const assertMaxTurns = (maxTurns: number): void => {
@@ -544,7 +562,8 @@ const assertMaxTurns = (maxTurns: number): void => {
   }
 };
 
-const positionKey = (position: Position): string => `${position.x},${position.y}`;
+const positionKey = (position: Position): string =>
+  `${position.x},${position.y}`;
 
 const chebyshev = (left: Position, right: Position): number =>
   Math.max(Math.abs(left.x - right.x), Math.abs(left.y - right.y));

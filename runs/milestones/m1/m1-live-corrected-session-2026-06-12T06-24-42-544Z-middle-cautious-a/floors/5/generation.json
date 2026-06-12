@@ -1,0 +1,32 @@
+{
+  "recordType": "generation",
+  "protocolVersion": "1.2.0",
+  "engineVersion": "0.0.0",
+  "modelId": "ambient:codex",
+  "seed": "m1-live-middle-5",
+  "createdAt": "2026-06-12T06:24:44.128Z",
+  "runId": "m1-live-corrected-session-2026-06-12T06-24-42-544Z-middle-cautious-a",
+  "depth": 5,
+  "attempts": [
+    {
+      "attemptIndex": 0,
+      "promptHash": "81612e9900b7ea2bf82a6ddb2c82f5848921184e804f82403d3d01a9f23be93f",
+      "rawOutputPath": "floors/5/attempts/0/raw.txt",
+      "provider": {
+        "ok": false,
+        "usage": {
+          "latencyMs": 210,
+          "tokens": null
+        },
+        "error": {
+          "code": "process_error",
+          "message": "process exited with code 1 signal null: WARNING: proceeding, even though we could not update PATH: Operation not permitted (os error 1)\nReading additional input from stdin...\nError: failed to initialize in-process app-server client: Operation not permitted (os error 1)\n"
+        }
+      }
+    }
+  ],
+  "outcome": {
+    "kind": "fallback",
+    "fallbackId": "fallback:old-stock:middle-5"
+  }
+}

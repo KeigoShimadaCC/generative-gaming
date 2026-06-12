@@ -2,13 +2,13 @@ import { describe, expect, it } from "vitest";
 
 import {
   getFallbackFloor,
-  loadFallbackContentPack,
+  loadFallbackContentPack
 } from "../../harness/content-loader.js";
 import {
   createTile,
   createTileGrid,
   Terrain,
-  withTile,
+  withTile
 } from "../../engine/map/index.js";
 import type { Position } from "../../engine/state/index.js";
 import type { RoomRect } from "../../engine/floorgen/index.js";
@@ -18,7 +18,7 @@ import type {
   ManifestItemEntry,
   ManifestNpcEntry,
   ManifestRosterEntry,
-  ManifestTrapEntry,
+  ManifestTrapEntry
 } from "../../schemas/manifest.js";
 import { judgeGate2, type Gate2Report } from "./judge.js";
 import {
@@ -26,7 +26,7 @@ import {
   evaluateGate2,
   runGate2,
   type CandidateFloorTransform,
-  type Gate2Config,
+  type Gate2Config
 } from "./run.js";
 
 describe("Gate 2 simulated playability", () => {
@@ -35,7 +35,7 @@ describe("Gate 2 simulated playability", () => {
     const report = runGate2(manifest, {
       config: currentBotRealityConfig(manifest),
       clock: sequenceClock(10, 34),
-      transformFloor: corridorFloor,
+      transformFloor: corridorFloor
     });
 
     expect(report.pass, failedDetails(report)).toBe(true);
@@ -50,7 +50,7 @@ describe("Gate 2 simulated playability", () => {
     const report = runGate2(manifest, {
       config: currentBotRealityConfig(manifest),
       clock: sequenceClock(0, 12),
-      transformFloor: walledStairsFloor,
+      transformFloor: walledStairsFloor
     });
 
     expect(report.pass).toBe(false);
@@ -62,12 +62,12 @@ describe("Gate 2 simulated playability", () => {
   it("rejects a zero-threat floor below depth 2", () => {
     const manifest = {
       ...fallbackManifest(1, "gate2-zero-threat"),
-      roster: [],
+      roster: []
     } satisfies FloorManifest;
     const report = runGate2(manifest, {
       config: currentBotRealityConfig(manifest),
       clock: sequenceClock(0, 9),
-      transformFloor: corridorFloor,
+      transformFloor: corridorFloor
     });
 
     expect(report.pass).toBe(false);
@@ -80,12 +80,12 @@ describe("Gate 2 simulated playability", () => {
     const options = {
       config: currentBotRealityConfig(manifest),
       clock: sequenceClock(100, 117),
-      transformFloor: corridorFloor,
+      transformFloor: corridorFloor
     };
     const first = runGate2(manifest, options);
     const second = runGate2(manifest, {
       ...options,
-      clock: sequenceClock(100, 117),
+      clock: sequenceClock(100, 117)
     });
 
     expect(second.verdict).toEqual(first.verdict);
@@ -93,29 +93,68 @@ describe("Gate 2 simulated playability", () => {
     expect(second.candidate).toEqual(first.candidate);
   });
 
+  it("records HP retention as advisory without rejecting the Gate 2 verdict", () => {
+    const manifest = fallbackManifest(1, "gate2-judge-codes");
+    const evaluation = evaluateGate2(manifest, {
+      config: currentBotRealityConfig(manifest),
+      clock: sequenceClock(0, 1),
+      transformFloor: corridorFloor
+    });
+    const report = judgeGate2({
+      ...evaluation,
+      hpRetentionMode: "advisory",
+      thresholds: defaultGate2Config(manifest).thresholdsByBand
+    });
+    const hpCheck = report.checks.find(
+      (check) => check.code === "G2_HP_RETENTION"
+    );
+
+    expect(report.pass, failedDetails(report)).toBe(true);
+    expect(report.verdict).toEqual({ status: "pass", codes: [] });
+    expect(hpCheck).toMatchObject({
+      pass: false,
+      advisory: true
+    });
+  });
+
+  it("rejects HP retention when the Gate 2 config flips to blocking mode", () => {
+    const manifest = fallbackManifest(1, "gate2-blocking-hp");
+    const evaluation = evaluateGate2(manifest, {
+      config: currentBotRealityConfig(manifest),
+      clock: sequenceClock(0, 1),
+      transformFloor: corridorFloor
+    });
+    const report = judgeGate2({
+      ...evaluation,
+      hpRetentionMode: "blocking",
+      thresholds: defaultGate2Config(manifest).thresholdsByBand
+    });
+
+    expect(report.pass).toBe(false);
+    expect(report.verdict.codes).toContain("G2_HP_RETENTION");
+    expect(
+      report.checks.find((check) => check.code === "G2_HP_RETENTION")
+    ).toMatchObject({
+      pass: false
+    });
+  });
+
   it("fires configured judge thresholds and hard rejects with frozen G2 codes", () => {
     const manifest = fallbackManifest(1, "gate2-judge-codes");
     const evaluation = evaluateGate2(manifest, {
       config: currentBotRealityConfig(manifest),
       clock: sequenceClock(0, 1),
-      transformFloor: corridorFloor,
+      transformFloor: corridorFloor
     });
-
-    expect(
-      judgeGate2({
-        ...evaluation,
-        thresholds: defaultGate2Config(manifest).thresholdsByBand,
-      }).verdict.codes,
-    ).toContain("G2_HP_RETENTION");
 
     expect(
       judgeGate2({
         ...evaluation,
         aggregate: {
           ...evaluation.aggregate,
-          deathCount: 1,
-        },
-      }).verdict.codes,
+          deathCount: 1
+        }
+      }).verdict.codes
     ).toContain("G2_DEATH_SHALLOW");
 
     expect(
@@ -125,16 +164,16 @@ describe("Gate 2 simulated playability", () => {
         band: "middle",
         aggregate: {
           ...evaluation.aggregate,
-          clearRatePercent: 50,
-        },
-      }).verdict.codes,
+          clearRatePercent: 50
+        }
+      }).verdict.codes
     ).toContain("G2_HARD_CLEAR_RATE");
 
     expect(
       judgeGate2({
         ...evaluation,
-        elapsedMs: evaluation.wallClockBudgetMs + 1,
-      }).verdict.codes,
+        elapsedMs: evaluation.wallClockBudgetMs + 1
+      }).verdict.codes
     ).toContain("G2_WALL_CLOCK");
   });
 });
@@ -151,19 +190,19 @@ const currentBotRealityConfig = (manifest: FloorManifest): Gate2Config => {
     thresholdsByBand: {
       shallows: allowCurrentHpRetention(base.thresholdsByBand.shallows),
       middle: allowCurrentHpRetention(base.thresholdsByBand.middle),
-      lowest: allowCurrentHpRetention(base.thresholdsByBand.lowest),
-    },
+      lowest: allowCurrentHpRetention(base.thresholdsByBand.lowest)
+    }
   };
 };
 
 const allowCurrentHpRetention = (
-  threshold: Gate2Config["thresholdsByBand"]["shallows"],
+  threshold: Gate2Config["thresholdsByBand"]["shallows"]
 ): Gate2Config["thresholdsByBand"]["shallows"] => ({
   ...threshold,
   medianHpRetentionPercent: {
     ...threshold.medianHpRetentionPercent,
-    max: 100,
-  },
+    max: 100
+  }
 });
 
 const fallbackManifest = (depth: number, seed: string): FloorManifest => {
@@ -178,46 +217,47 @@ const fallbackManifest = (depth: number, seed: string): FloorManifest => {
       bandOrSize: floor.band,
       roomCountRange: floor.params.roomCountRange,
       flavor: floor.flavor,
-      seed,
+      seed
     },
     roster: floor.roster.map(
       (entry): ManifestRosterEntry => ({
         ...entry,
-        placementHint: null,
-      }),
+        placementHint: null
+      })
     ),
     items: floor.items.map(
       (entry): ManifestItemEntry => ({
         ...entry,
-        placementHint: null,
-      }),
+        placementHint: null
+      })
     ),
     traps: floor.traps.map(
       (entry): ManifestTrapEntry => ({
         ...entry,
-        placementHint: null,
-      }),
+        placementHint: null
+      })
     ),
     npcs: floor.npcs.map(
       (entry): ManifestNpcEntry => ({
         ...entry,
-        placementHint: null,
-      }),
+        placementHint: null
+      })
     ),
     quest: floor.quest,
     narration: {
       floorIntro: "The old stock floor waits in test silence.",
-      observations: [],
+      observations: []
     },
     metadata: {
       originTags: {
         made: originEntries.filter((entry) => entry.origin === "made").length,
-        old_stock: originEntries.filter((entry) => entry.origin === "old_stock").length,
-        kept: originEntries.filter((entry) => entry.origin === "kept").length,
+        old_stock: originEntries.filter((entry) => entry.origin === "old_stock")
+          .length,
+        kept: originEntries.filter((entry) => entry.origin === "kept").length
       },
       callbacks: [],
-      signature: false,
-    },
+      signature: false
+    }
   };
 };
 
@@ -228,7 +268,7 @@ const corridorFloor: CandidateFloorTransform = (floor) => {
   let grid = createTileGrid({
     width: floor.grid.width,
     height: floor.grid.height,
-    fill: Terrain.Wall,
+    fill: Terrain.Wall
   });
 
   for (let x = entrance.x; x <= stairsDown.x; x += 1) {
@@ -244,7 +284,7 @@ const corridorFloor: CandidateFloorTransform = (floor) => {
     stairsDown,
     entranceRoomIndex: 0,
     stairsRoomIndex: 0,
-    rooms: [room],
+    rooms: [room]
   };
 };
 
@@ -259,7 +299,7 @@ const walledStairsFloor: CandidateFloorTransform = (floor, manifest) => {
 
   return {
     ...corridor,
-    grid,
+    grid
   };
 };
 
@@ -270,8 +310,8 @@ const corridorRoom = (entrance: Position, stairsDown: Position): RoomRect => ({
   height: 1,
   center: {
     x: Math.floor((entrance.x + stairsDown.x) / 2),
-    y: entrance.y,
-  },
+    y: entrance.y
+  }
 });
 
 const neighbors = (position: Position): readonly Position[] => [
@@ -282,7 +322,7 @@ const neighbors = (position: Position): readonly Position[] => [
   { x: position.x + 1, y: position.y },
   { x: position.x - 1, y: position.y + 1 },
   { x: position.x, y: position.y + 1 },
-  { x: position.x + 1, y: position.y + 1 },
+  { x: position.x + 1, y: position.y + 1 }
 ];
 
 const sequenceClock = (...values: readonly number[]) => {
@@ -293,13 +333,11 @@ const sequenceClock = (...values: readonly number[]) => {
       const value = values[Math.min(index, values.length - 1)] ?? 0;
       index += 1;
       return value;
-    },
+    }
   };
 };
 
-const failedDetails = (
-  report: Gate2Report,
-): string =>
+const failedDetails = (report: Gate2Report): string =>
   report.checks
     .filter((check) => !check.pass)
     .map((check) => `${check.code}: ${check.detail}`)

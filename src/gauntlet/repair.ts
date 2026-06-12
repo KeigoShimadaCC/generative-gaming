@@ -1,32 +1,40 @@
 import { bounds, config as defaultConfig } from "../config/index.js";
-import { materialize, type MaterializedFloor } from "../director/apply/index.js";
+import {
+  materialize,
+  type MaterializedFloor
+} from "../director/apply/index.js";
 import {
   type DirectorProvider,
   type GenerateManifestOptions,
   type ProviderFailureCode,
   type ProviderResult,
-  failure,
+  failure
 } from "../director/provider/index.js";
-import type { FloorContent, FloorContentProvider } from "../engine/run/index.js";
-import {
-  createFallbackFloorContentProvider,
-} from "../harness/fallback-provider.js";
+import type {
+  FloorContent,
+  FloorContentProvider
+} from "../engine/run/index.js";
+import { createFallbackFloorContentProvider } from "../harness/fallback-provider.js";
 import {
   writeGenerationRecord,
   type GenerationAttemptInput,
   type GenerationRecord,
-  type WriteGenerationRecordOptions,
+  type WriteGenerationRecordOptions
 } from "../harness/artifacts/index.js";
 import type { FloorManifest } from "../schemas/manifest.js";
 import type { Gate2Check, Gate2Report } from "./gate2/judge.js";
-import { defaultGate2Config, runGate2, type Gate2RunOptions } from "./gate2/run.js";
+import {
+  defaultGate2Config,
+  runGate2,
+  type Gate2RunOptions
+} from "./gate2/run.js";
 import {
   failedChecks,
   runGate0,
   runGate1,
   type GateCheck,
   type GateReport,
-  type Gate1Context,
+  type Gate1Context
 } from "./gates01/index.js";
 
 export type RepairClock = () => string;
@@ -90,13 +98,13 @@ type Gate2EvaluationResult =
 
 const IMMEDIATE_FALLBACK_PROVIDER_CODES = new Set<ProviderFailureCode>([
   "timeout",
-  "process_error",
+  "process_error"
 ]);
 const DEFAULT_ROOT_DIR = "runs";
 const FRAGMENT_MAX_CHARS = 4_000;
 
 export const generateFloor = async (
-  ctx: GenerateFloorContext,
+  ctx: GenerateFloorContext
 ): Promise<GenerateFloorResult> => {
   const repairCap = ctx.repairCap ?? bounds.gauntlet.repairRetriesMax;
   const attempts: GenerationAttemptInput[] = [];
@@ -105,7 +113,9 @@ export const generateFloor = async (
 
   while (true) {
     const providerResult = await generateManifest(ctx.provider, prompt, {
-      timeoutMs: ctx.providerOptions?.timeoutMs ?? defaultConfig.director.manifestTimeoutMs,
+      timeoutMs:
+        ctx.providerOptions?.timeoutMs ??
+        defaultConfig.director.manifestTimeoutMs
     });
     const evaluation = evaluateProviderResult(providerResult, ctx);
     attempts.push({
@@ -113,18 +123,18 @@ export const generateFloor = async (
       providerResult,
       ...(evaluation.gateReports === undefined
         ? {}
-        : { gateReports: evaluation.gateReports }),
+        : { gateReports: evaluation.gateReports })
     });
 
     if (evaluation.kind === "manifest") {
       const record = writeRecord(ctx, attempts, {
         kind: "manifest",
-        manifestPath: servedManifestPath(ctx, attempts.length - 1),
+        manifestPath: servedManifestPath(ctx, attempts.length - 1)
       });
 
       return {
         floor: evaluation.floor,
-        record,
+        record
       };
     }
 
@@ -140,7 +150,7 @@ export const generateFloor = async (
       originalPrompt: ctx.prompt,
       providerResult,
       gateReports: evaluation.gateReports,
-      manifest: evaluation.manifest,
+      manifest: evaluation.manifest
     });
     repairsUsed += 1;
   }
@@ -150,14 +160,11 @@ export const buildRepairPrompt = ({
   originalPrompt,
   providerResult,
   gateReports,
-  manifest,
+  manifest
 }: RepairPromptInput): string => {
   const failed = collectFailedChecks(gateReports);
   const checks = failed
-    .map(
-      (check) =>
-        `- Gate ${check.gate} ${check.code}: ${check.detail}`,
-    )
+    .map((check) => `- Gate ${check.gate} ${check.code}: ${check.detail}`)
     .join("\n");
   const fragments = offendingFragments(providerResult, manifest)
     .map((fragment) => `\`\`\`json\n${fragment}\n\`\`\``)
@@ -172,16 +179,18 @@ export const buildRepairPrompt = ({
     "Fix only these checks; preserve valid content when possible.",
     "",
     "Offending JSON fragment(s):",
-    fragments.length === 0 ? "```json\n<empty provider output>\n```" : fragments,
+    fragments.length === 0
+      ? "```json\n<empty provider output>\n```"
+      : fragments,
     "",
-    "Return the corrected complete JSON manifest only.",
+    "Return the corrected complete JSON manifest only."
   ].join("\n");
 };
 
 const generateManifest = async (
   provider: DirectorProvider,
   prompt: string,
-  options: GenerateManifestOptions,
+  options: GenerateManifestOptions
 ): Promise<ProviderResult> => {
   try {
     return await provider.generateManifest(prompt, options);
@@ -189,14 +198,14 @@ const generateManifest = async (
     return failure(
       "process_error",
       error instanceof Error ? error.message : String(error),
-      { latencyMs: 0, tokens: null },
+      { latencyMs: 0, tokens: null }
     );
   }
 };
 
 const evaluateProviderResult = (
   providerResult: ProviderResult,
-  ctx: GenerateFloorContext,
+  ctx: GenerateFloorContext
 ): EvaluatedAttempt => {
   if (
     !providerResult.ok &&
@@ -205,19 +214,21 @@ const evaluateProviderResult = (
     return { kind: "fallback" };
   }
 
-  const raw = providerResult.ok ? providerResult.raw : (providerResult.raw ?? "");
+  const raw = providerResult.ok
+    ? providerResult.raw
+    : (providerResult.raw ?? "");
   const gate0 = runGate0(raw);
   if (!gate0.pass) {
     return {
       kind: "repairable",
-      gateReports: { gate0 },
+      gateReports: { gate0 }
     };
   }
 
   if (!providerResult.ok) {
     return {
       kind: "fallback",
-      gateReports: { gate0 },
+      gateReports: { gate0 }
     };
   }
 
@@ -226,7 +237,7 @@ const evaluateProviderResult = (
     return {
       kind: "repairable",
       gateReports: { gate0, gate1 },
-      manifest: providerResult.manifest,
+      manifest: providerResult.manifest
     };
   }
 
@@ -234,27 +245,27 @@ const evaluateProviderResult = (
   const gateReports = {
     gate0,
     gate1,
-    gate2: gate2Evaluation.report,
+    gate2: gate2Evaluation.report
   };
 
   if (gate2Evaluation.kind === "fail") {
     return {
       kind: "repairable",
       gateReports,
-      manifest: providerResult.manifest,
+      manifest: providerResult.manifest
     };
   }
 
   return {
     kind: "manifest",
     floor: gate2Evaluation.floor,
-    gateReports,
+    gateReports
   };
 };
 
 const evaluateGate2 = (
   manifest: FloorManifest,
-  options: Gate2RunOptions = {},
+  options: Gate2RunOptions = {}
 ): Gate2EvaluationResult => {
   let floor: MaterializedFloor;
 
@@ -262,25 +273,34 @@ const evaluateGate2 = (
     floor = materialize(manifest, manifest.params.seed, {
       ...(options.transformFloor === undefined
         ? {}
-        : { transformFloor: options.transformFloor }),
+        : { transformFloor: options.transformFloor })
     }).floor;
   } catch (error) {
     return {
       kind: "fail",
-      report: materializationFailureReport(manifest, options, error),
+      report: materializationFailureReport(manifest, options, error)
     };
   }
 
   try {
+    const report = runGate2(manifest, options);
+
+    if (!report.pass) {
+      return {
+        kind: "fail",
+        report
+      };
+    }
+
     return {
       kind: "pass",
       floor,
-      report: runGate2(manifest, options),
+      report
     };
   } catch (error) {
     return {
       kind: "fail",
-      report: materializationFailureReport(manifest, options, error),
+      report: materializationFailureReport(manifest, options, error)
     };
   }
 };
@@ -288,7 +308,7 @@ const evaluateGate2 = (
 const materializationFailureReport = (
   manifest: FloorManifest,
   options: Gate2RunOptions,
-  source: unknown,
+  source: unknown
 ): Gate2Report => {
   const gateConfig = options.config ?? defaultGate2Config(manifest);
   const detail =
@@ -298,7 +318,7 @@ const materializationFailureReport = (
   const check: Gate2Check = {
     code: "G2_MATERIALIZATION",
     pass: false,
-    detail,
+    detail
   };
 
   return {
@@ -306,7 +326,7 @@ const materializationFailureReport = (
     pass: false,
     verdict: {
       status: "reject",
-      codes: ["G2_MATERIALIZATION"],
+      codes: ["G2_MATERIALIZATION"]
     },
     checks: [check],
     metrics: {
@@ -318,27 +338,27 @@ const materializationFailureReport = (
       clearRatePercent: 0,
       medianHpRetentionPercent: 0,
       minTurns: 0,
-      maxTurns: 0,
+      maxTurns: 0
     },
     candidate: {
       seed: manifest.params.seed,
       stairsReachable: false,
       pathLength: null,
       hasThreatOnPath: false,
-      placementDeviationCount: 0,
+      placementDeviationCount: 0
     },
     ensemble: {
       policies: gateConfig.policies,
       seeds: gateConfig.seeds,
-      maxTurns: gateConfig.maxTurns,
+      maxTurns: gateConfig.maxTurns
     },
     elapsedMs: 0,
-    wallClockBudgetMs: gateConfig.wallClockBudgetMs,
+    wallClockBudgetMs: gateConfig.wallClockBudgetMs
   };
 };
 
 const collectFailedChecks = (
-  gateReports: NonNullable<GenerationAttemptInput["gateReports"]>,
+  gateReports: NonNullable<GenerationAttemptInput["gateReports"]>
 ): readonly {
   readonly gate: 0 | 1 | 2;
   readonly code: GateCheck["code"] | Gate2Check["code"];
@@ -357,21 +377,27 @@ const collectFailedChecks = (
         .map((check) => ({
           gate: 2 as const,
           code: check.code,
-          detail: check.detail,
-        }))),
+          detail: check.detail
+        })))
 ];
 
 const withGate =
   (report: GateReport) =>
-  (check: GateCheck): { readonly gate: 0 | 1; readonly code: GateCheck["code"]; readonly detail: string } => ({
+  (
+    check: GateCheck
+  ): {
+    readonly gate: 0 | 1;
+    readonly code: GateCheck["code"];
+    readonly detail: string;
+  } => ({
     gate: report.gate,
     code: check.code,
-    detail: check.detail,
+    detail: check.detail
   });
 
 const offendingFragments = (
   providerResult: ProviderResult,
-  manifest: FloorManifest | undefined,
+  manifest: FloorManifest | undefined
 ): readonly string[] => {
   const raw = providerResult.ok ? providerResult.raw : providerResult.raw;
   if (raw !== undefined && raw.trim().length > 0) {
@@ -392,14 +418,14 @@ const truncateFragment = (fragment: string): string =>
 
 const serveFallback = (
   ctx: GenerateFloorContext,
-  attempts: readonly GenerationAttemptInput[],
+  attempts: readonly GenerationAttemptInput[]
 ): GenerateFloorResult => {
   const fallbackProvider =
     ctx.fallbackProvider ?? createFallbackFloorContentProvider();
   const floor = fallbackProvider.getFloor(ctx.depth, ctx.seed);
   const record = writeRecord(ctx, attempts, {
     kind: "fallback",
-    fallbackId: fallbackId(ctx.depth, floor),
+    fallbackId: fallbackId(ctx.depth, floor)
   });
 
   return { floor, record };
@@ -411,7 +437,7 @@ const fallbackId = (depth: number, floor: FloorContent): string =>
 const writeRecord = (
   ctx: GenerateFloorContext,
   attempts: readonly GenerationAttemptInput[],
-  outcome: Parameters<typeof writeGenerationRecord>[0]["outcome"],
+  outcome: Parameters<typeof writeGenerationRecord>[0]["outcome"]
 ): GenerationRecord => {
   const createdAt = ctx.createdAt ?? ctx.now?.() ?? new Date().toISOString();
   const recordedAt = ctx.recordedAt ?? ctx.now?.() ?? createdAt;
@@ -425,15 +451,15 @@ const writeRecord = (
       createdAt,
       recordedAt,
       attempts,
-      outcome,
+      outcome
     },
-    ctx.artifacts,
+    ctx.artifacts
   );
 };
 
 const servedManifestPath = (
   ctx: GenerateFloorContext,
-  attemptIndex: number,
+  attemptIndex: number
 ): string => {
   const rootDir = trimTrailingSlash(ctx.artifacts?.rootDir ?? DEFAULT_ROOT_DIR);
   return `${rootDir}/${ctx.runId}/floors/${ctx.depth}/attempts/${attemptIndex}/manifest.json`;

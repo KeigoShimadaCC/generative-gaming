@@ -1,0 +1,15 @@
+{
+  "caseId": "middle-balanced-b",
+  "band": "middle",
+  "depth": 6,
+  "policy": "balanced",
+  "tracePath": "/Users/keigoshimada/Documents/generative-gaming/runs/milestones/m1/traces/session-2026-06-12T06-03-56-588Z/middle-balanced-b.ndjson",
+  "outcome": "generated",
+  "attempts": 1,
+  "latencyMs": 39764,
+  "gateFailures": [
+    "attempt0:G2_HP_RETENTION"
+  ],
+  "recordPath": "/Users/keigoshimada/Documents/generative-gaming/runs/milestones/m1/m1-live-session-2026-06-12T06-03-56-588Z-middle-balanced-b/floors/6/generation.json",
+  "manifestPath": "/Users/keigoshimada/Documents/generative-gaming/runs/milestones/m1/m1-live-session-2026-06-12T06-03-56-588Z-middle-balanced-b/floors/6/attempts/0/manifest.json"
+}

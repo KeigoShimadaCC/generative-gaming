@@ -1,0 +1,20 @@
+{
+  "recordType": "generation-index",
+  "protocolVersion": "1.2.0",
+  "engineVersion": "0.0.0",
+  "modelId": "director:ambient",
+  "seed": "simulate-ambient-1",
+  "createdAt": "2026-06-12T06:43:08.610Z",
+  "runId": "simulate-ambient-1",
+  "updatedAt": "2026-06-12T06:43:08.610Z",
+  "floors": [
+    {
+      "depth": 1,
+      "recordPath": "floors/1/generation.json",
+      "outcome": {
+        "kind": "manifest"
+      },
+      "recordedAt": "2026-06-12T06:43:08.610Z"
+    }
+  ]
+}

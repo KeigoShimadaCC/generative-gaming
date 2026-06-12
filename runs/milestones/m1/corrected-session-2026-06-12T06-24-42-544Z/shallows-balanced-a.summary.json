@@ -1,0 +1,14 @@
+{
+  "caseId": "shallows-balanced-a",
+  "band": "shallows",
+  "depth": 3,
+  "policy": "balanced",
+  "tracePath": "/Users/keigoshimada/Documents/generative-gaming/runs/milestones/m1/traces/corrected-session-2026-06-12T06-24-42-544Z/shallows-balanced-a.ndjson",
+  "outcome": "fallback",
+  "attempts": 1,
+  "latencyMs": 215,
+  "gateFailures": [],
+  "gateAdvisories": [],
+  "recordPath": "/Users/keigoshimada/Documents/generative-gaming/runs/milestones/m1/m1-live-corrected-session-2026-06-12T06-24-42-544Z-shallows-balanced-a/floors/3/generation.json",
+  "manifestPath": null
+}

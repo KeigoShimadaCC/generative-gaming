@@ -1,0 +1,279 @@
+{
+  "protocolVersion": "1.2.0",
+  "depth": 11,
+  "band": "lowest",
+  "params": {
+    "bandOrSize": "lowest",
+    "roomCountRange": {
+      "min": 3,
+      "max": 6
+    },
+    "flavor": "sanctum",
+    "seed": "m1-live-lowest-11"
+  },
+  "roster": [
+    {
+      "id": "made-door-that-waits",
+      "name": "door that waits",
+      "glyph": "d",
+      "origin": "made",
+      "stats": {
+        "band": "lowest",
+        "hp": 24,
+        "attack": 9,
+        "defense": 3,
+        "xpYield": 12
+      },
+      "behaviors": [
+        {
+          "kind": "approach_melee",
+          "approachMelee": {},
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": null,
+          "ambusher": null,
+          "territorial": null,
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    },
+    {
+      "id": "made-hand-never-filled",
+      "name": "hand never filled",
+      "glyph": "h",
+      "origin": "made",
+      "stats": {
+        "band": "lowest",
+        "hp": 24,
+        "attack": 9,
+        "defense": 3,
+        "xpYield": 12
+      },
+      "behaviors": [
+        {
+          "kind": "approach_melee",
+          "approachMelee": {},
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": null,
+          "ambusher": null,
+          "territorial": null,
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "quiet-last-knife",
+      "name": "quiet last knife",
+      "glyph": ")",
+      "kind": "weapon",
+      "value": {
+        "band": "lowest",
+        "coin": 60
+      },
+      "weapon": {
+        "attackBonus": 1,
+        "cursed": false,
+        "onHit": null
+      },
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "patient-ash-coat",
+      "name": "patient ash coat",
+      "glyph": "[",
+      "kind": "armor",
+      "value": {
+        "band": "lowest",
+        "coin": 60
+      },
+      "weapon": null,
+      "armor": {
+        "defenseBonus": 1,
+        "cursed": false,
+        "onStruck": null
+      },
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "near_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "bread-kept-warm",
+      "name": "bread kept warm",
+      "glyph": "%",
+      "kind": "food",
+      "value": {
+        "band": "lowest",
+        "coin": 60
+      },
+      "weapon": null,
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": {
+        "effect": {
+          "effects": [
+            {
+              "kind": "nutrition",
+              "damage": null,
+              "heal": null,
+              "applyStatus": null,
+              "cureStatus": null,
+              "buffStat": null,
+              "nutrition": {
+                "fullness": 10
+              },
+              "teleportSelf": null,
+              "teleportTarget": null,
+              "blink": null,
+              "knockback": null,
+              "reveal": null,
+              "identify": null,
+              "enchant": null,
+              "summon": null,
+              "transform": null,
+              "dig": null
+            }
+          ],
+          "trigger": {
+            "kind": "quaff",
+            "quaff": {},
+            "read": null,
+            "throwHit": null,
+            "equipPassive": null,
+            "onHit": null,
+            "onStruck": null,
+            "step": null,
+            "use": null
+          },
+          "targeting": {
+            "kind": "self",
+            "self": {},
+            "melee": null,
+            "bolt": null,
+            "burst": null,
+            "floor": null
+          }
+        }
+      },
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "near_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "four-coins-unspent",
+      "name": "four coins unspent",
+      "glyph": "$",
+      "kind": "coin",
+      "value": {
+        "band": "lowest",
+        "coin": 60
+      },
+      "weapon": null,
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": {},
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": false
+      }
+    }
+  ],
+  "traps": [],
+  "npcs": [],
+  "quest": null,
+  "narration": {
+    "floorIntro": "The Deep sets few things before you now. It has learned how little you touch, and how carefully you pass.",
+    "observations": [
+      {
+        "id": "obs-four-unspent",
+        "triggerTag": "four-unspent",
+        "text": "Four small prizes wait in the hush. The Deep remembers your closed hands."
+      },
+      {
+        "id": "obs-many-spared",
+        "triggerTag": "many-spared",
+        "text": "The halls leave room beside their teeth. You have passed more hunger than you answered."
+      },
+      {
+        "id": "obs-no-retreat",
+        "triggerTag": "no-retreat",
+        "text": "Behind you, the path remains clean of flight. You did not run. You simply chose."
+      }
+    ]
+  },
+  "metadata": {
+    "originTags": {
+      "made": 6,
+      "old_stock": 0,
+      "kept": 0
+    },
+    "callbacks": [
+      "four-unspent",
+      "many-spared",
+      "no-retreat"
+    ],
+    "signature": false
+  }
+}

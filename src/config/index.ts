@@ -181,7 +181,7 @@ export const config = deepFreeze({
         max: 1.5 // GAME_DESIGN §8
       }
     },
-    cursedRate: 0.10, // GAME_DESIGN §8
+    cursedRate: 0.1, // GAME_DESIGN §8
     cursedGearChanceMaxPercent: 10, // GAME_DESIGN §8
     questRewardValueMultiplier: {
       min: 1.5, // GAME_DESIGN §8
@@ -302,6 +302,7 @@ export const config = deepFreeze({
       ],
       seedsPerPolicy: 5 // GAME_DESIGN §11
     },
+    hpRetentionMode: "advisory", // GAME_DESIGN §11 calibration staging [T]
     thresholdsByBand: {
       shallows: {
         clearRateMinPercent: 95, // GAME_DESIGN §11

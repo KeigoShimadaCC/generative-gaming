@@ -1,0 +1,35 @@
+Root cause: `repair.ts` treated any non-throwing `runGate2()` call as `kind: "pass"` and served the manifest without checking `Gate2Report.pass`; the M1 live runner was already calling `generateFloor`, so the defect was in the repair path.
+
+Changed:
+- [src/gauntlet/repair.ts](/Users/keigoshimada/Documents/generative-gaming/src/gauntlet/repair.ts:286): now honors `report.pass` and repairs/falls back on blocking Gate 2 rejection.
+- [src/config/index.ts](/Users/keigoshimada/Documents/generative-gaming/src/config/index.ts:305), [src/gauntlet/gate2/run.ts](/Users/keigoshimada/Documents/generative-gaming/src/gauntlet/gate2/run.ts:78), [src/gauntlet/gate2/judge.ts](/Users/keigoshimada/Documents/generative-gaming/src/gauntlet/gate2/judge.ts:39): added `hpRetentionMode`, defaulting to advisory, with advisory HP failures recorded but excluded from blocking verdicts.
+- [tests/integration/m1.test.ts](/Users/keigoshimada/Documents/generative-gaming/tests/integration/m1.test.ts:289): added the five-call corrected live runner and report append.
+- [runs/milestones/m1/report.md](/Users/keigoshimada/Documents/generative-gaming/runs/milestones/m1/report.md:82): appended corrected session evidence.
+
+Corrected authoritative session: `corrected-session-2026-06-12T06-25-36-988Z`.
+
+| case | outcome | attempts | latency ms | blocking failures | advisory |
+|---|---:|---:|---:|---|---|
+| shallows-aggressive-fixture | generated | 1 | 55823 | none | G2_HP_RETENTION |
+| shallows-cautious-fixture | generated | 1 | 44966 | none | G2_HP_RETENTION |
+| shallows-balanced-a | generated | 1 | 30929 | none | G2_HP_RETENTION |
+| middle-cautious-a | generated | 1 | 34658 | none | G2_HP_RETENTION |
+| middle-balanced-b | generated | 1 | 30443 | none | G2_HP_RETENTION |
+
+Amended mechanical verdict: `MET` for the corrected five-call session: 5/5 served without fallback under honest blocking gates; HP retention recorded advisory in all rows.
+
+Verification:
+- `pnpm exec vitest run src/config/config.test.ts src/gauntlet/gate2/gate2.test.ts src/gauntlet/repair.test.ts` -> 3 files passed, 17 tests passed.
+- `pnpm exec vitest run --config tests/integration/vitest.config.ts tests/integration/m1.test.ts` -> 1 file passed, 1 passed, 2 skipped.
+- `CODEX_HOME=<temp> CODEX_LIVE=1 pnpm exec vitest run --config tests/integration/vitest.config.ts tests/integration/m1.test.ts -t "5 corrected ambient"` -> Vitest reported 1 file passed, 1 passed, 2 skipped, 198.36s. Wrapper then exited after completion due zsh readonly `$status`; artifact audit below is clean.
+- Artifact audit -> `corrected session audit passed: 5/5 generated, no blocking gate failures, HP retention advisory recorded in every row`.
+- `git diff --check` -> clean.
+- `pnpm run check` -> typecheck + lint + tests green: 67 files passed, 478 passed, 1 skipped.
+
+Scope deviations: no implementation scope deviation. The report includes an earlier invalid corrected-session attempt; I appended a note marking it non-authoritative and identifying the valid session.
+
+Residual risks: no prompt/balance tuning done; HP retention remains advisory by design until PHASE-58.
+
+Environment discoveries: known nested `codex exec` issue was hit; live ambient calls required temporary writable `CODEX_HOME`. Also hit zsh’s readonly `status` variable in the wrapper. No `ENVIRONMENT.md` edit because it is locked to workers.
+
+Actual: ~22m vs 35m estimate. No commit made.
