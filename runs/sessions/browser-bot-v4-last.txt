@@ -1,0 +1,39 @@
+Implemented the browser bot v4 policy bridge, with no commits per brief.
+
+Changed files:
+- [app/store/game-store.ts](/Users/keigoshimada/Documents/generative-gaming/app/store/game-store.ts:251): dev-only bot state bridge using `serialize(gameState)`.
+- [app/store/game-store.test.ts](/Users/keigoshimada/Documents/generative-gaming/app/store/game-store.test.ts:120): focused bridge flag-on / flag-off tests.
+- [e2e/browser-bot.ts](/Users/keigoshimada/Documents/generative-gaming/e2e/browser-bot.ts:667): browser bot now reads `window.__GG_BOT_STATE__`, deserializes in Node, builds the harness bot view, calls real balanced policy, then sends keyboard input.
+- [e2e/full-clear.spec.ts](/Users/keigoshimada/Documents/generative-gaming/e2e/full-clear.spec.ts:29): full-clear URLs enable `?botBridge=1`.
+
+Policy entry point reused:
+- CLI driver path: [driver.ts](/Users/keigoshimada/Documents/generative-gaming/src/harness/bots/driver.ts:121) builds `createBotStateView`, updates memory, then calls `policy.decide(view)` at line 126.
+- Browser path now mirrors that and calls `balancedPolicy.decide(view)` at [browser-bot.ts](/Users/keigoshimada/Documents/generative-gaming/e2e/browser-bot.ts:675).
+- Actual policy: [balanced.ts](/Users/keigoshimada/Documents/generative-gaming/src/harness/bots/policies/balanced.ts:23).
+
+Action to key mapping:
+- `move`: north `ArrowUp`, south `ArrowDown`, west `ArrowLeft`, east `ArrowRight`, diagonals `y/u/b/n` at [browser-bot.ts](/Users/keigoshimada/Documents/generative-gaming/e2e/browser-bot.ts:171).
+- `attack`: direction key toward adjacent target.
+- `pickup`: `g`; `wait`: `.`; `descend`: `>`; `take_hoard`: `T`.
+- `use_item` / equip flow: `i`, tracked inventory selection via `ArrowUp/ArrowDown`, `Enter`, optional direction key for throws at [browser-bot.ts](/Users/keigoshimada/Documents/generative-gaming/e2e/browser-bot.ts:846).
+- `abort`: `Escape`, `y`.
+- Unsupported `talk` / `inspect`: logged, dumped, then policy is re-queried with only expressible actions at [browser-bot.ts](/Users/keigoshimada/Documents/generative-gaming/e2e/browser-bot.ts:754).
+
+Bridge gating proof:
+- Gated by `NODE_ENV !== "production"` and `?botBridge=1` at [game-store.ts](/Users/keigoshimada/Documents/generative-gaming/app/store/game-store.ts:260).
+- Snapshot is non-enumerable, non-writable, serialized via engine serializer at [game-store.ts](/Users/keigoshimada/Documents/generative-gaming/app/store/game-store.ts:273).
+- Flag-on/off tests at [game-store.test.ts](/Users/keigoshimada/Documents/generative-gaming/app/store/game-store.test.ts:120).
+
+Verification:
+- `pnpm exec vitest run --config app/store/vitest.config.ts --reporter verbose` -> exit 0, 1 file / 5 tests passed.
+- `pnpm run typecheck` -> exit 0.
+- `pnpm run lint` -> exit 0.
+- `pnpm run check` -> exit 0, 79 files passed, 543 passed / 2 skipped.
+
+Notes:
+- Did not run Playwright/Chromium campaign in sandbox per STEP 0.
+- No commits, no branch changes.
+- `PROGRESS.md` left untouched because this brief did not grant ownership.
+- Environment discoveries: none.
+- Out-of-scope discoveries: none.
+- Actual time: ~35m vs 35m estimate, within 70m timebox.

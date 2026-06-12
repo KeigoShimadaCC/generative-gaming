@@ -1,0 +1,35 @@
+Implemented the browser policy bridge fix in `e2e/browser-bot.ts` and added the focused regression at `src/harness/browser-bot-view.test.ts`.
+
+Divergences found:
+- Prior browser policy input did not faithfully mirror the CLI driver’s `createBotStateView(state, { policyName, memory }) -> updateBotMemory(memory, view) -> policy.decide(view)` flow.
+- Missing/starved fields were memory continuity, structured available actions, fog/visibility-derived visible entities, inventory/equipment, and player level. XP is serialized and preserved, but not exposed on `BotStateView` in either CLI or browser.
+- Serializer/deserializer itself preserves entities, fog, inventory, equipment, level, and XP. The bug was in browser-side view construction, not state serialization.
+
+Fix:
+- Added `constructBrowserBotStateView()` to deserialize the raw bridge snapshot, build the same bot view shape as the CLI, and return updated memory.
+- Browser bot now persists `BotMemory` across turns and updates it exactly through `updateBotMemory`.
+- Diagnostics now include constructed-view `hp`, `adjacentEnemyCount`, `inventoryCount`, plus richer last-view diagnostics.
+- Failure/unsupported-action dumps now include `rawSerializedSnapshot`.
+
+Verification:
+```text
+pnpm exec vitest run src/harness/browser-bot-view.test.ts --reporter verbose
+exit 0
+✓ src/harness/browser-bot-view.test.ts > browser bot policy view bridge > preserves mid-combat state through serialize/deserialize before policy decide
+Test Files 1 passed (1)
+Tests 1 passed (1)
+```
+
+```text
+pnpm run typecheck
+exit 0
+tsc --noEmit -p tsconfig.src.json && tsc --noEmit -p tsconfig.next.json
+```
+
+```text
+pnpm run lint
+exit 0
+eslint .
+```
+
+No commits made. Environment discovery: root Vitest only includes `src/**/*.test.ts`, so the focused no-browser regression is under `src/harness`. Actual time was about 35 minutes against the 40 minute timebox.

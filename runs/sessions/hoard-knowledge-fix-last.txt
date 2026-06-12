@@ -1,0 +1,41 @@
+Implemented the engine fix and removed the harness workaround.
+
+Root cause: pre-fix `src/engine/systems/movement.ts:264` rebuilt `floor.geometry` with `createFloorGeometrySlot(..., openedGrid)`, which kept only the new grid and dropped extra opaque metadata, including `knowledge.decorativeFeatures`. The fixed door path now preserves prior opaque metadata and overwrites only grid fields at [movement.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/systems/movement.ts:257).
+
+Changed:
+- [movement.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/systems/movement.ts:257): preserve opaque knowledge on door open.
+- [movement.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/systems/movement.test.ts:175): regression for known Hoard decorative feature surviving door open.
+- [driver.ts](/Users/keigoshimada/Documents/generative-gaming/src/harness/bots/driver.ts:136): removed `preserveHoardKnowledge`.
+- Regenerated affected goldens and updated determinism audit expectation because Hoard-capable persona traces now WIN.
+
+Verification:
+```text
+pnpm run check -> exit 0
+Test Files  80 passed (80)
+Tests       545 passed | 2 skipped (547)
+```
+
+```text
+npm_config_cache=/private/tmp/gg-npm-cache pnpm exec vitest run --config tests/determinism-audit/vitest.config.ts --reporter verbose -> exit 0
+Test Files  1 passed (1)
+Tests       3 passed (3)
+```
+
+```text
+pnpm exec vitest run --config tests/golden/vitest.config.ts --reporter verbose -> exit 0
+Test Files  1 passed (1)
+Tests       9 passed (9)
+```
+
+5-seed table:
+```text
+policy   | seed       | terminal | depth | turns | kills | hp% | itemUses
+---------|------------|----------|-------|-------|-------|-----|---------
+balanced | simulate-1 | ABORTED  | 2     | 158   | 4     | 100 | 2
+balanced | simulate-2 | ABORTED  | 5     | 268   | 7     | 100 | 3
+balanced | simulate-3 | LOSS     | 12    | 539   | 16    | 0   | 11
+balanced | simulate-4 | WIN      | 12    | 512   | 22    | 60  | 8
+balanced | simulate-5 | WIN      | 12    | 543   | 22    | 58  | 9
+```
+
+Scope deviations: none. No app/e2e/content/balance files touched. Environment discoveries: none. Actual time: about 18 minutes.

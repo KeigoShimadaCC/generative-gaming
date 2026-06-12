@@ -25,11 +25,12 @@ runs/milestones/HUMAN-CHECKLIST.md.
 | fullclear-combat-fix | merged | Codex | 3d2f5bb5; independently verified GREEN (Cursor, 2026-06-13) incl. eval-bank regeneration plausibility. |
 | fullclear-transition-wait | merged | Codex | c1aef324 (bot v3 commit); verified in the same GREEN pass. |
 | descend-throw-fallback | merged | Codex | 2ffa2d7e; verified in the same GREEN pass. |
-| fullclear-bot-survival | ready-for-verify | Codex | Survival policy patched: heal/retreat before attacks, disengage toward stairs/hoard, avoid equally short enemy-adjacent routes, LOSS diagnostics include last playing depth/turn. |
-| balance-calibration | blocked | Codex | STOP condition hit: full 45-run extreme allowed-lever batch still produced 0 WIN, so GAME_DESIGN §11 targets are unreachable within this brief's levers. |
-| balance-calibration-v2 | blocked | Codex | STOP condition hit: allowed player/content balance levers removed shallow deaths and pushed most runs to depth 12, but the full 45-run batch still produced 0 WIN; 27/27 depth-12 ABORTs followed illegal `take_hoard` attempts while not standing on the Hoard, which is out-of-scope bot/action-availability work. |
-| combat-math-investigation | blocked | Codex | Harness kit-usage patch is WIP and focused tests pass, but required after-batch/check are blocked by out-of-scope runtime-status serialization: active burn/slow durations tick below authored schema minima. |
-| status-duration-serialization | ready-for-verify | Codex | Runtime status schema split complete; authoring bounds remain intact; focused trace/schema regressions, `pnpm run check`, and balanced 15-seed repro pass. |
+| fullclear-bot-survival | merged | Codex | 58d7eb9a; verified GREEN. |
+| balance-calibration | closed | Codex | STOP was correct: root cause was combat math + bot kit usage, not levers (see combat-math-investigation). |
+| balance-calibration-v2 | merged | Codex | dc662faa; 0 shallow deaths, median loss depth 12; the 0-WIN residue was the take_hoard bot defect, fixed in 53335b3a (29/45 WIN). |
+| combat-math-investigation | merged | Codex | Diagnosis chain merged across 3d2f5bb5/53335b3a; ledger proved 1-vs-5 exchange and dead retreat branch. |
+| status-duration-serialization | merged | Codex | 35245702; verified GREEN. |
+| full-clear browser campaign | **CLEARED** | orchestrator | 24 runs, 11 real defects found+fixed. WINs: fullclear-1 (2.9m, run 20), fullclear-4 (2.5m, run 24); honest LOSSes d10/d11 (fullclear-2/3). Batch merged 873a7520..dbbe92aa, verified GREEN (one RED round-trip on prefetch rejections, fixed). |
 
 Status values: `queued` → `claimed` → `in-progress` → `ready-for-verify` →
 `verified` → `merged` (or `blocked` / `returned` with a note).
@@ -124,6 +125,10 @@ spike ≤ 15 min (hard).
 | 2026-06-12 | close-out | Test-event union leak: previous UI/check work exposed event-union narrowing fragility; keep a hygiene task for test/event barrel boundaries | post-MVP type hygiene |
 | 2026-06-13 | worker | PHASE-58 STOP: even with minimum legal fallback enemy stats, near-cap player HP, stronger/more frequent healing, and one middle/lowest threat per tuned floor, the real 45-run batch still produced 0 WIN; likely requires bot objective/pathing changes, combat math/HARD stat table revision, or Gate 2 acceptance reinterpretation | PHASE-58 follow-up |
 | 2026-06-13 | worker | Runtime status ticking can leave active statuses below schema minima, causing simulate to throw during serialization; reproduced when a longer-surviving path reached spore warden burn, worked around in content by converting that enemy burn effect to direct damage | engine/status follow-up |
+| 2026-06-13 | orchestrator | d11->d12 stairs-cap race flake (~1 in 3 on identical code): transition wedges in 'descending'; terminal-floor fast path reduced but did not eliminate it — instrument the floor-request lifecycle server-side | web transport follow-up |
+| 2026-06-13 | orchestrator | Bot lowest-band survivability: browser/CLI policies die d10-d11 on ~half of seeds; acceptable roguelike difficulty per §11 spirit but worth a policy pass (lowest-band caution, deeper heal reserve) | post-MVP bot pass |
+| 2026-06-13 | orchestrator | Policy abort budgets: hp-100 ABORTs on shallow floors (exploration give-up) depress WIN rate; revisit exploration budget vs floor size | post-MVP bot pass |
+| 2026-06-13 | orchestrator | codex exec lane: 4 no-event stalls this session (101-byte jsonl), 2 on one brief -> rerouted to Cursor per stall rule; Cursor lane recovered and delivered 6 tasks | harness note |
 | 2026-06-13 | worker | Balance v2 final-floor blocker: 27/27 depth-12 ABORTs in `/tmp/balance-v2-final-45.json` attempted `take_hoard` while the player was not standing on the Hoard; fix likely belongs in bot Hoard pursuit/action availability, but `src/harness/bots/**` was forbidden for this brief | PHASE-58 follow-up |
 
 ## Phase Rotation Procedure

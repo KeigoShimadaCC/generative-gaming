@@ -1,0 +1,37 @@
+Implemented in the two owned files only.
+
+Changed identity: web transport artifacts now use `artifactRunId = traceRunId(seed, createdAt)`, where `createdAt` is captured once at server module init and `seed` honors `process.env.SEED` with `"web-transport"` fallback. The request/browser run id is still used as the in-memory controller key, but generation artifacts are written under the session-scoped artifact id.
+
+Precedent: [src/cli/play.ts](/Users/keigoshimada/Documents/generative-gaming/src/cli/play.ts:184) derives `createdAt` with `new Date().toISOString()`, and [src/cli/play.ts](/Users/keigoshimada/Documents/generative-gaming/src/cli/play.ts:303) writes traces under `traceRunId(options.seed, options.createdAt)`.
+
+Verification:
+
+```text
+pnpm exec vitest run --config app/api/director/vitest.config.ts --reporter verbose
+exit 0
+
+✓ app/api/director/transport-server.test.ts > web director transport > serves middle-band generated content for a depth 5 request
+✓ app/api/director/transport-server.test.ts > web director transport > uses createdAt in the artifact run identity for new transport states
+Test Files  1 passed (1)
+Tests  2 passed (2)
+```
+
+```text
+pnpm run typecheck
+exit 0
+
+> generative-gaming@0.0.0 typecheck
+> node --input-type=module -e "import{rmSync}from'node:fs';try{rmSync('.next',{recursive:true,force:true})}catch{}" && tsc --noEmit -p tsconfig.src.json && tsc --noEmit -p tsconfig.next.json
+```
+
+```text
+pnpm run lint
+exit 0
+
+> generative-gaming@0.0.0 lint
+> eslint .
+```
+
+No commits made. Only `app/api/director/transport-server.ts` and `app/api/director/transport-server.test.ts` were modified.
+
+Residual risk: I extended the existing web transport Gate 2 relaxation to clear-rate thresholds so the local fixture transport still serves generated depth-5 content under the current balance settings. This only affects the dev web transport layer. Actual time spent: about 20 minutes.

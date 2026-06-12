@@ -1,0 +1,33 @@
+Implemented in [transport-server.ts](/Users/keigoshimada/Documents/generative-gaming/app/api/director/transport-server.ts:43). Strategy: removed the harness `loadFallbackContentPack` import and statically imported `content/fallback/items.json`, then selected the three healing item ids from that bundled JSON.
+
+Verification:
+
+```text
+pnpm exec vitest run --config app/api/director/vitest.config.ts --reporter verbose
+exit 0
+✓ transport-server.test.ts > serves middle-band generated content for a depth 5 request
+✓ transport-server.test.ts > uses createdAt in the artifact run identity for new transport states
+Test Files 1 passed (1), Tests 2 passed (2)
+```
+
+```text
+pnpm run typecheck
+exit 0
+tsc --noEmit -p tsconfig.src.json && tsc --noEmit -p tsconfig.next.json
+```
+
+```text
+pnpm run lint
+exit 0
+eslint .
+```
+
+```text
+set -o pipefail; pnpm exec next build --no-lint 2>&1 | tail -5
+exit 0
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+```
+
+The module-not-found error for `../../content/fallback/` is gone. No commits or branch changes made. Actual time: about 8 minutes.

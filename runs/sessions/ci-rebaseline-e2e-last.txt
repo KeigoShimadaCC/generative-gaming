@@ -1,0 +1,52 @@
+**Changed**
+- Re-baselined [mock-baseline.json](/Users/keigoshimada/Documents/generative-gaming/tests/eval-baselines/mock-baseline.json:1) against HEAD `2f10a4e4`.
+- Updated [ci.yml](/Users/keigoshimada/Documents/generative-gaming/.github/workflows/ci.yml:15): `check` timeout 30m, `e2e` timeout 15m, Playwright browser cache before Chromium install.
+- [playwright.config.ts](/Users/keigoshimada/Documents/generative-gaming/playwright.config.ts:43) was read but not changed; it already has `webServer.timeout: 120_000`.
+
+**Part A Evidence**
+Baseline run:
+```bash
+npm_config_cache=/private/tmp/gg-npm-cache pnpm run evals -- --mode mock --n 1 --eval-id ci-mock-baseline
+# exit 0
+Eval ci-mock-baseline: complete
+Records: 15
+Validity: 66.67%
+Solvability: 33.33%
+Fallback: 66.67%
+```
+
+CI smoke reproduction used unique `EVAL_ID=ci-smoke-local-20260613T062043` with the same inline TS logic from `ci.yml`.
+```bash
+# exit 0
+Eval ci-smoke-local-20260613T062043: complete
+Records: 15
+Validity: 66.67%
+Solvability: 33.33%
+Fallback: 66.67%
+```
+
+Threshold compare:
+```bash
+npm_config_cache=/private/tmp/gg-npm-cache pnpm dlx tsx tests/eval-baselines/compare.ts tests/eval-baselines/mock-baseline.json runs/evals/ci-smoke-local-20260613T062043/report.json
+# exit 0
+eval threshold check passed (112 metrics compared, 0 regressions beyond tolerance)
+```
+
+Fresh inspectable artifacts are at:
+- `runs/evals/ci-mock-baseline-current-20260613T062043/`
+- `runs/evals/ci-smoke-local-20260613T062043/`
+
+**Part B Diagnosis**
+- `ci.yml` had no job-level timeout on `e2e`, so any stalled browser install, server startup, or Playwright process could occupy the runner until external cancellation.
+- `ci.yml` set `PLAYWRIGHT_BROWSERS_PATH` but had no cache restore before `pnpm exec playwright install --with-deps chromium`.
+- `playwright.config.ts:44` starts `pnpm run dev`; `playwright.config.ts:51` already had an explicit 120s server timeout, so I did not change it.
+- Fixed with workflow guardrails only; local Playwright was not run because the brief says browsers cannot run in this sandbox.
+
+**Final Check**
+```bash
+git diff --check
+# exit 0
+# no output
+```
+
+Tracked diff is limited to owned files: `.github/workflows/ci.yml` and `tests/eval-baselines/mock-baseline.json`. No commits or branches made. Actual time: ~25 min vs 20 min estimate / 40 min timebox. Environment discovery: `git restore` was blocked by `.git/index.lock` permission in this sandbox, so I restored generated artifact contents from the preserved copy without touching `.git`.

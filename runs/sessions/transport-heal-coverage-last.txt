@@ -1,0 +1,38 @@
+Implemented in [transport-server.ts](/Users/keigoshimada/Documents/generative-gaming/app/api/director/transport-server.ts:92) and [transport-server.test.ts](/Users/keigoshimada/Documents/generative-gaming/app/api/director/transport-server.test.ts:46).
+
+Added fallback-pack healing items per band:
+- `shallows`: `oldstock-sour-cordial`, heal `12`
+- `middle`: `oldstock-bitter-purge`, heal `14`
+- `lowest`: `oldstock-deep-cordial`, heal `18`
+
+The transport now loads those definitions from `content/fallback/items.json` via the fallback content loader and appends the band-appropriate healing item to each derived fixture manifest if missing. Existing fixture items, quest refs, and merchant refs are otherwise unchanged.
+
+Verification:
+
+```text
+pnpm exec vitest run --config app/api/director/vitest.config.ts --reporter verbose
+exit 0
+
+✓ app/api/director/transport-server.test.ts > web director transport > serves middle-band generated content for a depth 5 request 91ms
+✓ app/api/director/transport-server.test.ts > web director transport > uses createdAt in the artifact run identity for new transport states 129ms
+Test Files  1 passed (1)
+Tests       2 passed (2)
+```
+
+```text
+pnpm run typecheck
+exit 0
+
+> generative-gaming@0.0.0 typecheck
+> node --input-type=module -e "import{rmSync}from'node:fs';try{rmSync('.next',{recursive:true,force:true})}catch{}" && tsc --noEmit -p tsconfig.src.json && tsc --noEmit -p tsconfig.next.json
+```
+
+```text
+pnpm run lint
+exit 0
+
+> generative-gaming@0.0.0 lint
+> eslint .
+```
+
+No commits or branches created. Scope deviations: none. Environment discoveries: none. Actual time: about 15 minutes vs 20 minute timebox.

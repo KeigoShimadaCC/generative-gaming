@@ -166,3 +166,13 @@ timestamp	label	agent	model	effort	seconds	input_tokens	output_tokens	total_toke
 2026-06-12T19:11:31Z	combat-math-investigation	codex	default	default	431	4430345	22459	4452804	0
 2026-06-12T19:20:27Z	status-duration-serialization	codex	default	default	282	1805374	11136	1816510	0
 2026-06-12T19:30:18Z	balance-calibration-v2	codex	default	default	1157	13276199	48373	13324572	0
+2026-06-12T21:10:02Z	ci-rebaseline-e2e	codex	default	default	1308	1523530	15045	1538575	0
+2026-06-12T21:53:41Z	transport-run-identity	codex	default	default	343	3258581	20739	3279320	0
+2026-06-12T22:02:04Z	browser-bot-v4	codex	default	default	110	0	0	0	0
+2026-06-12T22:03:57Z	browser-bot-v4	codex	default	default	605	6562936	27191	6590127	0
+2026-06-12T22:18:30Z	botv4-view-fix	codex	default	default	408	4763071	26887	4789958	0
+2026-06-12T22:27:43Z	transport-heal-coverage	codex	default	default	185	1422545	10835	1433380	0
+2026-06-12T22:34:32Z	transport-heal-bundlefix	codex	default	default	129	670317	6571	676888	0
+2026-06-12T22:41:42Z	transport-fallback-mode	codex	default	default	133	0	0	0	0
+2026-06-12T22:43:58Z	transport-fallback-mode	codex	default	default	191	0	0	0	0
+2026-06-12T23:06:28Z	hoard-knowledge-fix	codex	default	default	388	2577914	12221	2590135	0
