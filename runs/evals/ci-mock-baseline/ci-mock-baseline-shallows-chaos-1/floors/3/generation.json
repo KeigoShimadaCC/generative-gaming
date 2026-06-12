@@ -4,13 +4,13 @@
   "engineVersion": "0.0.0",
   "modelId": "director:mock",
   "seed": "ci-mock-baseline-shallows-chaos-1:seed",
-  "createdAt": "2026-06-12T08:03:11.819Z",
+  "createdAt": "2026-06-12T10:08:26.727Z",
   "runId": "ci-mock-baseline-shallows-chaos-1",
   "depth": 3,
   "attempts": [
     {
       "attemptIndex": 0,
-      "promptHash": "68e0f319c43319055af438b3606c4e816a9c081bc94d39c9b7d8af2d257102bb",
+      "promptHash": "496a114482df14fb195737427224c3d30a2cdec52d02418f7e71c1a653f584e8",
       "rawOutputPath": "floors/3/attempts/0/raw.txt",
       "provider": {
         "ok": true,

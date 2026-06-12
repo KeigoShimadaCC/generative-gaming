@@ -1,0 +1,21 @@
+{
+  "recordType": "generation-index",
+  "protocolVersion": "1.2.0",
+  "engineVersion": "0.0.0",
+  "modelId": "ambient:codex",
+  "seed": "tuning-02-iteration-1-lowest-speedrunner-1:seed",
+  "createdAt": "2026-06-12T10:03:02.889Z",
+  "runId": "tuning-02-iteration-1-lowest-speedrunner-1",
+  "updatedAt": "2026-06-12T10:03:02.889Z",
+  "floors": [
+    {
+      "depth": 11,
+      "recordPath": "floors/11/generation.json",
+      "outcome": {
+        "kind": "fallback",
+        "fallbackId": "fallback:old-stock:lowest-11"
+      },
+      "recordedAt": "2026-06-12T10:03:02.889Z"
+    }
+  ]
+}

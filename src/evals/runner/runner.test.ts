@@ -253,7 +253,7 @@ describe("eval report thesis scoring", () => {
     });
     expect(scoredGeneration.responsiveness).toMatchObject({
       scored: true,
-      metricVersion: "phase-42-responsiveness-v1",
+      metricVersion: "phase-47-responsiveness-v2",
     });
     expect(fallbackGeneration.novelty).toEqual({
       scored: false,

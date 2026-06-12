@@ -4,9 +4,9 @@
   "engineVersion": "0.0.0",
   "modelId": "director:mock",
   "seed": "ci-mock-baseline-shallows-pacifist-1:seed",
-  "createdAt": "2026-06-12T08:03:10.045Z",
+  "createdAt": "2026-06-12T10:08:25.124Z",
   "runId": "ci-mock-baseline-shallows-pacifist-1",
-  "updatedAt": "2026-06-12T08:03:10.045Z",
+  "updatedAt": "2026-06-12T10:08:25.124Z",
   "floors": [
     {
       "depth": 3,
@@ -14,7 +14,7 @@
       "outcome": {
         "kind": "manifest"
       },
-      "recordedAt": "2026-06-12T08:03:10.045Z"
+      "recordedAt": "2026-06-12T10:08:25.124Z"
     }
   ]
 }

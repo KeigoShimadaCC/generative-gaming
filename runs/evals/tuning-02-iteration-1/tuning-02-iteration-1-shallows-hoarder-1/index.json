@@ -1,0 +1,20 @@
+{
+  "recordType": "generation-index",
+  "protocolVersion": "1.2.0",
+  "engineVersion": "0.0.0",
+  "modelId": "ambient:codex",
+  "seed": "tuning-02-iteration-1-shallows-hoarder-1:seed",
+  "createdAt": "2026-06-12T09:57:18.074Z",
+  "runId": "tuning-02-iteration-1-shallows-hoarder-1",
+  "updatedAt": "2026-06-12T09:57:18.074Z",
+  "floors": [
+    {
+      "depth": 3,
+      "recordPath": "floors/3/generation.json",
+      "outcome": {
+        "kind": "manifest"
+      },
+      "recordedAt": "2026-06-12T09:57:18.074Z"
+    }
+  ]
+}

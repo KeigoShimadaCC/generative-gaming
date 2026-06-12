@@ -1,0 +1,21 @@
+{
+  "recordType": "generation-index",
+  "protocolVersion": "1.2.0",
+  "engineVersion": "0.0.0",
+  "modelId": "ambient:codex",
+  "seed": "tuning-02-baseline-shallows-pacifist-1:seed",
+  "createdAt": "2026-06-12T09:42:39.903Z",
+  "runId": "tuning-02-baseline-shallows-pacifist-1",
+  "updatedAt": "2026-06-12T09:42:39.903Z",
+  "floors": [
+    {
+      "depth": 3,
+      "recordPath": "floors/3/generation.json",
+      "outcome": {
+        "kind": "fallback",
+        "fallbackId": "fallback:old-stock:shallows-3"
+      },
+      "recordedAt": "2026-06-12T09:42:39.903Z"
+    }
+  ]
+}

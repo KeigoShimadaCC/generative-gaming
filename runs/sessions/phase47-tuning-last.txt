@@ -1,0 +1,29 @@
+Implemented Phase 47 tuning and stopped after iteration 1 per contract.
+
+**Phase Completion Check**  
+Status: complete procedure, partial quality outcome. The target was met, but iteration 1 regressed validity by one cell, so I stopped immediately as required.
+
+Changed:
+- Revised frozen responsiveness metric to `phase-47-responsiveness-v2` in [responsiveness.ts](/Users/keigoshimada/Documents/generative-gaming/src/evals/metrics/responsiveness.ts).
+- Updated detector tests and runner version assertion.
+- Added trace-keyed prompt responsiveness targets in [blocks.ts](/Users/keigoshimada/Documents/generative-gaming/src/director/prompt/blocks.ts).
+- Updated prompt snapshots and mock baseline.
+- Wrote [summary.md](/Users/keigoshimada/Documents/generative-gaming/runs/evals/tuning-02/summary.md) and [iteration-1.md](/Users/keigoshimada/Documents/generative-gaming/runs/evals/tuning-02/iteration-1.md).
+
+Key eval results:
+- Usable baseline: same-persona `5.13%`, cross-persona `7.05%`, validity `100%`, solvability `86.67%`.
+- Iteration 1: same-persona `54.76%`, cross-persona `17.86%`, validity `93.33%`, solvability `93.33%`.
+- Target passed because cross is below half of same (`17.86% <= 27.38%`).
+- Stopped because validity regressed `100% -> 93.33%`.
+
+Verification:
+- `pnpm run check` -> pass; typecheck pass, lint pass, Vitest `78` files, `529` passed, `2` skipped.
+- Mock re-baseline compare -> pass, `112` metrics compared.
+- No commit made.
+
+Residual risks:
+- Completionist same-persona stayed `0%`; completionist-shaped content leaked into cross-persona scores.
+- One invalid `lowest:speedrunner` output blended NPC/quest content and failed schema.
+- No new environment facts; used the already documented temp `CODEX_HOME` workaround for nested ambient Codex. Initial no-workaround baseline is preserved as failed evidence.
+
+Actual time: about 50 minutes vs 60 minute estimate.

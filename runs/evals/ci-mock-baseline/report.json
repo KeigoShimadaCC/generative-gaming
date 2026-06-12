@@ -3,8 +3,8 @@
   "reportVersion": "phase-41-eval-report-v1",
   "evalId": "ci-mock-baseline",
   "status": "complete",
-  "startedAt": "2026-06-12T08:03:09.538Z",
-  "completedAt": "2026-06-12T08:03:12.120Z",
+  "startedAt": "2026-06-12T10:08:24.689Z",
+  "completedAt": "2026-06-12T10:08:27.001Z",
   "config": {
     "evalId": "ci-mock-baseline",
     "rootDir": "runs/evals",
@@ -173,7 +173,7 @@
     ]
   },
   "git": {
-    "rev": "81f1b9fa8b2ec3c9184d3eb60a71658d6f578ccc"
+    "rev": "ec2f83721c88474494dc5800a9f798fb351c7464"
   },
   "calls": {
     "attempted": 15,
@@ -479,27 +479,29 @@
           {
             "generationIndex": 0,
             "novelty": {
+              "scored": true,
               "metricVersion": "phase-42-novelty-v1",
-              "distance": 0.47690874914559134,
-              "score": 0.47690874914559134,
+              "distance": 0.38651629072681715,
+              "score": 0.38651629072681715,
               "nearDuplicate": false,
               "components": {
-                "nameSimilarity": 0.3216141001855287,
+                "nameSimilarity": 0.36233440744718937,
                 "statVectorDistance": 0,
-                "compositionOverlap": 0.3157894736842105
+                "compositionOverlap": 0.5333333333333333
               },
               "vsFallback": {
-                "nameSimilarity": 0.3216141001855287,
+                "nameSimilarity": 0.36233440744718937,
                 "statVectorDistance": 0,
-                "compositionOverlap": 0.3157894736842105
+                "compositionOverlap": 0.5333333333333333
               },
               "vsRecent": null
             },
             "responsiveness": {
-              "metricVersion": "phase-42-responsiveness-v1",
+              "scored": true,
+              "metricVersion": "phase-47-responsiveness-v2",
               "sourcePersona": "hoarder",
               "samePersona": {
-                "metricVersion": "phase-42-responsiveness-v1",
+                "metricVersion": "phase-47-responsiveness-v2",
                 "persona": "hoarder",
                 "hits": 0,
                 "total": 3,
@@ -521,7 +523,7 @@
               },
               "crossPersona": {
                 "hoarder": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "hoarder",
                   "hits": 0,
                   "total": 3,
@@ -542,14 +544,14 @@
                   ]
                 },
                 "pacifist": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "pacifist",
                   "hits": 0,
                   "total": 3,
                   "rate": 0,
                   "detectors": [
                     {
-                      "id": "pacifist_open_routes",
+                      "id": "pacifist_route_options",
                       "hit": false
                     },
                     {
@@ -563,7 +565,7 @@
                   ]
                 },
                 "speedrunner": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "speedrunner",
                   "hits": 0,
                   "total": 3,
@@ -584,18 +586,18 @@
                   ]
                 },
                 "completionist": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "completionist",
                   "hits": 0,
                   "total": 3,
                   "rate": 0,
                   "detectors": [
                     {
-                      "id": "completionist_npc_present",
+                      "id": "completionist_dialogue_depth",
                       "hit": false
                     },
                     {
-                      "id": "completionist_quest_present",
+                      "id": "completionist_quest_richness",
                       "hit": false
                     },
                     {
@@ -605,7 +607,7 @@
                   ]
                 },
                 "chaos": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "chaos",
                   "hits": 1,
                   "total": 4,
@@ -620,7 +622,7 @@
                       "hit": false
                     },
                     {
-                      "id": "chaos_mixed_origins",
+                      "id": "chaos_content_variance",
                       "hit": false
                     },
                     {
@@ -635,7 +637,7 @@
         ],
         "summary": {
           "novelty": {
-            "averageScore": 0.47690874914559134,
+            "averageScore": 0.38651629072681715,
             "nearDuplicateCount": 0,
             "sampleCount": 1
           },
@@ -658,13 +660,13 @@
             {
               "id": "hoarder_inventory_narration",
               "persona": "hoarder",
-              "description": "Narration references hoarding or carrying burden.",
+              "description": "Narration ties hoarded/carrying pressure to a named authored item.",
               "uncertain": true
             },
             {
-              "id": "pacifist_open_routes",
+              "id": "pacifist_route_options",
               "persona": "pacifist",
-              "description": "Layout flavor or room span suggests alternate routes (open/halls or wide room span)."
+              "description": "Low enemy density, wide route span, and spread/far placements offer avoidance routes."
             },
             {
               "id": "pacifist_soft_threats",
@@ -674,12 +676,12 @@
             {
               "id": "pacifist_caution_narration",
               "persona": "pacifist",
-              "description": "Narration acknowledges caution or non-violence."
+              "description": "Narration ties avoided/retreated combat to a named authored threat."
             },
             {
               "id": "speedrunner_compact_floor",
               "persona": "speedrunner",
-              "description": "Compact room span or open/halls flavor for fast routing."
+              "description": "Compact floor with structured stairs/exit signal for fast routing."
             },
             {
               "id": "speedrunner_near_entrance_loot",
@@ -689,28 +691,29 @@
             {
               "id": "speedrunner_pace_narration",
               "persona": "speedrunner",
-              "description": "Narration references stairs, exits, or urgency.",
+              "description": "Narration ties low-exploration play to structured stairs/exit routing.",
               "uncertain": true
             },
             {
-              "id": "completionist_npc_present",
+              "id": "completionist_dialogue_depth",
               "persona": "completionist",
-              "description": "At least one NPC is authored on the floor."
+              "description": "At least one NPC has multi-node, multi-choice dialogue depth."
             },
             {
-              "id": "completionist_quest_present",
+              "id": "completionist_quest_richness",
               "persona": "completionist",
-              "description": "A quest hook is present."
+              "description": "Quest has multiple richness signals: title, reward, entity reference, and NPC linkage."
             },
             {
               "id": "completionist_rich_callbacks",
               "persona": "completionist",
-              "description": "Multiple narration observations or callback tags."
+              "description": "Multiple callback observations are anchored to NPC or quest content."
             },
             {
               "id": "chaos_behavior_diversity",
               "persona": "chaos",
-              "description": "Three or more distinct enemy behavior kinds."
+              "description": "Three or more distinct enemy behavior kinds.",
+              "uncertain": true
             },
             {
               "id": "chaos_trap_variety",
@@ -719,9 +722,10 @@
               "uncertain": true
             },
             {
-              "id": "chaos_mixed_origins",
+              "id": "chaos_content_variance",
               "persona": "chaos",
-              "description": "Origin tag summary shows mixed made/old_stock/kept content."
+              "description": "Within-seed content varies across behavior, item, trap, placement, and callback axes.",
+              "uncertain": true
             },
             {
               "id": "chaos_varied_engagement",
@@ -1014,8 +1018,14 @@
         "generations": [
           {
             "generationIndex": 0,
-            "novelty": null,
-            "responsiveness": null
+            "novelty": {
+              "scored": false,
+              "reason": "fallback"
+            },
+            "responsiveness": {
+              "scored": false,
+              "reason": "fallback"
+            }
           }
         ],
         "summary": {
@@ -1043,13 +1053,13 @@
             {
               "id": "hoarder_inventory_narration",
               "persona": "hoarder",
-              "description": "Narration references hoarding or carrying burden.",
+              "description": "Narration ties hoarded/carrying pressure to a named authored item.",
               "uncertain": true
             },
             {
-              "id": "pacifist_open_routes",
+              "id": "pacifist_route_options",
               "persona": "pacifist",
-              "description": "Layout flavor or room span suggests alternate routes (open/halls or wide room span)."
+              "description": "Low enemy density, wide route span, and spread/far placements offer avoidance routes."
             },
             {
               "id": "pacifist_soft_threats",
@@ -1059,12 +1069,12 @@
             {
               "id": "pacifist_caution_narration",
               "persona": "pacifist",
-              "description": "Narration acknowledges caution or non-violence."
+              "description": "Narration ties avoided/retreated combat to a named authored threat."
             },
             {
               "id": "speedrunner_compact_floor",
               "persona": "speedrunner",
-              "description": "Compact room span or open/halls flavor for fast routing."
+              "description": "Compact floor with structured stairs/exit signal for fast routing."
             },
             {
               "id": "speedrunner_near_entrance_loot",
@@ -1074,28 +1084,29 @@
             {
               "id": "speedrunner_pace_narration",
               "persona": "speedrunner",
-              "description": "Narration references stairs, exits, or urgency.",
+              "description": "Narration ties low-exploration play to structured stairs/exit routing.",
               "uncertain": true
             },
             {
-              "id": "completionist_npc_present",
+              "id": "completionist_dialogue_depth",
               "persona": "completionist",
-              "description": "At least one NPC is authored on the floor."
+              "description": "At least one NPC has multi-node, multi-choice dialogue depth."
             },
             {
-              "id": "completionist_quest_present",
+              "id": "completionist_quest_richness",
               "persona": "completionist",
-              "description": "A quest hook is present."
+              "description": "Quest has multiple richness signals: title, reward, entity reference, and NPC linkage."
             },
             {
               "id": "completionist_rich_callbacks",
               "persona": "completionist",
-              "description": "Multiple narration observations or callback tags."
+              "description": "Multiple callback observations are anchored to NPC or quest content."
             },
             {
               "id": "chaos_behavior_diversity",
               "persona": "chaos",
-              "description": "Three or more distinct enemy behavior kinds."
+              "description": "Three or more distinct enemy behavior kinds.",
+              "uncertain": true
             },
             {
               "id": "chaos_trap_variety",
@@ -1104,9 +1115,10 @@
               "uncertain": true
             },
             {
-              "id": "chaos_mixed_origins",
+              "id": "chaos_content_variance",
               "persona": "chaos",
-              "description": "Origin tag summary shows mixed made/old_stock/kept content."
+              "description": "Within-seed content varies across behavior, item, trap, placement, and callback axes.",
+              "uncertain": true
             },
             {
               "id": "chaos_varied_engagement",
@@ -1416,27 +1428,29 @@
           {
             "generationIndex": 0,
             "novelty": {
+              "scored": true,
               "metricVersion": "phase-42-novelty-v1",
-              "distance": 0.4969265470845945,
-              "score": 0.4969265470845945,
+              "distance": 0.4516482843137255,
+              "score": 0.4516482843137255,
               "nearDuplicate": false,
               "components": {
-                "nameSimilarity": 0.35842490842490843,
-                "statVectorDistance": 0.13013977233326388,
-                "compositionOverlap": 0.3333333333333333
+                "nameSimilarity": 0.23898809523809522,
+                "statVectorDistance": 0,
+                "compositionOverlap": 0.47058823529411764
               },
               "vsFallback": {
-                "nameSimilarity": 0.35842490842490843,
-                "statVectorDistance": 0.13013977233326388,
-                "compositionOverlap": 0.3333333333333333
+                "nameSimilarity": 0.23898809523809522,
+                "statVectorDistance": 0,
+                "compositionOverlap": 0.47058823529411764
               },
               "vsRecent": null
             },
             "responsiveness": {
-              "metricVersion": "phase-42-responsiveness-v1",
+              "scored": true,
+              "metricVersion": "phase-47-responsiveness-v2",
               "sourcePersona": "hoarder",
               "samePersona": {
-                "metricVersion": "phase-42-responsiveness-v1",
+                "metricVersion": "phase-47-responsiveness-v2",
                 "persona": "hoarder",
                 "hits": 0,
                 "total": 3,
@@ -1458,7 +1472,7 @@
               },
               "crossPersona": {
                 "hoarder": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "hoarder",
                   "hits": 0,
                   "total": 3,
@@ -1479,14 +1493,14 @@
                   ]
                 },
                 "pacifist": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "pacifist",
                   "hits": 0,
                   "total": 3,
                   "rate": 0,
                   "detectors": [
                     {
-                      "id": "pacifist_open_routes",
+                      "id": "pacifist_route_options",
                       "hit": false
                     },
                     {
@@ -1500,7 +1514,7 @@
                   ]
                 },
                 "speedrunner": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "speedrunner",
                   "hits": 0,
                   "total": 3,
@@ -1521,18 +1535,18 @@
                   ]
                 },
                 "completionist": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "completionist",
                   "hits": 0,
                   "total": 3,
                   "rate": 0,
                   "detectors": [
                     {
-                      "id": "completionist_npc_present",
+                      "id": "completionist_dialogue_depth",
                       "hit": false
                     },
                     {
-                      "id": "completionist_quest_present",
+                      "id": "completionist_quest_richness",
                       "hit": false
                     },
                     {
@@ -1542,7 +1556,7 @@
                   ]
                 },
                 "chaos": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "chaos",
                   "hits": 2,
                   "total": 4,
@@ -1557,7 +1571,7 @@
                       "hit": true
                     },
                     {
-                      "id": "chaos_mixed_origins",
+                      "id": "chaos_content_variance",
                       "hit": false
                     },
                     {
@@ -1572,7 +1586,7 @@
         ],
         "summary": {
           "novelty": {
-            "averageScore": 0.4969265470845945,
+            "averageScore": 0.4516482843137255,
             "nearDuplicateCount": 0,
             "sampleCount": 1
           },
@@ -1595,13 +1609,13 @@
             {
               "id": "hoarder_inventory_narration",
               "persona": "hoarder",
-              "description": "Narration references hoarding or carrying burden.",
+              "description": "Narration ties hoarded/carrying pressure to a named authored item.",
               "uncertain": true
             },
             {
-              "id": "pacifist_open_routes",
+              "id": "pacifist_route_options",
               "persona": "pacifist",
-              "description": "Layout flavor or room span suggests alternate routes (open/halls or wide room span)."
+              "description": "Low enemy density, wide route span, and spread/far placements offer avoidance routes."
             },
             {
               "id": "pacifist_soft_threats",
@@ -1611,12 +1625,12 @@
             {
               "id": "pacifist_caution_narration",
               "persona": "pacifist",
-              "description": "Narration acknowledges caution or non-violence."
+              "description": "Narration ties avoided/retreated combat to a named authored threat."
             },
             {
               "id": "speedrunner_compact_floor",
               "persona": "speedrunner",
-              "description": "Compact room span or open/halls flavor for fast routing."
+              "description": "Compact floor with structured stairs/exit signal for fast routing."
             },
             {
               "id": "speedrunner_near_entrance_loot",
@@ -1626,28 +1640,29 @@
             {
               "id": "speedrunner_pace_narration",
               "persona": "speedrunner",
-              "description": "Narration references stairs, exits, or urgency.",
+              "description": "Narration ties low-exploration play to structured stairs/exit routing.",
               "uncertain": true
             },
             {
-              "id": "completionist_npc_present",
+              "id": "completionist_dialogue_depth",
               "persona": "completionist",
-              "description": "At least one NPC is authored on the floor."
+              "description": "At least one NPC has multi-node, multi-choice dialogue depth."
             },
             {
-              "id": "completionist_quest_present",
+              "id": "completionist_quest_richness",
               "persona": "completionist",
-              "description": "A quest hook is present."
+              "description": "Quest has multiple richness signals: title, reward, entity reference, and NPC linkage."
             },
             {
               "id": "completionist_rich_callbacks",
               "persona": "completionist",
-              "description": "Multiple narration observations or callback tags."
+              "description": "Multiple callback observations are anchored to NPC or quest content."
             },
             {
               "id": "chaos_behavior_diversity",
               "persona": "chaos",
-              "description": "Three or more distinct enemy behavior kinds."
+              "description": "Three or more distinct enemy behavior kinds.",
+              "uncertain": true
             },
             {
               "id": "chaos_trap_variety",
@@ -1656,9 +1671,10 @@
               "uncertain": true
             },
             {
-              "id": "chaos_mixed_origins",
+              "id": "chaos_content_variance",
               "persona": "chaos",
-              "description": "Origin tag summary shows mixed made/old_stock/kept content."
+              "description": "Within-seed content varies across behavior, item, trap, placement, and callback axes.",
+              "uncertain": true
             },
             {
               "id": "chaos_varied_engagement",
@@ -1968,49 +1984,51 @@
           {
             "generationIndex": 0,
             "novelty": {
+              "scored": true,
               "metricVersion": "phase-42-novelty-v1",
-              "distance": 0.47690874914559134,
-              "score": 0.47690874914559134,
+              "distance": 0.38651629072681715,
+              "score": 0.38651629072681715,
               "nearDuplicate": false,
               "components": {
-                "nameSimilarity": 0.3216141001855287,
+                "nameSimilarity": 0.36233440744718937,
                 "statVectorDistance": 0,
-                "compositionOverlap": 0.3157894736842105
+                "compositionOverlap": 0.5333333333333333
               },
               "vsFallback": {
-                "nameSimilarity": 0.3216141001855287,
+                "nameSimilarity": 0.36233440744718937,
                 "statVectorDistance": 0,
-                "compositionOverlap": 0.3157894736842105
+                "compositionOverlap": 0.5333333333333333
               },
               "vsRecent": null
             },
             "responsiveness": {
-              "metricVersion": "phase-42-responsiveness-v1",
+              "scored": true,
+              "metricVersion": "phase-47-responsiveness-v2",
               "sourcePersona": "pacifist",
               "samePersona": {
-                "metricVersion": "phase-42-responsiveness-v1",
+                "metricVersion": "phase-47-responsiveness-v2",
                 "persona": "pacifist",
-                "hits": 3,
+                "hits": 0,
                 "total": 3,
-                "rate": 1,
+                "rate": 0,
                 "detectors": [
                   {
-                    "id": "pacifist_open_routes",
-                    "hit": true
+                    "id": "pacifist_route_options",
+                    "hit": false
                   },
                   {
                     "id": "pacifist_soft_threats",
-                    "hit": true
+                    "hit": false
                   },
                   {
                     "id": "pacifist_caution_narration",
-                    "hit": true
+                    "hit": false
                   }
                 ]
               },
               "crossPersona": {
                 "hoarder": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "hoarder",
                   "hits": 0,
                   "total": 3,
@@ -2031,28 +2049,28 @@
                   ]
                 },
                 "pacifist": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "pacifist",
-                  "hits": 3,
+                  "hits": 0,
                   "total": 3,
-                  "rate": 1,
+                  "rate": 0,
                   "detectors": [
                     {
-                      "id": "pacifist_open_routes",
-                      "hit": true
+                      "id": "pacifist_route_options",
+                      "hit": false
                     },
                     {
                       "id": "pacifist_soft_threats",
-                      "hit": true
+                      "hit": false
                     },
                     {
                       "id": "pacifist_caution_narration",
-                      "hit": true
+                      "hit": false
                     }
                   ]
                 },
                 "speedrunner": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "speedrunner",
                   "hits": 1,
                   "total": 3,
@@ -2073,18 +2091,18 @@
                   ]
                 },
                 "completionist": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "completionist",
                   "hits": 0,
                   "total": 3,
                   "rate": 0,
                   "detectors": [
                     {
-                      "id": "completionist_npc_present",
+                      "id": "completionist_dialogue_depth",
                       "hit": false
                     },
                     {
-                      "id": "completionist_quest_present",
+                      "id": "completionist_quest_richness",
                       "hit": false
                     },
                     {
@@ -2094,7 +2112,7 @@
                   ]
                 },
                 "chaos": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "chaos",
                   "hits": 0,
                   "total": 4,
@@ -2109,7 +2127,7 @@
                       "hit": false
                     },
                     {
-                      "id": "chaos_mixed_origins",
+                      "id": "chaos_content_variance",
                       "hit": false
                     },
                     {
@@ -2124,12 +2142,12 @@
         ],
         "summary": {
           "novelty": {
-            "averageScore": 0.47690874914559134,
+            "averageScore": 0.38651629072681715,
             "nearDuplicateCount": 0,
             "sampleCount": 1
           },
           "responsiveness": {
-            "samePersonaHitRate": 1,
+            "samePersonaHitRate": 0,
             "crossPersonaHitRate": 0.08333333333333333,
             "sampleCount": 1
           },
@@ -2147,13 +2165,13 @@
             {
               "id": "hoarder_inventory_narration",
               "persona": "hoarder",
-              "description": "Narration references hoarding or carrying burden.",
+              "description": "Narration ties hoarded/carrying pressure to a named authored item.",
               "uncertain": true
             },
             {
-              "id": "pacifist_open_routes",
+              "id": "pacifist_route_options",
               "persona": "pacifist",
-              "description": "Layout flavor or room span suggests alternate routes (open/halls or wide room span)."
+              "description": "Low enemy density, wide route span, and spread/far placements offer avoidance routes."
             },
             {
               "id": "pacifist_soft_threats",
@@ -2163,12 +2181,12 @@
             {
               "id": "pacifist_caution_narration",
               "persona": "pacifist",
-              "description": "Narration acknowledges caution or non-violence."
+              "description": "Narration ties avoided/retreated combat to a named authored threat."
             },
             {
               "id": "speedrunner_compact_floor",
               "persona": "speedrunner",
-              "description": "Compact room span or open/halls flavor for fast routing."
+              "description": "Compact floor with structured stairs/exit signal for fast routing."
             },
             {
               "id": "speedrunner_near_entrance_loot",
@@ -2178,28 +2196,29 @@
             {
               "id": "speedrunner_pace_narration",
               "persona": "speedrunner",
-              "description": "Narration references stairs, exits, or urgency.",
+              "description": "Narration ties low-exploration play to structured stairs/exit routing.",
               "uncertain": true
             },
             {
-              "id": "completionist_npc_present",
+              "id": "completionist_dialogue_depth",
               "persona": "completionist",
-              "description": "At least one NPC is authored on the floor."
+              "description": "At least one NPC has multi-node, multi-choice dialogue depth."
             },
             {
-              "id": "completionist_quest_present",
+              "id": "completionist_quest_richness",
               "persona": "completionist",
-              "description": "A quest hook is present."
+              "description": "Quest has multiple richness signals: title, reward, entity reference, and NPC linkage."
             },
             {
               "id": "completionist_rich_callbacks",
               "persona": "completionist",
-              "description": "Multiple narration observations or callback tags."
+              "description": "Multiple callback observations are anchored to NPC or quest content."
             },
             {
               "id": "chaos_behavior_diversity",
               "persona": "chaos",
-              "description": "Three or more distinct enemy behavior kinds."
+              "description": "Three or more distinct enemy behavior kinds.",
+              "uncertain": true
             },
             {
               "id": "chaos_trap_variety",
@@ -2208,9 +2227,10 @@
               "uncertain": true
             },
             {
-              "id": "chaos_mixed_origins",
+              "id": "chaos_content_variance",
               "persona": "chaos",
-              "description": "Origin tag summary shows mixed made/old_stock/kept content."
+              "description": "Within-seed content varies across behavior, item, trap, placement, and callback axes.",
+              "uncertain": true
             },
             {
               "id": "chaos_varied_engagement",
@@ -2503,8 +2523,14 @@
         "generations": [
           {
             "generationIndex": 0,
-            "novelty": null,
-            "responsiveness": null
+            "novelty": {
+              "scored": false,
+              "reason": "fallback"
+            },
+            "responsiveness": {
+              "scored": false,
+              "reason": "fallback"
+            }
           }
         ],
         "summary": {
@@ -2532,13 +2558,13 @@
             {
               "id": "hoarder_inventory_narration",
               "persona": "hoarder",
-              "description": "Narration references hoarding or carrying burden.",
+              "description": "Narration ties hoarded/carrying pressure to a named authored item.",
               "uncertain": true
             },
             {
-              "id": "pacifist_open_routes",
+              "id": "pacifist_route_options",
               "persona": "pacifist",
-              "description": "Layout flavor or room span suggests alternate routes (open/halls or wide room span)."
+              "description": "Low enemy density, wide route span, and spread/far placements offer avoidance routes."
             },
             {
               "id": "pacifist_soft_threats",
@@ -2548,12 +2574,12 @@
             {
               "id": "pacifist_caution_narration",
               "persona": "pacifist",
-              "description": "Narration acknowledges caution or non-violence."
+              "description": "Narration ties avoided/retreated combat to a named authored threat."
             },
             {
               "id": "speedrunner_compact_floor",
               "persona": "speedrunner",
-              "description": "Compact room span or open/halls flavor for fast routing."
+              "description": "Compact floor with structured stairs/exit signal for fast routing."
             },
             {
               "id": "speedrunner_near_entrance_loot",
@@ -2563,28 +2589,29 @@
             {
               "id": "speedrunner_pace_narration",
               "persona": "speedrunner",
-              "description": "Narration references stairs, exits, or urgency.",
+              "description": "Narration ties low-exploration play to structured stairs/exit routing.",
               "uncertain": true
             },
             {
-              "id": "completionist_npc_present",
+              "id": "completionist_dialogue_depth",
               "persona": "completionist",
-              "description": "At least one NPC is authored on the floor."
+              "description": "At least one NPC has multi-node, multi-choice dialogue depth."
             },
             {
-              "id": "completionist_quest_present",
+              "id": "completionist_quest_richness",
               "persona": "completionist",
-              "description": "A quest hook is present."
+              "description": "Quest has multiple richness signals: title, reward, entity reference, and NPC linkage."
             },
             {
               "id": "completionist_rich_callbacks",
               "persona": "completionist",
-              "description": "Multiple narration observations or callback tags."
+              "description": "Multiple callback observations are anchored to NPC or quest content."
             },
             {
               "id": "chaos_behavior_diversity",
               "persona": "chaos",
-              "description": "Three or more distinct enemy behavior kinds."
+              "description": "Three or more distinct enemy behavior kinds.",
+              "uncertain": true
             },
             {
               "id": "chaos_trap_variety",
@@ -2593,9 +2620,10 @@
               "uncertain": true
             },
             {
-              "id": "chaos_mixed_origins",
+              "id": "chaos_content_variance",
               "persona": "chaos",
-              "description": "Origin tag summary shows mixed made/old_stock/kept content."
+              "description": "Within-seed content varies across behavior, item, trap, placement, and callback axes.",
+              "uncertain": true
             },
             {
               "id": "chaos_varied_engagement",
@@ -2905,39 +2933,41 @@
           {
             "generationIndex": 0,
             "novelty": {
+              "scored": true,
               "metricVersion": "phase-42-novelty-v1",
-              "distance": 0.4969265470845945,
-              "score": 0.4969265470845945,
+              "distance": 0.4516482843137255,
+              "score": 0.4516482843137255,
               "nearDuplicate": false,
               "components": {
-                "nameSimilarity": 0.35842490842490843,
-                "statVectorDistance": 0.13013977233326388,
-                "compositionOverlap": 0.3333333333333333
+                "nameSimilarity": 0.23898809523809522,
+                "statVectorDistance": 0,
+                "compositionOverlap": 0.47058823529411764
               },
               "vsFallback": {
-                "nameSimilarity": 0.35842490842490843,
-                "statVectorDistance": 0.13013977233326388,
-                "compositionOverlap": 0.3333333333333333
+                "nameSimilarity": 0.23898809523809522,
+                "statVectorDistance": 0,
+                "compositionOverlap": 0.47058823529411764
               },
               "vsRecent": null
             },
             "responsiveness": {
-              "metricVersion": "phase-42-responsiveness-v1",
+              "scored": true,
+              "metricVersion": "phase-47-responsiveness-v2",
               "sourcePersona": "pacifist",
               "samePersona": {
-                "metricVersion": "phase-42-responsiveness-v1",
+                "metricVersion": "phase-47-responsiveness-v2",
                 "persona": "pacifist",
-                "hits": 2,
+                "hits": 0,
                 "total": 3,
-                "rate": 0.6666666666666666,
+                "rate": 0,
                 "detectors": [
                   {
-                    "id": "pacifist_open_routes",
-                    "hit": true
+                    "id": "pacifist_route_options",
+                    "hit": false
                   },
                   {
                     "id": "pacifist_soft_threats",
-                    "hit": true
+                    "hit": false
                   },
                   {
                     "id": "pacifist_caution_narration",
@@ -2947,7 +2977,7 @@
               },
               "crossPersona": {
                 "hoarder": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "hoarder",
                   "hits": 0,
                   "total": 3,
@@ -2968,19 +2998,19 @@
                   ]
                 },
                 "pacifist": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "pacifist",
-                  "hits": 2,
+                  "hits": 0,
                   "total": 3,
-                  "rate": 0.6666666666666666,
+                  "rate": 0,
                   "detectors": [
                     {
-                      "id": "pacifist_open_routes",
-                      "hit": true
+                      "id": "pacifist_route_options",
+                      "hit": false
                     },
                     {
                       "id": "pacifist_soft_threats",
-                      "hit": true
+                      "hit": false
                     },
                     {
                       "id": "pacifist_caution_narration",
@@ -2989,15 +3019,15 @@
                   ]
                 },
                 "speedrunner": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "speedrunner",
-                  "hits": 1,
+                  "hits": 0,
                   "total": 3,
-                  "rate": 0.3333333333333333,
+                  "rate": 0,
                   "detectors": [
                     {
                       "id": "speedrunner_compact_floor",
-                      "hit": true
+                      "hit": false
                     },
                     {
                       "id": "speedrunner_near_entrance_loot",
@@ -3010,18 +3040,18 @@
                   ]
                 },
                 "completionist": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "completionist",
                   "hits": 0,
                   "total": 3,
                   "rate": 0,
                   "detectors": [
                     {
-                      "id": "completionist_npc_present",
+                      "id": "completionist_dialogue_depth",
                       "hit": false
                     },
                     {
-                      "id": "completionist_quest_present",
+                      "id": "completionist_quest_richness",
                       "hit": false
                     },
                     {
@@ -3031,7 +3061,7 @@
                   ]
                 },
                 "chaos": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "chaos",
                   "hits": 0,
                   "total": 4,
@@ -3046,7 +3076,7 @@
                       "hit": false
                     },
                     {
-                      "id": "chaos_mixed_origins",
+                      "id": "chaos_content_variance",
                       "hit": false
                     },
                     {
@@ -3061,13 +3091,13 @@
         ],
         "summary": {
           "novelty": {
-            "averageScore": 0.4969265470845945,
+            "averageScore": 0.4516482843137255,
             "nearDuplicateCount": 0,
             "sampleCount": 1
           },
           "responsiveness": {
-            "samePersonaHitRate": 0.6666666666666666,
-            "crossPersonaHitRate": 0.08333333333333333,
+            "samePersonaHitRate": 0,
+            "crossPersonaHitRate": 0,
             "sampleCount": 1
           },
           "detectorProposal": [
@@ -3084,13 +3114,13 @@
             {
               "id": "hoarder_inventory_narration",
               "persona": "hoarder",
-              "description": "Narration references hoarding or carrying burden.",
+              "description": "Narration ties hoarded/carrying pressure to a named authored item.",
               "uncertain": true
             },
             {
-              "id": "pacifist_open_routes",
+              "id": "pacifist_route_options",
               "persona": "pacifist",
-              "description": "Layout flavor or room span suggests alternate routes (open/halls or wide room span)."
+              "description": "Low enemy density, wide route span, and spread/far placements offer avoidance routes."
             },
             {
               "id": "pacifist_soft_threats",
@@ -3100,12 +3130,12 @@
             {
               "id": "pacifist_caution_narration",
               "persona": "pacifist",
-              "description": "Narration acknowledges caution or non-violence."
+              "description": "Narration ties avoided/retreated combat to a named authored threat."
             },
             {
               "id": "speedrunner_compact_floor",
               "persona": "speedrunner",
-              "description": "Compact room span or open/halls flavor for fast routing."
+              "description": "Compact floor with structured stairs/exit signal for fast routing."
             },
             {
               "id": "speedrunner_near_entrance_loot",
@@ -3115,28 +3145,29 @@
             {
               "id": "speedrunner_pace_narration",
               "persona": "speedrunner",
-              "description": "Narration references stairs, exits, or urgency.",
+              "description": "Narration ties low-exploration play to structured stairs/exit routing.",
               "uncertain": true
             },
             {
-              "id": "completionist_npc_present",
+              "id": "completionist_dialogue_depth",
               "persona": "completionist",
-              "description": "At least one NPC is authored on the floor."
+              "description": "At least one NPC has multi-node, multi-choice dialogue depth."
             },
             {
-              "id": "completionist_quest_present",
+              "id": "completionist_quest_richness",
               "persona": "completionist",
-              "description": "A quest hook is present."
+              "description": "Quest has multiple richness signals: title, reward, entity reference, and NPC linkage."
             },
             {
               "id": "completionist_rich_callbacks",
               "persona": "completionist",
-              "description": "Multiple narration observations or callback tags."
+              "description": "Multiple callback observations are anchored to NPC or quest content."
             },
             {
               "id": "chaos_behavior_diversity",
               "persona": "chaos",
-              "description": "Three or more distinct enemy behavior kinds."
+              "description": "Three or more distinct enemy behavior kinds.",
+              "uncertain": true
             },
             {
               "id": "chaos_trap_variety",
@@ -3145,9 +3176,10 @@
               "uncertain": true
             },
             {
-              "id": "chaos_mixed_origins",
+              "id": "chaos_content_variance",
               "persona": "chaos",
-              "description": "Origin tag summary shows mixed made/old_stock/kept content."
+              "description": "Within-seed content varies across behavior, item, trap, placement, and callback axes.",
+              "uncertain": true
             },
             {
               "id": "chaos_varied_engagement",
@@ -3457,27 +3489,29 @@
           {
             "generationIndex": 0,
             "novelty": {
+              "scored": true,
               "metricVersion": "phase-42-novelty-v1",
-              "distance": 0.47690874914559134,
-              "score": 0.47690874914559134,
+              "distance": 0.38651629072681715,
+              "score": 0.38651629072681715,
               "nearDuplicate": false,
               "components": {
-                "nameSimilarity": 0.3216141001855287,
+                "nameSimilarity": 0.36233440744718937,
                 "statVectorDistance": 0,
-                "compositionOverlap": 0.3157894736842105
+                "compositionOverlap": 0.5333333333333333
               },
               "vsFallback": {
-                "nameSimilarity": 0.3216141001855287,
+                "nameSimilarity": 0.36233440744718937,
                 "statVectorDistance": 0,
-                "compositionOverlap": 0.3157894736842105
+                "compositionOverlap": 0.5333333333333333
               },
               "vsRecent": null
             },
             "responsiveness": {
-              "metricVersion": "phase-42-responsiveness-v1",
+              "scored": true,
+              "metricVersion": "phase-47-responsiveness-v2",
               "sourcePersona": "speedrunner",
               "samePersona": {
-                "metricVersion": "phase-42-responsiveness-v1",
+                "metricVersion": "phase-47-responsiveness-v2",
                 "persona": "speedrunner",
                 "hits": 1,
                 "total": 3,
@@ -3499,7 +3533,7 @@
               },
               "crossPersona": {
                 "hoarder": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "hoarder",
                   "hits": 0,
                   "total": 3,
@@ -3520,14 +3554,14 @@
                   ]
                 },
                 "pacifist": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "pacifist",
                   "hits": 0,
                   "total": 3,
                   "rate": 0,
                   "detectors": [
                     {
-                      "id": "pacifist_open_routes",
+                      "id": "pacifist_route_options",
                       "hit": false
                     },
                     {
@@ -3541,7 +3575,7 @@
                   ]
                 },
                 "speedrunner": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "speedrunner",
                   "hits": 1,
                   "total": 3,
@@ -3562,18 +3596,18 @@
                   ]
                 },
                 "completionist": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "completionist",
                   "hits": 0,
                   "total": 3,
                   "rate": 0,
                   "detectors": [
                     {
-                      "id": "completionist_npc_present",
+                      "id": "completionist_dialogue_depth",
                       "hit": false
                     },
                     {
-                      "id": "completionist_quest_present",
+                      "id": "completionist_quest_richness",
                       "hit": false
                     },
                     {
@@ -3583,7 +3617,7 @@
                   ]
                 },
                 "chaos": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "chaos",
                   "hits": 1,
                   "total": 4,
@@ -3598,7 +3632,7 @@
                       "hit": false
                     },
                     {
-                      "id": "chaos_mixed_origins",
+                      "id": "chaos_content_variance",
                       "hit": false
                     },
                     {
@@ -3613,7 +3647,7 @@
         ],
         "summary": {
           "novelty": {
-            "averageScore": 0.47690874914559134,
+            "averageScore": 0.38651629072681715,
             "nearDuplicateCount": 0,
             "sampleCount": 1
           },
@@ -3636,13 +3670,13 @@
             {
               "id": "hoarder_inventory_narration",
               "persona": "hoarder",
-              "description": "Narration references hoarding or carrying burden.",
+              "description": "Narration ties hoarded/carrying pressure to a named authored item.",
               "uncertain": true
             },
             {
-              "id": "pacifist_open_routes",
+              "id": "pacifist_route_options",
               "persona": "pacifist",
-              "description": "Layout flavor or room span suggests alternate routes (open/halls or wide room span)."
+              "description": "Low enemy density, wide route span, and spread/far placements offer avoidance routes."
             },
             {
               "id": "pacifist_soft_threats",
@@ -3652,12 +3686,12 @@
             {
               "id": "pacifist_caution_narration",
               "persona": "pacifist",
-              "description": "Narration acknowledges caution or non-violence."
+              "description": "Narration ties avoided/retreated combat to a named authored threat."
             },
             {
               "id": "speedrunner_compact_floor",
               "persona": "speedrunner",
-              "description": "Compact room span or open/halls flavor for fast routing."
+              "description": "Compact floor with structured stairs/exit signal for fast routing."
             },
             {
               "id": "speedrunner_near_entrance_loot",
@@ -3667,28 +3701,29 @@
             {
               "id": "speedrunner_pace_narration",
               "persona": "speedrunner",
-              "description": "Narration references stairs, exits, or urgency.",
+              "description": "Narration ties low-exploration play to structured stairs/exit routing.",
               "uncertain": true
             },
             {
-              "id": "completionist_npc_present",
+              "id": "completionist_dialogue_depth",
               "persona": "completionist",
-              "description": "At least one NPC is authored on the floor."
+              "description": "At least one NPC has multi-node, multi-choice dialogue depth."
             },
             {
-              "id": "completionist_quest_present",
+              "id": "completionist_quest_richness",
               "persona": "completionist",
-              "description": "A quest hook is present."
+              "description": "Quest has multiple richness signals: title, reward, entity reference, and NPC linkage."
             },
             {
               "id": "completionist_rich_callbacks",
               "persona": "completionist",
-              "description": "Multiple narration observations or callback tags."
+              "description": "Multiple callback observations are anchored to NPC or quest content."
             },
             {
               "id": "chaos_behavior_diversity",
               "persona": "chaos",
-              "description": "Three or more distinct enemy behavior kinds."
+              "description": "Three or more distinct enemy behavior kinds.",
+              "uncertain": true
             },
             {
               "id": "chaos_trap_variety",
@@ -3697,9 +3732,10 @@
               "uncertain": true
             },
             {
-              "id": "chaos_mixed_origins",
+              "id": "chaos_content_variance",
               "persona": "chaos",
-              "description": "Origin tag summary shows mixed made/old_stock/kept content."
+              "description": "Within-seed content varies across behavior, item, trap, placement, and callback axes.",
+              "uncertain": true
             },
             {
               "id": "chaos_varied_engagement",
@@ -3992,8 +4028,14 @@
         "generations": [
           {
             "generationIndex": 0,
-            "novelty": null,
-            "responsiveness": null
+            "novelty": {
+              "scored": false,
+              "reason": "fallback"
+            },
+            "responsiveness": {
+              "scored": false,
+              "reason": "fallback"
+            }
           }
         ],
         "summary": {
@@ -4021,13 +4063,13 @@
             {
               "id": "hoarder_inventory_narration",
               "persona": "hoarder",
-              "description": "Narration references hoarding or carrying burden.",
+              "description": "Narration ties hoarded/carrying pressure to a named authored item.",
               "uncertain": true
             },
             {
-              "id": "pacifist_open_routes",
+              "id": "pacifist_route_options",
               "persona": "pacifist",
-              "description": "Layout flavor or room span suggests alternate routes (open/halls or wide room span)."
+              "description": "Low enemy density, wide route span, and spread/far placements offer avoidance routes."
             },
             {
               "id": "pacifist_soft_threats",
@@ -4037,12 +4079,12 @@
             {
               "id": "pacifist_caution_narration",
               "persona": "pacifist",
-              "description": "Narration acknowledges caution or non-violence."
+              "description": "Narration ties avoided/retreated combat to a named authored threat."
             },
             {
               "id": "speedrunner_compact_floor",
               "persona": "speedrunner",
-              "description": "Compact room span or open/halls flavor for fast routing."
+              "description": "Compact floor with structured stairs/exit signal for fast routing."
             },
             {
               "id": "speedrunner_near_entrance_loot",
@@ -4052,28 +4094,29 @@
             {
               "id": "speedrunner_pace_narration",
               "persona": "speedrunner",
-              "description": "Narration references stairs, exits, or urgency.",
+              "description": "Narration ties low-exploration play to structured stairs/exit routing.",
               "uncertain": true
             },
             {
-              "id": "completionist_npc_present",
+              "id": "completionist_dialogue_depth",
               "persona": "completionist",
-              "description": "At least one NPC is authored on the floor."
+              "description": "At least one NPC has multi-node, multi-choice dialogue depth."
             },
             {
-              "id": "completionist_quest_present",
+              "id": "completionist_quest_richness",
               "persona": "completionist",
-              "description": "A quest hook is present."
+              "description": "Quest has multiple richness signals: title, reward, entity reference, and NPC linkage."
             },
             {
               "id": "completionist_rich_callbacks",
               "persona": "completionist",
-              "description": "Multiple narration observations or callback tags."
+              "description": "Multiple callback observations are anchored to NPC or quest content."
             },
             {
               "id": "chaos_behavior_diversity",
               "persona": "chaos",
-              "description": "Three or more distinct enemy behavior kinds."
+              "description": "Three or more distinct enemy behavior kinds.",
+              "uncertain": true
             },
             {
               "id": "chaos_trap_variety",
@@ -4082,9 +4125,10 @@
               "uncertain": true
             },
             {
-              "id": "chaos_mixed_origins",
+              "id": "chaos_content_variance",
               "persona": "chaos",
-              "description": "Origin tag summary shows mixed made/old_stock/kept content."
+              "description": "Within-seed content varies across behavior, item, trap, placement, and callback axes.",
+              "uncertain": true
             },
             {
               "id": "chaos_varied_engagement",
@@ -4394,35 +4438,37 @@
           {
             "generationIndex": 0,
             "novelty": {
+              "scored": true,
               "metricVersion": "phase-42-novelty-v1",
-              "distance": 0.4969265470845945,
-              "score": 0.4969265470845945,
+              "distance": 0.4516482843137255,
+              "score": 0.4516482843137255,
               "nearDuplicate": false,
               "components": {
-                "nameSimilarity": 0.35842490842490843,
-                "statVectorDistance": 0.13013977233326388,
-                "compositionOverlap": 0.3333333333333333
+                "nameSimilarity": 0.23898809523809522,
+                "statVectorDistance": 0,
+                "compositionOverlap": 0.47058823529411764
               },
               "vsFallback": {
-                "nameSimilarity": 0.35842490842490843,
-                "statVectorDistance": 0.13013977233326388,
-                "compositionOverlap": 0.3333333333333333
+                "nameSimilarity": 0.23898809523809522,
+                "statVectorDistance": 0,
+                "compositionOverlap": 0.47058823529411764
               },
               "vsRecent": null
             },
             "responsiveness": {
-              "metricVersion": "phase-42-responsiveness-v1",
+              "scored": true,
+              "metricVersion": "phase-47-responsiveness-v2",
               "sourcePersona": "speedrunner",
               "samePersona": {
-                "metricVersion": "phase-42-responsiveness-v1",
+                "metricVersion": "phase-47-responsiveness-v2",
                 "persona": "speedrunner",
-                "hits": 1,
+                "hits": 0,
                 "total": 3,
-                "rate": 0.3333333333333333,
+                "rate": 0,
                 "detectors": [
                   {
                     "id": "speedrunner_compact_floor",
-                    "hit": true
+                    "hit": false
                   },
                   {
                     "id": "speedrunner_near_entrance_loot",
@@ -4436,7 +4482,7 @@
               },
               "crossPersona": {
                 "hoarder": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "hoarder",
                   "hits": 0,
                   "total": 3,
@@ -4457,14 +4503,14 @@
                   ]
                 },
                 "pacifist": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "pacifist",
                   "hits": 0,
                   "total": 3,
                   "rate": 0,
                   "detectors": [
                     {
-                      "id": "pacifist_open_routes",
+                      "id": "pacifist_route_options",
                       "hit": false
                     },
                     {
@@ -4478,15 +4524,15 @@
                   ]
                 },
                 "speedrunner": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "speedrunner",
-                  "hits": 1,
+                  "hits": 0,
                   "total": 3,
-                  "rate": 0.3333333333333333,
+                  "rate": 0,
                   "detectors": [
                     {
                       "id": "speedrunner_compact_floor",
-                      "hit": true
+                      "hit": false
                     },
                     {
                       "id": "speedrunner_near_entrance_loot",
@@ -4499,18 +4545,18 @@
                   ]
                 },
                 "completionist": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "completionist",
                   "hits": 0,
                   "total": 3,
                   "rate": 0,
                   "detectors": [
                     {
-                      "id": "completionist_npc_present",
+                      "id": "completionist_dialogue_depth",
                       "hit": false
                     },
                     {
-                      "id": "completionist_quest_present",
+                      "id": "completionist_quest_richness",
                       "hit": false
                     },
                     {
@@ -4520,7 +4566,7 @@
                   ]
                 },
                 "chaos": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "chaos",
                   "hits": 2,
                   "total": 4,
@@ -4535,7 +4581,7 @@
                       "hit": true
                     },
                     {
-                      "id": "chaos_mixed_origins",
+                      "id": "chaos_content_variance",
                       "hit": false
                     },
                     {
@@ -4550,12 +4596,12 @@
         ],
         "summary": {
           "novelty": {
-            "averageScore": 0.4969265470845945,
+            "averageScore": 0.4516482843137255,
             "nearDuplicateCount": 0,
             "sampleCount": 1
           },
           "responsiveness": {
-            "samePersonaHitRate": 0.3333333333333333,
+            "samePersonaHitRate": 0,
             "crossPersonaHitRate": 0.125,
             "sampleCount": 1
           },
@@ -4573,13 +4619,13 @@
             {
               "id": "hoarder_inventory_narration",
               "persona": "hoarder",
-              "description": "Narration references hoarding or carrying burden.",
+              "description": "Narration ties hoarded/carrying pressure to a named authored item.",
               "uncertain": true
             },
             {
-              "id": "pacifist_open_routes",
+              "id": "pacifist_route_options",
               "persona": "pacifist",
-              "description": "Layout flavor or room span suggests alternate routes (open/halls or wide room span)."
+              "description": "Low enemy density, wide route span, and spread/far placements offer avoidance routes."
             },
             {
               "id": "pacifist_soft_threats",
@@ -4589,12 +4635,12 @@
             {
               "id": "pacifist_caution_narration",
               "persona": "pacifist",
-              "description": "Narration acknowledges caution or non-violence."
+              "description": "Narration ties avoided/retreated combat to a named authored threat."
             },
             {
               "id": "speedrunner_compact_floor",
               "persona": "speedrunner",
-              "description": "Compact room span or open/halls flavor for fast routing."
+              "description": "Compact floor with structured stairs/exit signal for fast routing."
             },
             {
               "id": "speedrunner_near_entrance_loot",
@@ -4604,28 +4650,29 @@
             {
               "id": "speedrunner_pace_narration",
               "persona": "speedrunner",
-              "description": "Narration references stairs, exits, or urgency.",
+              "description": "Narration ties low-exploration play to structured stairs/exit routing.",
               "uncertain": true
             },
             {
-              "id": "completionist_npc_present",
+              "id": "completionist_dialogue_depth",
               "persona": "completionist",
-              "description": "At least one NPC is authored on the floor."
+              "description": "At least one NPC has multi-node, multi-choice dialogue depth."
             },
             {
-              "id": "completionist_quest_present",
+              "id": "completionist_quest_richness",
               "persona": "completionist",
-              "description": "A quest hook is present."
+              "description": "Quest has multiple richness signals: title, reward, entity reference, and NPC linkage."
             },
             {
               "id": "completionist_rich_callbacks",
               "persona": "completionist",
-              "description": "Multiple narration observations or callback tags."
+              "description": "Multiple callback observations are anchored to NPC or quest content."
             },
             {
               "id": "chaos_behavior_diversity",
               "persona": "chaos",
-              "description": "Three or more distinct enemy behavior kinds."
+              "description": "Three or more distinct enemy behavior kinds.",
+              "uncertain": true
             },
             {
               "id": "chaos_trap_variety",
@@ -4634,9 +4681,10 @@
               "uncertain": true
             },
             {
-              "id": "chaos_mixed_origins",
+              "id": "chaos_content_variance",
               "persona": "chaos",
-              "description": "Origin tag summary shows mixed made/old_stock/kept content."
+              "description": "Within-seed content varies across behavior, item, trap, placement, and callback axes.",
+              "uncertain": true
             },
             {
               "id": "chaos_varied_engagement",
@@ -4946,38 +4994,40 @@
           {
             "generationIndex": 0,
             "novelty": {
+              "scored": true,
               "metricVersion": "phase-42-novelty-v1",
-              "distance": 0.47690874914559134,
-              "score": 0.47690874914559134,
+              "distance": 0.38651629072681715,
+              "score": 0.38651629072681715,
               "nearDuplicate": false,
               "components": {
-                "nameSimilarity": 0.3216141001855287,
+                "nameSimilarity": 0.36233440744718937,
                 "statVectorDistance": 0,
-                "compositionOverlap": 0.3157894736842105
+                "compositionOverlap": 0.5333333333333333
               },
               "vsFallback": {
-                "nameSimilarity": 0.3216141001855287,
+                "nameSimilarity": 0.36233440744718937,
                 "statVectorDistance": 0,
-                "compositionOverlap": 0.3157894736842105
+                "compositionOverlap": 0.5333333333333333
               },
               "vsRecent": null
             },
             "responsiveness": {
-              "metricVersion": "phase-42-responsiveness-v1",
+              "scored": true,
+              "metricVersion": "phase-47-responsiveness-v2",
               "sourcePersona": "completionist",
               "samePersona": {
-                "metricVersion": "phase-42-responsiveness-v1",
+                "metricVersion": "phase-47-responsiveness-v2",
                 "persona": "completionist",
                 "hits": 0,
                 "total": 3,
                 "rate": 0,
                 "detectors": [
                   {
-                    "id": "completionist_npc_present",
+                    "id": "completionist_dialogue_depth",
                     "hit": false
                   },
                   {
-                    "id": "completionist_quest_present",
+                    "id": "completionist_quest_richness",
                     "hit": false
                   },
                   {
@@ -4988,7 +5038,7 @@
               },
               "crossPersona": {
                 "hoarder": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "hoarder",
                   "hits": 0,
                   "total": 3,
@@ -5009,14 +5059,14 @@
                   ]
                 },
                 "pacifist": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "pacifist",
                   "hits": 0,
                   "total": 3,
                   "rate": 0,
                   "detectors": [
                     {
-                      "id": "pacifist_open_routes",
+                      "id": "pacifist_route_options",
                       "hit": false
                     },
                     {
@@ -5030,7 +5080,7 @@
                   ]
                 },
                 "speedrunner": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "speedrunner",
                   "hits": 0,
                   "total": 3,
@@ -5051,18 +5101,18 @@
                   ]
                 },
                 "completionist": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "completionist",
                   "hits": 0,
                   "total": 3,
                   "rate": 0,
                   "detectors": [
                     {
-                      "id": "completionist_npc_present",
+                      "id": "completionist_dialogue_depth",
                       "hit": false
                     },
                     {
-                      "id": "completionist_quest_present",
+                      "id": "completionist_quest_richness",
                       "hit": false
                     },
                     {
@@ -5072,7 +5122,7 @@
                   ]
                 },
                 "chaos": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "chaos",
                   "hits": 1,
                   "total": 4,
@@ -5087,7 +5137,7 @@
                       "hit": false
                     },
                     {
-                      "id": "chaos_mixed_origins",
+                      "id": "chaos_content_variance",
                       "hit": false
                     },
                     {
@@ -5102,7 +5152,7 @@
         ],
         "summary": {
           "novelty": {
-            "averageScore": 0.47690874914559134,
+            "averageScore": 0.38651629072681715,
             "nearDuplicateCount": 0,
             "sampleCount": 1
           },
@@ -5125,13 +5175,13 @@
             {
               "id": "hoarder_inventory_narration",
               "persona": "hoarder",
-              "description": "Narration references hoarding or carrying burden.",
+              "description": "Narration ties hoarded/carrying pressure to a named authored item.",
               "uncertain": true
             },
             {
-              "id": "pacifist_open_routes",
+              "id": "pacifist_route_options",
               "persona": "pacifist",
-              "description": "Layout flavor or room span suggests alternate routes (open/halls or wide room span)."
+              "description": "Low enemy density, wide route span, and spread/far placements offer avoidance routes."
             },
             {
               "id": "pacifist_soft_threats",
@@ -5141,12 +5191,12 @@
             {
               "id": "pacifist_caution_narration",
               "persona": "pacifist",
-              "description": "Narration acknowledges caution or non-violence."
+              "description": "Narration ties avoided/retreated combat to a named authored threat."
             },
             {
               "id": "speedrunner_compact_floor",
               "persona": "speedrunner",
-              "description": "Compact room span or open/halls flavor for fast routing."
+              "description": "Compact floor with structured stairs/exit signal for fast routing."
             },
             {
               "id": "speedrunner_near_entrance_loot",
@@ -5156,28 +5206,29 @@
             {
               "id": "speedrunner_pace_narration",
               "persona": "speedrunner",
-              "description": "Narration references stairs, exits, or urgency.",
+              "description": "Narration ties low-exploration play to structured stairs/exit routing.",
               "uncertain": true
             },
             {
-              "id": "completionist_npc_present",
+              "id": "completionist_dialogue_depth",
               "persona": "completionist",
-              "description": "At least one NPC is authored on the floor."
+              "description": "At least one NPC has multi-node, multi-choice dialogue depth."
             },
             {
-              "id": "completionist_quest_present",
+              "id": "completionist_quest_richness",
               "persona": "completionist",
-              "description": "A quest hook is present."
+              "description": "Quest has multiple richness signals: title, reward, entity reference, and NPC linkage."
             },
             {
               "id": "completionist_rich_callbacks",
               "persona": "completionist",
-              "description": "Multiple narration observations or callback tags."
+              "description": "Multiple callback observations are anchored to NPC or quest content."
             },
             {
               "id": "chaos_behavior_diversity",
               "persona": "chaos",
-              "description": "Three or more distinct enemy behavior kinds."
+              "description": "Three or more distinct enemy behavior kinds.",
+              "uncertain": true
             },
             {
               "id": "chaos_trap_variety",
@@ -5186,9 +5237,10 @@
               "uncertain": true
             },
             {
-              "id": "chaos_mixed_origins",
+              "id": "chaos_content_variance",
               "persona": "chaos",
-              "description": "Origin tag summary shows mixed made/old_stock/kept content."
+              "description": "Within-seed content varies across behavior, item, trap, placement, and callback axes.",
+              "uncertain": true
             },
             {
               "id": "chaos_varied_engagement",
@@ -5481,8 +5533,14 @@
         "generations": [
           {
             "generationIndex": 0,
-            "novelty": null,
-            "responsiveness": null
+            "novelty": {
+              "scored": false,
+              "reason": "fallback"
+            },
+            "responsiveness": {
+              "scored": false,
+              "reason": "fallback"
+            }
           }
         ],
         "summary": {
@@ -5510,13 +5568,13 @@
             {
               "id": "hoarder_inventory_narration",
               "persona": "hoarder",
-              "description": "Narration references hoarding or carrying burden.",
+              "description": "Narration ties hoarded/carrying pressure to a named authored item.",
               "uncertain": true
             },
             {
-              "id": "pacifist_open_routes",
+              "id": "pacifist_route_options",
               "persona": "pacifist",
-              "description": "Layout flavor or room span suggests alternate routes (open/halls or wide room span)."
+              "description": "Low enemy density, wide route span, and spread/far placements offer avoidance routes."
             },
             {
               "id": "pacifist_soft_threats",
@@ -5526,12 +5584,12 @@
             {
               "id": "pacifist_caution_narration",
               "persona": "pacifist",
-              "description": "Narration acknowledges caution or non-violence."
+              "description": "Narration ties avoided/retreated combat to a named authored threat."
             },
             {
               "id": "speedrunner_compact_floor",
               "persona": "speedrunner",
-              "description": "Compact room span or open/halls flavor for fast routing."
+              "description": "Compact floor with structured stairs/exit signal for fast routing."
             },
             {
               "id": "speedrunner_near_entrance_loot",
@@ -5541,28 +5599,29 @@
             {
               "id": "speedrunner_pace_narration",
               "persona": "speedrunner",
-              "description": "Narration references stairs, exits, or urgency.",
+              "description": "Narration ties low-exploration play to structured stairs/exit routing.",
               "uncertain": true
             },
             {
-              "id": "completionist_npc_present",
+              "id": "completionist_dialogue_depth",
               "persona": "completionist",
-              "description": "At least one NPC is authored on the floor."
+              "description": "At least one NPC has multi-node, multi-choice dialogue depth."
             },
             {
-              "id": "completionist_quest_present",
+              "id": "completionist_quest_richness",
               "persona": "completionist",
-              "description": "A quest hook is present."
+              "description": "Quest has multiple richness signals: title, reward, entity reference, and NPC linkage."
             },
             {
               "id": "completionist_rich_callbacks",
               "persona": "completionist",
-              "description": "Multiple narration observations or callback tags."
+              "description": "Multiple callback observations are anchored to NPC or quest content."
             },
             {
               "id": "chaos_behavior_diversity",
               "persona": "chaos",
-              "description": "Three or more distinct enemy behavior kinds."
+              "description": "Three or more distinct enemy behavior kinds.",
+              "uncertain": true
             },
             {
               "id": "chaos_trap_variety",
@@ -5571,9 +5630,10 @@
               "uncertain": true
             },
             {
-              "id": "chaos_mixed_origins",
+              "id": "chaos_content_variance",
               "persona": "chaos",
-              "description": "Origin tag summary shows mixed made/old_stock/kept content."
+              "description": "Within-seed content varies across behavior, item, trap, placement, and callback axes.",
+              "uncertain": true
             },
             {
               "id": "chaos_varied_engagement",
@@ -5883,38 +5943,40 @@
           {
             "generationIndex": 0,
             "novelty": {
+              "scored": true,
               "metricVersion": "phase-42-novelty-v1",
-              "distance": 0.4969265470845945,
-              "score": 0.4969265470845945,
+              "distance": 0.4516482843137255,
+              "score": 0.4516482843137255,
               "nearDuplicate": false,
               "components": {
-                "nameSimilarity": 0.35842490842490843,
-                "statVectorDistance": 0.13013977233326388,
-                "compositionOverlap": 0.3333333333333333
+                "nameSimilarity": 0.23898809523809522,
+                "statVectorDistance": 0,
+                "compositionOverlap": 0.47058823529411764
               },
               "vsFallback": {
-                "nameSimilarity": 0.35842490842490843,
-                "statVectorDistance": 0.13013977233326388,
-                "compositionOverlap": 0.3333333333333333
+                "nameSimilarity": 0.23898809523809522,
+                "statVectorDistance": 0,
+                "compositionOverlap": 0.47058823529411764
               },
               "vsRecent": null
             },
             "responsiveness": {
-              "metricVersion": "phase-42-responsiveness-v1",
+              "scored": true,
+              "metricVersion": "phase-47-responsiveness-v2",
               "sourcePersona": "completionist",
               "samePersona": {
-                "metricVersion": "phase-42-responsiveness-v1",
+                "metricVersion": "phase-47-responsiveness-v2",
                 "persona": "completionist",
                 "hits": 0,
                 "total": 3,
                 "rate": 0,
                 "detectors": [
                   {
-                    "id": "completionist_npc_present",
+                    "id": "completionist_dialogue_depth",
                     "hit": false
                   },
                   {
-                    "id": "completionist_quest_present",
+                    "id": "completionist_quest_richness",
                     "hit": false
                   },
                   {
@@ -5925,7 +5987,7 @@
               },
               "crossPersona": {
                 "hoarder": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "hoarder",
                   "hits": 0,
                   "total": 3,
@@ -5946,14 +6008,14 @@
                   ]
                 },
                 "pacifist": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "pacifist",
                   "hits": 0,
                   "total": 3,
                   "rate": 0,
                   "detectors": [
                     {
-                      "id": "pacifist_open_routes",
+                      "id": "pacifist_route_options",
                       "hit": false
                     },
                     {
@@ -5967,7 +6029,7 @@
                   ]
                 },
                 "speedrunner": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "speedrunner",
                   "hits": 0,
                   "total": 3,
@@ -5988,18 +6050,18 @@
                   ]
                 },
                 "completionist": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "completionist",
                   "hits": 0,
                   "total": 3,
                   "rate": 0,
                   "detectors": [
                     {
-                      "id": "completionist_npc_present",
+                      "id": "completionist_dialogue_depth",
                       "hit": false
                     },
                     {
-                      "id": "completionist_quest_present",
+                      "id": "completionist_quest_richness",
                       "hit": false
                     },
                     {
@@ -6009,7 +6071,7 @@
                   ]
                 },
                 "chaos": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "chaos",
                   "hits": 2,
                   "total": 4,
@@ -6024,7 +6086,7 @@
                       "hit": true
                     },
                     {
-                      "id": "chaos_mixed_origins",
+                      "id": "chaos_content_variance",
                       "hit": false
                     },
                     {
@@ -6039,7 +6101,7 @@
         ],
         "summary": {
           "novelty": {
-            "averageScore": 0.4969265470845945,
+            "averageScore": 0.4516482843137255,
             "nearDuplicateCount": 0,
             "sampleCount": 1
           },
@@ -6062,13 +6124,13 @@
             {
               "id": "hoarder_inventory_narration",
               "persona": "hoarder",
-              "description": "Narration references hoarding or carrying burden.",
+              "description": "Narration ties hoarded/carrying pressure to a named authored item.",
               "uncertain": true
             },
             {
-              "id": "pacifist_open_routes",
+              "id": "pacifist_route_options",
               "persona": "pacifist",
-              "description": "Layout flavor or room span suggests alternate routes (open/halls or wide room span)."
+              "description": "Low enemy density, wide route span, and spread/far placements offer avoidance routes."
             },
             {
               "id": "pacifist_soft_threats",
@@ -6078,12 +6140,12 @@
             {
               "id": "pacifist_caution_narration",
               "persona": "pacifist",
-              "description": "Narration acknowledges caution or non-violence."
+              "description": "Narration ties avoided/retreated combat to a named authored threat."
             },
             {
               "id": "speedrunner_compact_floor",
               "persona": "speedrunner",
-              "description": "Compact room span or open/halls flavor for fast routing."
+              "description": "Compact floor with structured stairs/exit signal for fast routing."
             },
             {
               "id": "speedrunner_near_entrance_loot",
@@ -6093,28 +6155,29 @@
             {
               "id": "speedrunner_pace_narration",
               "persona": "speedrunner",
-              "description": "Narration references stairs, exits, or urgency.",
+              "description": "Narration ties low-exploration play to structured stairs/exit routing.",
               "uncertain": true
             },
             {
-              "id": "completionist_npc_present",
+              "id": "completionist_dialogue_depth",
               "persona": "completionist",
-              "description": "At least one NPC is authored on the floor."
+              "description": "At least one NPC has multi-node, multi-choice dialogue depth."
             },
             {
-              "id": "completionist_quest_present",
+              "id": "completionist_quest_richness",
               "persona": "completionist",
-              "description": "A quest hook is present."
+              "description": "Quest has multiple richness signals: title, reward, entity reference, and NPC linkage."
             },
             {
               "id": "completionist_rich_callbacks",
               "persona": "completionist",
-              "description": "Multiple narration observations or callback tags."
+              "description": "Multiple callback observations are anchored to NPC or quest content."
             },
             {
               "id": "chaos_behavior_diversity",
               "persona": "chaos",
-              "description": "Three or more distinct enemy behavior kinds."
+              "description": "Three or more distinct enemy behavior kinds.",
+              "uncertain": true
             },
             {
               "id": "chaos_trap_variety",
@@ -6123,9 +6186,10 @@
               "uncertain": true
             },
             {
-              "id": "chaos_mixed_origins",
+              "id": "chaos_content_variance",
               "persona": "chaos",
-              "description": "Origin tag summary shows mixed made/old_stock/kept content."
+              "description": "Within-seed content varies across behavior, item, trap, placement, and callback axes.",
+              "uncertain": true
             },
             {
               "id": "chaos_varied_engagement",
@@ -6435,27 +6499,29 @@
           {
             "generationIndex": 0,
             "novelty": {
+              "scored": true,
               "metricVersion": "phase-42-novelty-v1",
-              "distance": 0.47690874914559134,
-              "score": 0.47690874914559134,
+              "distance": 0.38651629072681715,
+              "score": 0.38651629072681715,
               "nearDuplicate": false,
               "components": {
-                "nameSimilarity": 0.3216141001855287,
+                "nameSimilarity": 0.36233440744718937,
                 "statVectorDistance": 0,
-                "compositionOverlap": 0.3157894736842105
+                "compositionOverlap": 0.5333333333333333
               },
               "vsFallback": {
-                "nameSimilarity": 0.3216141001855287,
+                "nameSimilarity": 0.36233440744718937,
                 "statVectorDistance": 0,
-                "compositionOverlap": 0.3157894736842105
+                "compositionOverlap": 0.5333333333333333
               },
               "vsRecent": null
             },
             "responsiveness": {
-              "metricVersion": "phase-42-responsiveness-v1",
+              "scored": true,
+              "metricVersion": "phase-47-responsiveness-v2",
               "sourcePersona": "chaos",
               "samePersona": {
-                "metricVersion": "phase-42-responsiveness-v1",
+                "metricVersion": "phase-47-responsiveness-v2",
                 "persona": "chaos",
                 "hits": 0,
                 "total": 4,
@@ -6470,7 +6536,7 @@
                     "hit": false
                   },
                   {
-                    "id": "chaos_mixed_origins",
+                    "id": "chaos_content_variance",
                     "hit": false
                   },
                   {
@@ -6481,7 +6547,7 @@
               },
               "crossPersona": {
                 "hoarder": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "hoarder",
                   "hits": 0,
                   "total": 3,
@@ -6502,28 +6568,28 @@
                   ]
                 },
                 "pacifist": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "pacifist",
-                  "hits": 3,
+                  "hits": 0,
                   "total": 3,
-                  "rate": 1,
+                  "rate": 0,
                   "detectors": [
                     {
-                      "id": "pacifist_open_routes",
-                      "hit": true
+                      "id": "pacifist_route_options",
+                      "hit": false
                     },
                     {
                       "id": "pacifist_soft_threats",
-                      "hit": true
+                      "hit": false
                     },
                     {
                       "id": "pacifist_caution_narration",
-                      "hit": true
+                      "hit": false
                     }
                   ]
                 },
                 "speedrunner": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "speedrunner",
                   "hits": 1,
                   "total": 3,
@@ -6544,18 +6610,18 @@
                   ]
                 },
                 "completionist": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "completionist",
                   "hits": 0,
                   "total": 3,
                   "rate": 0,
                   "detectors": [
                     {
-                      "id": "completionist_npc_present",
+                      "id": "completionist_dialogue_depth",
                       "hit": false
                     },
                     {
-                      "id": "completionist_quest_present",
+                      "id": "completionist_quest_richness",
                       "hit": false
                     },
                     {
@@ -6565,7 +6631,7 @@
                   ]
                 },
                 "chaos": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "chaos",
                   "hits": 0,
                   "total": 4,
@@ -6580,7 +6646,7 @@
                       "hit": false
                     },
                     {
-                      "id": "chaos_mixed_origins",
+                      "id": "chaos_content_variance",
                       "hit": false
                     },
                     {
@@ -6595,13 +6661,13 @@
         ],
         "summary": {
           "novelty": {
-            "averageScore": 0.47690874914559134,
+            "averageScore": 0.38651629072681715,
             "nearDuplicateCount": 0,
             "sampleCount": 1
           },
           "responsiveness": {
             "samePersonaHitRate": 0,
-            "crossPersonaHitRate": 0.3333333333333333,
+            "crossPersonaHitRate": 0.08333333333333333,
             "sampleCount": 1
           },
           "detectorProposal": [
@@ -6618,13 +6684,13 @@
             {
               "id": "hoarder_inventory_narration",
               "persona": "hoarder",
-              "description": "Narration references hoarding or carrying burden.",
+              "description": "Narration ties hoarded/carrying pressure to a named authored item.",
               "uncertain": true
             },
             {
-              "id": "pacifist_open_routes",
+              "id": "pacifist_route_options",
               "persona": "pacifist",
-              "description": "Layout flavor or room span suggests alternate routes (open/halls or wide room span)."
+              "description": "Low enemy density, wide route span, and spread/far placements offer avoidance routes."
             },
             {
               "id": "pacifist_soft_threats",
@@ -6634,12 +6700,12 @@
             {
               "id": "pacifist_caution_narration",
               "persona": "pacifist",
-              "description": "Narration acknowledges caution or non-violence."
+              "description": "Narration ties avoided/retreated combat to a named authored threat."
             },
             {
               "id": "speedrunner_compact_floor",
               "persona": "speedrunner",
-              "description": "Compact room span or open/halls flavor for fast routing."
+              "description": "Compact floor with structured stairs/exit signal for fast routing."
             },
             {
               "id": "speedrunner_near_entrance_loot",
@@ -6649,28 +6715,29 @@
             {
               "id": "speedrunner_pace_narration",
               "persona": "speedrunner",
-              "description": "Narration references stairs, exits, or urgency.",
+              "description": "Narration ties low-exploration play to structured stairs/exit routing.",
               "uncertain": true
             },
             {
-              "id": "completionist_npc_present",
+              "id": "completionist_dialogue_depth",
               "persona": "completionist",
-              "description": "At least one NPC is authored on the floor."
+              "description": "At least one NPC has multi-node, multi-choice dialogue depth."
             },
             {
-              "id": "completionist_quest_present",
+              "id": "completionist_quest_richness",
               "persona": "completionist",
-              "description": "A quest hook is present."
+              "description": "Quest has multiple richness signals: title, reward, entity reference, and NPC linkage."
             },
             {
               "id": "completionist_rich_callbacks",
               "persona": "completionist",
-              "description": "Multiple narration observations or callback tags."
+              "description": "Multiple callback observations are anchored to NPC or quest content."
             },
             {
               "id": "chaos_behavior_diversity",
               "persona": "chaos",
-              "description": "Three or more distinct enemy behavior kinds."
+              "description": "Three or more distinct enemy behavior kinds.",
+              "uncertain": true
             },
             {
               "id": "chaos_trap_variety",
@@ -6679,9 +6746,10 @@
               "uncertain": true
             },
             {
-              "id": "chaos_mixed_origins",
+              "id": "chaos_content_variance",
               "persona": "chaos",
-              "description": "Origin tag summary shows mixed made/old_stock/kept content."
+              "description": "Within-seed content varies across behavior, item, trap, placement, and callback axes.",
+              "uncertain": true
             },
             {
               "id": "chaos_varied_engagement",
@@ -6974,8 +7042,14 @@
         "generations": [
           {
             "generationIndex": 0,
-            "novelty": null,
-            "responsiveness": null
+            "novelty": {
+              "scored": false,
+              "reason": "fallback"
+            },
+            "responsiveness": {
+              "scored": false,
+              "reason": "fallback"
+            }
           }
         ],
         "summary": {
@@ -7003,13 +7077,13 @@
             {
               "id": "hoarder_inventory_narration",
               "persona": "hoarder",
-              "description": "Narration references hoarding or carrying burden.",
+              "description": "Narration ties hoarded/carrying pressure to a named authored item.",
               "uncertain": true
             },
             {
-              "id": "pacifist_open_routes",
+              "id": "pacifist_route_options",
               "persona": "pacifist",
-              "description": "Layout flavor or room span suggests alternate routes (open/halls or wide room span)."
+              "description": "Low enemy density, wide route span, and spread/far placements offer avoidance routes."
             },
             {
               "id": "pacifist_soft_threats",
@@ -7019,12 +7093,12 @@
             {
               "id": "pacifist_caution_narration",
               "persona": "pacifist",
-              "description": "Narration acknowledges caution or non-violence."
+              "description": "Narration ties avoided/retreated combat to a named authored threat."
             },
             {
               "id": "speedrunner_compact_floor",
               "persona": "speedrunner",
-              "description": "Compact room span or open/halls flavor for fast routing."
+              "description": "Compact floor with structured stairs/exit signal for fast routing."
             },
             {
               "id": "speedrunner_near_entrance_loot",
@@ -7034,28 +7108,29 @@
             {
               "id": "speedrunner_pace_narration",
               "persona": "speedrunner",
-              "description": "Narration references stairs, exits, or urgency.",
+              "description": "Narration ties low-exploration play to structured stairs/exit routing.",
               "uncertain": true
             },
             {
-              "id": "completionist_npc_present",
+              "id": "completionist_dialogue_depth",
               "persona": "completionist",
-              "description": "At least one NPC is authored on the floor."
+              "description": "At least one NPC has multi-node, multi-choice dialogue depth."
             },
             {
-              "id": "completionist_quest_present",
+              "id": "completionist_quest_richness",
               "persona": "completionist",
-              "description": "A quest hook is present."
+              "description": "Quest has multiple richness signals: title, reward, entity reference, and NPC linkage."
             },
             {
               "id": "completionist_rich_callbacks",
               "persona": "completionist",
-              "description": "Multiple narration observations or callback tags."
+              "description": "Multiple callback observations are anchored to NPC or quest content."
             },
             {
               "id": "chaos_behavior_diversity",
               "persona": "chaos",
-              "description": "Three or more distinct enemy behavior kinds."
+              "description": "Three or more distinct enemy behavior kinds.",
+              "uncertain": true
             },
             {
               "id": "chaos_trap_variety",
@@ -7064,9 +7139,10 @@
               "uncertain": true
             },
             {
-              "id": "chaos_mixed_origins",
+              "id": "chaos_content_variance",
               "persona": "chaos",
-              "description": "Origin tag summary shows mixed made/old_stock/kept content."
+              "description": "Within-seed content varies across behavior, item, trap, placement, and callback axes.",
+              "uncertain": true
             },
             {
               "id": "chaos_varied_engagement",
@@ -7376,27 +7452,29 @@
           {
             "generationIndex": 0,
             "novelty": {
+              "scored": true,
               "metricVersion": "phase-42-novelty-v1",
-              "distance": 0.4969265470845945,
-              "score": 0.4969265470845945,
+              "distance": 0.4516482843137255,
+              "score": 0.4516482843137255,
               "nearDuplicate": false,
               "components": {
-                "nameSimilarity": 0.35842490842490843,
-                "statVectorDistance": 0.13013977233326388,
-                "compositionOverlap": 0.3333333333333333
+                "nameSimilarity": 0.23898809523809522,
+                "statVectorDistance": 0,
+                "compositionOverlap": 0.47058823529411764
               },
               "vsFallback": {
-                "nameSimilarity": 0.35842490842490843,
-                "statVectorDistance": 0.13013977233326388,
-                "compositionOverlap": 0.3333333333333333
+                "nameSimilarity": 0.23898809523809522,
+                "statVectorDistance": 0,
+                "compositionOverlap": 0.47058823529411764
               },
               "vsRecent": null
             },
             "responsiveness": {
-              "metricVersion": "phase-42-responsiveness-v1",
+              "scored": true,
+              "metricVersion": "phase-47-responsiveness-v2",
               "sourcePersona": "chaos",
               "samePersona": {
-                "metricVersion": "phase-42-responsiveness-v1",
+                "metricVersion": "phase-47-responsiveness-v2",
                 "persona": "chaos",
                 "hits": 0,
                 "total": 4,
@@ -7411,7 +7489,7 @@
                     "hit": false
                   },
                   {
-                    "id": "chaos_mixed_origins",
+                    "id": "chaos_content_variance",
                     "hit": false
                   },
                   {
@@ -7422,7 +7500,7 @@
               },
               "crossPersona": {
                 "hoarder": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "hoarder",
                   "hits": 0,
                   "total": 3,
@@ -7443,19 +7521,19 @@
                   ]
                 },
                 "pacifist": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "pacifist",
-                  "hits": 2,
+                  "hits": 0,
                   "total": 3,
-                  "rate": 0.6666666666666666,
+                  "rate": 0,
                   "detectors": [
                     {
-                      "id": "pacifist_open_routes",
-                      "hit": true
+                      "id": "pacifist_route_options",
+                      "hit": false
                     },
                     {
                       "id": "pacifist_soft_threats",
-                      "hit": true
+                      "hit": false
                     },
                     {
                       "id": "pacifist_caution_narration",
@@ -7464,15 +7542,15 @@
                   ]
                 },
                 "speedrunner": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "speedrunner",
-                  "hits": 1,
+                  "hits": 0,
                   "total": 3,
-                  "rate": 0.3333333333333333,
+                  "rate": 0,
                   "detectors": [
                     {
                       "id": "speedrunner_compact_floor",
-                      "hit": true
+                      "hit": false
                     },
                     {
                       "id": "speedrunner_near_entrance_loot",
@@ -7485,18 +7563,18 @@
                   ]
                 },
                 "completionist": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "completionist",
                   "hits": 0,
                   "total": 3,
                   "rate": 0,
                   "detectors": [
                     {
-                      "id": "completionist_npc_present",
+                      "id": "completionist_dialogue_depth",
                       "hit": false
                     },
                     {
-                      "id": "completionist_quest_present",
+                      "id": "completionist_quest_richness",
                       "hit": false
                     },
                     {
@@ -7506,7 +7584,7 @@
                   ]
                 },
                 "chaos": {
-                  "metricVersion": "phase-42-responsiveness-v1",
+                  "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "chaos",
                   "hits": 0,
                   "total": 4,
@@ -7521,7 +7599,7 @@
                       "hit": false
                     },
                     {
-                      "id": "chaos_mixed_origins",
+                      "id": "chaos_content_variance",
                       "hit": false
                     },
                     {
@@ -7536,13 +7614,13 @@
         ],
         "summary": {
           "novelty": {
-            "averageScore": 0.4969265470845945,
+            "averageScore": 0.4516482843137255,
             "nearDuplicateCount": 0,
             "sampleCount": 1
           },
           "responsiveness": {
             "samePersonaHitRate": 0,
-            "crossPersonaHitRate": 0.25,
+            "crossPersonaHitRate": 0,
             "sampleCount": 1
           },
           "detectorProposal": [
@@ -7559,13 +7637,13 @@
             {
               "id": "hoarder_inventory_narration",
               "persona": "hoarder",
-              "description": "Narration references hoarding or carrying burden.",
+              "description": "Narration ties hoarded/carrying pressure to a named authored item.",
               "uncertain": true
             },
             {
-              "id": "pacifist_open_routes",
+              "id": "pacifist_route_options",
               "persona": "pacifist",
-              "description": "Layout flavor or room span suggests alternate routes (open/halls or wide room span)."
+              "description": "Low enemy density, wide route span, and spread/far placements offer avoidance routes."
             },
             {
               "id": "pacifist_soft_threats",
@@ -7575,12 +7653,12 @@
             {
               "id": "pacifist_caution_narration",
               "persona": "pacifist",
-              "description": "Narration acknowledges caution or non-violence."
+              "description": "Narration ties avoided/retreated combat to a named authored threat."
             },
             {
               "id": "speedrunner_compact_floor",
               "persona": "speedrunner",
-              "description": "Compact room span or open/halls flavor for fast routing."
+              "description": "Compact floor with structured stairs/exit signal for fast routing."
             },
             {
               "id": "speedrunner_near_entrance_loot",
@@ -7590,28 +7668,29 @@
             {
               "id": "speedrunner_pace_narration",
               "persona": "speedrunner",
-              "description": "Narration references stairs, exits, or urgency.",
+              "description": "Narration ties low-exploration play to structured stairs/exit routing.",
               "uncertain": true
             },
             {
-              "id": "completionist_npc_present",
+              "id": "completionist_dialogue_depth",
               "persona": "completionist",
-              "description": "At least one NPC is authored on the floor."
+              "description": "At least one NPC has multi-node, multi-choice dialogue depth."
             },
             {
-              "id": "completionist_quest_present",
+              "id": "completionist_quest_richness",
               "persona": "completionist",
-              "description": "A quest hook is present."
+              "description": "Quest has multiple richness signals: title, reward, entity reference, and NPC linkage."
             },
             {
               "id": "completionist_rich_callbacks",
               "persona": "completionist",
-              "description": "Multiple narration observations or callback tags."
+              "description": "Multiple callback observations are anchored to NPC or quest content."
             },
             {
               "id": "chaos_behavior_diversity",
               "persona": "chaos",
-              "description": "Three or more distinct enemy behavior kinds."
+              "description": "Three or more distinct enemy behavior kinds.",
+              "uncertain": true
             },
             {
               "id": "chaos_trap_variety",
@@ -7620,9 +7699,10 @@
               "uncertain": true
             },
             {
-              "id": "chaos_mixed_origins",
+              "id": "chaos_content_variance",
               "persona": "chaos",
-              "description": "Origin tag summary shows mixed made/old_stock/kept content."
+              "description": "Within-seed content varies across behavior, item, trap, placement, and callback axes.",
+              "uncertain": true
             },
             {
               "id": "chaos_varied_engagement",
@@ -8509,13 +8589,13 @@
   },
   "thesis": {
     "novelty": {
-      "averageScore": 0.4869176481150929,
+      "averageScore": 0.41908228752027127,
       "nearDuplicateCount": 0,
       "sampleCount": 10
     },
     "responsiveness": {
-      "samePersonaHitRate": 0.2333333333333333,
-      "crossPersonaHitRate": 0.13125,
+      "samePersonaHitRate": 0.03333333333333333,
+      "crossPersonaHitRate": 0.07291666666666666,
       "sampleCount": 10
     },
     "detectorProposal": [
@@ -8532,13 +8612,13 @@
       {
         "id": "hoarder_inventory_narration",
         "persona": "hoarder",
-        "description": "Narration references hoarding or carrying burden.",
+        "description": "Narration ties hoarded/carrying pressure to a named authored item.",
         "uncertain": true
       },
       {
-        "id": "pacifist_open_routes",
+        "id": "pacifist_route_options",
         "persona": "pacifist",
-        "description": "Layout flavor or room span suggests alternate routes (open/halls or wide room span)."
+        "description": "Low enemy density, wide route span, and spread/far placements offer avoidance routes."
       },
       {
         "id": "pacifist_soft_threats",
@@ -8548,12 +8628,12 @@
       {
         "id": "pacifist_caution_narration",
         "persona": "pacifist",
-        "description": "Narration acknowledges caution or non-violence."
+        "description": "Narration ties avoided/retreated combat to a named authored threat."
       },
       {
         "id": "speedrunner_compact_floor",
         "persona": "speedrunner",
-        "description": "Compact room span or open/halls flavor for fast routing."
+        "description": "Compact floor with structured stairs/exit signal for fast routing."
       },
       {
         "id": "speedrunner_near_entrance_loot",
@@ -8563,28 +8643,29 @@
       {
         "id": "speedrunner_pace_narration",
         "persona": "speedrunner",
-        "description": "Narration references stairs, exits, or urgency.",
+        "description": "Narration ties low-exploration play to structured stairs/exit routing.",
         "uncertain": true
       },
       {
-        "id": "completionist_npc_present",
+        "id": "completionist_dialogue_depth",
         "persona": "completionist",
-        "description": "At least one NPC is authored on the floor."
+        "description": "At least one NPC has multi-node, multi-choice dialogue depth."
       },
       {
-        "id": "completionist_quest_present",
+        "id": "completionist_quest_richness",
         "persona": "completionist",
-        "description": "A quest hook is present."
+        "description": "Quest has multiple richness signals: title, reward, entity reference, and NPC linkage."
       },
       {
         "id": "completionist_rich_callbacks",
         "persona": "completionist",
-        "description": "Multiple narration observations or callback tags."
+        "description": "Multiple callback observations are anchored to NPC or quest content."
       },
       {
         "id": "chaos_behavior_diversity",
         "persona": "chaos",
-        "description": "Three or more distinct enemy behavior kinds."
+        "description": "Three or more distinct enemy behavior kinds.",
+        "uncertain": true
       },
       {
         "id": "chaos_trap_variety",
@@ -8593,9 +8674,10 @@
         "uncertain": true
       },
       {
-        "id": "chaos_mixed_origins",
+        "id": "chaos_content_variance",
         "persona": "chaos",
-        "description": "Origin tag summary shows mixed made/old_stock/kept content."
+        "description": "Within-seed content varies across behavior, item, trap, placement, and callback axes.",
+        "uncertain": true
       },
       {
         "id": "chaos_varied_engagement",

@@ -1,0 +1,184 @@
+{
+  "recordType": "generation",
+  "protocolVersion": "1.2.0",
+  "engineVersion": "0.0.0",
+  "modelId": "ambient:codex",
+  "seed": "tuning-02-baseline-envfix-lowest-completionist-1:seed",
+  "createdAt": "2026-06-12T09:52:20.752Z",
+  "runId": "tuning-02-baseline-envfix-lowest-completionist-1",
+  "depth": 11,
+  "attempts": [
+    {
+      "attemptIndex": 0,
+      "promptHash": "ce0e5ed6aa1a00f7a66a88d60fa65a7b899e138ac7caaa4b065f45b4fdcb379b",
+      "rawOutputPath": "floors/11/attempts/0/raw.txt",
+      "provider": {
+        "ok": true,
+        "usage": {
+          "latencyMs": 36136,
+          "tokens": null
+        },
+        "manifestPath": "floors/11/attempts/0/manifest.json"
+      },
+      "gateReports": {
+        "gate0": {
+          "gate": 0,
+          "pass": true,
+          "checks": [
+            {
+              "code": "G0_SCHEMA",
+              "pass": true,
+              "detail": "manifest schema valid"
+            }
+          ]
+        },
+        "gate1": {
+          "gate": 1,
+          "pass": true,
+          "checks": [
+            {
+              "code": "G1_PROTOCOL_VERSION",
+              "pass": true,
+              "detail": "protocolVersion 1.2.0"
+            },
+            {
+              "code": "G1_REF_INTEGRITY",
+              "pass": true,
+              "detail": "entity references resolve within manifest"
+            },
+            {
+              "code": "G1_CALLBACK_REF",
+              "pass": true,
+              "detail": "callback tags match narration observation triggerTags"
+            },
+            {
+              "code": "G1_PLACEMENT_HINT",
+              "pass": true,
+              "detail": "placement hint room indexes fit params.roomCountRange"
+            },
+            {
+              "code": "G1_ENEMY_STATS",
+              "pass": true,
+              "detail": "all roster stats within lowest band"
+            },
+            {
+              "code": "G1_ROSTER_BUDGET",
+              "pass": true,
+              "detail": "roster cost 18 within lowest spawn budget 70"
+            },
+            {
+              "code": "G1_ITEM_VALUE",
+              "pass": true,
+              "detail": "all item values match lowest economy band"
+            },
+            {
+              "code": "G1_TRAP_LETHALITY",
+              "pass": true,
+              "detail": "trap bundles are non-lethal from band-typical full HP"
+            },
+            {
+              "code": "G1_ENTITY_CAP",
+              "pass": true,
+              "detail": "entity counts within configured caps"
+            },
+            {
+              "code": "G1_TEXT_CAP",
+              "pass": true,
+              "detail": "text fields within configured caps"
+            },
+            {
+              "code": "G1_SIGNATURE",
+              "pass": true,
+              "detail": "signature flag not set"
+            }
+          ]
+        },
+        "gate2": {
+          "gate": 2,
+          "pass": true,
+          "verdict": {
+            "status": "pass",
+            "codes": []
+          },
+          "checks": [
+            {
+              "code": "G2_MATERIALIZATION",
+              "pass": true,
+              "detail": "candidate floor materialized"
+            },
+            {
+              "code": "G2_ZERO_THREAT",
+              "pass": true,
+              "detail": "zero-threat hard reject applies only below depth 2"
+            },
+            {
+              "code": "G2_DEATH_SHALLOW",
+              "pass": true,
+              "detail": "band has no shallow-death hard reject"
+            },
+            {
+              "code": "G2_HARD_CLEAR_RATE",
+              "pass": true,
+              "detail": "clear rate 100% is at least hard reject 40%"
+            },
+            {
+              "code": "G2_CLEAR_RATE",
+              "pass": true,
+              "detail": "clear rate 100% is at least 70%"
+            },
+            {
+              "code": "G2_HP_RETENTION",
+              "pass": false,
+              "detail": "median HP retention 100% is outside 15-60%",
+              "advisory": true
+            },
+            {
+              "code": "G2_WALL_CLOCK",
+              "pass": true,
+              "detail": "ensemble took 1ms within budget 8000ms"
+            }
+          ],
+          "metrics": {
+            "totalRuns": 15,
+            "clearCount": 15,
+            "reachedStairsCount": 15,
+            "questCompletedCount": 0,
+            "deathCount": 0,
+            "clearRatePercent": 100,
+            "medianHpRetentionPercent": 100,
+            "minTurns": 44,
+            "maxTurns": 76
+          },
+          "candidate": {
+            "seed": "tuning-02-baseline-envfix-lowest-completionist-1:seed",
+            "stairsReachable": true,
+            "pathLength": 13,
+            "hasThreatOnPath": true,
+            "placementDeviationCount": 0
+          },
+          "ensemble": {
+            "policies": [
+              "cautious",
+              "balanced",
+              "aggressive"
+            ],
+            "seeds": [
+              "tuning-02-baseline-envfix-lowest-completionist-1:seed:gate2:1",
+              "tuning-02-baseline-envfix-lowest-completionist-1:seed:gate2:2",
+              "tuning-02-baseline-envfix-lowest-completionist-1:seed:gate2:3",
+              "tuning-02-baseline-envfix-lowest-completionist-1:seed:gate2:4",
+              "tuning-02-baseline-envfix-lowest-completionist-1:seed:gate2:5"
+            ],
+            "maxTurns": 800
+          },
+          "elapsedMs": 1,
+          "wallClockBudgetMs": 8000
+        }
+      }
+    }
+  ],
+  "outcome": {
+    "kind": "manifest",
+    "manifestPath": "floors/11/attempts/0/manifest.json"
+  }
+}

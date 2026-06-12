@@ -1,0 +1,32 @@
+{
+  "recordType": "generation",
+  "protocolVersion": "1.2.0",
+  "engineVersion": "0.0.0",
+  "modelId": "ambient:codex",
+  "seed": "tuning-02-baseline-shallows-pacifist-1:seed",
+  "createdAt": "2026-06-12T09:42:39.903Z",
+  "runId": "tuning-02-baseline-shallows-pacifist-1",
+  "depth": 3,
+  "attempts": [
+    {
+      "attemptIndex": 0,
+      "promptHash": "a07286ec8077b4444e81d38895329af04351dac85a962d281bd9c02284a21b5f",
+      "rawOutputPath": "floors/3/attempts/0/raw.txt",
+      "provider": {
+        "ok": false,
+        "usage": {
+          "latencyMs": 217,
+          "tokens": null
+        },
+        "error": {
+          "code": "process_error",
+          "message": "process exited with code 1 signal null: WARNING: proceeding, even though we could not update PATH: Operation not permitted (os error 1)\nReading additional input from stdin...\nError: failed to initialize in-process app-server client: Operation not permitted (os error 1)\n"
+        }
+      }
+    }
+  ],
+  "outcome": {
+    "kind": "fallback",
+    "fallbackId": "fallback:old-stock:shallows-3"
+  }
+}

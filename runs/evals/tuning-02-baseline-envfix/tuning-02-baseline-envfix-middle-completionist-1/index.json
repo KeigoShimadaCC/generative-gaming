@@ -1,0 +1,20 @@
+{
+  "recordType": "generation-index",
+  "protocolVersion": "1.2.0",
+  "engineVersion": "0.0.0",
+  "modelId": "ambient:codex",
+  "seed": "tuning-02-baseline-envfix-middle-completionist-1:seed",
+  "createdAt": "2026-06-12T09:51:44.437Z",
+  "runId": "tuning-02-baseline-envfix-middle-completionist-1",
+  "updatedAt": "2026-06-12T09:51:44.437Z",
+  "floors": [
+    {
+      "depth": 6,
+      "recordPath": "floors/6/generation.json",
+      "outcome": {
+        "kind": "manifest"
+      },
+      "recordedAt": "2026-06-12T09:51:44.437Z"
+    }
+  ]
+}

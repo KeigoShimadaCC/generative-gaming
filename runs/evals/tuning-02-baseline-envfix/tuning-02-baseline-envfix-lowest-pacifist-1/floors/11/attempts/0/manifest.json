@@ -1,0 +1,275 @@
+{
+  "protocolVersion": "1.2.0",
+  "depth": 11,
+  "band": "lowest",
+  "params": {
+    "bandOrSize": "lowest",
+    "roomCountRange": {
+      "min": 3,
+      "max": 6
+    },
+    "flavor": "sanctum",
+    "seed": "tuning-02-baseline-envfix-lowest-pacifist-1:seed"
+  },
+  "roster": [
+    {
+      "id": "witness-at-the-turn",
+      "name": "witness at the turn",
+      "glyph": "w",
+      "origin": "made",
+      "stats": {
+        "band": "lowest",
+        "hp": 24,
+        "attack": 9,
+        "defense": 3,
+        "xpYield": 12
+      },
+      "behaviors": [
+        {
+          "kind": "approach_melee",
+          "approachMelee": {},
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": null,
+          "ambusher": null,
+          "territorial": null,
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    },
+    {
+      "id": "quiet-shape-behind",
+      "name": "quiet shape behind",
+      "glyph": "q",
+      "origin": "made",
+      "stats": {
+        "band": "lowest",
+        "hp": 24,
+        "attack": 9,
+        "defense": 3,
+        "xpYield": 12
+      },
+      "behaviors": [
+        {
+          "kind": "approach_melee",
+          "approachMelee": {},
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": null,
+          "ambusher": null,
+          "territorial": null,
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "unlifted-knife",
+      "name": "unlifted knife",
+      "glyph": ")",
+      "kind": "weapon",
+      "value": {
+        "band": "lowest",
+        "coin": 60
+      },
+      "weapon": {
+        "attackBonus": 1,
+        "cursed": false,
+        "onHit": null
+      },
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "near_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "patient-coat",
+      "name": "patient coat",
+      "glyph": "[",
+      "kind": "armor",
+      "value": {
+        "band": "lowest",
+        "coin": 60
+      },
+      "weapon": null,
+      "armor": {
+        "defenseBonus": 1,
+        "cursed": false,
+        "onStruck": null
+      },
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "near_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "untouched-bread",
+      "name": "untouched bread",
+      "glyph": "%",
+      "kind": "food",
+      "value": {
+        "band": "lowest",
+        "coin": 60
+      },
+      "weapon": null,
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": {
+        "effect": {
+          "effects": [
+            {
+              "kind": "nutrition",
+              "damage": null,
+              "heal": null,
+              "applyStatus": null,
+              "cureStatus": null,
+              "buffStat": null,
+              "nutrition": {
+                "fullness": 10
+              },
+              "teleportSelf": null,
+              "teleportTarget": null,
+              "blink": null,
+              "knockback": null,
+              "reveal": null,
+              "identify": null,
+              "enchant": null,
+              "summon": null,
+              "transform": null,
+              "dig": null
+            }
+          ],
+          "trigger": {
+            "kind": "quaff",
+            "quaff": {},
+            "read": null,
+            "throwHit": null,
+            "equipPassive": null,
+            "onHit": null,
+            "onStruck": null,
+            "step": null,
+            "use": null
+          },
+          "targeting": {
+            "kind": "self",
+            "self": {},
+            "melee": null,
+            "bolt": null,
+            "burst": null,
+            "floor": null
+          }
+        }
+      },
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "near_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "single-return-coin",
+      "name": "single return coin",
+      "glyph": "$",
+      "kind": "coin",
+      "value": {
+        "band": "lowest",
+        "coin": 60
+      },
+      "weapon": null,
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": {},
+      "placementHint": null
+    }
+  ],
+  "traps": [],
+  "npcs": [],
+  "quest": null,
+  "narration": {
+    "floorIntro": "The Deep makes a small floor for the one who would not touch its teeth.",
+    "observations": [
+      {
+        "id": "two-cells-seen",
+        "triggerTag": "two-cells-seen",
+        "text": "You have seen almost nothing, so the hall leaves almost nothing to hide behind."
+      },
+      {
+        "id": "no-blood-taken",
+        "triggerTag": "no-blood-taken",
+        "text": "No blood follows you. The stones remember that restraint and do not praise it."
+      },
+      {
+        "id": "untouched-gifts",
+        "triggerTag": "untouched-gifts",
+        "text": "Bread, coat, blade, coin: each waits where your hand may pass it by again."
+      }
+    ]
+  },
+  "metadata": {
+    "originTags": {
+      "made": 2,
+      "old_stock": 0,
+      "kept": 0
+    },
+    "callbacks": [
+      "two-cells-seen",
+      "no-blood-taken",
+      "untouched-gifts"
+    ],
+    "signature": false
+  }
+}

@@ -48,10 +48,17 @@ describe("prompt blocks", () => {
     expect(task).toContain("placementHint");
     expect(task).toContain("packHunter");
     expect(task).toContain("ambusher");
-    expect(task).toContain("Use exactly 2 roster entries");
+    expect(task).toContain("Use 2 roster entries by default");
     expect(task).toContain("copy these exact low-cost stats");
-    expect(task).toContain("Use exactly 4 items");
-    expect(task).toContain("Use traps:[], npcs:[], and quest:null");
+    expect(task).toContain("Use exactly 4 items by default");
+    expect(task).toContain("Use traps:[] by default");
+    expect(task).toContain("Use npcs:[] and quest:null by default");
+    expect(task).toContain("RESPONSIVENESS TARGETS");
+    expect(task).toContain("Hoarder-clear");
+    expect(task).toContain("Pacifist-clear");
+    expect(task).toContain("Speedrunner-clear");
+    expect(task).toContain("Completionist-clear");
+    expect(task).toContain("Chaos-clear");
     for (const kind of ["weapon", "armor", "food", "coin"]) {
       expect(task).toContain(`"kind": "${kind}"`);
     }

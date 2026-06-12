@@ -4,13 +4,13 @@
   "engineVersion": "0.0.0",
   "modelId": "director:mock",
   "seed": "ci-mock-baseline-shallows-pacifist-1:seed",
-  "createdAt": "2026-06-12T08:03:10.045Z",
+  "createdAt": "2026-06-12T10:08:25.124Z",
   "runId": "ci-mock-baseline-shallows-pacifist-1",
   "depth": 3,
   "attempts": [
     {
       "attemptIndex": 0,
-      "promptHash": "64c968e3008c1a534202d95215323b6e47d0819e8adff660be236a26258e8868",
+      "promptHash": "eeddb7cd3260644f0366edea3128d252da0754aed84eed7dd42da427dac60f8b",
       "rawOutputPath": "floors/3/attempts/0/raw.txt",
       "provider": {
         "ok": true,

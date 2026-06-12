@@ -4,13 +4,13 @@
   "engineVersion": "0.0.0",
   "modelId": "director:mock",
   "seed": "ci-mock-baseline-lowest-speedrunner-1:seed",
-  "createdAt": "2026-06-12T08:03:10.913Z",
+  "createdAt": "2026-06-12T10:08:25.894Z",
   "runId": "ci-mock-baseline-lowest-speedrunner-1",
   "depth": 11,
   "attempts": [
     {
       "attemptIndex": 0,
-      "promptHash": "e1ccc27493ff74938888556a9c54b265cefd3d20264f1434915a9052dbd6ae00",
+      "promptHash": "bdf1546af21defcd1d72434b14d7cf0c7f7e4f7a7b8905d0ef917a9ccc6883f2",
       "rawOutputPath": "floors/11/attempts/0/raw.txt",
       "provider": {
         "ok": true,

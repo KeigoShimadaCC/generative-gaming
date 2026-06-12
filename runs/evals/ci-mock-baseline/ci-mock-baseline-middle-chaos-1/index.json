@@ -4,9 +4,9 @@
   "engineVersion": "0.0.0",
   "modelId": "director:mock",
   "seed": "ci-mock-baseline-middle-chaos-1:seed",
-  "createdAt": "2026-06-12T08:03:11.823Z",
+  "createdAt": "2026-06-12T10:08:26.731Z",
   "runId": "ci-mock-baseline-middle-chaos-1",
-  "updatedAt": "2026-06-12T08:03:11.823Z",
+  "updatedAt": "2026-06-12T10:08:26.731Z",
   "floors": [
     {
       "depth": 6,
@@ -15,7 +15,7 @@
         "kind": "fallback",
         "fallbackId": "fallback:old-stock:middle-6"
       },
-      "recordedAt": "2026-06-12T08:03:11.823Z"
+      "recordedAt": "2026-06-12T10:08:26.731Z"
     }
   ]
 }

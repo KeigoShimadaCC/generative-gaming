@@ -1,0 +1,20 @@
+{
+  "recordType": "generation-index",
+  "protocolVersion": "1.2.0",
+  "engineVersion": "0.0.0",
+  "modelId": "director:mock",
+  "seed": "tuning-02-iteration-1-mock-lowest-pacifist-1:seed",
+  "createdAt": "2026-06-12T09:56:18.364Z",
+  "runId": "tuning-02-iteration-1-mock-lowest-pacifist-1",
+  "updatedAt": "2026-06-12T09:56:18.364Z",
+  "floors": [
+    {
+      "depth": 11,
+      "recordPath": "floors/11/generation.json",
+      "outcome": {
+        "kind": "manifest"
+      },
+      "recordedAt": "2026-06-12T09:56:18.364Z"
+    }
+  ]
+}

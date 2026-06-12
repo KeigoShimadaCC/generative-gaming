@@ -1,0 +1,20 @@
+{
+  "recordType": "generation-index",
+  "protocolVersion": "1.2.0",
+  "engineVersion": "0.0.0",
+  "modelId": "ambient:codex",
+  "seed": "tuning-02-iteration-1-middle-speedrunner-1:seed",
+  "createdAt": "2026-06-12T10:01:39.315Z",
+  "runId": "tuning-02-iteration-1-middle-speedrunner-1",
+  "updatedAt": "2026-06-12T10:01:39.315Z",
+  "floors": [
+    {
+      "depth": 6,
+      "recordPath": "floors/6/generation.json",
+      "outcome": {
+        "kind": "manifest"
+      },
+      "recordedAt": "2026-06-12T10:01:39.315Z"
+    }
+  ]
+}

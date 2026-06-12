@@ -69,11 +69,19 @@ Every roster/item/trap/npc entry MUST include placementHint (object with roomInd
 metadata requires originTags {made, old_stock, kept}, callbacks string array, and signature boolean.
 
 Validity-first output recipe for this live pass:
-- Use exactly 2 roster entries, abilities:[] on every enemy, and only behavior kind approach_melee.
-- For both roster entries, copy these exact low-cost stats for the middle band: hp 12, attack 5, defense 1, xpYield 5. Do not choose larger in-range stats; Gate 1 prices stat increases and can reject the roster.
-- Use exactly 4 items: one weapon, one armor, one food, and one coin. Do not emit charm, draught, note, throwable, tool, or key_item unless a later prompt explicitly asks.
-- Use traps:[], npcs:[], and quest:null. Trap/NPC/quest richness is optional content; schema validity is mandatory.
+- Use 2 roster entries by default, abilities:[] on every enemy. If the player summary is pacifist-clear (0% combat engagement with fights avoided or retreats), use exactly 1 roster entry so enemy density stays low.
+- For every roster entry, copy these exact low-cost stats for the middle band: hp 12, attack 5, defense 1, xpYield 5. Do not choose larger in-range stats; Gate 1 prices stat increases and can reject the roster.
+- Use behavior kind approach_melee unless the responsiveness target below explicitly asks for thief, keep_range, flee_low_hp, or patrol. Include the required payload object for every active behavior and null for inactive behavior payloads.
+- Use exactly 4 items by default: one weapon, one armor, one food, and one coin. For hoarder-clear summaries, use 5-6 items if the item budget allows or make at least two emitted items kind "coin". Do not emit charm, draught, note, throwable, tool, or key_item unless a later prompt explicitly asks.
+- Use traps:[] by default. Prefer behavior, placement, item, callback, NPC, and quest variation over traps for responsiveness; trap schema validity is easy to break.
+- Use npcs:[] and quest:null by default. If the player summary is completionist-clear (NPC talks, quests accepted/completed, or broad exploration), include exactly 1 kept NPC and one linked quest using the NPC/quest safety notes below.
 - Use metadata.callbacks as exactly the narration observation triggerTag values you emitted.
+
+NPC/quest safety notes when completionist-clear:
+- Quest objective kind "fetch" is safest: fetch.itemId MUST equal one emitted item id; all inactive objective payload fields MUST be null.
+- Quest reward should have coin non-null or itemIds/identifyItemIds non-empty.
+- NPC origin MUST be "kept"; dialogue needs rootNodeId, at least 2 nodes, 2 choices per node, and no dangling nextNodeId.
+- Link the quest twice: npc.questHook.id equals quest.id, and one dialogue choice questHookId equals quest.id.
 
 Tagged vocabulary objects use nullable-payload style: include kind, include every payload field, set the active payload object on the matching field, and null on every inactive field.
 Behavior payloads that MUST include their parameter objects when active:
@@ -96,6 +104,18 @@ Effect payload spellings are strict:
 Any effect bundle using trigger kind "use" MUST include use:{charges} within bounds.
 Note items MUST use note:{effect:{...}} — never invent note.text or other free-form fields.
 Common mistakes to avoid: do not omit protocolVersion, metadata, value, cursed, placementHint, inactive nullable payloads, behavior parameters, use.charges, or the full step trigger object; do not raise enemy stats above the exact recipe, write hidden:false, nutrition.amount, reveal.radiusTiles, identify:{}, status:"sleep", applyStatus.turns, item proc, or note.text fields — weapons use onHit, armor uses onStruck, and absent procs are null.
+
+RESPONSIVENESS TARGETS
+
+Apply only the target whose numeric trace facts clearly match; do not blend every persona into every floor.
+
+- Hoarder-clear: pickups exceed uses or hoarding signal is 2.00+. Add inventory pressure: 5-6 items if allowed or at least 2 coin items, optionally one thief behavior enemy, and narration must name one authored item while mentioning pack/cache/hoard/carry.
+- Pacifist-clear: combat engagement is 0% with fights avoided or retreats. Use a route-friendly ring/open floor with room span at least 3, no near-entrance enemy, far/spread placements, exactly 1 keep_range or flee_low_hp enemy, and narration must name that threat while saying the player can avoid/slip past/retreat without striking.
+- Speedrunner-clear: pickups are 0-2 and exploration is about 14% or lower. Use a compact room range with max 6 and span 0-2, place at least 2 useful items near_entrance, include an observation triggerTag/callback such as "stairs-short-route" or "exit-direct-route", and narration must mention stairs/exit plus short/direct/near routing.
+- Completionist-clear: NPC talks, accepted/completed quests, or broad exploration are present. Include the safe kept NPC plus linked fetch quest, at least 2 narration observations with callbacks "npc-talk" and "quest-map", and narration must name the NPC or quest.
+- Chaos-clear: both fights picked and fights avoided, 2+ item-use categories, or close call plus quest refusal. Keep traps empty for safety, but vary within valid fields: use 3+ behavior kinds across the roster, 3+ item kinds, mixed near/far placements, and 2+ callbacks/observations tied to the mixed engagement.
+
+If no target clearly matches, keep the default validity-first recipe.
 
 Safe field-shape example manifest (copy this structural pattern; change names/text/ids, keep the same counts and nullable-payload discipline):
 {
@@ -421,11 +441,19 @@ Every roster/item/trap/npc entry MUST include placementHint (object with roomInd
 metadata requires originTags {made, old_stock, kept}, callbacks string array, and signature boolean.
 
 Validity-first output recipe for this live pass:
-- Use exactly 2 roster entries, abilities:[] on every enemy, and only behavior kind approach_melee.
-- For both roster entries, copy these exact low-cost stats for the shallows band: hp 4, attack 2, defense 0, xpYield 2. Do not choose larger in-range stats; Gate 1 prices stat increases and can reject the roster.
-- Use exactly 4 items: one weapon, one armor, one food, and one coin. Do not emit charm, draught, note, throwable, tool, or key_item unless a later prompt explicitly asks.
-- Use traps:[], npcs:[], and quest:null. Trap/NPC/quest richness is optional content; schema validity is mandatory.
+- Use 2 roster entries by default, abilities:[] on every enemy. If the player summary is pacifist-clear (0% combat engagement with fights avoided or retreats), use exactly 1 roster entry so enemy density stays low.
+- For every roster entry, copy these exact low-cost stats for the shallows band: hp 4, attack 2, defense 0, xpYield 2. Do not choose larger in-range stats; Gate 1 prices stat increases and can reject the roster.
+- Use behavior kind approach_melee unless the responsiveness target below explicitly asks for thief, keep_range, flee_low_hp, or patrol. Include the required payload object for every active behavior and null for inactive behavior payloads.
+- Use exactly 4 items by default: one weapon, one armor, one food, and one coin. For hoarder-clear summaries, use 5-6 items if the item budget allows or make at least two emitted items kind "coin". Do not emit charm, draught, note, throwable, tool, or key_item unless a later prompt explicitly asks.
+- Use traps:[] by default. Prefer behavior, placement, item, callback, NPC, and quest variation over traps for responsiveness; trap schema validity is easy to break.
+- Use npcs:[] and quest:null by default. If the player summary is completionist-clear (NPC talks, quests accepted/completed, or broad exploration), include exactly 1 kept NPC and one linked quest using the NPC/quest safety notes below.
 - Use metadata.callbacks as exactly the narration observation triggerTag values you emitted.
+
+NPC/quest safety notes when completionist-clear:
+- Quest objective kind "fetch" is safest: fetch.itemId MUST equal one emitted item id; all inactive objective payload fields MUST be null.
+- Quest reward should have coin non-null or itemIds/identifyItemIds non-empty.
+- NPC origin MUST be "kept"; dialogue needs rootNodeId, at least 2 nodes, 2 choices per node, and no dangling nextNodeId.
+- Link the quest twice: npc.questHook.id equals quest.id, and one dialogue choice questHookId equals quest.id.
 
 Tagged vocabulary objects use nullable-payload style: include kind, include every payload field, set the active payload object on the matching field, and null on every inactive field.
 Behavior payloads that MUST include their parameter objects when active:
@@ -448,6 +476,18 @@ Effect payload spellings are strict:
 Any effect bundle using trigger kind "use" MUST include use:{charges} within bounds.
 Note items MUST use note:{effect:{...}} — never invent note.text or other free-form fields.
 Common mistakes to avoid: do not omit protocolVersion, metadata, value, cursed, placementHint, inactive nullable payloads, behavior parameters, use.charges, or the full step trigger object; do not raise enemy stats above the exact recipe, write hidden:false, nutrition.amount, reveal.radiusTiles, identify:{}, status:"sleep", applyStatus.turns, item proc, or note.text fields — weapons use onHit, armor uses onStruck, and absent procs are null.
+
+RESPONSIVENESS TARGETS
+
+Apply only the target whose numeric trace facts clearly match; do not blend every persona into every floor.
+
+- Hoarder-clear: pickups exceed uses or hoarding signal is 2.00+. Add inventory pressure: 5-6 items if allowed or at least 2 coin items, optionally one thief behavior enemy, and narration must name one authored item while mentioning pack/cache/hoard/carry.
+- Pacifist-clear: combat engagement is 0% with fights avoided or retreats. Use a route-friendly ring/open floor with room span at least 3, no near-entrance enemy, far/spread placements, exactly 1 keep_range or flee_low_hp enemy, and narration must name that threat while saying the player can avoid/slip past/retreat without striking.
+- Speedrunner-clear: pickups are 0-2 and exploration is about 14% or lower. Use a compact room range with max 6 and span 0-2, place at least 2 useful items near_entrance, include an observation triggerTag/callback such as "stairs-short-route" or "exit-direct-route", and narration must mention stairs/exit plus short/direct/near routing.
+- Completionist-clear: NPC talks, accepted/completed quests, or broad exploration are present. Include the safe kept NPC plus linked fetch quest, at least 2 narration observations with callbacks "npc-talk" and "quest-map", and narration must name the NPC or quest.
+- Chaos-clear: both fights picked and fights avoided, 2+ item-use categories, or close call plus quest refusal. Keep traps empty for safety, but vary within valid fields: use 3+ behavior kinds across the roster, 3+ item kinds, mixed near/far placements, and 2+ callbacks/observations tied to the mixed engagement.
+
+If no target clearly matches, keep the default validity-first recipe.
 
 Safe field-shape example manifest (copy this structural pattern; change names/text/ids, keep the same counts and nullable-payload discipline):
 {

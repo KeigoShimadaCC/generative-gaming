@@ -1,0 +1,71 @@
+{
+  "recordType": "generation",
+  "protocolVersion": "1.2.0",
+  "engineVersion": "0.0.0",
+  "modelId": "ambient:codex",
+  "seed": "tuning-02-iteration-1-lowest-speedrunner-1:seed",
+  "createdAt": "2026-06-12T10:03:02.889Z",
+  "runId": "tuning-02-iteration-1-lowest-speedrunner-1",
+  "depth": 11,
+  "attempts": [
+    {
+      "attemptIndex": 0,
+      "promptHash": "8f19bdd3d670158d07a07731a4e70358f85c1283cb66611dbcdb298b30e5fe52",
+      "rawOutputPath": "floors/11/attempts/0/raw.txt",
+      "provider": {
+        "ok": false,
+        "usage": {
+          "latencyMs": 83556,
+          "tokens": null
+        },
+        "error": {
+          "code": "validate_fail",
+          "message": "manifest output did not parse or validate",
+          "details": [
+            "$.npcs[0].dialogue.nodes[0].choices[0].label: Invalid input: expected string, received undefined",
+            "$.npcs[0].dialogue.nodes[0].choices[0].closesDialogue: Invalid input: expected boolean, received undefined",
+            "$.npcs[0].dialogue.nodes[0].choices[0]: Unrecognized key: \"text\"",
+            "$.npcs[0].dialogue.nodes[0].choices[1].label: Invalid input: expected string, received undefined",
+            "$.npcs[0].dialogue.nodes[0].choices[1].closesDialogue: Invalid input: expected boolean, received undefined",
+            "$.npcs[0].dialogue.nodes[0].choices[1]: Unrecognized key: \"text\"",
+            "$.npcs[0].dialogue.nodes[1].choices[0].label: Invalid input: expected string, received undefined",
+            "$.npcs[0].dialogue.nodes[1].choices[0].closesDialogue: Invalid input: expected boolean, received undefined",
+            "$.npcs[0].dialogue.nodes[1].choices[0]: Unrecognized key: \"text\"",
+            "$.npcs[0].dialogue.nodes[1].choices[1].label: Invalid input: expected string, received undefined",
+            "$.npcs[0].dialogue.nodes[1].choices[1].closesDialogue: Invalid input: expected boolean, received undefined",
+            "$.npcs[0].dialogue.nodes[1].choices[1]: Unrecognized key: \"text\"",
+            "$.npcs[0].merchantInventoryItemIds: Invalid input: expected array, received undefined",
+            "$.npcs[0].questHook.title: Invalid input: expected string, received undefined",
+            "$.npcs[0].questHook.objective: Invalid input: expected object, received undefined",
+            "$.npcs[0].questHook.reward: Invalid input: expected object, received undefined",
+            "$.npcs[0]: Unrecognized key: \"description\"",
+            "$.quest.objective.fetch.floorScope: Invalid option: expected one of \"this_floor\"|\"next_floor\"",
+            "$.quest.objective.deliver: Invalid input: expected object, received undefined",
+            "$.quest.objective.escort: Invalid input: expected object, received undefined",
+            "$.quest.objective.constraint: Invalid input: expected object, received undefined",
+            "$.quest.objective: Unrecognized key: \"talk\"",
+            "$.quest.reward.valueMultiplier: Invalid input: expected number, received undefined",
+            "$.quest: Unrecognized keys: \"description\", \"giverNpcId\""
+          ]
+        }
+      },
+      "gateReports": {
+        "gate0": {
+          "gate": 0,
+          "pass": false,
+          "checks": [
+            {
+              "code": "G0_SCHEMA",
+              "pass": false,
+              "detail": "$.npcs[0].dialogue.nodes[0].choices[0].label: Invalid input: expected string, received undefined; $.npcs[0].dialogue.nodes[0].choices[0].closesDialogue: Invalid input: expected boolean, received undefined; $.npcs[0].dialogue.nodes[0].choices[0]: Unrecognized key: \"text\"; $.npcs[0].dialogue.nodes[0].choices[1].label: Invalid input: expected string, received undefined; $.npcs[0].dialogue.nodes[0].choices[1].closesDialogue: Invalid input: expected boolean, received undefined; $.npcs[0].dialogue.nodes[0].choices[1]: Unrecognized key: \"text\"; $.npcs[0].dialogue.nodes[1].choices[0].label: Invalid input: expected string, received undefined; $.npcs[0].dialogue.nodes[1].choices[0].closesDialogue: Invalid input: expected boolean, received undefined; $.npcs[0].dialogue.nodes[1].choices[0]: Unrecognized key: \"text\"; $.npcs[0].dialogue.nodes[1].choices[1].label: Invalid input: expected string, received undefined; $.npcs[0].dialogue.nodes[1].choices[1].closesDialogue: Invalid input: expected boolean, received undefined; $.npcs[0].dialogue.nodes[1].choices[1]: Unrecognized key: \"text\"; $.npcs[0].merchantInventoryItemIds: Invalid input: expected array, received undefined; $.npcs[0].questHook.title: Invalid input: expected string, received undefined; $.npcs[0].questHook.objective: Invalid input: expected object, received undefined; $.npcs[0].questHook.reward: Invalid input: expected object, received undefined; $.npcs[0]: Unrecognized key: \"description\"; $.quest.objective.fetch.floorScope: Invalid option: expected one of \"this_floor\"|\"next_floor\"; $.quest.objective.deliver: Invalid input: expected object, received undefined; $.quest.objective.escort: Invalid input: expected object, received undefined; $.quest.objective.constraint: Invalid input: expected object, received undefined; $.quest.objective: Unrecognized key: \"talk\"; $.quest.reward.valueMultiplier: Invalid input: expected number, received undefined; $.quest: Unrecognized keys: \"description\", \"giverNpcId\""
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "outcome": {
+    "kind": "fallback",
+    "fallbackId": "fallback:old-stock:lowest-11"
+  }
+}

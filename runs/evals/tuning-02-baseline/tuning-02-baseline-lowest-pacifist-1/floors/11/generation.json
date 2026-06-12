@@ -1,0 +1,32 @@
+{
+  "recordType": "generation",
+  "protocolVersion": "1.2.0",
+  "engineVersion": "0.0.0",
+  "modelId": "ambient:codex",
+  "seed": "tuning-02-baseline-lowest-pacifist-1:seed",
+  "createdAt": "2026-06-12T09:42:40.350Z",
+  "runId": "tuning-02-baseline-lowest-pacifist-1",
+  "depth": 11,
+  "attempts": [
+    {
+      "attemptIndex": 0,
+      "promptHash": "e2535f8493bac3d3ad6007d8262ec5b0e5e1084c7ee05eba90dd34fc68a4bc47",
+      "rawOutputPath": "floors/11/attempts/0/raw.txt",
+      "provider": {
+        "ok": false,
+        "usage": {
+          "latencyMs": 221,
+          "tokens": null
+        },
+        "error": {
+          "code": "process_error",
+          "message": "process exited with code 1 signal null: WARNING: proceeding, even though we could not update PATH: Operation not permitted (os error 1)\nReading additional input from stdin...\nError: failed to initialize in-process app-server client: Operation not permitted (os error 1)\n"
+        }
+      }
+    }
+  ],
+  "outcome": {
+    "kind": "fallback",
+    "fallbackId": "fallback:old-stock:lowest-11"
+  }
+}

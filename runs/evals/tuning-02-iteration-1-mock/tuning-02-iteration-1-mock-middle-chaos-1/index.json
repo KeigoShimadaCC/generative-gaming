@@ -1,0 +1,21 @@
+{
+  "recordType": "generation-index",
+  "protocolVersion": "1.2.0",
+  "engineVersion": "0.0.0",
+  "modelId": "director:mock",
+  "seed": "tuning-02-iteration-1-mock-middle-chaos-1:seed",
+  "createdAt": "2026-06-12T09:56:19.662Z",
+  "runId": "tuning-02-iteration-1-mock-middle-chaos-1",
+  "updatedAt": "2026-06-12T09:56:19.662Z",
+  "floors": [
+    {
+      "depth": 6,
+      "recordPath": "floors/6/generation.json",
+      "outcome": {
+        "kind": "fallback",
+        "fallbackId": "fallback:old-stock:middle-6"
+      },
+      "recordedAt": "2026-06-12T09:56:19.662Z"
+    }
+  ]
+}

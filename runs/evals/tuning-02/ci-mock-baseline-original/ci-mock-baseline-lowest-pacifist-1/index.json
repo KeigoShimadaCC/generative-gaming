@@ -1,0 +1,20 @@
+{
+  "recordType": "generation-index",
+  "protocolVersion": "1.2.0",
+  "engineVersion": "0.0.0",
+  "modelId": "director:mock",
+  "seed": "ci-mock-baseline-lowest-pacifist-1:seed",
+  "createdAt": "2026-06-12T08:03:10.300Z",
+  "runId": "ci-mock-baseline-lowest-pacifist-1",
+  "updatedAt": "2026-06-12T08:03:10.300Z",
+  "floors": [
+    {
+      "depth": 11,
+      "recordPath": "floors/11/generation.json",
+      "outcome": {
+        "kind": "manifest"
+      },
+      "recordedAt": "2026-06-12T08:03:10.300Z"
+    }
+  ]
+}

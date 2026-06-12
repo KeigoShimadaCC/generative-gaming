@@ -4,9 +4,9 @@
   "engineVersion": "0.0.0",
   "modelId": "director:mock",
   "seed": "ci-mock-baseline-shallows-chaos-1:seed",
-  "createdAt": "2026-06-12T08:03:11.819Z",
+  "createdAt": "2026-06-12T10:08:26.727Z",
   "runId": "ci-mock-baseline-shallows-chaos-1",
-  "updatedAt": "2026-06-12T08:03:11.819Z",
+  "updatedAt": "2026-06-12T10:08:26.727Z",
   "floors": [
     {
       "depth": 3,
@@ -14,7 +14,7 @@
       "outcome": {
         "kind": "manifest"
       },
-      "recordedAt": "2026-06-12T08:03:11.819Z"
+      "recordedAt": "2026-06-12T10:08:26.727Z"
     }
   ]
 }

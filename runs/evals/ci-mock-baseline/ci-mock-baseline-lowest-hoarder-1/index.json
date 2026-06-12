@@ -4,9 +4,9 @@
   "engineVersion": "0.0.0",
   "modelId": "director:mock",
   "seed": "ci-mock-baseline-lowest-hoarder-1:seed",
-  "createdAt": "2026-06-12T08:03:09.950Z",
+  "createdAt": "2026-06-12T10:08:25.038Z",
   "runId": "ci-mock-baseline-lowest-hoarder-1",
-  "updatedAt": "2026-06-12T08:03:09.950Z",
+  "updatedAt": "2026-06-12T10:08:25.038Z",
   "floors": [
     {
       "depth": 11,
@@ -14,7 +14,7 @@
       "outcome": {
         "kind": "manifest"
       },
-      "recordedAt": "2026-06-12T08:03:09.950Z"
+      "recordedAt": "2026-06-12T10:08:25.038Z"
     }
   ]
 }

@@ -1,0 +1,107 @@
+{
+  "recordType": "generation",
+  "protocolVersion": "1.2.0",
+  "engineVersion": "0.0.0",
+  "modelId": "director:mock",
+  "seed": "ci-mock-baseline-middle-pacifist-1:seed",
+  "createdAt": "2026-06-12T08:03:10.050Z",
+  "runId": "ci-mock-baseline-middle-pacifist-1",
+  "depth": 6,
+  "attempts": [
+    {
+      "attemptIndex": 0,
+      "promptHash": "e45f23695ea1aee5dd5026fab4fc3ace494c87bc185a0f49b26bf64eb2875f4c",
+      "rawOutputPath": "floors/6/attempts/0/raw.txt",
+      "provider": {
+        "ok": true,
+        "usage": {
+          "latencyMs": 10,
+          "tokens": {
+            "inputTokens": 100,
+            "outputTokens": 50,
+            "totalTokens": 150
+          }
+        },
+        "manifestPath": "floors/6/attempts/0/manifest.json"
+      },
+      "gateReports": {
+        "gate0": {
+          "gate": 0,
+          "pass": true,
+          "checks": [
+            {
+              "code": "G0_SCHEMA",
+              "pass": true,
+              "detail": "manifest schema valid"
+            }
+          ]
+        },
+        "gate1": {
+          "gate": 1,
+          "pass": false,
+          "checks": [
+            {
+              "code": "G1_PROTOCOL_VERSION",
+              "pass": true,
+              "detail": "protocolVersion 1.2.0"
+            },
+            {
+              "code": "G1_REF_INTEGRITY",
+              "pass": false,
+              "detail": "quest fetch references missing item \"item-1\"; npc middle-kept-scrivener merchantInventoryItemIds references missing item \"weapon-1\"; npc middle-kept-scrivener merchantInventoryItemIds references missing item \"food-1\"; npc middle-kept-scrivener questHook fetch references missing item \"item-1\""
+            },
+            {
+              "code": "G1_CALLBACK_REF",
+              "pass": true,
+              "detail": "callback tags match narration observation triggerTags"
+            },
+            {
+              "code": "G1_PLACEMENT_HINT",
+              "pass": true,
+              "detail": "placement hint room indexes fit params.roomCountRange"
+            },
+            {
+              "code": "G1_ENEMY_STATS",
+              "pass": true,
+              "detail": "all roster stats within middle band"
+            },
+            {
+              "code": "G1_ROSTER_BUDGET",
+              "pass": true,
+              "detail": "roster cost 10 within middle spawn budget 45"
+            },
+            {
+              "code": "G1_ITEM_VALUE",
+              "pass": true,
+              "detail": "all item values match middle economy band"
+            },
+            {
+              "code": "G1_TRAP_LETHALITY",
+              "pass": true,
+              "detail": "trap bundles are non-lethal from band-typical full HP"
+            },
+            {
+              "code": "G1_ENTITY_CAP",
+              "pass": true,
+              "detail": "entity counts within configured caps"
+            },
+            {
+              "code": "G1_TEXT_CAP",
+              "pass": true,
+              "detail": "text fields within configured caps"
+            },
+            {
+              "code": "G1_SIGNATURE",
+              "pass": true,
+              "detail": "signature allowed in middle band"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "outcome": {
+    "kind": "fallback",
+    "fallbackId": "fallback:old-stock:middle-6"
+  }
+}

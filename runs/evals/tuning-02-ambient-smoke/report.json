@@ -1,0 +1,953 @@
+{
+  "recordType": "eval-report",
+  "reportVersion": "phase-41-eval-report-v1",
+  "evalId": "tuning-02-ambient-smoke",
+  "status": "complete",
+  "startedAt": "2026-06-12T09:43:25.849Z",
+  "completedAt": "2026-06-12T09:44:01.767Z",
+  "config": {
+    "evalId": "tuning-02-ambient-smoke",
+    "rootDir": "runs/evals",
+    "n": 1,
+    "maxCalls": 1,
+    "cells": [
+      {
+        "persona": "hoarder",
+        "band": "shallows",
+        "depth": 3
+      }
+    ]
+  },
+  "provider": {
+    "mode": "ambient",
+    "modelId": "ambient:codex"
+  },
+  "bank": {
+    "version": "persona-bank:d2132458d87a",
+    "fixtures": [
+      {
+        "persona": "hoarder",
+        "seed": "persona-bank-1",
+        "relativePath": "tests/eval-bank/hoarder-persona-bank-1.ndjson"
+      },
+      {
+        "persona": "hoarder",
+        "seed": "persona-bank-2",
+        "relativePath": "tests/eval-bank/hoarder-persona-bank-2.ndjson"
+      },
+      {
+        "persona": "hoarder",
+        "seed": "persona-bank-3",
+        "relativePath": "tests/eval-bank/hoarder-persona-bank-3.ndjson"
+      }
+    ]
+  },
+  "git": {
+    "rev": "ec2f83721c88474494dc5800a9f798fb351c7464"
+  },
+  "calls": {
+    "attempted": 1,
+    "completed": 1,
+    "cap": 1
+  },
+  "cells": [
+    {
+      "cellId": "shallows:hoarder",
+      "persona": "hoarder",
+      "band": "shallows",
+      "depth": 3,
+      "generationRunIds": [
+        "tuning-02-ambient-smoke-shallows-hoarder-1"
+      ],
+      "bankSeeds": [
+        "persona-bank-1"
+      ],
+      "scores": {
+        "recordType": "eval-scores",
+        "metricVersion": "phase-40b-core-v1",
+        "recordCount": 1,
+        "generations": [
+          {
+            "runId": "tuning-02-ambient-smoke-shallows-hoarder-1",
+            "depth": 3,
+            "band": "shallows",
+            "attemptCount": 1,
+            "validity": true,
+            "solvability": true,
+            "servedWithoutFallback": true,
+            "repairCount": 0,
+            "fallback": false,
+            "latencyMs": 35779,
+            "tokens": null,
+            "gate2": {
+              "recorded": true,
+              "passed": true,
+              "blockingCodes": []
+            },
+            "advisoryFlags": {
+              "hpRetentionRecorded": true,
+              "hpRetentionAdvisory": true,
+              "hpRetentionPassed": false,
+              "advisoryCodes": [
+                "G2_HP_RETENTION"
+              ],
+              "failedAdvisoryCodes": [
+                "G2_HP_RETENTION"
+              ]
+            },
+            "bandAccuracy": {
+              "band": "shallows",
+              "clearRatePercent": 100,
+              "clearRateTargetPercent": 95,
+              "clearRateMet": true,
+              "medianHpRetentionPercent": 100,
+              "medianHpRetentionTargetPercent": {
+                "min": 55,
+                "max": 90
+              },
+              "hpRetentionInBand": false,
+              "accurate": false
+            }
+          }
+        ],
+        "summary": {
+          "rates": {
+            "validity": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "solvability": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "servedWithoutFallback": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "fallback": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            },
+            "bandAccuracy": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            }
+          },
+          "latencyMs": {
+            "count": 1,
+            "min": 35779,
+            "p50": 35779,
+            "avg": 35779,
+            "max": 35779
+          },
+          "repairDistribution": {
+            "zero": 1,
+            "one": 0,
+            "two": 0,
+            "threeOrMore": 0,
+            "byRepairCount": [
+              {
+                "repairCount": 0,
+                "count": 1
+              }
+            ]
+          },
+          "tokens": {
+            "recordCountWithTokens": 0,
+            "totals": null,
+            "averagePerRecordWithTokens": null
+          },
+          "byBand": {
+            "shallows": {
+              "band": "shallows",
+              "count": 1,
+              "rates": {
+                "validity": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "solvability": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "servedWithoutFallback": {
+                  "count": 1,
+                  "passed": 1,
+                  "percent": 100
+                },
+                "fallback": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 1,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 1,
+                "min": 35779,
+                "p50": 35779,
+                "avg": 35779,
+                "max": 35779
+              },
+              "repairDistribution": {
+                "zero": 1,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": [
+                  {
+                    "repairCount": 0,
+                    "count": 1
+                  }
+                ]
+              },
+              "tokens": {
+                "recordCountWithTokens": 0,
+                "totals": null,
+                "averagePerRecordWithTokens": null
+              }
+            },
+            "middle": {
+              "band": "middle",
+              "count": 0,
+              "rates": {
+                "validity": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 0,
+                "min": 0,
+                "p50": 0,
+                "avg": 0,
+                "max": 0
+              },
+              "repairDistribution": {
+                "zero": 0,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": []
+              },
+              "tokens": {
+                "recordCountWithTokens": 0,
+                "totals": null,
+                "averagePerRecordWithTokens": null
+              }
+            },
+            "lowest": {
+              "band": "lowest",
+              "count": 0,
+              "rates": {
+                "validity": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "solvability": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "servedWithoutFallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "fallback": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                },
+                "bandAccuracy": {
+                  "count": 0,
+                  "passed": 0,
+                  "percent": 0
+                }
+              },
+              "latencyMs": {
+                "count": 0,
+                "min": 0,
+                "p50": 0,
+                "avg": 0,
+                "max": 0
+              },
+              "repairDistribution": {
+                "zero": 0,
+                "one": 0,
+                "two": 0,
+                "threeOrMore": 0,
+                "byRepairCount": []
+              },
+              "tokens": {
+                "recordCountWithTokens": 0,
+                "totals": null,
+                "averagePerRecordWithTokens": null
+              }
+            }
+          }
+        },
+        "comparability": {
+          "segmentId": "shallows:hoarder"
+        }
+      },
+      "thesis": {
+        "generations": [
+          {
+            "generationIndex": 0,
+            "novelty": {
+              "scored": true,
+              "metricVersion": "phase-42-novelty-v1",
+              "distance": 0.43430616471734895,
+              "score": 0.43430616471734895,
+              "nearDuplicate": false,
+              "components": {
+                "nameSimilarity": 0.3591252436647174,
+                "statVectorDistance": 0,
+                "compositionOverlap": 0.4
+              },
+              "vsFallback": {
+                "nameSimilarity": 0.3591252436647174,
+                "statVectorDistance": 0,
+                "compositionOverlap": 0.4
+              },
+              "vsRecent": null
+            },
+            "responsiveness": {
+              "scored": true,
+              "metricVersion": "phase-47-responsiveness-v2",
+              "sourcePersona": "hoarder",
+              "samePersona": {
+                "metricVersion": "phase-47-responsiveness-v2",
+                "persona": "hoarder",
+                "hits": 0,
+                "total": 3,
+                "rate": 0,
+                "detectors": [
+                  {
+                    "id": "hoarder_item_density",
+                    "hit": false
+                  },
+                  {
+                    "id": "hoarder_thief_pressure",
+                    "hit": false
+                  },
+                  {
+                    "id": "hoarder_inventory_narration",
+                    "hit": false
+                  }
+                ]
+              },
+              "crossPersona": {
+                "hoarder": {
+                  "metricVersion": "phase-47-responsiveness-v2",
+                  "persona": "hoarder",
+                  "hits": 0,
+                  "total": 3,
+                  "rate": 0,
+                  "detectors": [
+                    {
+                      "id": "hoarder_item_density",
+                      "hit": false
+                    },
+                    {
+                      "id": "hoarder_thief_pressure",
+                      "hit": false
+                    },
+                    {
+                      "id": "hoarder_inventory_narration",
+                      "hit": false
+                    }
+                  ]
+                },
+                "pacifist": {
+                  "metricVersion": "phase-47-responsiveness-v2",
+                  "persona": "pacifist",
+                  "hits": 0,
+                  "total": 3,
+                  "rate": 0,
+                  "detectors": [
+                    {
+                      "id": "pacifist_route_options",
+                      "hit": false
+                    },
+                    {
+                      "id": "pacifist_soft_threats",
+                      "hit": false
+                    },
+                    {
+                      "id": "pacifist_caution_narration",
+                      "hit": false
+                    }
+                  ]
+                },
+                "speedrunner": {
+                  "metricVersion": "phase-47-responsiveness-v2",
+                  "persona": "speedrunner",
+                  "hits": 0,
+                  "total": 3,
+                  "rate": 0,
+                  "detectors": [
+                    {
+                      "id": "speedrunner_compact_floor",
+                      "hit": false
+                    },
+                    {
+                      "id": "speedrunner_near_entrance_loot",
+                      "hit": false
+                    },
+                    {
+                      "id": "speedrunner_pace_narration",
+                      "hit": false
+                    }
+                  ]
+                },
+                "completionist": {
+                  "metricVersion": "phase-47-responsiveness-v2",
+                  "persona": "completionist",
+                  "hits": 0,
+                  "total": 3,
+                  "rate": 0,
+                  "detectors": [
+                    {
+                      "id": "completionist_dialogue_depth",
+                      "hit": false
+                    },
+                    {
+                      "id": "completionist_quest_richness",
+                      "hit": false
+                    },
+                    {
+                      "id": "completionist_rich_callbacks",
+                      "hit": false
+                    }
+                  ]
+                },
+                "chaos": {
+                  "metricVersion": "phase-47-responsiveness-v2",
+                  "persona": "chaos",
+                  "hits": 1,
+                  "total": 4,
+                  "rate": 0.25,
+                  "detectors": [
+                    {
+                      "id": "chaos_behavior_diversity",
+                      "hit": false
+                    },
+                    {
+                      "id": "chaos_trap_variety",
+                      "hit": false
+                    },
+                    {
+                      "id": "chaos_content_variance",
+                      "hit": false
+                    },
+                    {
+                      "id": "chaos_varied_engagement",
+                      "hit": true
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ],
+        "summary": {
+          "novelty": {
+            "averageScore": 0.43430616471734895,
+            "nearDuplicateCount": 0,
+            "sampleCount": 1
+          },
+          "responsiveness": {
+            "samePersonaHitRate": 0,
+            "crossPersonaHitRate": 0.0625,
+            "sampleCount": 1
+          },
+          "detectorProposal": [
+            {
+              "id": "hoarder_item_density",
+              "persona": "hoarder",
+              "description": "Floor offers above-minimum item count or multiple coin pickups."
+            },
+            {
+              "id": "hoarder_thief_pressure",
+              "persona": "hoarder",
+              "description": "Roster includes a thief behavior enemy."
+            },
+            {
+              "id": "hoarder_inventory_narration",
+              "persona": "hoarder",
+              "description": "Narration ties hoarded/carrying pressure to a named authored item.",
+              "uncertain": true
+            },
+            {
+              "id": "pacifist_route_options",
+              "persona": "pacifist",
+              "description": "Low enemy density, wide route span, and spread/far placements offer avoidance routes."
+            },
+            {
+              "id": "pacifist_soft_threats",
+              "persona": "pacifist",
+              "description": "Few enemies are placed near the entrance; more keep-range/flee behaviors."
+            },
+            {
+              "id": "pacifist_caution_narration",
+              "persona": "pacifist",
+              "description": "Narration ties avoided/retreated combat to a named authored threat."
+            },
+            {
+              "id": "speedrunner_compact_floor",
+              "persona": "speedrunner",
+              "description": "Compact floor with structured stairs/exit signal for fast routing."
+            },
+            {
+              "id": "speedrunner_near_entrance_loot",
+              "persona": "speedrunner",
+              "description": "High-value entities placed near entrance for grab-and-go."
+            },
+            {
+              "id": "speedrunner_pace_narration",
+              "persona": "speedrunner",
+              "description": "Narration ties low-exploration play to structured stairs/exit routing.",
+              "uncertain": true
+            },
+            {
+              "id": "completionist_dialogue_depth",
+              "persona": "completionist",
+              "description": "At least one NPC has multi-node, multi-choice dialogue depth."
+            },
+            {
+              "id": "completionist_quest_richness",
+              "persona": "completionist",
+              "description": "Quest has multiple richness signals: title, reward, entity reference, and NPC linkage."
+            },
+            {
+              "id": "completionist_rich_callbacks",
+              "persona": "completionist",
+              "description": "Multiple callback observations are anchored to NPC or quest content."
+            },
+            {
+              "id": "chaos_behavior_diversity",
+              "persona": "chaos",
+              "description": "Three or more distinct enemy behavior kinds.",
+              "uncertain": true
+            },
+            {
+              "id": "chaos_trap_variety",
+              "persona": "chaos",
+              "description": "Multiple traps or mixed trap/item effect verbs.",
+              "uncertain": true
+            },
+            {
+              "id": "chaos_content_variance",
+              "persona": "chaos",
+              "description": "Within-seed content varies across behavior, item, trap, placement, and callback axes.",
+              "uncertain": true
+            },
+            {
+              "id": "chaos_varied_engagement",
+              "persona": "chaos",
+              "description": "Trace shows mixed fight/avoid patterns and manifest offers diverse threats.",
+              "uncertain": true
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "overall": {
+    "recordType": "eval-scores",
+    "metricVersion": "phase-40b-core-v1",
+    "recordCount": 1,
+    "generations": [
+      {
+        "runId": "tuning-02-ambient-smoke-shallows-hoarder-1",
+        "depth": 3,
+        "band": "shallows",
+        "attemptCount": 1,
+        "validity": true,
+        "solvability": true,
+        "servedWithoutFallback": true,
+        "repairCount": 0,
+        "fallback": false,
+        "latencyMs": 35779,
+        "tokens": null,
+        "gate2": {
+          "recorded": true,
+          "passed": true,
+          "blockingCodes": []
+        },
+        "advisoryFlags": {
+          "hpRetentionRecorded": true,
+          "hpRetentionAdvisory": true,
+          "hpRetentionPassed": false,
+          "advisoryCodes": [
+            "G2_HP_RETENTION"
+          ],
+          "failedAdvisoryCodes": [
+            "G2_HP_RETENTION"
+          ]
+        },
+        "bandAccuracy": {
+          "band": "shallows",
+          "clearRatePercent": 100,
+          "clearRateTargetPercent": 95,
+          "clearRateMet": true,
+          "medianHpRetentionPercent": 100,
+          "medianHpRetentionTargetPercent": {
+            "min": 55,
+            "max": 90
+          },
+          "hpRetentionInBand": false,
+          "accurate": false
+        }
+      }
+    ],
+    "summary": {
+      "rates": {
+        "validity": {
+          "count": 1,
+          "passed": 1,
+          "percent": 100
+        },
+        "solvability": {
+          "count": 1,
+          "passed": 1,
+          "percent": 100
+        },
+        "servedWithoutFallback": {
+          "count": 1,
+          "passed": 1,
+          "percent": 100
+        },
+        "fallback": {
+          "count": 1,
+          "passed": 0,
+          "percent": 0
+        },
+        "bandAccuracy": {
+          "count": 1,
+          "passed": 0,
+          "percent": 0
+        }
+      },
+      "latencyMs": {
+        "count": 1,
+        "min": 35779,
+        "p50": 35779,
+        "avg": 35779,
+        "max": 35779
+      },
+      "repairDistribution": {
+        "zero": 1,
+        "one": 0,
+        "two": 0,
+        "threeOrMore": 0,
+        "byRepairCount": [
+          {
+            "repairCount": 0,
+            "count": 1
+          }
+        ]
+      },
+      "tokens": {
+        "recordCountWithTokens": 0,
+        "totals": null,
+        "averagePerRecordWithTokens": null
+      },
+      "byBand": {
+        "shallows": {
+          "band": "shallows",
+          "count": 1,
+          "rates": {
+            "validity": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "solvability": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "servedWithoutFallback": {
+              "count": 1,
+              "passed": 1,
+              "percent": 100
+            },
+            "fallback": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            },
+            "bandAccuracy": {
+              "count": 1,
+              "passed": 0,
+              "percent": 0
+            }
+          },
+          "latencyMs": {
+            "count": 1,
+            "min": 35779,
+            "p50": 35779,
+            "avg": 35779,
+            "max": 35779
+          },
+          "repairDistribution": {
+            "zero": 1,
+            "one": 0,
+            "two": 0,
+            "threeOrMore": 0,
+            "byRepairCount": [
+              {
+                "repairCount": 0,
+                "count": 1
+              }
+            ]
+          },
+          "tokens": {
+            "recordCountWithTokens": 0,
+            "totals": null,
+            "averagePerRecordWithTokens": null
+          }
+        },
+        "middle": {
+          "band": "middle",
+          "count": 0,
+          "rates": {
+            "validity": {
+              "count": 0,
+              "passed": 0,
+              "percent": 0
+            },
+            "solvability": {
+              "count": 0,
+              "passed": 0,
+              "percent": 0
+            },
+            "servedWithoutFallback": {
+              "count": 0,
+              "passed": 0,
+              "percent": 0
+            },
+            "fallback": {
+              "count": 0,
+              "passed": 0,
+              "percent": 0
+            },
+            "bandAccuracy": {
+              "count": 0,
+              "passed": 0,
+              "percent": 0
+            }
+          },
+          "latencyMs": {
+            "count": 0,
+            "min": 0,
+            "p50": 0,
+            "avg": 0,
+            "max": 0
+          },
+          "repairDistribution": {
+            "zero": 0,
+            "one": 0,
+            "two": 0,
+            "threeOrMore": 0,
+            "byRepairCount": []
+          },
+          "tokens": {
+            "recordCountWithTokens": 0,
+            "totals": null,
+            "averagePerRecordWithTokens": null
+          }
+        },
+        "lowest": {
+          "band": "lowest",
+          "count": 0,
+          "rates": {
+            "validity": {
+              "count": 0,
+              "passed": 0,
+              "percent": 0
+            },
+            "solvability": {
+              "count": 0,
+              "passed": 0,
+              "percent": 0
+            },
+            "servedWithoutFallback": {
+              "count": 0,
+              "passed": 0,
+              "percent": 0
+            },
+            "fallback": {
+              "count": 0,
+              "passed": 0,
+              "percent": 0
+            },
+            "bandAccuracy": {
+              "count": 0,
+              "passed": 0,
+              "percent": 0
+            }
+          },
+          "latencyMs": {
+            "count": 0,
+            "min": 0,
+            "p50": 0,
+            "avg": 0,
+            "max": 0
+          },
+          "repairDistribution": {
+            "zero": 0,
+            "one": 0,
+            "two": 0,
+            "threeOrMore": 0,
+            "byRepairCount": []
+          },
+          "tokens": {
+            "recordCountWithTokens": 0,
+            "totals": null,
+            "averagePerRecordWithTokens": null
+          }
+        }
+      }
+    },
+    "comparability": {
+      "candidateId": "tuning-02-ambient-smoke"
+    }
+  },
+  "thesis": {
+    "novelty": {
+      "averageScore": 0.43430616471734895,
+      "nearDuplicateCount": 0,
+      "sampleCount": 1
+    },
+    "responsiveness": {
+      "samePersonaHitRate": 0,
+      "crossPersonaHitRate": 0.0625,
+      "sampleCount": 1
+    },
+    "detectorProposal": [
+      {
+        "id": "hoarder_item_density",
+        "persona": "hoarder",
+        "description": "Floor offers above-minimum item count or multiple coin pickups."
+      },
+      {
+        "id": "hoarder_thief_pressure",
+        "persona": "hoarder",
+        "description": "Roster includes a thief behavior enemy."
+      },
+      {
+        "id": "hoarder_inventory_narration",
+        "persona": "hoarder",
+        "description": "Narration ties hoarded/carrying pressure to a named authored item.",
+        "uncertain": true
+      },
+      {
+        "id": "pacifist_route_options",
+        "persona": "pacifist",
+        "description": "Low enemy density, wide route span, and spread/far placements offer avoidance routes."
+      },
+      {
+        "id": "pacifist_soft_threats",
+        "persona": "pacifist",
+        "description": "Few enemies are placed near the entrance; more keep-range/flee behaviors."
+      },
+      {
+        "id": "pacifist_caution_narration",
+        "persona": "pacifist",
+        "description": "Narration ties avoided/retreated combat to a named authored threat."
+      },
+      {
+        "id": "speedrunner_compact_floor",
+        "persona": "speedrunner",
+        "description": "Compact floor with structured stairs/exit signal for fast routing."
+      },
+      {
+        "id": "speedrunner_near_entrance_loot",
+        "persona": "speedrunner",
+        "description": "High-value entities placed near entrance for grab-and-go."
+      },
+      {
+        "id": "speedrunner_pace_narration",
+        "persona": "speedrunner",
+        "description": "Narration ties low-exploration play to structured stairs/exit routing.",
+        "uncertain": true
+      },
+      {
+        "id": "completionist_dialogue_depth",
+        "persona": "completionist",
+        "description": "At least one NPC has multi-node, multi-choice dialogue depth."
+      },
+      {
+        "id": "completionist_quest_richness",
+        "persona": "completionist",
+        "description": "Quest has multiple richness signals: title, reward, entity reference, and NPC linkage."
+      },
+      {
+        "id": "completionist_rich_callbacks",
+        "persona": "completionist",
+        "description": "Multiple callback observations are anchored to NPC or quest content."
+      },
+      {
+        "id": "chaos_behavior_diversity",
+        "persona": "chaos",
+        "description": "Three or more distinct enemy behavior kinds.",
+        "uncertain": true
+      },
+      {
+        "id": "chaos_trap_variety",
+        "persona": "chaos",
+        "description": "Multiple traps or mixed trap/item effect verbs.",
+        "uncertain": true
+      },
+      {
+        "id": "chaos_content_variance",
+        "persona": "chaos",
+        "description": "Within-seed content varies across behavior, item, trap, placement, and callback axes.",
+        "uncertain": true
+      },
+      {
+        "id": "chaos_varied_engagement",
+        "persona": "chaos",
+        "description": "Trace shows mixed fight/avoid patterns and manifest offers diverse threats.",
+        "uncertain": true
+      }
+    ]
+  }
+}
