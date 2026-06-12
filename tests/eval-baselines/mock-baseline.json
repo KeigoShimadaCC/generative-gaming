@@ -2,7 +2,7 @@
   "_baseline": {
     "recordType": "eval-baseline-metadata",
     "purpose": "PR mock smoke threshold gate",
-    "rebaselinedAt": "2026-06-12T10:08:32.346Z",
+    "rebaselinedAt": "2026-06-12T21:29:14.821Z",
     "sourceEvalId": "ci-mock-baseline",
     "rebaselineProcedure": "See docs/runbooks/evals.md — deliberate commit only."
   },
@@ -10,8 +10,8 @@
   "reportVersion": "phase-41-eval-report-v1",
   "evalId": "ci-mock-baseline",
   "status": "complete",
-  "startedAt": "2026-06-12T10:08:24.689Z",
-  "completedAt": "2026-06-12T10:08:27.001Z",
+  "startedAt": "2026-06-12T21:29:04.123Z",
+  "completedAt": "2026-06-12T21:29:06.251Z",
   "config": {
     "evalId": "ci-mock-baseline",
     "rootDir": "runs/evals",
@@ -100,7 +100,7 @@
     "modelId": "director:mock"
   },
   "bank": {
-    "version": "persona-bank:bc7a48f5ab54",
+    "version": "persona-bank:0cb8bc7e1ef6",
     "fixtures": [
       {
         "persona": "chaos",
@@ -180,7 +180,7 @@
     ]
   },
   "git": {
-    "rev": "ec2f83721c88474494dc5800a9f798fb351c7464"
+    "rev": "2f10a4e4f86dd7e25a01bd85e9355b807840d6ed"
   },
   "calls": {
     "attempted": 15,
@@ -488,17 +488,17 @@
             "novelty": {
               "scored": true,
               "metricVersion": "phase-42-novelty-v1",
-              "distance": 0.38651629072681715,
-              "score": 0.38651629072681715,
+              "distance": 0.424016290726817,
+              "score": 0.424016290726817,
               "nearDuplicate": false,
               "components": {
                 "nameSimilarity": 0.36233440744718937,
-                "statVectorDistance": 0,
+                "statVectorDistance": 0.125,
                 "compositionOverlap": 0.5333333333333333
               },
               "vsFallback": {
                 "nameSimilarity": 0.36233440744718937,
-                "statVectorDistance": 0,
+                "statVectorDistance": 0.125,
                 "compositionOverlap": 0.5333333333333333
               },
               "vsRecent": null
@@ -616,9 +616,9 @@
                 "chaos": {
                   "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "chaos",
-                  "hits": 1,
+                  "hits": 0,
                   "total": 4,
-                  "rate": 0.25,
+                  "rate": 0,
                   "detectors": [
                     {
                       "id": "chaos_behavior_diversity",
@@ -634,7 +634,7 @@
                     },
                     {
                       "id": "chaos_varied_engagement",
-                      "hit": true
+                      "hit": false
                     }
                   ]
                 }
@@ -644,13 +644,13 @@
         ],
         "summary": {
           "novelty": {
-            "averageScore": 0.38651629072681715,
+            "averageScore": 0.424016290726817,
             "nearDuplicateCount": 0,
             "sampleCount": 1
           },
           "responsiveness": {
             "samePersonaHitRate": 0,
-            "crossPersonaHitRate": 0.0625,
+            "crossPersonaHitRate": 0,
             "sampleCount": 1
           },
           "detectorProposal": [
@@ -1159,10 +1159,10 @@
             "band": "lowest",
             "attemptCount": 1,
             "validity": true,
-            "solvability": true,
-            "servedWithoutFallback": true,
+            "solvability": false,
+            "servedWithoutFallback": false,
             "repairCount": 0,
-            "fallback": false,
+            "fallback": true,
             "latencyMs": 10,
             "tokens": {
               "inputTokens": 100,
@@ -1171,8 +1171,11 @@
             },
             "gate2": {
               "recorded": true,
-              "passed": true,
-              "blockingCodes": []
+              "passed": false,
+              "blockingCodes": [
+                "G2_HARD_CLEAR_RATE",
+                "G2_CLEAR_RATE"
+              ]
             },
             "advisoryFlags": {
               "hpRetentionRecorded": true,
@@ -1187,10 +1190,10 @@
             },
             "bandAccuracy": {
               "band": "lowest",
-              "clearRatePercent": 100,
+              "clearRatePercent": 0,
               "clearRateTargetPercent": 70,
-              "clearRateMet": true,
-              "medianHpRetentionPercent": 100,
+              "clearRateMet": false,
+              "medianHpRetentionPercent": 0,
               "medianHpRetentionTargetPercent": {
                 "min": 15,
                 "max": 60
@@ -1209,18 +1212,18 @@
             },
             "solvability": {
               "count": 1,
-              "passed": 1,
-              "percent": 100
+              "passed": 0,
+              "percent": 0
             },
             "servedWithoutFallback": {
               "count": 1,
-              "passed": 1,
-              "percent": 100
+              "passed": 0,
+              "percent": 0
             },
             "fallback": {
               "count": 1,
-              "passed": 0,
-              "percent": 0
+              "passed": 1,
+              "percent": 100
             },
             "bandAccuracy": {
               "count": 1,
@@ -1372,18 +1375,18 @@
                 },
                 "solvability": {
                   "count": 1,
-                  "passed": 1,
-                  "percent": 100
+                  "passed": 0,
+                  "percent": 0
                 },
                 "servedWithoutFallback": {
                   "count": 1,
-                  "passed": 1,
-                  "percent": 100
+                  "passed": 0,
+                  "percent": 0
                 },
                 "fallback": {
                   "count": 1,
-                  "passed": 0,
-                  "percent": 0
+                  "passed": 1,
+                  "percent": 100
                 },
                 "bandAccuracy": {
                   "count": 1,
@@ -1435,172 +1438,25 @@
           {
             "generationIndex": 0,
             "novelty": {
-              "scored": true,
-              "metricVersion": "phase-42-novelty-v1",
-              "distance": 0.4516482843137255,
-              "score": 0.4516482843137255,
-              "nearDuplicate": false,
-              "components": {
-                "nameSimilarity": 0.23898809523809522,
-                "statVectorDistance": 0,
-                "compositionOverlap": 0.47058823529411764
-              },
-              "vsFallback": {
-                "nameSimilarity": 0.23898809523809522,
-                "statVectorDistance": 0,
-                "compositionOverlap": 0.47058823529411764
-              },
-              "vsRecent": null
+              "scored": false,
+              "reason": "fallback"
             },
             "responsiveness": {
-              "scored": true,
-              "metricVersion": "phase-47-responsiveness-v2",
-              "sourcePersona": "hoarder",
-              "samePersona": {
-                "metricVersion": "phase-47-responsiveness-v2",
-                "persona": "hoarder",
-                "hits": 0,
-                "total": 3,
-                "rate": 0,
-                "detectors": [
-                  {
-                    "id": "hoarder_item_density",
-                    "hit": false
-                  },
-                  {
-                    "id": "hoarder_thief_pressure",
-                    "hit": false
-                  },
-                  {
-                    "id": "hoarder_inventory_narration",
-                    "hit": false
-                  }
-                ]
-              },
-              "crossPersona": {
-                "hoarder": {
-                  "metricVersion": "phase-47-responsiveness-v2",
-                  "persona": "hoarder",
-                  "hits": 0,
-                  "total": 3,
-                  "rate": 0,
-                  "detectors": [
-                    {
-                      "id": "hoarder_item_density",
-                      "hit": false
-                    },
-                    {
-                      "id": "hoarder_thief_pressure",
-                      "hit": false
-                    },
-                    {
-                      "id": "hoarder_inventory_narration",
-                      "hit": false
-                    }
-                  ]
-                },
-                "pacifist": {
-                  "metricVersion": "phase-47-responsiveness-v2",
-                  "persona": "pacifist",
-                  "hits": 0,
-                  "total": 3,
-                  "rate": 0,
-                  "detectors": [
-                    {
-                      "id": "pacifist_route_options",
-                      "hit": false
-                    },
-                    {
-                      "id": "pacifist_soft_threats",
-                      "hit": false
-                    },
-                    {
-                      "id": "pacifist_caution_narration",
-                      "hit": false
-                    }
-                  ]
-                },
-                "speedrunner": {
-                  "metricVersion": "phase-47-responsiveness-v2",
-                  "persona": "speedrunner",
-                  "hits": 0,
-                  "total": 3,
-                  "rate": 0,
-                  "detectors": [
-                    {
-                      "id": "speedrunner_compact_floor",
-                      "hit": false
-                    },
-                    {
-                      "id": "speedrunner_near_entrance_loot",
-                      "hit": false
-                    },
-                    {
-                      "id": "speedrunner_pace_narration",
-                      "hit": false
-                    }
-                  ]
-                },
-                "completionist": {
-                  "metricVersion": "phase-47-responsiveness-v2",
-                  "persona": "completionist",
-                  "hits": 0,
-                  "total": 3,
-                  "rate": 0,
-                  "detectors": [
-                    {
-                      "id": "completionist_dialogue_depth",
-                      "hit": false
-                    },
-                    {
-                      "id": "completionist_quest_richness",
-                      "hit": false
-                    },
-                    {
-                      "id": "completionist_rich_callbacks",
-                      "hit": false
-                    }
-                  ]
-                },
-                "chaos": {
-                  "metricVersion": "phase-47-responsiveness-v2",
-                  "persona": "chaos",
-                  "hits": 2,
-                  "total": 4,
-                  "rate": 0.5,
-                  "detectors": [
-                    {
-                      "id": "chaos_behavior_diversity",
-                      "hit": false
-                    },
-                    {
-                      "id": "chaos_trap_variety",
-                      "hit": true
-                    },
-                    {
-                      "id": "chaos_content_variance",
-                      "hit": false
-                    },
-                    {
-                      "id": "chaos_varied_engagement",
-                      "hit": true
-                    }
-                  ]
-                }
-              }
+              "scored": false,
+              "reason": "fallback"
             }
           }
         ],
         "summary": {
           "novelty": {
-            "averageScore": 0.4516482843137255,
+            "averageScore": 0,
             "nearDuplicateCount": 0,
-            "sampleCount": 1
+            "sampleCount": 0
           },
           "responsiveness": {
             "samePersonaHitRate": 0,
-            "crossPersonaHitRate": 0.125,
-            "sampleCount": 1
+            "crossPersonaHitRate": 0,
+            "sampleCount": 0
           },
           "detectorProposal": [
             {
@@ -1993,17 +1849,17 @@
             "novelty": {
               "scored": true,
               "metricVersion": "phase-42-novelty-v1",
-              "distance": 0.38651629072681715,
-              "score": 0.38651629072681715,
+              "distance": 0.424016290726817,
+              "score": 0.424016290726817,
               "nearDuplicate": false,
               "components": {
                 "nameSimilarity": 0.36233440744718937,
-                "statVectorDistance": 0,
+                "statVectorDistance": 0.125,
                 "compositionOverlap": 0.5333333333333333
               },
               "vsFallback": {
                 "nameSimilarity": 0.36233440744718937,
-                "statVectorDistance": 0,
+                "statVectorDistance": 0.125,
                 "compositionOverlap": 0.5333333333333333
               },
               "vsRecent": null
@@ -2149,7 +2005,7 @@
         ],
         "summary": {
           "novelty": {
-            "averageScore": 0.38651629072681715,
+            "averageScore": 0.424016290726817,
             "nearDuplicateCount": 0,
             "sampleCount": 1
           },
@@ -2664,10 +2520,10 @@
             "band": "lowest",
             "attemptCount": 1,
             "validity": true,
-            "solvability": true,
-            "servedWithoutFallback": true,
+            "solvability": false,
+            "servedWithoutFallback": false,
             "repairCount": 0,
-            "fallback": false,
+            "fallback": true,
             "latencyMs": 10,
             "tokens": {
               "inputTokens": 100,
@@ -2676,8 +2532,10 @@
             },
             "gate2": {
               "recorded": true,
-              "passed": true,
-              "blockingCodes": []
+              "passed": false,
+              "blockingCodes": [
+                "G2_CLEAR_RATE"
+              ]
             },
             "advisoryFlags": {
               "hpRetentionRecorded": true,
@@ -2692,9 +2550,9 @@
             },
             "bandAccuracy": {
               "band": "lowest",
-              "clearRatePercent": 80,
+              "clearRatePercent": 66.66666666666666,
               "clearRateTargetPercent": 70,
-              "clearRateMet": true,
+              "clearRateMet": false,
               "medianHpRetentionPercent": 100,
               "medianHpRetentionTargetPercent": {
                 "min": 15,
@@ -2714,18 +2572,18 @@
             },
             "solvability": {
               "count": 1,
-              "passed": 1,
-              "percent": 100
+              "passed": 0,
+              "percent": 0
             },
             "servedWithoutFallback": {
               "count": 1,
-              "passed": 1,
-              "percent": 100
+              "passed": 0,
+              "percent": 0
             },
             "fallback": {
               "count": 1,
-              "passed": 0,
-              "percent": 0
+              "passed": 1,
+              "percent": 100
             },
             "bandAccuracy": {
               "count": 1,
@@ -2877,18 +2735,18 @@
                 },
                 "solvability": {
                   "count": 1,
-                  "passed": 1,
-                  "percent": 100
+                  "passed": 0,
+                  "percent": 0
                 },
                 "servedWithoutFallback": {
                   "count": 1,
-                  "passed": 1,
-                  "percent": 100
+                  "passed": 0,
+                  "percent": 0
                 },
                 "fallback": {
                   "count": 1,
-                  "passed": 0,
-                  "percent": 0
+                  "passed": 1,
+                  "percent": 100
                 },
                 "bandAccuracy": {
                   "count": 1,
@@ -2940,172 +2798,25 @@
           {
             "generationIndex": 0,
             "novelty": {
-              "scored": true,
-              "metricVersion": "phase-42-novelty-v1",
-              "distance": 0.4516482843137255,
-              "score": 0.4516482843137255,
-              "nearDuplicate": false,
-              "components": {
-                "nameSimilarity": 0.23898809523809522,
-                "statVectorDistance": 0,
-                "compositionOverlap": 0.47058823529411764
-              },
-              "vsFallback": {
-                "nameSimilarity": 0.23898809523809522,
-                "statVectorDistance": 0,
-                "compositionOverlap": 0.47058823529411764
-              },
-              "vsRecent": null
+              "scored": false,
+              "reason": "fallback"
             },
             "responsiveness": {
-              "scored": true,
-              "metricVersion": "phase-47-responsiveness-v2",
-              "sourcePersona": "pacifist",
-              "samePersona": {
-                "metricVersion": "phase-47-responsiveness-v2",
-                "persona": "pacifist",
-                "hits": 0,
-                "total": 3,
-                "rate": 0,
-                "detectors": [
-                  {
-                    "id": "pacifist_route_options",
-                    "hit": false
-                  },
-                  {
-                    "id": "pacifist_soft_threats",
-                    "hit": false
-                  },
-                  {
-                    "id": "pacifist_caution_narration",
-                    "hit": false
-                  }
-                ]
-              },
-              "crossPersona": {
-                "hoarder": {
-                  "metricVersion": "phase-47-responsiveness-v2",
-                  "persona": "hoarder",
-                  "hits": 0,
-                  "total": 3,
-                  "rate": 0,
-                  "detectors": [
-                    {
-                      "id": "hoarder_item_density",
-                      "hit": false
-                    },
-                    {
-                      "id": "hoarder_thief_pressure",
-                      "hit": false
-                    },
-                    {
-                      "id": "hoarder_inventory_narration",
-                      "hit": false
-                    }
-                  ]
-                },
-                "pacifist": {
-                  "metricVersion": "phase-47-responsiveness-v2",
-                  "persona": "pacifist",
-                  "hits": 0,
-                  "total": 3,
-                  "rate": 0,
-                  "detectors": [
-                    {
-                      "id": "pacifist_route_options",
-                      "hit": false
-                    },
-                    {
-                      "id": "pacifist_soft_threats",
-                      "hit": false
-                    },
-                    {
-                      "id": "pacifist_caution_narration",
-                      "hit": false
-                    }
-                  ]
-                },
-                "speedrunner": {
-                  "metricVersion": "phase-47-responsiveness-v2",
-                  "persona": "speedrunner",
-                  "hits": 0,
-                  "total": 3,
-                  "rate": 0,
-                  "detectors": [
-                    {
-                      "id": "speedrunner_compact_floor",
-                      "hit": false
-                    },
-                    {
-                      "id": "speedrunner_near_entrance_loot",
-                      "hit": false
-                    },
-                    {
-                      "id": "speedrunner_pace_narration",
-                      "hit": false
-                    }
-                  ]
-                },
-                "completionist": {
-                  "metricVersion": "phase-47-responsiveness-v2",
-                  "persona": "completionist",
-                  "hits": 0,
-                  "total": 3,
-                  "rate": 0,
-                  "detectors": [
-                    {
-                      "id": "completionist_dialogue_depth",
-                      "hit": false
-                    },
-                    {
-                      "id": "completionist_quest_richness",
-                      "hit": false
-                    },
-                    {
-                      "id": "completionist_rich_callbacks",
-                      "hit": false
-                    }
-                  ]
-                },
-                "chaos": {
-                  "metricVersion": "phase-47-responsiveness-v2",
-                  "persona": "chaos",
-                  "hits": 0,
-                  "total": 4,
-                  "rate": 0,
-                  "detectors": [
-                    {
-                      "id": "chaos_behavior_diversity",
-                      "hit": false
-                    },
-                    {
-                      "id": "chaos_trap_variety",
-                      "hit": false
-                    },
-                    {
-                      "id": "chaos_content_variance",
-                      "hit": false
-                    },
-                    {
-                      "id": "chaos_varied_engagement",
-                      "hit": false
-                    }
-                  ]
-                }
-              }
+              "scored": false,
+              "reason": "fallback"
             }
           }
         ],
         "summary": {
           "novelty": {
-            "averageScore": 0.4516482843137255,
+            "averageScore": 0,
             "nearDuplicateCount": 0,
-            "sampleCount": 1
+            "sampleCount": 0
           },
           "responsiveness": {
             "samePersonaHitRate": 0,
             "crossPersonaHitRate": 0,
-            "sampleCount": 1
+            "sampleCount": 0
           },
           "detectorProposal": [
             {
@@ -3498,17 +3209,17 @@
             "novelty": {
               "scored": true,
               "metricVersion": "phase-42-novelty-v1",
-              "distance": 0.38651629072681715,
-              "score": 0.38651629072681715,
+              "distance": 0.424016290726817,
+              "score": 0.424016290726817,
               "nearDuplicate": false,
               "components": {
                 "nameSimilarity": 0.36233440744718937,
-                "statVectorDistance": 0,
+                "statVectorDistance": 0.125,
                 "compositionOverlap": 0.5333333333333333
               },
               "vsFallback": {
                 "nameSimilarity": 0.36233440744718937,
-                "statVectorDistance": 0,
+                "statVectorDistance": 0.125,
                 "compositionOverlap": 0.5333333333333333
               },
               "vsRecent": null
@@ -3626,9 +3337,9 @@
                 "chaos": {
                   "metricVersion": "phase-47-responsiveness-v2",
                   "persona": "chaos",
-                  "hits": 1,
+                  "hits": 0,
                   "total": 4,
-                  "rate": 0.25,
+                  "rate": 0,
                   "detectors": [
                     {
                       "id": "chaos_behavior_diversity",
@@ -3644,7 +3355,7 @@
                     },
                     {
                       "id": "chaos_varied_engagement",
-                      "hit": true
+                      "hit": false
                     }
                   ]
                 }
@@ -3654,13 +3365,13 @@
         ],
         "summary": {
           "novelty": {
-            "averageScore": 0.38651629072681715,
+            "averageScore": 0.424016290726817,
             "nearDuplicateCount": 0,
             "sampleCount": 1
           },
           "responsiveness": {
             "samePersonaHitRate": 0.3333333333333333,
-            "crossPersonaHitRate": 0.0625,
+            "crossPersonaHitRate": 0,
             "sampleCount": 1
           },
           "detectorProposal": [
@@ -4169,10 +3880,10 @@
             "band": "lowest",
             "attemptCount": 1,
             "validity": true,
-            "solvability": true,
-            "servedWithoutFallback": true,
+            "solvability": false,
+            "servedWithoutFallback": false,
             "repairCount": 0,
-            "fallback": false,
+            "fallback": true,
             "latencyMs": 10,
             "tokens": {
               "inputTokens": 100,
@@ -4181,8 +3892,11 @@
             },
             "gate2": {
               "recorded": true,
-              "passed": true,
-              "blockingCodes": []
+              "passed": false,
+              "blockingCodes": [
+                "G2_HARD_CLEAR_RATE",
+                "G2_CLEAR_RATE"
+              ]
             },
             "advisoryFlags": {
               "hpRetentionRecorded": true,
@@ -4197,10 +3911,10 @@
             },
             "bandAccuracy": {
               "band": "lowest",
-              "clearRatePercent": 100,
+              "clearRatePercent": 0,
               "clearRateTargetPercent": 70,
-              "clearRateMet": true,
-              "medianHpRetentionPercent": 100,
+              "clearRateMet": false,
+              "medianHpRetentionPercent": 0,
               "medianHpRetentionTargetPercent": {
                 "min": 15,
                 "max": 60
@@ -4219,18 +3933,18 @@
             },
             "solvability": {
               "count": 1,
-              "passed": 1,
-              "percent": 100
+              "passed": 0,
+              "percent": 0
             },
             "servedWithoutFallback": {
               "count": 1,
-              "passed": 1,
-              "percent": 100
+              "passed": 0,
+              "percent": 0
             },
             "fallback": {
               "count": 1,
-              "passed": 0,
-              "percent": 0
+              "passed": 1,
+              "percent": 100
             },
             "bandAccuracy": {
               "count": 1,
@@ -4382,18 +4096,18 @@
                 },
                 "solvability": {
                   "count": 1,
-                  "passed": 1,
-                  "percent": 100
+                  "passed": 0,
+                  "percent": 0
                 },
                 "servedWithoutFallback": {
                   "count": 1,
-                  "passed": 1,
-                  "percent": 100
+                  "passed": 0,
+                  "percent": 0
                 },
                 "fallback": {
                   "count": 1,
-                  "passed": 0,
-                  "percent": 0
+                  "passed": 1,
+                  "percent": 100
                 },
                 "bandAccuracy": {
                   "count": 1,
@@ -4445,172 +4159,25 @@
           {
             "generationIndex": 0,
             "novelty": {
-              "scored": true,
-              "metricVersion": "phase-42-novelty-v1",
-              "distance": 0.4516482843137255,
-              "score": 0.4516482843137255,
-              "nearDuplicate": false,
-              "components": {
-                "nameSimilarity": 0.23898809523809522,
-                "statVectorDistance": 0,
-                "compositionOverlap": 0.47058823529411764
-              },
-              "vsFallback": {
-                "nameSimilarity": 0.23898809523809522,
-                "statVectorDistance": 0,
-                "compositionOverlap": 0.47058823529411764
-              },
-              "vsRecent": null
+              "scored": false,
+              "reason": "fallback"
             },
             "responsiveness": {
-              "scored": true,
-              "metricVersion": "phase-47-responsiveness-v2",
-              "sourcePersona": "speedrunner",
-              "samePersona": {
-                "metricVersion": "phase-47-responsiveness-v2",
-                "persona": "speedrunner",
-                "hits": 0,
-                "total": 3,
-                "rate": 0,
-                "detectors": [
-                  {
-                    "id": "speedrunner_compact_floor",
-                    "hit": false
-                  },
-                  {
-                    "id": "speedrunner_near_entrance_loot",
-                    "hit": false
-                  },
-                  {
-                    "id": "speedrunner_pace_narration",
-                    "hit": false
-                  }
-                ]
-              },
-              "crossPersona": {
-                "hoarder": {
-                  "metricVersion": "phase-47-responsiveness-v2",
-                  "persona": "hoarder",
-                  "hits": 0,
-                  "total": 3,
-                  "rate": 0,
-                  "detectors": [
-                    {
-                      "id": "hoarder_item_density",
-                      "hit": false
-                    },
-                    {
-                      "id": "hoarder_thief_pressure",
-                      "hit": false
-                    },
-                    {
-                      "id": "hoarder_inventory_narration",
-                      "hit": false
-                    }
-                  ]
-                },
-                "pacifist": {
-                  "metricVersion": "phase-47-responsiveness-v2",
-                  "persona": "pacifist",
-                  "hits": 0,
-                  "total": 3,
-                  "rate": 0,
-                  "detectors": [
-                    {
-                      "id": "pacifist_route_options",
-                      "hit": false
-                    },
-                    {
-                      "id": "pacifist_soft_threats",
-                      "hit": false
-                    },
-                    {
-                      "id": "pacifist_caution_narration",
-                      "hit": false
-                    }
-                  ]
-                },
-                "speedrunner": {
-                  "metricVersion": "phase-47-responsiveness-v2",
-                  "persona": "speedrunner",
-                  "hits": 0,
-                  "total": 3,
-                  "rate": 0,
-                  "detectors": [
-                    {
-                      "id": "speedrunner_compact_floor",
-                      "hit": false
-                    },
-                    {
-                      "id": "speedrunner_near_entrance_loot",
-                      "hit": false
-                    },
-                    {
-                      "id": "speedrunner_pace_narration",
-                      "hit": false
-                    }
-                  ]
-                },
-                "completionist": {
-                  "metricVersion": "phase-47-responsiveness-v2",
-                  "persona": "completionist",
-                  "hits": 0,
-                  "total": 3,
-                  "rate": 0,
-                  "detectors": [
-                    {
-                      "id": "completionist_dialogue_depth",
-                      "hit": false
-                    },
-                    {
-                      "id": "completionist_quest_richness",
-                      "hit": false
-                    },
-                    {
-                      "id": "completionist_rich_callbacks",
-                      "hit": false
-                    }
-                  ]
-                },
-                "chaos": {
-                  "metricVersion": "phase-47-responsiveness-v2",
-                  "persona": "chaos",
-                  "hits": 2,
-                  "total": 4,
-                  "rate": 0.5,
-                  "detectors": [
-                    {
-                      "id": "chaos_behavior_diversity",
-                      "hit": false
-                    },
-                    {
-                      "id": "chaos_trap_variety",
-                      "hit": true
-                    },
-                    {
-                      "id": "chaos_content_variance",
-                      "hit": false
-                    },
-                    {
-                      "id": "chaos_varied_engagement",
-                      "hit": true
-                    }
-                  ]
-                }
-              }
+              "scored": false,
+              "reason": "fallback"
             }
           }
         ],
         "summary": {
           "novelty": {
-            "averageScore": 0.4516482843137255,
+            "averageScore": 0,
             "nearDuplicateCount": 0,
-            "sampleCount": 1
+            "sampleCount": 0
           },
           "responsiveness": {
             "samePersonaHitRate": 0,
-            "crossPersonaHitRate": 0.125,
-            "sampleCount": 1
+            "crossPersonaHitRate": 0,
+            "sampleCount": 0
           },
           "detectorProposal": [
             {
@@ -5003,17 +4570,17 @@
             "novelty": {
               "scored": true,
               "metricVersion": "phase-42-novelty-v1",
-              "distance": 0.38651629072681715,
-              "score": 0.38651629072681715,
+              "distance": 0.424016290726817,
+              "score": 0.424016290726817,
               "nearDuplicate": false,
               "components": {
                 "nameSimilarity": 0.36233440744718937,
-                "statVectorDistance": 0,
+                "statVectorDistance": 0.125,
                 "compositionOverlap": 0.5333333333333333
               },
               "vsFallback": {
                 "nameSimilarity": 0.36233440744718937,
-                "statVectorDistance": 0,
+                "statVectorDistance": 0.125,
                 "compositionOverlap": 0.5333333333333333
               },
               "vsRecent": null
@@ -5159,7 +4726,7 @@
         ],
         "summary": {
           "novelty": {
-            "averageScore": 0.38651629072681715,
+            "averageScore": 0.424016290726817,
             "nearDuplicateCount": 0,
             "sampleCount": 1
           },
@@ -5674,10 +5241,10 @@
             "band": "lowest",
             "attemptCount": 1,
             "validity": true,
-            "solvability": true,
-            "servedWithoutFallback": true,
+            "solvability": false,
+            "servedWithoutFallback": false,
             "repairCount": 0,
-            "fallback": false,
+            "fallback": true,
             "latencyMs": 10,
             "tokens": {
               "inputTokens": 100,
@@ -5686,8 +5253,11 @@
             },
             "gate2": {
               "recorded": true,
-              "passed": true,
-              "blockingCodes": []
+              "passed": false,
+              "blockingCodes": [
+                "G2_HARD_CLEAR_RATE",
+                "G2_CLEAR_RATE"
+              ]
             },
             "advisoryFlags": {
               "hpRetentionRecorded": true,
@@ -5702,10 +5272,10 @@
             },
             "bandAccuracy": {
               "band": "lowest",
-              "clearRatePercent": 100,
+              "clearRatePercent": 0,
               "clearRateTargetPercent": 70,
-              "clearRateMet": true,
-              "medianHpRetentionPercent": 100,
+              "clearRateMet": false,
+              "medianHpRetentionPercent": 0,
               "medianHpRetentionTargetPercent": {
                 "min": 15,
                 "max": 60
@@ -5724,18 +5294,18 @@
             },
             "solvability": {
               "count": 1,
-              "passed": 1,
-              "percent": 100
+              "passed": 0,
+              "percent": 0
             },
             "servedWithoutFallback": {
               "count": 1,
-              "passed": 1,
-              "percent": 100
+              "passed": 0,
+              "percent": 0
             },
             "fallback": {
               "count": 1,
-              "passed": 0,
-              "percent": 0
+              "passed": 1,
+              "percent": 100
             },
             "bandAccuracy": {
               "count": 1,
@@ -5887,18 +5457,18 @@
                 },
                 "solvability": {
                   "count": 1,
-                  "passed": 1,
-                  "percent": 100
+                  "passed": 0,
+                  "percent": 0
                 },
                 "servedWithoutFallback": {
                   "count": 1,
-                  "passed": 1,
-                  "percent": 100
+                  "passed": 0,
+                  "percent": 0
                 },
                 "fallback": {
                   "count": 1,
-                  "passed": 0,
-                  "percent": 0
+                  "passed": 1,
+                  "percent": 100
                 },
                 "bandAccuracy": {
                   "count": 1,
@@ -5950,172 +5520,25 @@
           {
             "generationIndex": 0,
             "novelty": {
-              "scored": true,
-              "metricVersion": "phase-42-novelty-v1",
-              "distance": 0.4516482843137255,
-              "score": 0.4516482843137255,
-              "nearDuplicate": false,
-              "components": {
-                "nameSimilarity": 0.23898809523809522,
-                "statVectorDistance": 0,
-                "compositionOverlap": 0.47058823529411764
-              },
-              "vsFallback": {
-                "nameSimilarity": 0.23898809523809522,
-                "statVectorDistance": 0,
-                "compositionOverlap": 0.47058823529411764
-              },
-              "vsRecent": null
+              "scored": false,
+              "reason": "fallback"
             },
             "responsiveness": {
-              "scored": true,
-              "metricVersion": "phase-47-responsiveness-v2",
-              "sourcePersona": "completionist",
-              "samePersona": {
-                "metricVersion": "phase-47-responsiveness-v2",
-                "persona": "completionist",
-                "hits": 0,
-                "total": 3,
-                "rate": 0,
-                "detectors": [
-                  {
-                    "id": "completionist_dialogue_depth",
-                    "hit": false
-                  },
-                  {
-                    "id": "completionist_quest_richness",
-                    "hit": false
-                  },
-                  {
-                    "id": "completionist_rich_callbacks",
-                    "hit": false
-                  }
-                ]
-              },
-              "crossPersona": {
-                "hoarder": {
-                  "metricVersion": "phase-47-responsiveness-v2",
-                  "persona": "hoarder",
-                  "hits": 0,
-                  "total": 3,
-                  "rate": 0,
-                  "detectors": [
-                    {
-                      "id": "hoarder_item_density",
-                      "hit": false
-                    },
-                    {
-                      "id": "hoarder_thief_pressure",
-                      "hit": false
-                    },
-                    {
-                      "id": "hoarder_inventory_narration",
-                      "hit": false
-                    }
-                  ]
-                },
-                "pacifist": {
-                  "metricVersion": "phase-47-responsiveness-v2",
-                  "persona": "pacifist",
-                  "hits": 0,
-                  "total": 3,
-                  "rate": 0,
-                  "detectors": [
-                    {
-                      "id": "pacifist_route_options",
-                      "hit": false
-                    },
-                    {
-                      "id": "pacifist_soft_threats",
-                      "hit": false
-                    },
-                    {
-                      "id": "pacifist_caution_narration",
-                      "hit": false
-                    }
-                  ]
-                },
-                "speedrunner": {
-                  "metricVersion": "phase-47-responsiveness-v2",
-                  "persona": "speedrunner",
-                  "hits": 0,
-                  "total": 3,
-                  "rate": 0,
-                  "detectors": [
-                    {
-                      "id": "speedrunner_compact_floor",
-                      "hit": false
-                    },
-                    {
-                      "id": "speedrunner_near_entrance_loot",
-                      "hit": false
-                    },
-                    {
-                      "id": "speedrunner_pace_narration",
-                      "hit": false
-                    }
-                  ]
-                },
-                "completionist": {
-                  "metricVersion": "phase-47-responsiveness-v2",
-                  "persona": "completionist",
-                  "hits": 0,
-                  "total": 3,
-                  "rate": 0,
-                  "detectors": [
-                    {
-                      "id": "completionist_dialogue_depth",
-                      "hit": false
-                    },
-                    {
-                      "id": "completionist_quest_richness",
-                      "hit": false
-                    },
-                    {
-                      "id": "completionist_rich_callbacks",
-                      "hit": false
-                    }
-                  ]
-                },
-                "chaos": {
-                  "metricVersion": "phase-47-responsiveness-v2",
-                  "persona": "chaos",
-                  "hits": 2,
-                  "total": 4,
-                  "rate": 0.5,
-                  "detectors": [
-                    {
-                      "id": "chaos_behavior_diversity",
-                      "hit": false
-                    },
-                    {
-                      "id": "chaos_trap_variety",
-                      "hit": true
-                    },
-                    {
-                      "id": "chaos_content_variance",
-                      "hit": false
-                    },
-                    {
-                      "id": "chaos_varied_engagement",
-                      "hit": true
-                    }
-                  ]
-                }
-              }
+              "scored": false,
+              "reason": "fallback"
             }
           }
         ],
         "summary": {
           "novelty": {
-            "averageScore": 0.4516482843137255,
+            "averageScore": 0,
             "nearDuplicateCount": 0,
-            "sampleCount": 1
+            "sampleCount": 0
           },
           "responsiveness": {
             "samePersonaHitRate": 0,
-            "crossPersonaHitRate": 0.125,
-            "sampleCount": 1
+            "crossPersonaHitRate": 0,
+            "sampleCount": 0
           },
           "detectorProposal": [
             {
@@ -6508,17 +5931,17 @@
             "novelty": {
               "scored": true,
               "metricVersion": "phase-42-novelty-v1",
-              "distance": 0.38651629072681715,
-              "score": 0.38651629072681715,
+              "distance": 0.424016290726817,
+              "score": 0.424016290726817,
               "nearDuplicate": false,
               "components": {
                 "nameSimilarity": 0.36233440744718937,
-                "statVectorDistance": 0,
+                "statVectorDistance": 0.125,
                 "compositionOverlap": 0.5333333333333333
               },
               "vsFallback": {
                 "nameSimilarity": 0.36233440744718937,
-                "statVectorDistance": 0,
+                "statVectorDistance": 0.125,
                 "compositionOverlap": 0.5333333333333333
               },
               "vsRecent": null
@@ -6668,7 +6091,7 @@
         ],
         "summary": {
           "novelty": {
-            "averageScore": 0.38651629072681715,
+            "averageScore": 0.424016290726817,
             "nearDuplicateCount": 0,
             "sampleCount": 1
           },
@@ -7183,10 +6606,10 @@
             "band": "lowest",
             "attemptCount": 1,
             "validity": true,
-            "solvability": true,
-            "servedWithoutFallback": true,
+            "solvability": false,
+            "servedWithoutFallback": false,
             "repairCount": 0,
-            "fallback": false,
+            "fallback": true,
             "latencyMs": 10,
             "tokens": {
               "inputTokens": 100,
@@ -7195,8 +6618,11 @@
             },
             "gate2": {
               "recorded": true,
-              "passed": true,
-              "blockingCodes": []
+              "passed": false,
+              "blockingCodes": [
+                "G2_HARD_CLEAR_RATE",
+                "G2_CLEAR_RATE"
+              ]
             },
             "advisoryFlags": {
               "hpRetentionRecorded": true,
@@ -7211,10 +6637,10 @@
             },
             "bandAccuracy": {
               "band": "lowest",
-              "clearRatePercent": 100,
+              "clearRatePercent": 0,
               "clearRateTargetPercent": 70,
-              "clearRateMet": true,
-              "medianHpRetentionPercent": 100,
+              "clearRateMet": false,
+              "medianHpRetentionPercent": 0,
               "medianHpRetentionTargetPercent": {
                 "min": 15,
                 "max": 60
@@ -7233,18 +6659,18 @@
             },
             "solvability": {
               "count": 1,
-              "passed": 1,
-              "percent": 100
+              "passed": 0,
+              "percent": 0
             },
             "servedWithoutFallback": {
               "count": 1,
-              "passed": 1,
-              "percent": 100
+              "passed": 0,
+              "percent": 0
             },
             "fallback": {
               "count": 1,
-              "passed": 0,
-              "percent": 0
+              "passed": 1,
+              "percent": 100
             },
             "bandAccuracy": {
               "count": 1,
@@ -7396,18 +6822,18 @@
                 },
                 "solvability": {
                   "count": 1,
-                  "passed": 1,
-                  "percent": 100
+                  "passed": 0,
+                  "percent": 0
                 },
                 "servedWithoutFallback": {
                   "count": 1,
-                  "passed": 1,
-                  "percent": 100
+                  "passed": 0,
+                  "percent": 0
                 },
                 "fallback": {
                   "count": 1,
-                  "passed": 0,
-                  "percent": 0
+                  "passed": 1,
+                  "percent": 100
                 },
                 "bandAccuracy": {
                   "count": 1,
@@ -7459,176 +6885,25 @@
           {
             "generationIndex": 0,
             "novelty": {
-              "scored": true,
-              "metricVersion": "phase-42-novelty-v1",
-              "distance": 0.4516482843137255,
-              "score": 0.4516482843137255,
-              "nearDuplicate": false,
-              "components": {
-                "nameSimilarity": 0.23898809523809522,
-                "statVectorDistance": 0,
-                "compositionOverlap": 0.47058823529411764
-              },
-              "vsFallback": {
-                "nameSimilarity": 0.23898809523809522,
-                "statVectorDistance": 0,
-                "compositionOverlap": 0.47058823529411764
-              },
-              "vsRecent": null
+              "scored": false,
+              "reason": "fallback"
             },
             "responsiveness": {
-              "scored": true,
-              "metricVersion": "phase-47-responsiveness-v2",
-              "sourcePersona": "chaos",
-              "samePersona": {
-                "metricVersion": "phase-47-responsiveness-v2",
-                "persona": "chaos",
-                "hits": 0,
-                "total": 4,
-                "rate": 0,
-                "detectors": [
-                  {
-                    "id": "chaos_behavior_diversity",
-                    "hit": false
-                  },
-                  {
-                    "id": "chaos_trap_variety",
-                    "hit": false
-                  },
-                  {
-                    "id": "chaos_content_variance",
-                    "hit": false
-                  },
-                  {
-                    "id": "chaos_varied_engagement",
-                    "hit": false
-                  }
-                ]
-              },
-              "crossPersona": {
-                "hoarder": {
-                  "metricVersion": "phase-47-responsiveness-v2",
-                  "persona": "hoarder",
-                  "hits": 0,
-                  "total": 3,
-                  "rate": 0,
-                  "detectors": [
-                    {
-                      "id": "hoarder_item_density",
-                      "hit": false
-                    },
-                    {
-                      "id": "hoarder_thief_pressure",
-                      "hit": false
-                    },
-                    {
-                      "id": "hoarder_inventory_narration",
-                      "hit": false
-                    }
-                  ]
-                },
-                "pacifist": {
-                  "metricVersion": "phase-47-responsiveness-v2",
-                  "persona": "pacifist",
-                  "hits": 0,
-                  "total": 3,
-                  "rate": 0,
-                  "detectors": [
-                    {
-                      "id": "pacifist_route_options",
-                      "hit": false
-                    },
-                    {
-                      "id": "pacifist_soft_threats",
-                      "hit": false
-                    },
-                    {
-                      "id": "pacifist_caution_narration",
-                      "hit": false
-                    }
-                  ]
-                },
-                "speedrunner": {
-                  "metricVersion": "phase-47-responsiveness-v2",
-                  "persona": "speedrunner",
-                  "hits": 0,
-                  "total": 3,
-                  "rate": 0,
-                  "detectors": [
-                    {
-                      "id": "speedrunner_compact_floor",
-                      "hit": false
-                    },
-                    {
-                      "id": "speedrunner_near_entrance_loot",
-                      "hit": false
-                    },
-                    {
-                      "id": "speedrunner_pace_narration",
-                      "hit": false
-                    }
-                  ]
-                },
-                "completionist": {
-                  "metricVersion": "phase-47-responsiveness-v2",
-                  "persona": "completionist",
-                  "hits": 0,
-                  "total": 3,
-                  "rate": 0,
-                  "detectors": [
-                    {
-                      "id": "completionist_dialogue_depth",
-                      "hit": false
-                    },
-                    {
-                      "id": "completionist_quest_richness",
-                      "hit": false
-                    },
-                    {
-                      "id": "completionist_rich_callbacks",
-                      "hit": false
-                    }
-                  ]
-                },
-                "chaos": {
-                  "metricVersion": "phase-47-responsiveness-v2",
-                  "persona": "chaos",
-                  "hits": 0,
-                  "total": 4,
-                  "rate": 0,
-                  "detectors": [
-                    {
-                      "id": "chaos_behavior_diversity",
-                      "hit": false
-                    },
-                    {
-                      "id": "chaos_trap_variety",
-                      "hit": false
-                    },
-                    {
-                      "id": "chaos_content_variance",
-                      "hit": false
-                    },
-                    {
-                      "id": "chaos_varied_engagement",
-                      "hit": false
-                    }
-                  ]
-                }
-              }
+              "scored": false,
+              "reason": "fallback"
             }
           }
         ],
         "summary": {
           "novelty": {
-            "averageScore": 0.4516482843137255,
+            "averageScore": 0,
             "nearDuplicateCount": 0,
-            "sampleCount": 1
+            "sampleCount": 0
           },
           "responsiveness": {
             "samePersonaHitRate": 0,
             "crossPersonaHitRate": 0,
-            "sampleCount": 1
+            "sampleCount": 0
           },
           "detectorProposal": [
             {
@@ -7809,10 +7084,10 @@
         "band": "lowest",
         "attemptCount": 1,
         "validity": true,
-        "solvability": true,
-        "servedWithoutFallback": true,
+        "solvability": false,
+        "servedWithoutFallback": false,
         "repairCount": 0,
-        "fallback": false,
+        "fallback": true,
         "latencyMs": 10,
         "tokens": {
           "inputTokens": 100,
@@ -7821,8 +7096,11 @@
         },
         "gate2": {
           "recorded": true,
-          "passed": true,
-          "blockingCodes": []
+          "passed": false,
+          "blockingCodes": [
+            "G2_HARD_CLEAR_RATE",
+            "G2_CLEAR_RATE"
+          ]
         },
         "advisoryFlags": {
           "hpRetentionRecorded": true,
@@ -7837,10 +7115,10 @@
         },
         "bandAccuracy": {
           "band": "lowest",
-          "clearRatePercent": 100,
+          "clearRatePercent": 0,
           "clearRateTargetPercent": 70,
-          "clearRateMet": true,
-          "medianHpRetentionPercent": 100,
+          "clearRateMet": false,
+          "medianHpRetentionPercent": 0,
           "medianHpRetentionTargetPercent": {
             "min": 15,
             "max": 60
@@ -7931,10 +7209,10 @@
         "band": "lowest",
         "attemptCount": 1,
         "validity": true,
-        "solvability": true,
-        "servedWithoutFallback": true,
+        "solvability": false,
+        "servedWithoutFallback": false,
         "repairCount": 0,
-        "fallback": false,
+        "fallback": true,
         "latencyMs": 10,
         "tokens": {
           "inputTokens": 100,
@@ -7943,8 +7221,10 @@
         },
         "gate2": {
           "recorded": true,
-          "passed": true,
-          "blockingCodes": []
+          "passed": false,
+          "blockingCodes": [
+            "G2_CLEAR_RATE"
+          ]
         },
         "advisoryFlags": {
           "hpRetentionRecorded": true,
@@ -7959,9 +7239,9 @@
         },
         "bandAccuracy": {
           "band": "lowest",
-          "clearRatePercent": 80,
+          "clearRatePercent": 66.66666666666666,
           "clearRateTargetPercent": 70,
-          "clearRateMet": true,
+          "clearRateMet": false,
           "medianHpRetentionPercent": 100,
           "medianHpRetentionTargetPercent": {
             "min": 15,
@@ -8053,10 +7333,10 @@
         "band": "lowest",
         "attemptCount": 1,
         "validity": true,
-        "solvability": true,
-        "servedWithoutFallback": true,
+        "solvability": false,
+        "servedWithoutFallback": false,
         "repairCount": 0,
-        "fallback": false,
+        "fallback": true,
         "latencyMs": 10,
         "tokens": {
           "inputTokens": 100,
@@ -8065,8 +7345,11 @@
         },
         "gate2": {
           "recorded": true,
-          "passed": true,
-          "blockingCodes": []
+          "passed": false,
+          "blockingCodes": [
+            "G2_HARD_CLEAR_RATE",
+            "G2_CLEAR_RATE"
+          ]
         },
         "advisoryFlags": {
           "hpRetentionRecorded": true,
@@ -8081,10 +7364,10 @@
         },
         "bandAccuracy": {
           "band": "lowest",
-          "clearRatePercent": 100,
+          "clearRatePercent": 0,
           "clearRateTargetPercent": 70,
-          "clearRateMet": true,
-          "medianHpRetentionPercent": 100,
+          "clearRateMet": false,
+          "medianHpRetentionPercent": 0,
           "medianHpRetentionTargetPercent": {
             "min": 15,
             "max": 60
@@ -8175,10 +7458,10 @@
         "band": "lowest",
         "attemptCount": 1,
         "validity": true,
-        "solvability": true,
-        "servedWithoutFallback": true,
+        "solvability": false,
+        "servedWithoutFallback": false,
         "repairCount": 0,
-        "fallback": false,
+        "fallback": true,
         "latencyMs": 10,
         "tokens": {
           "inputTokens": 100,
@@ -8187,8 +7470,11 @@
         },
         "gate2": {
           "recorded": true,
-          "passed": true,
-          "blockingCodes": []
+          "passed": false,
+          "blockingCodes": [
+            "G2_HARD_CLEAR_RATE",
+            "G2_CLEAR_RATE"
+          ]
         },
         "advisoryFlags": {
           "hpRetentionRecorded": true,
@@ -8203,10 +7489,10 @@
         },
         "bandAccuracy": {
           "band": "lowest",
-          "clearRatePercent": 100,
+          "clearRatePercent": 0,
           "clearRateTargetPercent": 70,
-          "clearRateMet": true,
-          "medianHpRetentionPercent": 100,
+          "clearRateMet": false,
+          "medianHpRetentionPercent": 0,
           "medianHpRetentionTargetPercent": {
             "min": 15,
             "max": 60
@@ -8297,10 +7583,10 @@
         "band": "lowest",
         "attemptCount": 1,
         "validity": true,
-        "solvability": true,
-        "servedWithoutFallback": true,
+        "solvability": false,
+        "servedWithoutFallback": false,
         "repairCount": 0,
-        "fallback": false,
+        "fallback": true,
         "latencyMs": 10,
         "tokens": {
           "inputTokens": 100,
@@ -8309,8 +7595,11 @@
         },
         "gate2": {
           "recorded": true,
-          "passed": true,
-          "blockingCodes": []
+          "passed": false,
+          "blockingCodes": [
+            "G2_HARD_CLEAR_RATE",
+            "G2_CLEAR_RATE"
+          ]
         },
         "advisoryFlags": {
           "hpRetentionRecorded": true,
@@ -8325,10 +7614,10 @@
         },
         "bandAccuracy": {
           "band": "lowest",
-          "clearRatePercent": 100,
+          "clearRatePercent": 0,
           "clearRateTargetPercent": 70,
-          "clearRateMet": true,
-          "medianHpRetentionPercent": 100,
+          "clearRateMet": false,
+          "medianHpRetentionPercent": 0,
           "medianHpRetentionTargetPercent": {
             "min": 15,
             "max": 60
@@ -8347,18 +7636,18 @@
         },
         "solvability": {
           "count": 15,
-          "passed": 10,
-          "percent": 66.66666666666666
+          "passed": 5,
+          "percent": 33.33333333333333
         },
         "servedWithoutFallback": {
           "count": 15,
-          "passed": 10,
-          "percent": 66.66666666666666
+          "passed": 5,
+          "percent": 33.33333333333333
         },
         "fallback": {
           "count": 15,
-          "passed": 5,
-          "percent": 33.33333333333333
+          "passed": 10,
+          "percent": 66.66666666666666
         },
         "bandAccuracy": {
           "count": 10,
@@ -8536,18 +7825,18 @@
             },
             "solvability": {
               "count": 5,
-              "passed": 5,
-              "percent": 100
+              "passed": 0,
+              "percent": 0
             },
             "servedWithoutFallback": {
               "count": 5,
-              "passed": 5,
-              "percent": 100
+              "passed": 0,
+              "percent": 0
             },
             "fallback": {
               "count": 5,
-              "passed": 0,
-              "percent": 0
+              "passed": 5,
+              "percent": 100
             },
             "bandAccuracy": {
               "count": 5,
@@ -8596,14 +7885,14 @@
   },
   "thesis": {
     "novelty": {
-      "averageScore": 0.41908228752027127,
+      "averageScore": 0.42401629072681696,
       "nearDuplicateCount": 0,
-      "sampleCount": 10
+      "sampleCount": 5
     },
     "responsiveness": {
-      "samePersonaHitRate": 0.03333333333333333,
-      "crossPersonaHitRate": 0.07291666666666666,
-      "sampleCount": 10
+      "samePersonaHitRate": 0.06666666666666667,
+      "crossPersonaHitRate": 0.04583333333333332,
+      "sampleCount": 5
     },
     "detectorProposal": [
       {
