@@ -1,2 +1,2 @@
 // Evals boundary: persona runners, scoring, and regression thresholds.
-export {};
+export * from "./personas/index.js";

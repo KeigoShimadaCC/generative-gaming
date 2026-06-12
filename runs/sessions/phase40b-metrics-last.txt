@@ -1,0 +1,33 @@
+Implemented PHASE-40B metrics in [core.ts](/Users/keigoshimada/Documents/generative-gaming/src/evals/metrics/core.ts) with tests in [core.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/evals/metrics/core.test.ts).
+
+What changed:
+- Added per-record scoring from `GenerationRecord`: validity, solvability, fallback/served, repairs, latency, tokens, advisory HP-retention flags, and band accuracy against §11 targets.
+- Added aggregate `EvalScores` report: rates, latency stats, repair distribution, token totals/averages, per-band breakdowns, and PHASE-41 comparability slot.
+- Added artifact-reader helpers that only delegate to `harness/artifacts` reads.
+- Added hand-computed fixture tests plus purity/read-only reader coverage.
+
+Verification:
+```text
+pnpm run typecheck
+> tsc --noEmit
+PASS
+```
+
+```text
+pnpm exec eslint src/evals/metrics
+PASS, no output
+```
+
+```text
+pnpm exec vitest run src/evals/metrics
+Test Files  1 passed (1)
+Tests       5 passed (5)
+```
+
+Extra purity check:
+```text
+rg -n "node:fs|writeFile|writeNewFile|makeDir|rename\(|Date\.now|Math\.random|novelty|responsiveness" src/evals/metrics
+no matches
+```
+
+No commit made. Scope deviations: none in owned files. Existing sibling/untracked work under `src/evals/personas`, `tests/eval-bank`, `runs/eval-bank-*`, and `src/evals/index.ts` was left untouched. Environment discoveries: none. Actual time: ~34m vs 35m estimate.

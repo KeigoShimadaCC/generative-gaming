@@ -101,3 +101,6 @@ timestamp	label	agent	model	effort	seconds	input_tokens	output_tokens	total_toke
 2026-06-12T05:50:24Z	phase38-fixes	cursor	composer-2.5	default	187	NA	NA	NA	0
 2026-06-12T05:55:54Z	phase39-m1	codex	default	default	1256	9160434	39028	9199462	0
 2026-06-12T06:19:05Z	phase39-g2fix	codex	default	default	905	5979675	29945	6009620	0
+2026-06-12T06:44:16Z	phase40b-metrics	codex	default	default	407	1691298	26815	1718113	0
+2026-06-12T06:43:58Z	phase40a-personas	cursor	composer-2.5	default	436	NA	NA	NA	0
+2026-06-12T06:54:37Z	phase40-verify	cursor	composer-2.5	default	254	NA	NA	NA	0
