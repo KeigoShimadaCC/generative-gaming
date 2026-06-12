@@ -151,3 +151,4 @@ timestamp	label	agent	model	effort	seconds	input_tokens	output_tokens	total_toke
 2026-06-12T15:22:40Z	fullclear-spec	cursor	composer-2.5	default	391	NA	NA	NA	124
 2026-06-12T15:29:30Z	fullclear-spec-codex	codex	default	default	523	6519848	28149	6547997	0
 2026-06-12T15:38:42Z	ci-m0-timeout	codex	default	default	183	297608	5644	303252	0
+2026-06-12T15:50:28Z	ci-perf-budget	codex	default	default	65	337228	2423	339651	0

@@ -1,0 +1,21 @@
+Done. Updated [GameGrid.test.ts](/Users/keigoshimada/Documents/generative-gaming/app/components/grid/GameGrid.test.ts:120) only.
+
+Change: strict local budget remains `16ms/update`; CI uses `16 * 4` with the requested rationale comment.
+
+Verification:
+
+```text
+$ pnpm exec vitest run --config app/components/grid/vitest.config.ts
+Test Files  1 passed (1)
+Tests       4 passed (4)
+Exit code: 0
+```
+
+```text
+$ CI=1 pnpm exec vitest run --config app/components/grid/vitest.config.ts
+Test Files  1 passed (1)
+Tests       4 passed (4)
+Exit code: 0
+```
+
+No commit made. Scope deviations: none. Residual risks: none beyond the intentional looser CI perf ceiling. Environment discoveries: none. Actual time: ~5 minutes; estimate not specified.

@@ -11,6 +11,7 @@ import type {
   EntityInstance,
   GameState,
   Position,
+  SerializableRecord,
 } from "@engine/state";
 
 export type GridFogState = "visible" | "remembered" | "unseen";
@@ -58,8 +59,12 @@ export type GridCellView = {
   readonly x: number;
   readonly y: number;
   readonly glyph: string;
+  readonly terrain: string;
   readonly fog: GridFogState;
   readonly layer: GridLayer;
+  readonly featureKind: string;
+  readonly featureId: string;
+  readonly hasItem: boolean;
   readonly label: string;
   readonly badge: string;
   readonly shape: GridShape;
@@ -106,6 +111,14 @@ type RuntimeRecord = {
   readonly [key: string]: unknown;
 };
 
+type GridFeatureView = {
+  readonly id: string;
+  readonly kind: string;
+  readonly name: string;
+  readonly x: number;
+  readonly y: number;
+};
+
 const EMPTY_EFFECTS: CellEffects = {
   pulses: [],
   hitFlash: false,
@@ -131,7 +144,9 @@ export const createGridViewModel = (
   const width = lines[0]?.length ?? 0;
   const height = lines.length;
   const cursor = cursorForState(state);
+  const grid = gridFromState(state);
   const entitiesByPosition = entitiesByCell(state);
+  const featuresByPosition = featuresByCell(state);
   const fogStates = fogStatesForState(state, width, height);
   const effectsByPosition = effectsSinceLastRender(state, previousCursor);
   const markersByPosition = overlayMarkersByCell(markers);
@@ -144,21 +159,29 @@ export const createGridViewModel = (
       const glyph = line.charAt(x) || " ";
       const positionKey = keyForPosition({ x, y });
       const fog = fogStates[y * width + x] ?? "unseen";
+      const entities = entitiesByPosition.get(positionKey) ?? [];
       const layer = layerAt(
         state,
         { x, y },
         glyph,
         fog,
-        entitiesByPosition.get(positionKey) ?? [],
+        entities,
       );
+      const terrain = terrainAt(grid, width, height, x, y);
       const effects = effectsByPosition.get(positionKey) ?? EMPTY_EFFECTS;
+      const feature = fog === "unseen"
+        ? null
+        : featuresByPosition.get(positionKey) ?? null;
       cells.push(
         createCell({
           x,
           y,
           glyph,
+          terrain,
           fog,
           layer,
+          feature,
+          hasItem: entities.some((entity) => entity.kind === "item"),
           markers: markersByPosition.get(positionKey) ?? [],
           effects,
         }),
@@ -208,16 +231,22 @@ const createCell = ({
   x,
   y,
   glyph,
+  terrain,
   fog,
   layer,
+  feature,
+  hasItem,
   markers,
   effects,
 }: {
   readonly x: number;
   readonly y: number;
   readonly glyph: string;
+  readonly terrain: string;
   readonly fog: GridFogState;
   readonly layer: GridLayer;
+  readonly feature: GridFeatureView | null;
+  readonly hasItem: boolean;
   readonly markers: readonly GridOverlayMarker[];
   readonly effects: CellEffects;
 }): GridCellView => {
@@ -228,8 +257,12 @@ const createCell = ({
     x,
     y,
     glyph,
+    terrain,
     fog,
     layer,
+    featureKind: feature?.kind ?? "",
+    featureId: feature?.id ?? "",
+    hasItem,
     label: labelForLayer(layer, fog),
     badge: affordance.badge,
     shape: affordance.shape,
@@ -239,8 +272,12 @@ const createCell = ({
     motion: effects.motion,
     renderKey: [
       glyph,
+      terrain,
       fog,
       layer,
+      feature?.kind ?? "",
+      feature?.id ?? "",
+      hasItem ? "item" : "",
       affordance.badge,
       affordance.shape,
       effects.hitFlash ? "hit" : "",
@@ -251,6 +288,25 @@ const createCell = ({
       ...effects.pulses.map((pulse) => `${pulse.id}:${pulse.kind}:${pulse.text}`),
     ].join("|"),
   };
+};
+
+const terrainAt = (
+  grid: ReturnType<typeof gridFromState>,
+  width: number,
+  height: number,
+  x: number,
+  y: number,
+): string => {
+  if (
+    grid === null ||
+    grid.width !== width ||
+    grid.height !== height
+  ) {
+    return "";
+  }
+
+  const tile = grid.tiles[y * width + x];
+  return typeof tile?.terrain === "string" ? tile.terrain : "";
 };
 
 const overlayMarkersByCell = (
@@ -270,6 +326,48 @@ const overlayMarkersByCell = (
   }
 
   return grouped;
+};
+
+const featuresByCell = (
+  state: GameState,
+): ReadonlyMap<string, GridFeatureView> => {
+  const grouped = new Map<string, GridFeatureView>();
+
+  for (const feature of decorativeFeatures(state)) {
+    grouped.set(keyForPosition(feature), feature);
+  }
+
+  return grouped;
+};
+
+const decorativeFeatures = (state: GameState): readonly GridFeatureView[] => {
+  const opaque = asRecord(state.floor.geometry.opaque);
+  const knowledge = asRecord(opaque?.knowledge);
+  const features = knowledge?.decorativeFeatures;
+
+  if (!Array.isArray(features)) {
+    return [];
+  }
+
+  return features.flatMap((feature: SerializableRecord) => {
+    const parsed = parseFeature(feature);
+    return parsed === null ? [] : [parsed];
+  });
+};
+
+const parseFeature = (feature: SerializableRecord): GridFeatureView | null => {
+  const record = asRecord(feature);
+  const id = stringValue(record?.id);
+  const kind = stringValue(record?.kind);
+  const name = stringValue(record?.name);
+  const x = numberValue(record?.x);
+  const y = numberValue(record?.y);
+
+  if (id === null || kind === null || name === null || x === null || y === null) {
+    return null;
+  }
+
+  return { id, kind, name, x, y };
 };
 
 const affordanceForLayer = (
