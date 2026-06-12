@@ -146,3 +146,4 @@ timestamp	label	agent	model	effort	seconds	input_tokens	output_tokens	total_toke
 2026-06-12T14:50:15Z	full-plan-audit	codex	default	default	309	0	0	0	137
 2026-06-12T14:55:24Z	full-plan-audit-r2	codex	default	default	640	6818286	29408	6847694	0
 2026-06-12T15:05:43Z	play-polish	cursor	composer-2.5	default	63	NA	NA	NA	0
+2026-06-12T15:06:50Z	ci-truth	codex	default	default	807	5772777	33137	5805914	0

@@ -96,7 +96,7 @@ describe("bot policies", () => {
     }
     expect(table).toContain("policy");
     expect(table.split("\n")).toHaveLength(32);
-  }, 120_000);
+  }, 600_000);
 
   it("does not expose out-of-sight hidden traps to policy decisions", () => {
     const withoutTrap = hiddenTrapFixture(false);

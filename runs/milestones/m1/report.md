@@ -5,6 +5,7 @@
 ## Mocked Full-Loop
 
 - `tests/integration/m1.test.ts > closes the mocked Director loop from bot trace to generated floor play` plays a fallback floor with a bot, parses and summarizes the trace, assembles a Director prompt, serves a mock manifest through `generateFloor`, observes Gate 0/1/2 pass, materializes the floor, and has a bot play the generated floor until it reaches stairs.
+- CI wiring: `.github/workflows/ci.yml` now runs `pnpm exec vitest run --config tests/integration/vitest.config.ts --reporter verbose` as an explicit check-job step, so the M1 mocked loop is covered outside the root `src/**/*.test.ts` suite.
 
 ## Live Ambient Session
 

@@ -1,0 +1,35 @@
+Implemented the CI-truth bundle. No commit made.
+
+Changed:
+- Added explicit CI steps for root Vitest, integration, golden, every app Vitest config, and determinism audit in `.github/workflows/ci.yml`.
+- Added explicit slow-test timeouts only: floorgen `120s`, bots batch `600s`, persona bank determinism tests `300s`.
+- Fixed the artifact empty state to `No generation artifacts recorded for this run.`
+- Added `docs/evidence/e2e-host-runs.md` with the 2026-06-12 host-side 5/5 e2e record.
+- Updated M1/M3 reports with CI wiring, local suite sweep, and e2e evidence.
+
+Verification run:
+- `pnpm run check` -> exit 0; typecheck pass, lint pass, Vitest `79 files / 533 passed / 2 skipped`.
+- `tests/integration/vitest.config.ts` -> exit 0; `3 files / 9 passed / 2 skipped`.
+- `tests/golden/vitest.config.ts` -> exit 0; `1 file / 9 passed`.
+- `tests/determinism-audit/vitest.config.ts` -> exit 0; `1 file / 3 passed`.
+
+App configs:
+- `app/input` -> `2 files / 9 passed`
+- `app/components/artifacts` -> `1 file / 4 passed`
+- `app/components/diary` -> `1 file / 2 passed`
+- `app/components/grid` -> `1 file / 4 passed`
+- `app/components/hud` -> `1 file / 2 passed`
+- `app/components/log` -> `1 file / 3 passed`
+- `app/components/panels` -> `1 file / 5 passed`
+- `app/components/runindex` -> `1 file / 2 passed`
+- `app/components/settings` -> `1 file / 4 passed`
+- `app/components/title` -> `1 file / 3 passed`
+- `app/components/transition` -> `1 file / 5 passed`
+
+E2E local run skipped: Chromium launch is blocked in the Codex macOS sandbox by the documented Mach-port failure; the CI e2e job still installs Chromium on Ubuntu with `pnpm exec playwright install --with-deps chromium`.
+
+Scope deviations: none from the fix brief. I did not edit `PROGRESS.md` because the brief’s owned-file list excluded it. Residual risk: live GitHub Actions green still needs the orchestrator push/confirmation. Environment discovery: the requested Mach-port fact is in the Phase 55 session note, while `ENVIRONMENT.md` only records the broader browser-host constraint.
+
+Generated evidence left intact: `runs/sessions/ci-truth.jsonl` updated during the session, and `pnpm run check` generated new `runs/bot-*` artifacts.
+
+Actual time: ~70m vs 45m estimate; overrun was mostly full-estate local verification and cleaning up formatter noise back to narrow diffs.

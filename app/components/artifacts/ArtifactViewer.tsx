@@ -193,7 +193,7 @@ const artifactEmptyMessage = (
   }
 
   return runId === null
-    ? "No generation artifacts selected."
+    ? "No generation artifacts recorded for this run."
     : "No generation artifacts recorded for this run; fallback play remains intact.";
 };
 

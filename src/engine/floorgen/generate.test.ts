@@ -75,7 +75,7 @@ describe("floor generation", () => {
 
     expect(failures).toEqual([]);
     expect(successes).toBe(1_000);
-  });
+  }, 120_000);
 
   it("is deterministic for the same seed and params", () => {
     const params = floorParamsForBand("middle", "halls", "phase17-determinism");

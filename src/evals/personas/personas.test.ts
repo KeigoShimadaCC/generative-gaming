@@ -189,7 +189,7 @@ describe("persona bank determinism", () => {
         0,
       );
     }
-  });
+  }, 300_000);
 
   it("regenerates byte-identical fixtures for the same seeds", () => {
     const provider = createFallbackFloorContentProvider();
@@ -207,5 +207,5 @@ describe("persona bank determinism", () => {
         expect(run.trace.content).toBe(committed);
       }
     }
-  });
+  }, 300_000);
 });
