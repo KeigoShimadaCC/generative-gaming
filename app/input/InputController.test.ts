@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { currentFloorRuntime, type RunAction } from "@engine/run";
 import type { EntityInstance, GameState, Position } from "@engine/state";
+import { buildReplayFrames } from "@/components/runindex/replay";
 
 import { createClientGameSession } from "./game-session";
 import { KEYMAP_BINDINGS, type KeyBindingContext } from "./keys";
@@ -81,6 +82,16 @@ describe("keyboard input dispatch", () => {
         reason: "there is no item here to pick up",
       },
     });
+  });
+
+  it("records canonical replayable trace lines from the web session holder", () => {
+    const session = createClientGameSession({ seed: "phase-52-trace" });
+    session.step({ kind: "wait" });
+    session.step({ kind: "wait" });
+
+    expect(session.parsedTrace.turns).toHaveLength(2);
+    expect(session.traceContent.split("\n").filter(Boolean)).toHaveLength(3);
+    expect(buildReplayFrames(session.traceContent).status).toBe("identical");
   });
 
   it("intercepts descend next to an enemy until y/Enter confirms or n/Esc cancels", () => {

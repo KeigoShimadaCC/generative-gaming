@@ -1,8 +1,10 @@
 "use client";
 
 import {
+  useEffect,
   useMemo,
   useState,
+  type CSSProperties,
   type MouseEvent,
 } from "react";
 
@@ -13,6 +15,15 @@ import { KeymapOverlay } from "@/components/keymap-overlay/KeymapOverlay";
 import { MessageLogRegion } from "@/components/log";
 import { ContextPanelFrame } from "@/components/panels/frame";
 import { questMarkersForState } from "@/components/panels/model";
+import { RunIndexScreen } from "@/components/runindex";
+import {
+  GLYPH_SIZE_REM,
+  MESSAGE_WINDOW_SIZE,
+  themeVariables,
+} from "@/components/settings";
+import { SettingsScreen } from "@/components/settings";
+import { TitleScreen } from "@/components/title";
+import { FloorTransitionOverlay } from "@/components/transition";
 import { GameInputOwner } from "@/input";
 import { InlineConfirmPrompt } from "@/input/InlineConfirmPrompt";
 import type { Position } from "@engine/state";
@@ -21,15 +32,74 @@ const gridRegionClass = "min-h-0";
 
 export function GameShell() {
   const gameState = useGameStore((state) => state.gameState);
+  const screen = useGameStore((state) => state.screen);
+  const settings = useGameStore((state) => state.settings);
+  const activeRun = useGameStore((state) => state.activeRun);
+  const runIndex = useGameStore((state) => state.runIndex);
+  const terminalRun = useGameStore((state) => state.terminalRun);
+  const transition = useGameStore((state) => state.transition);
   const ui = useGameStore((state) => state.ui);
+  const hydratePersistence = useGameStore((state) => state.hydratePersistence);
+  const startGameSession = useGameStore((state) => state.startGameSession);
+  const continueActiveRun = useGameStore((state) => state.continueActiveRun);
+  const openTitle = useGameStore((state) => state.openTitle);
+  const openSettings = useGameStore((state) => state.openSettings);
+  const openRunIndex = useGameStore((state) => state.openRunIndex);
+  const updateSettings = useGameStore((state) => state.updateSettings);
+  const skipTransitionTheater = useGameStore(
+    (state) => state.skipTransitionTheater,
+  );
   const [hoverPosition, setHoverPosition] = useState<Position | null>(null);
   const questMarkers = useMemo(
     () => (gameState === null ? [] : questMarkersForState(gameState)),
     [gameState],
   );
+  const shellStyle = themeVariables(settings.colorTheme) as CSSProperties;
+
+  useEffect(() => {
+    hydratePersistence();
+  }, [hydratePersistence]);
+
+  if (screen === "settings") {
+    return (
+      <div style={shellStyle}>
+        <SettingsScreen
+          settings={settings}
+          onBack={openTitle}
+          onChange={updateSettings}
+        />
+      </div>
+    );
+  }
+
+  if (screen === "run-index") {
+    return (
+      <div style={shellStyle}>
+        <RunIndexScreen runs={runIndex} onBack={openTitle} />
+      </div>
+    );
+  }
+
+  if (screen !== "playing" || gameState === null) {
+    return (
+      <div style={shellStyle}>
+        <TitleScreen
+          activeRun={activeRun?.gameState ?? null}
+          terminalRun={terminalRun}
+          onContinue={continueActiveRun}
+          onNewRun={(seed) => startGameSession({ seed })}
+          onRunIndex={openRunIndex}
+          onSettings={openSettings}
+        />
+      </div>
+    );
+  }
 
   return (
-    <main className="grid h-screen grid-rows-[minmax(0,1fr)_7rem] gap-2 overflow-hidden p-3">
+    <main
+      className="grid h-screen grid-rows-[minmax(0,1fr)_7rem] gap-2 overflow-hidden p-3"
+      style={shellStyle}
+    >
       <GameInputOwner />
       <div className="grid min-h-0 grid-cols-[minmax(0,1fr)_minmax(18rem,24rem)] gap-2">
         <div
@@ -39,6 +109,7 @@ export function GameShell() {
         >
           <GridRegion
             className={gridRegionClass}
+            glyphSizeRem={GLYPH_SIZE_REM[settings.glyphSize]}
             markers={questMarkers}
             state={gameState}
           />
@@ -56,10 +127,17 @@ export function GameShell() {
       </div>
 
       <div className="relative min-h-0">
-        <MessageLogRegion state={gameState} />
+        <MessageLogRegion
+          state={gameState}
+          windowSize={MESSAGE_WINDOW_SIZE[settings.messageSpeed]}
+        />
         <InlineConfirmPrompt confirm={ui.pendingConfirm} />
       </div>
       <KeymapOverlay open={ui.keymapOpen} />
+      <FloorTransitionOverlay
+        transition={transition}
+        onSkip={skipTransitionTheater}
+      />
     </main>
   );
 }

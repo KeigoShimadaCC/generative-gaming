@@ -1,0 +1,28 @@
+**Phase Completion Check**  
+Status: Complete
+
+Implemented the combined 52/53 lane without committing. Main changes are in [transition](/Users/keigoshimada/Documents/generative-gaming/app/components/transition), [title](/Users/keigoshimada/Documents/generative-gaming/app/components/title), [settings](/Users/keigoshimada/Documents/generative-gaming/app/components/settings), [runindex](/Users/keigoshimada/Documents/generative-gaming/app/components/runindex), plus wiring in [GameShell.tsx](/Users/keigoshimada/Documents/generative-gaming/app/components/GameShell.tsx), [game-session.ts](/Users/keigoshimada/Documents/generative-gaming/app/input/game-session.ts), and [game-store.ts](/Users/keigoshimada/Documents/generative-gaming/app/store/game-store.ts).
+
+What matches:
+- Transition UX: ready/in-flight/none states, 1.4s ready theater, 8s shimmer cap, interrupt-after-ready, identical generated/fallback presentation props.
+- Arrival: 2s ritual overlay, intro line presentation, quest chips update through the real HUD state.
+- Instrumentation: `[stairs-to-playable]` logs/store samples at floor-resolved time; arrival ritual is separate.
+- Title/settings/run index: title first screen, continue/new/settings/run index, persisted local settings, run index storage, replay stepping through the real grid.
+- Web session holder now records replayable canonical-style NDJSON traces.
+
+Verification:
+- `pnpm exec vitest run --config app/components/transition/vitest.config.ts --reporter verbose` -> 5 passed.
+- `pnpm exec vitest run --config app/components/settings/vitest.config.ts --reporter verbose` -> 4 passed.
+- `pnpm exec vitest run --config app/components/title/vitest.config.ts --reporter verbose` -> 3 passed.
+- `pnpm exec vitest run --config app/components/runindex/vitest.config.ts --reporter verbose` -> 2 passed.
+- `pnpm exec vitest run --config app/input/vitest.config.ts --reporter verbose` -> 7 passed.
+- `pnpm run check > /tmp/phase5253-check.log 2>&1` -> exit 0; 78 files, 529 passed, 2 skipped.
+- `PORT=3001 pnpm run dev` + `curl -I http://localhost:3001/` -> 200 OK.
+
+Gaps / risks:
+- In-app browser navigation was not callable in this session; tool discovery exposed screenshot/snapshot only. I did the dev HTTP smoke instead.
+- Detached background dev server launches did not survive the sandbox; foreground dev server worked and was stopped cleanly.
+- Root Vitest still does not discover `app/**/*.test.ts`, so the app suites are run explicitly.
+- Root tests generated untracked `runs/bot-*` artifacts; left in place as generated evidence.
+
+No commit made. Actual time: ~80m vs 60m estimate.

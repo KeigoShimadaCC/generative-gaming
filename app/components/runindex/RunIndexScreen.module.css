@@ -1,0 +1,156 @@
+.screen {
+  display: grid;
+  min-height: 100vh;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 0.75rem;
+  padding: 1rem;
+  background: var(--gg-bg);
+  color: var(--gg-text);
+}
+
+.header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--gg-border);
+  padding-bottom: 0.85rem;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  letter-spacing: 0;
+}
+
+.eyebrow {
+  color: var(--gg-muted);
+  font-size: 0.78rem;
+}
+
+.header button,
+.list button,
+.replayControls button {
+  border: 1px solid var(--gg-border);
+  border-radius: 6px;
+  background: var(--gg-surface);
+  color: var(--gg-text);
+  cursor: pointer;
+  font: inherit;
+}
+
+.header button {
+  min-height: 2.35rem;
+  padding: 0 0.8rem;
+}
+
+.layout {
+  display: grid;
+  min-height: 0;
+  grid-template-columns: minmax(16rem, 22rem) minmax(0, 1fr);
+  gap: 0.75rem;
+}
+
+.list {
+  display: grid;
+  min-height: 0;
+  align-content: start;
+  gap: 0.45rem;
+  overflow: auto;
+}
+
+.list button {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.2rem 0.65rem;
+  min-height: 4rem;
+  padding: 0.65rem;
+  text-align: left;
+}
+
+.list button span {
+  color: var(--gg-muted);
+  text-transform: capitalize;
+}
+
+.list button time {
+  grid-column: 1 / -1;
+  color: var(--gg-muted);
+  font-size: 0.78rem;
+}
+
+.list .selected {
+  border-color: var(--gg-accent);
+  background: var(--gg-surface-raised);
+}
+
+.detail {
+  display: grid;
+  min-height: 0;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  gap: 0.65rem;
+  overflow: hidden;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  color: var(--gg-muted);
+  font-size: 0.82rem;
+}
+
+.meta span {
+  border: 1px solid var(--gg-border);
+  border-radius: 999px;
+  padding: 0.16rem 0.5rem;
+}
+
+.replayControls {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.replayControls button {
+  min-height: 2.1rem;
+  padding: 0 0.75rem;
+}
+
+.replayControls button:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+.replayGrid {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.diaryStub {
+  color: var(--gg-accent);
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.empty {
+  display: grid;
+  min-height: 8rem;
+  place-items: center;
+  border: 1px solid var(--gg-border);
+  border-radius: 8px;
+  color: var(--gg-muted);
+}
+
+@media (max-width: 760px) {
+  .layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+
+  .list {
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(12rem, 1fr);
+    overflow-x: auto;
+  }
+}

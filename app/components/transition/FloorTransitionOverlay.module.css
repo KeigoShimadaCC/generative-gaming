@@ -1,0 +1,90 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  background: rgba(5, 7, 10, 0.9);
+  color: var(--gg-text);
+}
+
+.panel {
+  display: grid;
+  width: min(34rem, calc(100vw - 2rem));
+  gap: 0.9rem;
+  justify-items: center;
+  text-align: center;
+}
+
+.floor {
+  font-size: clamp(2.1rem, 9vw, 5rem);
+  font-weight: 800;
+  letter-spacing: 0;
+  line-height: 0.95;
+}
+
+.whisper {
+  max-width: 30rem;
+  color: var(--gg-muted);
+  font-size: 0.98rem;
+  line-height: 1.5;
+}
+
+.shimmerTrack {
+  position: relative;
+  width: min(21rem, 68vw);
+  height: 2px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.shimmerFill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: max(12%, var(--gg-transition-shimmer));
+  background: linear-gradient(90deg, transparent, var(--gg-accent), transparent);
+  animation: gg-transition-shimmer 1.1s linear infinite;
+}
+
+.arrival {
+  pointer-events: none;
+  background: rgba(5, 7, 10, 0.42);
+  animation: gg-arrival-fade 2s ease-out forwards;
+}
+
+.arrivalLine {
+  width: min(34rem, 84vw);
+  border-top: 1px solid var(--gg-border);
+  padding-top: 0.9rem;
+  color: var(--gg-text);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.descending {
+  pointer-events: auto;
+}
+
+@keyframes gg-transition-shimmer {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes gg-arrival-fade {
+  0% {
+    opacity: 1;
+  }
+
+  70% {
+    opacity: 0.65;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}

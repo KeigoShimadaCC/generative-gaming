@@ -1,0 +1,95 @@
+.screen {
+  display: grid;
+  min-height: 100vh;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem;
+  background:
+    linear-gradient(rgba(9, 11, 15, 0.72), rgba(9, 11, 15, 0.92)),
+    radial-gradient(circle at 50% 18%, rgba(214, 136, 98, 0.18), transparent 32%),
+    var(--gg-bg);
+  color: var(--gg-text);
+}
+
+.surface {
+  color: var(--gg-muted);
+  font-size: 0.82rem;
+}
+
+.titleBlock {
+  display: grid;
+  gap: 0.55rem;
+  justify-items: center;
+  text-align: center;
+}
+
+.titleBlock h1 {
+  margin: 0;
+  font-size: clamp(2.5rem, 11vw, 6rem);
+  letter-spacing: 0;
+  line-height: 0.95;
+}
+
+.titleBlock p {
+  max-width: 38rem;
+  margin: 0;
+  color: var(--gg-muted);
+  font-size: 0.96rem;
+  line-height: 1.55;
+}
+
+.actions {
+  display: grid;
+  width: min(26rem, 100%);
+  gap: 0.55rem;
+  justify-self: center;
+}
+
+.actions button,
+.seedButton {
+  min-height: 2.7rem;
+  border: 1px solid var(--gg-border);
+  border-radius: 8px;
+  background: var(--gg-surface);
+  color: var(--gg-text);
+  cursor: pointer;
+  font: inherit;
+}
+
+.actions button:first-child {
+  border-color: var(--gg-accent);
+}
+
+.seedButton {
+  justify-self: center;
+  min-height: 2.25rem;
+  padding: 0 0.8rem;
+  color: var(--gg-muted);
+}
+
+.summaryStrip {
+  display: grid;
+  width: min(34rem, 100%);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+  justify-self: center;
+}
+
+.summaryStrip div {
+  display: grid;
+  gap: 0.25rem;
+  border: 1px solid var(--gg-border);
+  border-radius: 8px;
+  background: var(--gg-surface);
+  padding: 0.75rem;
+}
+
+.summaryStrip span {
+  color: var(--gg-muted);
+  font-size: 0.72rem;
+}
+
+.summaryStrip strong {
+  font-size: 1.35rem;
+}
