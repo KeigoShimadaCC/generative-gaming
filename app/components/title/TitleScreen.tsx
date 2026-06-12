@@ -31,7 +31,7 @@ export function TitleScreen({
   onRunIndex,
   onSettings,
 }: TitleScreenProps) {
-  const [seed, setSeed] = useState(() => createTitleSeed());
+  const [seed, setSeed] = useState(() => createTitleSeed(0));
   const terminal = terminalRun === null ? null : terminalRunViewModel(terminalRun);
   const terminalDiary = useMemo(
     () => (terminalRun === null ? null : composeDiary({ state: terminalRun })),
@@ -41,6 +41,10 @@ export function TitleScreen({
     () => createTitleViewModel({ activeRun, seed }),
     [activeRun, seed],
   );
+
+  useEffect(() => {
+    setSeed(titleSeedOverride() ?? createTitleSeed());
+  }, []);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent): void => {
@@ -130,4 +134,13 @@ const isEditableTarget = (target: EventTarget | null): boolean => {
 
   const tagName = target.tagName.toLowerCase();
   return target.isContentEditable || tagName === "input" || tagName === "textarea";
+};
+
+const titleSeedOverride = (): string | null => {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  const seed = new URLSearchParams(window.location.search).get("seed")?.trim();
+  return seed === undefined || seed.length === 0 ? null : seed;
 };

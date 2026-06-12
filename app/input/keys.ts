@@ -167,6 +167,15 @@ export const KEYMAP_BINDINGS: readonly KeymapBinding[] = [
     intent: runAction({ kind: "descend" }),
   },
   {
+    id: "take-hoard",
+    contexts: ["play"],
+    keys: ["t", "T"],
+    keyLabel: "T",
+    helpGroup: "Actions",
+    helpAction: "Take from the Hoard",
+    intent: runAction({ kind: "take_hoard" }),
+  },
+  {
     id: "inventory",
     contexts: ["play"],
     keys: ["i", "I"],
