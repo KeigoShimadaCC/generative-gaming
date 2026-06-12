@@ -1,0 +1,18 @@
+Changed [place.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/floorgen/place.test.ts:181) only: added `120_000` timeout to the 500-seed crowded allocation test. Local timing check showed that was the only >1s test in the file.
+
+Verification:
+
+```text
+pnpm exec vitest run src/engine/floorgen
+
+ RUN  v4.1.8 /Users/keigoshimada/Documents/generative-gaming
+
+ Test Files  2 passed (2)
+      Tests  16 passed (16)
+   Start at  00:27:25
+   Duration  2.87s (transform 75ms, setup 0ms, import 98ms, tests 4.77s, environment 0ms)
+```
+
+Exit code: `0`.
+
+No commit made. Unrelated working tree changes outside the owned file were left untouched.

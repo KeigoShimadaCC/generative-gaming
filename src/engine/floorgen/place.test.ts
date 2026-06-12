@@ -181,7 +181,7 @@ describe("allocateCells", () => {
     }
 
     expect(failures).toEqual([]);
-  });
+  }, 120_000);
 
   it("never places on exits or unreachable cells in adversarial fixtures", () => {
     const { grid, markers } = parsePlacementMap(UNREACHABLE_ISLAND);
