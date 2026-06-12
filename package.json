@@ -12,12 +12,20 @@
     "lint": "eslint .",
     "test": "vitest run",
     "check": "pnpm run typecheck && pnpm run lint && pnpm test",
+    "play": "npx --yes tsx src/cli/play.ts",
     "format": "prettier --write ."
   },
   "dependencies": {
+    "better-sqlite3": "12.10.0",
     "zod": "4.4.3"
   },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "better-sqlite3"
+    ]
+  },
   "devDependencies": {
+    "@types/better-sqlite3": "7.6.13",
     "@typescript-eslint/eslint-plugin": "8.61.0",
     "@typescript-eslint/parser": "8.61.0",
     "eslint": "10.4.1",

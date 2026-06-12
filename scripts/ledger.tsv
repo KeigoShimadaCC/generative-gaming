@@ -70,3 +70,7 @@ timestamp	label	agent	model	effort	seconds	input_tokens	output_tokens	total_toke
 2026-06-12T01:06:29Z	phase23a-trace	codex	default	default	332	1448839	19739	1468578	0
 2026-06-12T01:12:31Z	phase23-verify	cursor	composer-2.5	default	145	NA	NA	NA	0
 2026-06-12T01:15:26Z	phase23-reconcile	codex	default	default	513	4563627	28894	4592521	0
+2026-06-12T01:24:56Z	phase25a-play	cursor	composer-2.5	default	583	NA	NA	NA	0
+2026-06-12T01:35:08Z	phase27-sqlite	cursor	composer-2.5	default	295	NA	NA	NA	0
+2026-06-12T01:40:23Z	phase27-buildfix	cursor	composer-2.5	default	25	NA	NA	NA	0
+2026-06-12T02:16:50Z	phaseC-verify	cursor	composer-2.5	default	444	NA	NA	NA	0

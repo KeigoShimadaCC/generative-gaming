@@ -98,6 +98,10 @@ tools and must be re-verified by the Phase 01 environment spike; facts marked
 - **[inherited]** A running/previously-run Next.js app pollutes typecheck via
   `.next/types/*` — clean `.next` before the typecheck gate.
 - macOS shell: `date +%s` for timing (no `%N`); BSD userland (`sed -i ''` etc.).
+- **[verified 2026-06-12]** pnpm blocks native build scripts by default and
+  `pnpm approve-builds` is interactive (sandbox-hostile). Native deps
+  (better-sqlite3) must be listed in `pnpm.onlyBuiltDependencies` in
+  package.json.
 
 ## Gate commands (cheapest first — fail fast)
 
