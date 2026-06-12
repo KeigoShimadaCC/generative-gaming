@@ -18,13 +18,9 @@ This file records *state*, never *design* — design lives in the doc spine
 
 | ID | Task | Owner (agent) | Worktree / branch | Status | Notes |
 |---|---|---|---|---|---|
-| 06-1 | Engine state model & serialization | Codex | main (src/engine/state) | verified | merged 9d5e3ac |
-| 07A/B | Map+FOV+path / turn contract | Codex+Cursor | main (src/engine) | verified | merged 0862e5c; 1 coverage round-trip |
-| 07B-a | Turn contract amendment: action-resolver registry | Codex | main (src/engine/turn) | in-progress | orchestrator-authorized after correct 08 STOP; external 5-method contract unchanged |
-| 08-1 | Movement & collision | Codex | main (src/engine/systems) | ready-for-verify | resolver/tests green; no commit per brief |
-| 09/10-c | Combat/status/turn consolidation seams | Codex | main (src/config, src/engine/turn, src/engine/systems) | ready-for-verify | config magnitudes, tick registry, death unification; `pnpm run check` green; no commit per brief |
-| 14-1 | Item triggers, targeting, identification, curses | Codex | main (src/engine/items) | blocked | implementation complete; `pnpm run check` blocked by unrelated untracked `src/engine/behaviors/**` lint errors outside owned scope |
-| 16-1 | Enemy assembly & cost function | Codex | main (src/engine/enemies) | blocked | implementation/scoped gates green; full `pnpm run check` blocked by unrelated untracked `src/engine/quests/**` type errors |
+| 21-1 | Run loop, caps, Hoard, endings | Codex | main (src/engine/run) | in-progress | r2 after stall #4; watched |
+| 26-1 | Fallback content pack (Old Stock) | Cursor | main (content/, loader) | in-progress | |
+| — | Wave B merged through 16/20 (b1ccd1d): 06–20,22 all verified | — | — | merged | engine complete except run loop |
 
 Status values: `queued` → `claimed` → `in-progress` → `ready-for-verify` →
 `verified` → `merged` (or `blocked` / `returned` with a note).
