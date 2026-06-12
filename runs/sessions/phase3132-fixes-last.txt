@@ -1,0 +1,24 @@
+Implemented the three round-trip fixes. No commit made.
+
+Changed:
+- Deleted [manifest.ambient.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/schemas/manifest.ambient.test.ts) because it duplicated the provider `@ambient` seam test and violated the seam with direct `node:child_process`.
+- Added ambient `judge()` failure taxonomy coverage in [provider.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/director/provider/provider.test.ts): `process_error`, `parse_fail`, `validate_fail`, `timeout`.
+- Hardened the prompt task block in [blocks.ts](/Users/keigoshimada/Documents/generative-gaming/src/director/prompt/blocks.ts): the embedded field-shape example now shows every item category, required nullable payloads, `value`, equippable `cursed` and proc slots as `onHit`/`onStruck: null`, plus a full step-trigger trap bundle. Added the common-mistakes line for the spike failures.
+- Updated prompt tests and snapshots.
+
+Verification:
+```text
+pnpm exec vitest run src/director/provider src/director/prompt
+→ 4 files passed; 28 passed, 1 skipped
+
+pnpm run check
+→ typecheck passed
+→ lint passed
+→ 60 test files passed; 424 passed, 1 skipped
+```
+
+Notes:
+- I did not run a live ambient call, per brief; I used the annotated spike-output failures and schemas.
+- `src/director/{provider,prompt}` were already untracked in this worktree. Full check also left/generated run trace artifacts under `runs/bot-*`; I did not delete evidence artifacts.
+- Environment discoveries: none new.
+- Actual time: ~20m; no estimate was provided in the brief.

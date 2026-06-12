@@ -18,6 +18,8 @@ const deepFreeze = <const T>(value: T): DeepReadonly<T> => {
   return value as DeepReadonly<T>;
 };
 
+export type DirectorProviderSelection = "mock" | "ambient" | "api-future";
+
 export const config = deepFreeze({
   runStructure: {
     depthFloors: 12, // GAME_DESIGN §2
@@ -340,6 +342,21 @@ export const config = deepFreeze({
     },
     signatureMoment: {
       budgetRelaxPercent: 25 // GAME_DESIGN §12
+    }
+  },
+  director: {
+    provider: "mock" as DirectorProviderSelection, // TECH_SPEC §6 [T]
+    manifestTimeoutMs: 120_000, // TECH_SPEC §6 [T]
+    judgeTimeoutMs: 120_000, // TECH_SPEC §6 [T]
+    ambient: {
+      manifestCommand: "codex", // TECH_SPEC §6 [T]
+      judgeCommand: "cursor-agent", // TECH_SPEC §6 [T]
+      judgeModel: "composer-2.5" // TECH_SPEC §6 [T]
+    },
+    apiFuture: {
+      enabled: false, // TECH_SPEC §6 [T]
+      directorModel: "deferred-until-api-key", // TECH_SPEC §6 [T]
+      judgeModel: "deferred-until-api-key" // TECH_SPEC §6 [T]
     }
   }
 } as const);

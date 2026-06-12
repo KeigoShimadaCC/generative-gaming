@@ -1,0 +1,23 @@
+Implemented Phase 31 task scope. No commit made.
+
+**What Changed**
+- Added provider seam types and taxonomy in [types.ts](/Users/keigoshimada/Documents/generative-gaming/src/director/provider/types.ts:9).
+- Added ambient CLI adapter with injected exec/clock, timeout kill, `parseManifest` output contract, and judge verdict parsing in [ambient.ts](/Users/keigoshimada/Documents/generative-gaming/src/director/provider/ambient.ts:85).
+- Added deterministic fixture-backed mock with failure injection in [mock.ts](/Users/keigoshimada/Documents/generative-gaming/src/director/provider/mock.ts:33).
+- Added config selection/timeouts for `mock | ambient | api-future` in [src/config/index.ts](/Users/keigoshimada/Documents/generative-gaming/src/config/index.ts:347).
+- Added scoped tests in [provider.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/director/provider/provider.test.ts:22).
+- Updated `PROGRESS.md` task row and validation log.
+
+**Verification**
+- `pnpm run typecheck` -> pass
+- `pnpm exec eslint src/director/provider` -> pass
+- `pnpm exec vitest run src/director/provider` -> 1 file passed, 12 tests passed, 1 `@ambient` skipped
+- `rg 'Math.random|Date.now' src/director/` -> no matches
+- `rg -n "generateObject|@ai-sdk|ai-sdk|from ['\"]ai['\"]" src` -> no matches
+
+**Notes**
+- API adapter remains deferred; `api-future` selection returns typed `process_error` without throwing through calls.
+- Live ambient call was not run because `AMBIENT_LIVE` was not set.
+- Existing/parallel working tree items left untouched: `src/director/prompt/`, `runs/sessions/phase31-seam.jsonl`, and a `scripts/ledger.tsv` row for `phase32-prompt`.
+- Environment discoveries: none.
+- Actual time: ~8m vs 35m estimate.
