@@ -1,5 +1,5 @@
 import { config } from "../../config/index.js";
-import type {} from "../quests/machine.js";
+import type { EngineLogEvent as RunEvent } from "../events.js";
 import type {
   GameState,
   SerializableRecord,
@@ -7,7 +7,7 @@ import type {
 } from "../state/index.js";
 import { ACTIVE_TERMINAL_STATUS } from "../state/index.js";
 import type { TurnEvent } from "../turn/index.js";
-import { runEvent, type RunEvent } from "./events.js";
+import { runEvent } from "./events.js";
 
 export type TakeHoardAction = {
   readonly kind: "take_hoard";

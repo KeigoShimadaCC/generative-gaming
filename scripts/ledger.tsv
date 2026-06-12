@@ -129,3 +129,5 @@ timestamp	label	agent	model	effort	seconds	input_tokens	output_tokens	total_toke
 2026-06-12T10:52:27Z	tree-repair-r2	codex	default	default	235	896164	9279	905443	0
 2026-06-12T10:56:46Z	phaseG1-verify	codex	default	default	448	2166234	16836	2183070	0
 2026-06-12T11:04:28Z	phaseG1-boundary-fix	codex	default	default	176	836217	11281	847498	0
+2026-06-12T11:09:38Z	log-label-fix	codex	default	default	162	1001223	9103	1010326	0
+2026-06-12T11:13:01Z	events-barrel-fix	codex	default	default	325	1485064	14140	1499204	0

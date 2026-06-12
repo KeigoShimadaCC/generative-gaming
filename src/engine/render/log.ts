@@ -1,6 +1,8 @@
 import type {
   EngineLogEvent,
   EngineLogEventType,
+} from "../events.js";
+import type {
   Position,
 } from "../state/index.js";
 

@@ -1,0 +1,25 @@
+Done. No commit made.
+
+Changed:
+- Added [src/engine/events.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/events.ts:1) as the central type-only event declaration barrel.
+- Updated consumers in [log.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/render/log.ts:1), [endings.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/run/endings.ts:1), and [traps.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/systems/traps.ts:1).
+- Restored the `tick_registry_probe` dummy payload `label`, which is required once the union is visible.
+
+Verification:
+```text
+pnpm run typecheck > /private/tmp/generative-gaming-typecheck.log 2>&1
+exit=0
+tsc --noEmit -p tsconfig.src.json && tsc --noEmit -p tsconfig.next.json
+```
+
+```text
+pnpm run check > /private/tmp/generative-gaming-check.log 2>&1
+exit=0
+Test Files  78 passed (78)
+Tests       529 passed | 2 skipped (531)
+```
+
+Declarer list covered by the barrel:
+`behaviors/movement.ts`, `behaviors/special.ts`, `effects/registry.ts`, `items/triggers.ts`, `npc/barter.ts`, `npc/dialogue.ts`, `quests/machine.ts`, `quests/objectives.ts`, `run/events.ts`, `systems/combat.ts`, `systems/inventory.ts`, `systems/movement.ts`, `systems/player.ts`, `systems/status.ts`, `turn/loop.ts`, `turn/loop.test.ts`, `turn/tick-hook-registry.test.ts`.
+
+Notes: no scope deviations, no new environment discoveries. Full check generated additional untracked `runs/bot-*178126298*` validation artifacts; pre-existing unrelated dirty files/artifacts remain untouched. Actual time: ~12 minutes; no brief estimate provided.
