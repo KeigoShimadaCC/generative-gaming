@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --gg-bg: #0b0d10;
+  --gg-surface: #12151a;
+  --gg-surface-raised: #181c23;
+  --gg-border: #2a3140;
+  --gg-text: #e8eaed;
+  --gg-muted: #8b939e;
+  --gg-accent: #6ea8fe;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--gg-bg);
+  color: var(--gg-text);
+  font-family: var(--font-mono), ui-monospace, monospace;
+}

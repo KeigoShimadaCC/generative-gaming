@@ -1,0 +1,36 @@
+Implemented the Phase 48 scaffold, but the task is **blocked by the final gate**: `pnpm run check` is not green because typecheck fails in out-of-scope `src/**` files that this brief forbids me to edit. No commit made.
+
+**Changed**
+- App Router shell: [app/page.tsx](/Users/keigoshimada/Documents/generative-gaming/app/page.tsx), [app/layout.tsx](/Users/keigoshimada/Documents/generative-gaming/app/layout.tsx), [app/components/GameShell.tsx](/Users/keigoshimada/Documents/generative-gaming/app/components/GameShell.tsx), [app/globals.css](/Users/keigoshimada/Documents/generative-gaming/app/globals.css)
+- Zustand mirror/dev fixture: [app/store/game-store.ts](/Users/keigoshimada/Documents/generative-gaming/app/store/game-store.ts), [app/store/fixture.ts](/Users/keigoshimada/Documents/generative-gaming/app/store/fixture.ts), [app/components/DevFixtureHydrator.tsx](/Users/keigoshimada/Documents/generative-gaming/app/components/DevFixtureHydrator.tsx)
+- API routes: `app/api/director/{start-generation,poll-status,get-floor}/route.ts`
+- Root config: `next.config.ts`, `tailwind.config.ts`, `postcss.config.mjs`, `tsconfig*.json`, `eslint.config.js`, `package.json`
+- Pinned deps/scripts: `next@15.5.19`, `react@19.2.7`, `react-dom@19.2.7`, `tailwindcss@3.4.17`, `zustand@5.0.14`; `dev` uses `${PORT:-3001}` with polling to avoid watcher `EMFILE`.
+
+**Verification**
+- `pnpm run dev` → ready on `http://localhost:3001`; `GET / HTTP:200`
+- Curl smokes:
+  - `start-generation` → `{"ok":true,"prefetchDepth":2}` / `HTTP:200`
+  - `poll-status` → `{"status":"ready","depth":2}` / `HTTP:200`
+  - `get-floor` → `{"source":"generated","depth":2,...}` / `HTTP:200`
+- `.next` hygiene:
+  - ran dev, killed it, then `pnpm run typecheck`
+  - cleanup confirmed: `.next absent after typecheck cleanup`
+  - typecheck still failed in out-of-scope `src/**`
+- `pnpm run lint` → pass
+- `pnpm test` → 78 files passed, 529 passed, 2 skipped
+- final `pnpm run check` → failed at `pnpm run typecheck`
+
+**Gate Blocker**
+Out-of-scope type errors:
+- `src/director/prompt/summarize.ts:201`
+- `src/engine/run/endings.ts:153`
+- `src/engine/systems/traps.ts:317`
+
+These are event-union mismatches like `quest_accepted` / `quest_offered` / `enemy_moved` not being present in the current event type union.
+
+**Notes**
+- Boundary scan for non-API app code found no deep `src/**` imports.
+- `PROGRESS.md` updated to `blocked`.
+- Environment discoveries: Next dev needed polling to avoid Watchpack `EMFILE`; Next rewrote a project-reference-only root `tsconfig.json`; webpack cannot bundle the Node-native fallback content directory URL, so the API subtree has a Next-only fallback-provider shim.
+- Actual time: ~12m vs 35m estimate.

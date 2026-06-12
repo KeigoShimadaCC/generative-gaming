@@ -122,3 +122,5 @@ timestamp	label	agent	model	effort	seconds	input_tokens	output_tokens	total_toke
 2026-06-12T09:24:00Z	phaseF-verify	codex	default	default	282	1359340	10345	1369685	0
 2026-06-12T09:29:10Z	phase45-vocab-fix	codex	default	default	101	295234	6674	301908	0
 2026-06-12T09:33:10Z	phase47-tuning	codex	default	default	2320	13558422	51074	13609496	0
+2026-06-12T10:13:56Z	phase48-nextjs	cursor	composer-2.5	default	185	NA	NA	NA	137
+2026-06-12T10:17:01Z	phase48-nextjs-codex	codex	default	default	782	8774098	33588	8807686	0
