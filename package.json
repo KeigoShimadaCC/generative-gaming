@@ -13,6 +13,8 @@
     "test": "vitest run",
     "check": "pnpm run typecheck && pnpm run lint && pnpm test",
     "play": "npx --yes tsx src/cli/play.ts",
+    "simulate": "npx --yes tsx src/cli/simulate.ts",
+    "replay": "npx --yes tsx src/cli/replay.ts",
     "format": "prettier --write ."
   },
   "dependencies": {

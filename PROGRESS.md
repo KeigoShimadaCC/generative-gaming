@@ -91,6 +91,8 @@ spike ≤ 15 min (hard).
 | 2026-06-11 | orchestrator | Effect/behavior vocabulary expansion round (GAME_DESIGN §7) | post-M3 |
 | 2026-06-11 | orchestrator | CI red-path demo (intentional failure blocks PR) deferred from 04A | with PHASE-43 |
 | 2026-06-11 | verifier | Prefer @types/node over growing state/node-fs.d.ts shim | when Node APIs grow |
+| 2026-06-12 | orchestrator | M0 finding: bots never WIN (15/15 ABORTED at maxTurns, 100% hp retention) — balance too soft + bot descent drive weak; feeds Gate-2 thresholds + PHASE-58 | PHASE-34 / PHASE-58 |
+| 2026-06-12 | worker | Root vitest config doesn't discover tests/integration/** (explicit config workaround in place) — consider root include | PHASE-57 hygiene |
 
 ## Phase Rotation Procedure
 

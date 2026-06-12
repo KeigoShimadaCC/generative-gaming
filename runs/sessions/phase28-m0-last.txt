@@ -1,0 +1,25 @@
+Mechanical M0 integration is complete; no commit made.
+
+Changed:
+- [tests/integration/m0.test.ts](/Users/keigoshimada/Documents/generative-gaming/tests/integration/m0.test.ts): M0 bot matrix, replay identity, byte determinism, offline import-graph scan, full WIN smoke.
+- [tests/integration/vitest.config.ts](/Users/keigoshimada/Documents/generative-gaming/tests/integration/vitest.config.ts): explicit runner config because root Vitest only includes `src/**/*.test.ts`.
+- [runs/milestones/m0/report.md](/Users/keigoshimada/Documents/generative-gaming/runs/milestones/m0/report.md): NORTH_STAR M0 quote, clause evidence, 15-run table, golden evidence, final human pending line.
+- `runs/milestones/m0/traces/*.ndjson`: 15 trace artifacts.
+- `tests/golden/replay-mini-wait.ndjson`: refreshed via canonical recorder; no content diff because it was already protocol `1.2.0`.
+
+Verification:
+- `pnpm exec vitest run --config tests/integration/vitest.config.ts` -> 1 file passed, 4 tests passed, duration 88.98s.
+- Golden replay refresh ×2:
+  - run 1 -> 1 passed, 5 skipped.
+  - run 2 -> 1 passed, 5 skipped.
+- `pnpm run check` -> typecheck passed, lint passed, tests passed:
+  - `Test Files 55 passed (55)`
+  - `Tests 390 passed (390)`
+  - `Duration 89.81s`
+
+Scope / risks:
+- Did not edit `PROGRESS.md`; it is orchestrator-owned and not in the owned-file list.
+- Current M0 bot matrix terminates cleanly but all 15 rows are `ABORTED`, not `WIN`; the separate full fallback WIN smoke is green. Bot win behavior is outside this owned scope.
+- Environment discovery: root Vitest config does not discover `tests/integration/**`, so the M0 suite needs the explicit integration config or an orchestrator-owned root config update.
+
+Actual time: ~35m vs 30m estimate, mostly due to the 89s M0 suite plus the full 90s gate.
