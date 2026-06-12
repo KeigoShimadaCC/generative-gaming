@@ -1,0 +1,36 @@
+Implemented the brief in owned files only:
+
+- `e2e/browser-bot.ts`
+  - HP now reads `[data-hud-field="hp"] [role="meter"]` via `aria-valuenow/max`.
+  - Replaced pinned-position recovery with a 150 game-turn no-new-visited-cell/no-depth-change watchdog.
+  - Added diagnostics to `test-results/fullclear-diagnostics/`: screenshot, page HTML, console JSON, bot-state JSON with depth/turn/visited/last 20 actions.
+  - Added `lastAction` to telemetry.
+  - Fixed exploration routing: explicit engine-aligned walkable terrain, safe route first, enemy-blocker fallback, visited-frontier fallback before random boxed movement, and no final-floor `T` spam unless standing on the Hoard.
+
+- `e2e/full-clear.spec.ts`
+  - Installs diagnostics capture before navigation and for determinism contexts.
+  - Continues dumping diagnostics on test failure.
+
+**DONE Evidence**
+`pnpm run typecheck` -> exit 0
+```text
+> generative-gaming@0.0.0 typecheck /Users/keigoshimada/Documents/generative-gaming
+> node --input-type=module -e "import{rmSync}from'node:fs';try{rmSync('.next',{recursive:true,force:true})}catch{}" && tsc --noEmit -p tsconfig.src.json && tsc --noEmit -p tsconfig.next.json
+```
+
+`pnpm run lint` -> exit 0
+```text
+> generative-gaming@0.0.0 lint /Users/keigoshimada/Documents/generative-gaming
+> eslint .
+```
+
+No browser/Playwright run attempted, per STEP 0.
+
+**Diagnosis**
+The HP bug was the known selector mismatch: `.value` targeted a CSS-module class that does not exist as a stable literal class. The HUD meter already exposes stable aria values, so no app change was needed.
+
+The exploration stall was in the bot policy, not the grid selectors. The app components expose the selectors the bot needs: `game-state`, `game-grid`, cell `data-x/y`, `data-fog`, `data-terrain`, `data-layer`, feature fields, inventory/action IDs, and HUD meter aria fields. The v2 exploration logic could exhaust currently unvisited known cells, ignore already-visited frontier/doorway cells, then fall back to random movement; it also treated actor blockers as hard route blockers. v3 now deliberately routes to frontiers, can route through enemy blockers to force combat, seeks stairs/Hoard, and aborts with diagnostics if progress still freezes.
+
+Scope deviations: none in implementation files. I did not edit `PROGRESS.md` because the brief explicitly says everything outside the owned files is read-only.
+
+Residual risk: browser campaign behavior still needs orchestrator verification in the host browser. Environment discoveries: none. Actual time spent: about 40m vs 40m timebox.

@@ -17,8 +17,15 @@ This file records *state*, never *design* — design lives in the doc spine
 
 ## Task Queue
 
-No worker tasks queued. The remaining active work is the human checklist:
+The remaining active human work is the human checklist:
 runs/milestones/HUMAN-CHECKLIST.md.
+
+| Task | Status | Owner | Notes |
+|---|---|---|---|
+| fullclear-combat-fix | merged | Codex | 3d2f5bb5; independently verified GREEN (Cursor, 2026-06-13) incl. eval-bank regeneration plausibility. |
+| fullclear-transition-wait | merged | Codex | c1aef324 (bot v3 commit); verified in the same GREEN pass. |
+| descend-throw-fallback | merged | Codex | 2ffa2d7e; verified in the same GREEN pass. |
+| fullclear-bot-survival | queued | Codex | Bot reached depth 5 and DIED (first-ever bot LOSS — combat now lethal). Needs retreat/heal/disengage tactics to reach WIN. |
 
 Status values: `queued` → `claimed` → `in-progress` → `ready-for-verify` →
 `verified` → `merged` (or `blocked` / `returned` with a note).
@@ -47,6 +54,9 @@ Format: `YYYY-MM-DD · phase/task · who · what was verified · evidence (comma
 | 2026-06-12 | 56-M2 | Codex | M2 mechanical evidence complete: persisted two-run memory in prompt, diary faithfulness, responsiveness baseline assertion, transition instrumentation, read-only artifact API bridge, milestone report | `pnpm exec vitest run --config app/components/artifacts/vitest.config.ts --reporter verbose` → 1 file / 3 passed; `pnpm exec vitest run --config tests/integration/vitest.config.ts tests/integration/m2.test.ts --reporter verbose` → 1 file / 4 passed; `pnpm run typecheck` → exit 0; `pnpm run lint` → exit 0; `pnpm run check` → exit 0, 79 files / 532 passed / 2 skipped; report: `runs/milestones/m2/report.md` |
 | 2026-06-12 | 57/58-I | Codex | Combined golden determinism + balance pass complete for verify: 45-run fallback batch diagnosed non-config blocker, final config unchanged, goldens regenerated, deterministic audit added | `npm_config_cache=/private/tmp/gg-npm-cache pnpm run simulate -- --batch --policies cautious,balanced,aggressive --seeds 15 --max-turns 8000 --out runs/milestones/balance-01/baseline-quick.json` → exit 0; `npm_config_cache=/private/tmp/gg-npm-cache npx --yes tsx runs/milestones/balance-01/batch-analysis.ts --label=baseline` → 45 ABORT / 0 WIN / 0 LOSS, 0 player damage, 44,603 enemy actor turns, 0 enemy behavior events; `pnpm exec vitest run --config tests/golden/vitest.config.ts --reporter verbose` → 1 file / 9 passed; `npm_config_cache=/private/tmp/gg-npm-cache pnpm exec vitest run --config tests/determinism-audit/vitest.config.ts --reporter verbose` → 1 file / 3 passed; `pnpm run check` → exit 0, 79 files / 532 passed / 2 skipped |
 | 2026-06-12 | 61-M3-close | Codex | M3 close-out artifacts complete; local mechanical gate sweep green; CI green link still pending because latest HEAD CI is red | `runs/milestones/m3/observation-sheet.md`; `runs/milestones/m3/report-draft.md`; `runs/milestones/HUMAN-CHECKLIST.md`; `pnpm run check` -> typecheck pass, lint pass, Vitest 79 files / 532 passed / 2 skipped; golden replay -> 1 file / 9 passed; determinism audit -> 1 file / 3 passed; mocked eval baseline -> complete, 15 records, threshold check passed (112 metrics, 0 regressions); latest CI checked: `https://github.com/KeigoShimadaCC/generative-gaming/actions/runs/27422222478` -> failure |
+| 2026-06-13 | fullclear-combat-fix | Codex | Full-clear blocker fix ready for verify: bump-attacks resolve combat, web session passes enemy behavior hook explicitly, title seed override hydrates after mount, bot loop-breaker added, replay/goldens synchronized | `pnpm exec vitest run src/engine/systems/movement.test.ts --reporter verbose` → exit 0, 1 file / 9 tests passed; `pnpm exec vitest run --config app/input/vitest.config.ts --reporter verbose` → exit 0, 2 files / 10 tests passed; `pnpm exec vitest run --config tests/golden/vitest.config.ts --reporter verbose` → exit 0, 1 file / 9 tests passed; `pnpm run check` → exit 0, typecheck pass, lint pass, Vitest 79 files / 535 passed / 2 skipped |
+| 2026-06-13 | fullclear-transition-wait | Codex | Full-clear transition wait ready for verify: browser bot waits out transition polls without key presses, resets no-progress counters around transitions, and limits descends to one intent per stairs visit; app contract verified as `data-transition-phase="none"` when `transition` is null, otherwise `descending` or `arrival`, with input locked during both transition states | `pnpm run typecheck` → exit 0; output: `generative-gaming@0.0.0 typecheck ... node --input-type=module -e "import{rmSync}from'node:fs';try{rmSync('.next',{recursive:true,force:true})}catch{}" && tsc --noEmit -p tsconfig.src.json && tsc --noEmit -p tsconfig.next.json`; `pnpm run lint` → exit 0; output: `generative-gaming@0.0.0 lint ... eslint .` |
+| 2026-06-13 | descend-throw-fallback | Codex | Descend floor-entry fallback and depth-correct web transport ready for verify: generated entry throw recovers through fallback, arrival completes/unlocks input, depth 5 transport serves generated middle-band legal content | `pnpm exec vitest run --config app/store/vitest.config.ts --reporter verbose` → exit 0, 1 file / 3 tests passed; `pnpm exec vitest run --config app/api/director/vitest.config.ts --reporter verbose` → exit 0, 1 file / 1 test passed; `pnpm run check` → exit 0, typecheck pass, lint pass, Vitest 79 files / 535 passed / 2 skipped |
 
 ## Worktrees & Branches
 
@@ -98,7 +108,7 @@ spike ≤ 15 min (hard).
 | 2026-06-12 | orchestrator | In-script stall watchdogs unreliable in live use (fired only in own smoke); cron-loop is the dependable net — debug both scripts | PHASE-57 hygiene |
 | 2026-06-12 | orchestrator | Cursor lane degraded ~17:00 JST (3 silent hangs, host auth fine) — re-test before Wave G; if persistent, Wave G goes Codex-serial | before PHASE-48 |
 | 2026-06-12 | worker | Root Vitest `include` excludes `app/**/*.test.ts`; 49A uses a grid-local Vitest config for explicit component tests | PHASE-57 hygiene |
-| 2026-06-12 | worker | Bot/replay simulation path emits enemy `actor_turn` events but no enemy behavior events because `stepRun` is called without the existing behavior actor hook; PHASE-58 config tuning cannot calibrate HP retention until this is wired | PHASE-58 follow-up |
+| ~~2026-06-12~~ | ~~worker~~ | RESOLVED 2026-06-13 (3d2f5bb5): bump-attack now resolves combat and the web/replay paths run behavior hooks; first bot LOSS observed in campaign run 7. Balance calibration is now unblocked | ~~PHASE-58 follow-up~~ |
 | 2026-06-12 | worker | Final-floor bot policies only move toward the Hoard after it is visible/remembered; depth-12 batches ABORT without WIN despite `take_hoard` being prioritized when available | PHASE-58 follow-up |
 | 2026-06-12 | close-out | Bot WIN-drive gap: bots reach depth 12 but do not reliably pursue/trigger the Hoard WIN path | post-MVP balance/bot pass |
 | 2026-06-12 | close-out | Balance calibration: HP retention and enemy behavior pressure remain under-instrumented until the simulation path runs behavior hooks | post-MVP balance pass |

@@ -1,0 +1,31 @@
+Diagnosis first:
+- A confirmed: `app/api/director/transport-server.ts` previously used the shallow fixture for the web mock/gate setup regardless of requested depth. Replaced with depth-aware fixture selection at [transport-server.ts](/Users/keigoshimada/Documents/generative-gaming/app/api/director/transport-server.ts:71).
+- B confirmed: `ClientGameSession.step` throws on a failed floor entry at [game-session.ts](/Users/keigoshimada/Documents/generative-gaming/app/input/game-session.ts:134), and the store entry path needed to catch that. Recovery is now handled at [game-store.ts](/Users/keigoshimada/Documents/generative-gaming/app/store/game-store.ts:377).
+
+Changed:
+- `app/store/game-store.ts`: wraps resolved-floor entry; on throw, resolves the same depth through the existing `resolveFloor` fallback path, re-serves fallback via `setServedFloor`, records fallback in transition latency, completes arrival, and unlocks input.
+- `app/api/director/transport-server.ts`: mock web transport now selects shallows/middle/lowest fixtures by requested depth, rewrites fixture depth/seed, and normalizes middle quest/NPC refs to pass gates.
+- Added focused tests:
+  - `app/store/game-store.test.ts`
+  - `app/api/director/transport-server.test.ts`
+  - `app/api/director/vitest.config.ts`
+- Updated `PROGRESS.md` task row and validation log.
+
+Evidence, all exit 0:
+```text
+pnpm exec vitest run --config app/store/vitest.config.ts --reporter verbose
+Test Files  1 passed (1)
+Tests  3 passed (3)
+
+pnpm exec vitest run --config app/api/director/vitest.config.ts --reporter verbose
+Test Files  1 passed (1)
+Tests  1 passed (1)
+
+pnpm run check
+typecheck pass
+lint pass
+Test Files  79 passed (79)
+Tests  535 passed | 2 skipped (537)
+```
+
+Scope deviations: none intentional. No commits, per branch assignment. Existing unrelated dirty files and run artifacts were preserved. Environment discoveries: none. Actual time spent: about 45 minutes vs 25 minute estimate, within 50 minute timebox.

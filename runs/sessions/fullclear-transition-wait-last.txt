@@ -1,0 +1,37 @@
+Implemented the brief.
+
+Changed [e2e/browser-bot.ts](/Users/keigoshimada/Documents/generative-gaming/e2e/browser-bot.ts):
+- Polls `data-transition-phase` every 250ms without pressing keys while phase is not `none`.
+- Times out after 90s, dumps diagnostics with reason `floor transition wedged`, then aborts.
+- Resets no-progress / identical-state counters after transition completion or depth change.
+- Tracks one pending descend intent per stairs visit so the bot does not spam `>`.
+
+Updated [PROGRESS.md](/Users/keigoshimada/Documents/generative-gaming/PROGRESS.md) for task status/evidence.
+
+App contract found:
+- `data-transition-phase="none"` when `transition` is null in `GameShell`.
+- Possible active phase values are `descending` and `arrival` from `FloorTransitionPhase`.
+- Input is locked during descend/arrival transition flow and unlocked in `finishArrival`.
+
+Verification:
+
+```text
+$ pnpm run typecheck
+> generative-gaming@0.0.0 typecheck /Users/keigoshimada/Documents/generative-gaming
+> node --input-type=module -e "import{rmSync}from'node:fs';try{rmSync('.next',{recursive:true,force:true})}catch{}" && tsc --noEmit -p tsconfig.src.json && tsc --noEmit -p tsconfig.next.json
+
+exit 0
+```
+
+```text
+$ pnpm run lint
+> generative-gaming@0.0.0 lint /Users/keigoshimada/Documents/generative-gaming
+> eslint .
+
+exit 0
+```
+
+Scope deviations: none for implementation; no commits or branches made per brief.  
+Residual risks: in-sandbox browser campaign not run, as STEP 0 says orchestrator runs it.  
+Environment discoveries: none.  
+Actual time spent: about 20 minutes vs 10 minute estimate / 20 minute timebox.

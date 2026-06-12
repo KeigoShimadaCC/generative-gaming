@@ -1,0 +1,27 @@
+Implemented the round-trip bot policy fix. No commit made.
+
+**Changed**
+- [e2e/browser-bot.ts](/Users/keigoshimada/Documents/generative-gaming/e2e/browser-bot.ts:112): added seeded policy state, per-depth visited tracking, 250-turn telemetry, depth-aware cap error, and 10-turn pinned-position recovery.
+- [e2e/browser-bot.ts](/Users/keigoshimada/Documents/generative-gaming/e2e/browser-bot.ts:301): replaced greedy wandering with priority routing: Hoard on depth 12, stairs before depth 12, then nearest unvisited reachable frontier, then seeded boxed fallback.
+- [e2e/full-clear.spec.ts](/Users/keigoshimada/Documents/generative-gaming/e2e/full-clear.spec.ts:35): passes the campaign seed into the bot so fallback randomization is deterministic.
+
+**Policy Summary**
+The bot now reads grid cells each turn, marks the player’s cell visited by depth, routes by BFS over known non-wall cells, prioritizes visible/remembered stairs before floor 12, prioritizes the Hoard and presses `T` on floor 12, explores unvisited frontier cells adjacent to unseen space, and uses seeded random adjacent movement or wait when boxed. Every 250 turns it logs `depth`, `turn`, visited percent, and HP. If unchanged for 10 turns, it tries perpendicular moves, then an adjacent door direction twice, then fails early with `pinned at depth N`.
+
+**Verification**
+```text
+pnpm run typecheck
+
+> generative-gaming@0.0.0 typecheck /Users/keigoshimada/Documents/generative-gaming
+> node --input-type=module -e "import{rmSync}from'node:fs';try{rmSync('.next',{recursive:true,force:true})}catch{}" && tsc --noEmit -p tsconfig.src.json && tsc --noEmit -p tsconfig.next.json
+```
+Exit: 0.
+
+Scoped eslint was attempted, but repo config ignores `e2e/*.ts`, so it produced only “File ignored” warnings and is not counted as evidence.
+
+**Report**
+Scope deviations: none.  
+Residual risk: full-clear campaign not run here; per brief, orchestrator runs it after.  
+Out-of-scope discoveries: none.  
+Environment discoveries: none.  
+Actual vs estimate: ~31m vs 25m.

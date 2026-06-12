@@ -155,3 +155,8 @@ timestamp	label	agent	model	effort	seconds	input_tokens	output_tokens	total_toke
 2026-06-12T16:00:29Z	ci-audit-portability	codex	default	default	162	482288	10568	492856	0
 2026-06-12T16:10:13Z	fullclear-bot-v2	codex	default	default	350	1799199	22790	1821989	0
 2026-06-12T16:16:17Z	ci-eval-id	codex	default	default	310	1194937	18774	1213711	0
+2026-06-12T16:27:07Z	fullclear-bot-v3	codex	default	default	466	4708502	27635	4736137	0
+2026-06-12T17:07:45Z	fullclear-combat-fix	codex	default	default	1575	16090625	46169	16136794	0
+2026-06-12T17:36:25Z	fullclear-transition-wait	codex	default	default	269	1371744	16261	1388005	0
+2026-06-12T17:44:24Z	arrival-wedge-fix	codex	default	default	433	1721511	22383	1743894	0
+2026-06-12T17:55:21Z	descend-throw-fallback	codex	default	default	658	8227456	31514	8258970	0

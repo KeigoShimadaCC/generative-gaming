@@ -1,0 +1,27 @@
+Implemented the brief on `main` with no commits/branches.
+
+**Diagnosis**
+- `u` maps to `move/northeast` in [app/input/keys.ts](/Users/keigoshimada/Documents/generative-gaming/app/input/keys.ts:116), then dispatches as a run action through the web session.
+- Diagonal melee is legal: `GAME_DESIGN.md` says movement is 8-way, and engine attack adjacency uses Chebyshev distance in [actions.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/turn/actions.ts:407).
+- Root break: move-into-enemy in [movement.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/systems/movement.ts:128) previously emitted only `attack_intent` with unchanged state, so [turn loop/run loop](/Users/keigoshimada/Documents/generative-gaming/src/engine/run/loop.ts:246) treated the move as resolved and advanced actors/ticks.
+- Separate web-path issue: the browser session was not passing enemy behavior hooks; fixed through the public `runGameplayTurnHooks()` path in [game-session.ts](/Users/keigoshimada/Documents/generative-gaming/app/input/game-session.ts:197).
+
+**Changed**
+- `src/engine/systems/movement.ts`: bumping an enemy now calls `resolveAttack`, preserving `attack_intent`.
+- `src/engine/run/loop.ts`, `app/input/game-session.ts`, `app/components/runindex/replay.ts`: explicit gameplay hook for web session and replay.
+- `app/components/title/TitleScreen.tsx`: deterministic initial seed, then `?seed=` applied after mount.
+- `e2e/browser-bot.ts`: loop-breaker for repeated unchanged adjacent-enemy actions.
+- Tests/fixtures: movement tests, web session test, persona eval-bank traces updated by the test suite.
+- `PROGRESS.md`: task marked ready for verify with evidence.
+
+**Verification**
+- `pnpm exec vitest run src/engine/systems/movement.test.ts --reporter verbose` → exit 0, 1 file / 9 tests passed.
+- `pnpm exec vitest run --config app/input/vitest.config.ts --reporter verbose` → exit 0, 2 files / 10 tests passed.
+- `pnpm exec vitest run --config tests/golden/vitest.config.ts --reporter verbose` → exit 0, 1 file / 9 tests passed.
+- `pnpm run check` → exit 0: typecheck pass, lint pass, Vitest 79 files passed, 535 passed / 2 skipped.
+
+**Notes**
+- Browser campaign was not run, per STEP 0 sandbox constraint.
+- Scope deviation: `app/components/runindex/replay.ts` needed the same explicit gameplay hook so web-session traces remain replayable.
+- Environment discovery: one `npx tsx tests/golden/generate-goldens.ts` run hung; stdin was closed, and `ps`/`pkill`/`killall` were blocked by sandbox process policy. I used a bounded trace rewrite instead.
+- Actual time: about 40 minutes vs 25 minute estimate, mostly from the generator hang and full-gate reruns.

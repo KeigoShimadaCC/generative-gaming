@@ -1,0 +1,49 @@
+Done on `main`; no commits or branches created.
+
+**Changed**
+- [game-store.ts](/Users/keigoshimada/Documents/generative-gaming/app/store/game-store.ts:303): `servedSource` is set in `resolveTransitionFloor` via `markTransitionFloorReady(..., served.source)`, and that path now invokes the arrival completion check.
+- [game-store.ts](/Users/keigoshimada/Documents/generative-gaming/app/store/game-store.ts:366): replaced the one-shot arrival timer with a guarded retry completion path. It waits until `playableAtMs`, then retries every 100ms until `servedSource` exists, without shortening the happy path.
+- [game-store.test.ts](/Users/keigoshimada/Documents/generative-gaming/app/store/game-store.test.ts:37): added happy-path and delayed-`servedSource` store unit tests.
+- [vitest.config.ts](/Users/keigoshimada/Documents/generative-gaming/app/store/vitest.config.ts:1): added local store test config.
+
+**Evidence**
+`pnpm exec vitest run --config app/store/vitest.config.ts --reporter verbose` -> exit 0
+
+```text
+ RUN  v4.1.8 /Users/keigoshimada/Documents/generative-gaming
+
+ ✓ app/store/game-store.test.ts > game store arrival transition > resumes on the original arrival timer when servedSource is already set 3ms
+ ✓ app/store/game-store.test.ts > game store arrival transition > retries and resumes when servedSource appears after playableAt 1ms
+
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  02:49:23
+   Duration  188ms (transform 56ms, setup 0ms, import 92ms, tests 4ms, environment 0ms)
+```
+
+`pnpm run check` -> exit 0
+
+```text
+> generative-gaming@0.0.0 check /Users/keigoshimada/Documents/generative-gaming
+> pnpm run typecheck && pnpm run lint && pnpm test
+
+> generative-gaming@0.0.0 typecheck /Users/keigoshimada/Documents/generative-gaming
+> node --input-type=module -e "import{rmSync}from'node:fs';try{rmSync('.next',{recursive:true,force:true})}catch{}" && tsc --noEmit -p tsconfig.src.json && tsc --noEmit -p tsconfig.next.json
+
+> generative-gaming@0.0.0 lint /Users/keigoshimada/Documents/generative-gaming
+> eslint .
+
+> generative-gaming@0.0.0 test /Users/keigoshimada/Documents/generative-gaming
+> vitest run
+
+ RUN  v4.1.8 /Users/keigoshimada/Documents/generative-gaming
+
+ Test Files  79 passed (79)
+      Tests  535 passed | 2 skipped (537)
+   Start at  02:49:33
+   Duration  76.38s (transform 4.12s, setup 0ms, import 10.68s, tests 97.24s, environment 5ms)
+```
+
+Scope deviations: none in implementation. `PROGRESS.md` was read but not edited because the brief made non-owned files read-only and no queue row existed for this task.
+
+Residual risks: none known. Out-of-scope discoveries: none. Environment discoveries: none new. Actual time spent: ~20 minutes vs 15 minute estimate, within the 30 minute timebox.
