@@ -45,6 +45,14 @@ export type GridMotion = {
   readonly dy: number;
 };
 
+export type GridOverlayMarker = {
+  readonly id: string;
+  readonly x: number;
+  readonly y: number;
+  readonly label: string;
+  readonly tone: "quest";
+};
+
 export type GridCellView = {
   readonly key: string;
   readonly x: number;
@@ -55,6 +63,7 @@ export type GridCellView = {
   readonly label: string;
   readonly badge: string;
   readonly shape: GridShape;
+  readonly markers: readonly GridOverlayMarker[];
   readonly pulses: readonly GridPulse[];
   readonly hitFlash: boolean;
   readonly motion: GridMotion | null;
@@ -116,6 +125,7 @@ export const hasRenderableGrid = (state: GameState): boolean =>
 export const createGridViewModel = (
   state: GameState,
   previousCursor?: GridRenderCursor,
+  markers: readonly GridOverlayMarker[] = [],
 ): GridViewModel => {
   const lines = renderedGridLines(state);
   const width = lines[0]?.length ?? 0;
@@ -124,6 +134,7 @@ export const createGridViewModel = (
   const entitiesByPosition = entitiesByCell(state);
   const fogStates = fogStatesForState(state, width, height);
   const effectsByPosition = effectsSinceLastRender(state, previousCursor);
+  const markersByPosition = overlayMarkersByCell(markers);
   const cells: GridCellView[] = [];
 
   for (let y = 0; y < height; y += 1) {
@@ -148,6 +159,7 @@ export const createGridViewModel = (
           glyph,
           fog,
           layer,
+          markers: markersByPosition.get(positionKey) ?? [],
           effects,
         }),
       );
@@ -198,6 +210,7 @@ const createCell = ({
   glyph,
   fog,
   layer,
+  markers,
   effects,
 }: {
   readonly x: number;
@@ -205,6 +218,7 @@ const createCell = ({
   readonly glyph: string;
   readonly fog: GridFogState;
   readonly layer: GridLayer;
+  readonly markers: readonly GridOverlayMarker[];
   readonly effects: CellEffects;
 }): GridCellView => {
   const affordance = affordanceForLayer(layer);
@@ -219,6 +233,7 @@ const createCell = ({
     label: labelForLayer(layer, fog),
     badge: affordance.badge,
     shape: affordance.shape,
+    markers,
     pulses: effects.pulses,
     hitFlash: effects.hitFlash,
     motion: effects.motion,
@@ -232,9 +247,29 @@ const createCell = ({
       effects.motion === null
         ? ""
         : `${effects.motion.dx},${effects.motion.dy}`,
+      ...markers.map((marker) => `marker:${marker.id}:${marker.tone}`),
       ...effects.pulses.map((pulse) => `${pulse.id}:${pulse.kind}:${pulse.text}`),
     ].join("|"),
   };
+};
+
+const overlayMarkersByCell = (
+  markers: readonly GridOverlayMarker[],
+): ReadonlyMap<string, readonly GridOverlayMarker[]> => {
+  const grouped = new Map<string, GridOverlayMarker[]>();
+
+  for (const marker of markers) {
+    const key = keyForPosition(marker);
+    const existing = grouped.get(key);
+
+    if (existing === undefined) {
+      grouped.set(key, [marker]);
+    } else {
+      existing.push(marker);
+    }
+  }
+
+  return grouped;
 };
 
 const affordanceForLayer = (

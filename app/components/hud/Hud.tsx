@@ -87,6 +87,7 @@ export function HudFrame({ model }: HudFrameProps) {
       </div>
 
       <StatusChips
+        quests={model.quests}
         statuses={model.statuses}
         pulse={model.statusesPulse}
       />
@@ -170,9 +171,11 @@ function HudMeter({
 }
 
 function StatusChips({
+  quests,
   statuses,
   pulse,
 }: {
+  readonly quests: HudViewModel["quests"];
   readonly statuses: readonly HudStatusChipView[];
   readonly pulse: boolean;
 }) {
@@ -185,6 +188,22 @@ function StatusChips({
       data-pulse={pulse ? "true" : "false"}
       aria-label="Statuses"
     >
+      <span
+        className={[styles.chip, quests.pulse ? styles.pulse : ""]
+          .filter(Boolean)
+          .join(" ")}
+        data-hud-field="quests"
+        data-pulse={quests.pulse ? "true" : "false"}
+      >
+        <span
+          className={[
+            styles.chipIcon,
+            shapeClass("diamond"),
+          ].join(" ")}
+          aria-hidden="true"
+        />
+        Quest {quests.active}/{quests.completed}
+      </span>
       {statuses.length === 0 ? (
         <span className={[styles.chip, styles.noStatus].join(" ")}>
           <span

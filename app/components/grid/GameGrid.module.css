@@ -85,6 +85,30 @@
   text-transform: uppercase;
 }
 
+.marker {
+  position: absolute;
+  z-index: 3;
+  top: 1px;
+  right: 1px;
+  display: grid;
+  width: 0.68rem;
+  height: 0.68rem;
+  place-items: center;
+  border: 1px solid rgba(255, 230, 128, 0.55);
+  border-radius: 999px;
+  background: rgba(255, 214, 102, 0.18);
+  color: #ffe680;
+  font-size: 0.48rem;
+  font-weight: 900;
+  line-height: 1;
+  pointer-events: none;
+  text-shadow: 0 0 0.45rem rgba(255, 214, 102, 0.75);
+}
+
+.questMarker {
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.42);
+}
+
 .shape::before {
   position: absolute;
   z-index: 0;

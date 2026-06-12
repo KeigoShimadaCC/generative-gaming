@@ -8,6 +8,7 @@ import {
   dispatchGameKey,
   type InputDispatchDeps,
 } from "./dispatcher";
+import { routePanelKey } from "./panel-focus";
 
 const INPUT_LOCK_MS = 50;
 
@@ -40,6 +41,11 @@ export const useGameInputOwner = (): void => {
 
     const onKeyDown = (event: KeyboardEvent): void => {
       if (event.defaultPrevented || isEditableTarget(event.target)) {
+        return;
+      }
+
+      if (routePanelKey({ key: event.key, repeat: event.repeat })) {
+        event.preventDefault();
         return;
       }
 

@@ -26,6 +26,11 @@ describe("Hud", () => {
       level: 2,
       xp: 5,
     });
+    expect(model.quests).toMatchObject({
+      active: 0,
+      completed: 0,
+      pulse: false,
+    });
     expect(model.statuses).toEqual([
       {
         status: "poison",
@@ -45,6 +50,7 @@ describe("Hud", () => {
     expect(markup).toContain('data-status-shape="diamond"');
     expect(markup).toContain('data-status="shield"');
     expect(markup).toContain('data-status-shape="square"');
+    expect(markup).toContain('data-hud-field="quests"');
   });
 
   it("pulses HUD fields only when player event metadata marks them changed since the previous render", () => {
@@ -55,6 +61,7 @@ describe("Hud", () => {
       withNonHudEvent(base),
       before.cursor,
     );
+    const questChange = createHudViewModel(withQuestPulse(base), before.cursor);
     const firstRender = createHudViewModel(withLevelUpPulse(base));
 
     expect(levelUp.hp.pulse).toBe(true);
@@ -65,6 +72,7 @@ describe("Hud", () => {
 
     expect(noHudChange.hp.pulse).toBe(false);
     expect(noHudChange.levelXp.pulse).toBe(false);
+    expect(questChange.quests.pulse).toBe(true);
     expect(firstRender.hp.pulse).toBe(false);
     expect(renderHud(levelUp)).toContain('data-pulse="true"');
   });
@@ -153,5 +161,24 @@ const withNonHudEvent = (state: GameState): GameState => ({
         to: { x: 2, y: 1 },
       },
     } as GameState["log"][number],
+  ],
+});
+
+const withQuestPulse = (state: GameState): GameState => ({
+  ...state,
+  quests: {
+    ...state.quests,
+    activeQuestIds: ["quest-1"],
+  },
+  log: [
+    ...state.log,
+    {
+      turn: state.run.turn,
+      type: "quest_accepted",
+      data: {
+        questId: "quest-1",
+        npcId: null,
+      },
+    } as unknown as GameState["log"][number],
   ],
 });

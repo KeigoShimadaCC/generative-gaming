@@ -22,6 +22,7 @@ import {
   hasRenderableGrid,
   type GridCellView,
   type GridLayer,
+  type GridOverlayMarker,
   type GridRenderCursor,
   type GridShape,
   type GridViewModel,
@@ -30,6 +31,7 @@ import {
 type GameGridProps = {
   readonly state: GameState | null;
   readonly glyphSizeRem?: number;
+  readonly markers?: readonly GridOverlayMarker[];
 };
 
 type GridRegionProps = GameGridProps & {
@@ -39,6 +41,7 @@ type GridRegionProps = GameGridProps & {
 export function GridRegion({
   state,
   glyphSizeRem,
+  markers = [],
   className,
 }: GridRegionProps) {
   const setGameState = useGameStore((store) => store.setGameState);
@@ -57,24 +60,24 @@ export function GridRegion({
       className={[styles.region, className].filter(Boolean).join(" ")}
       aria-label="The grid"
     >
-      <GameGrid state={state} glyphSizeRem={glyphSizeRem} />
+      <GameGrid state={state} glyphSizeRem={glyphSizeRem} markers={markers} />
       {devFixtureMode ? <GridFixtureControls /> : null}
     </section>
   );
 }
 
-export function GameGrid({ state, glyphSizeRem }: GameGridProps) {
+export function GameGrid({ state, glyphSizeRem, markers = [] }: GameGridProps) {
   const cursorRef = useRef<GridRenderCursor | undefined>(undefined);
   const model = useMemo(() => {
     if (state === null) {
       return null;
     }
 
-    const nextModel = createGridViewModel(state, cursorRef.current);
+    const nextModel = createGridViewModel(state, cursorRef.current, markers);
     cursorRef.current = nextModel.cursor;
 
     return nextModel;
-  }, [state]);
+  }, [state, markers]);
 
   if (model === null || model.width === 0 || model.height === 0) {
     return (
@@ -173,6 +176,23 @@ const GridCell = memo(
             {cell.badge}
           </span>
         ) : null}
+        {cell.markers.map((marker) => (
+          <span
+            className={[
+              styles.marker,
+              marker.tone === "quest" ? styles.questMarker : "",
+            ]
+              .filter(Boolean)
+              .join(" ")}
+            data-marker-id={marker.id}
+            data-marker-tone={marker.tone}
+            key={marker.id}
+            title={marker.label}
+            aria-label={marker.label}
+          >
+            !
+          </span>
+        ))}
         {cell.pulses.map((pulse) => (
           <span
             className={[

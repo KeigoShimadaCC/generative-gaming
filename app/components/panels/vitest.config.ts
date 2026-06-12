@@ -18,26 +18,10 @@ export default defineConfig({
     alias: [
       { find: "@", replacement: `${root}app` },
       { find: /^@engine\/(.+)$/, replacement: `${root}src/engine/$1` },
-      {
-        find: /^@engine\/map$/,
-        replacement: `${root}src/engine/map/index.ts`,
-      },
-      {
-        find: /^@engine\/render$/,
-        replacement: `${root}src/engine/render/index.ts`,
-      },
-      {
-        find: /^@engine\/render\/grid$/,
-        replacement: `${root}src/engine/render/grid.ts`,
-      },
-      {
-        find: /^@engine\/state$/,
-        replacement: `${root}src/engine/state/index.ts`,
-      },
     ],
   },
   test: {
     environment: "node",
-    include: ["app/components/grid/**/*.test.ts"],
+    include: ["app/components/panels/**/*.test.ts"],
   },
 });

@@ -6,7 +6,8 @@ export type HudPulseTarget =
   | "hp"
   | "fullness"
   | "levelXp"
-  | "statuses";
+  | "statuses"
+  | "quests";
 
 export type StatusChipShape =
   | "circle"
@@ -57,6 +58,11 @@ export type HudViewModel = {
   readonly levelXp: HudLevelXpView;
   readonly statuses: readonly HudStatusChipView[];
   readonly statusesPulse: boolean;
+  readonly quests: {
+    readonly active: number;
+    readonly completed: number;
+    readonly pulse: boolean;
+  };
   readonly cursor: HudRenderCursor;
 };
 
@@ -124,6 +130,11 @@ export const createHudViewModel = (
       shape: shapeForStatus(application.status),
     })),
     statusesPulse: pulses.has("statuses"),
+    quests: {
+      active: state.quests.activeQuestIds.length,
+      completed: state.quests.completedQuestIds.length,
+      pulse: pulses.has("quests"),
+    },
     cursor: cursorForState(state),
   };
 };
@@ -155,6 +166,10 @@ const hudPulsesSinceLastRender = (
   );
 
   for (const event of events) {
+    if (typeof event.type === "string" && event.type.startsWith("quest_")) {
+      pulses.add("quests");
+    }
+
     const hud = asRecord(asRecord(event.data)?.hud);
 
     if (hud?.pulse !== true) {
@@ -198,6 +213,9 @@ const pulseTargetsForField = (
     case "status":
     case "statuses":
       return ["statuses"];
+    case "quest":
+    case "quests":
+      return ["quests"];
     default:
       return [];
   }

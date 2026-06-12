@@ -1,0 +1,30 @@
+Implemented PHASE-51A+51B and did not commit.
+
+Changed:
+- Added context panel system under `app/components/panels/**`: frame, inspect, inventory, dialogue, quest, models, and tests.
+- Wired panel focus routing via `app/input/panel-focus.ts` and `app/input/use-game-input-owner.tsx`.
+- Wired `GameShell` to render one active panel mode, hover inspect parity, and quest grid markers.
+- Added grid overlay marker public props/styles.
+- Added quest HUD chip pulse coverage.
+- Added `src/engine/systems/index.ts` public barrel for inventory actions used by the app.
+
+Scope note: I touched `app/components/grid/**`, `app/components/hud/**`, and `src/engine/systems/index.ts` beyond the narrow owned-file list because the phase requirements explicitly needed grid marker props, quest HUD pulse behavior, and a public engine import path. No locked files or forbidden files were edited. No commit was made.
+
+Verification:
+- `pnpm run typecheck` -> exit 0
+- `pnpm run lint` -> exit 0
+- `pnpm exec vitest run --config app/components/panels/vitest.config.ts --reporter verbose` -> exit 0
+  - `keeps inspect card truthfulness: unknown item shows exactly the unknown and witnessed facts appear only after witnessing`
+  - `walks a fixture conversation by keyboard through barter while paused`
+- `pnpm exec vitest run --config app/components/hud/vitest.config.ts --reporter verbose` -> exit 0
+- `pnpm exec vitest run --config app/input/vitest.config.ts --reporter verbose` -> exit 0
+- `pnpm exec vitest run --config app/components/grid/vitest.config.ts --reporter verbose` -> exit 0
+- Full gate, clean `.next`, redirected output:
+  `node --input-type=module -e "import{rmSync}from'node:fs';try{rmSync('.next',{recursive:true,force:true})}catch{}" && pnpm run check > /tmp/phase51-check-final.log 2>&1; gate_status=$?; tail -n 120 /tmp/phase51-check-final.log; exit $gate_status`
+  -> exit 0, `Test Files 78 passed (78)`, `Tests 529 passed | 2 skipped (531)`.
+
+I also started the dev server on `http://localhost:3001` and confirmed `HTTP/1.1 200 OK`. Environment discovery: the sandbox then denied cleanup signals for the spawned Next dev `node` process on port 3001, and `ps`/`pkill` process inspection was also blocked, so that listener may still be running.
+
+Residual risks: no browser screenshot pass was captured; validation is test/type/lint plus HTTP smoke. Full `pnpm run check` generated untracked `runs/bot-*` artifacts; I left them intact per the repo evidence rule.
+
+Actual time: about 21 minutes vs the 60 minute estimate.
