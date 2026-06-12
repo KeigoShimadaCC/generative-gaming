@@ -238,6 +238,7 @@ export const parseSimulateArgs = (
 
 export const runSimulate = (args: Exclude<ParsedSimulateArgs, { help: true }>): SimulateResult => {
   let providerCounter = 0;
+  const createdAt = new Date().toISOString();
   const providerFactory = () =>
     createSimulateProvider(args.director, providerCounter += 1);
 
@@ -247,6 +248,7 @@ export const runSimulate = (args: Exclude<ParsedSimulateArgs, { help: true }>): 
         args.seeds,
         providerFactory,
         args.maxTurns,
+        { createdAt },
       )
     : {
         runs: [
@@ -255,7 +257,7 @@ export const runSimulate = (args: Exclude<ParsedSimulateArgs, { help: true }>): 
             args.seed,
             providerFactory(),
             args.maxTurns,
-            { runId: `bot-${args.policy}-${args.seed}` },
+            { createdAt },
           ),
         ],
         rows: [] as BotBatchRow[],

@@ -265,7 +265,7 @@ const nextMoveToward = (state: GameState, target: Position): RunAction => {
 
   const route = findPath(grid, state.player.position, target, {
     openDoors: true,
-    isOccupied: (position) => isActorAt(state, position)
+    isOccupied: (position) => isNpcAt(state, position)
   });
   const next = route?.[1];
   if (next === undefined) {
@@ -278,11 +278,10 @@ const nextMoveToward = (state: GameState, target: Position): RunAction => {
   };
 };
 
-const isActorAt = (state: GameState, position: Position): boolean =>
+const isNpcAt = (state: GameState, position: Position): boolean =>
   Object.values(state.entities).some(
     (entity) =>
-      (entity.kind === "enemy" || entity.kind === "npc") &&
-      samePosition(entity.position, position)
+      entity.kind === "npc" && samePosition(entity.position, position)
   );
 
 const directionBetween = (from: Position, to: Position): MoveDirection => {

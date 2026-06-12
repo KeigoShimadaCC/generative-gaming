@@ -28,10 +28,7 @@ export const runBotBatch = (
 ): BotBatchResult => {
   const runs = policies.flatMap((policy) =>
     seeds.map((seed) =>
-      runBot(policy, seed, providerFactory(), maxTurns, {
-        ...options,
-        runId: `bot-${policy.name}-${seed}`,
-      }),
+      runBot(policy, seed, providerFactory(), maxTurns, options),
     ),
   );
 

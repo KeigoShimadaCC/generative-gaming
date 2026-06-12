@@ -251,12 +251,12 @@ const actionsToDepth = (seed: string, targetDepth: number): readonly RunAction[]
     while (!samePosition(state.player.position, runtime.stairsDown)) {
       const action = nextMoveToward(state, runtime.stairsDown);
       actions.push(action);
-      state = stepOk(state, action, provider);
+      state = stepOk(state, action, provider, true);
     }
 
     const descend = { kind: "descend" } as const;
     actions.push(descend);
-    state = stepOk(state, descend, provider);
+    state = stepOk(state, descend, provider, true);
   }
 
   return actions;
@@ -266,8 +266,11 @@ const stepOk = (
   state: GameState,
   action: RunAction,
   provider: FloorContentProvider,
+  hookFree = false,
 ): GameState => {
-  const result = stepRun(state, action, provider);
+  const result = hookFree
+    ? stepRun(state, action, provider, { hooks: "none" })
+    : stepRun(state, action, provider);
   if (!result.ok) {
     throw new Error(result.error.message);
   }

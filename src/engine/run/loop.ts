@@ -96,7 +96,7 @@ export interface FloorContentProvider {
 export type RunAction = PlayerAction | TakeHoardAction;
 
 export type RunStepOptions = {
-  readonly hooks?: TurnHooks;
+  readonly hooks?: TurnHooks | "none";
   readonly config?: GameConfig;
 };
 
@@ -243,7 +243,7 @@ export const stepRun = (
     ]);
   }
 
-  const stepped = turnStep(state, action, { hooks: options.hooks });
+  const stepped = turnStep(state, action, runStepOptions(options.hooks));
   if (
     actionWasIllegal(stepped.events) ||
     stepped.state.run.terminalStatus !== "ACTIVE"
@@ -1145,3 +1145,6 @@ const parseNonEmptyString = (value: unknown): string | null =>
 
 const positionKey = (position: Position): string =>
   `${position.x},${position.y}`;
+
+const runStepOptions = (hooks: RunStepOptions["hooks"]) =>
+  hooks === "none" ? {} : { hooks: hooks ?? runGameplayTurnHooks() };

@@ -12,6 +12,7 @@ import {
   depthBandForDepth,
   deserialize,
   serialize,
+  type EntityId,
   type GameState,
   type Position
 } from "../state/index.js";
@@ -101,6 +102,37 @@ describe("run loop floor progression and Hoard ending", () => {
       depth: 1,
       turn: 0
     });
+  });
+
+  it("runs gameplay enemy behavior by default with an explicit hook-free escape hatch", () => {
+    const provider = shallowProvider([enemy("default-hooks-rat")]);
+    const state = expectStartedRun("default-hooks-enemy", provider);
+    const actorId = firstEnemyId(state);
+    const adjacentState = withEntityPosition(state, actorId, {
+      x: state.player.position.x + 1,
+      y: state.player.position.y
+    });
+    const hpBefore = adjacentState.player.hp.current;
+
+    const defaultStep = stepRun(adjacentState, { kind: "wait" }, provider);
+    expect(defaultStep.ok).toBe(true);
+    if (!defaultStep.ok) {
+      throw new Error(defaultStep.error.message);
+    }
+
+    expect(eventsOfType(defaultStep.events, "attack_hit")).toHaveLength(1);
+    expect(defaultStep.state.player.hp.current).toBeLessThan(hpBefore);
+
+    const hookFreeStep = stepRun(adjacentState, { kind: "wait" }, provider, {
+      hooks: "none"
+    });
+    expect(hookFreeStep.ok).toBe(true);
+    if (!hookFreeStep.ok) {
+      throw new Error(hookFreeStep.error.message);
+    }
+
+    expect(eventsOfType(hookFreeStep.events, "attack_hit")).toHaveLength(0);
+    expect(hookFreeStep.state.player.hp.current).toBe(hpBefore);
   });
 });
 
@@ -420,6 +452,28 @@ const withPlayerPosition = (
   }
 });
 
+const withEntityPosition = (
+  state: GameState,
+  entityId: EntityId,
+  position: Position
+): GameState => {
+  const entity = state.entities[entityId];
+  if (entity === undefined) {
+    throw new Error(`missing entity ${entityId}`);
+  }
+
+  return {
+    ...state,
+    entities: {
+      ...state.entities,
+      [entityId]: {
+        ...entity,
+        position
+      }
+    }
+  };
+};
+
 const withPlayerHp = (state: GameState, hp: number): GameState => ({
   ...state,
   player: {
@@ -477,6 +531,17 @@ const enemy = (id: string): EnemyDefinition =>
     ...validEnemyDefinitionFixture,
     id
   });
+
+const firstEnemyId = (state: GameState): EntityId => {
+  const entity = Object.values(state.entities).find(
+    (candidate) => candidate.kind === "enemy"
+  );
+  if (entity === undefined) {
+    throw new Error("expected an enemy");
+  }
+
+  return entity.id;
+};
 
 const flavorForBand = (band: DepthBand): LayoutFlavor => {
   switch (band) {

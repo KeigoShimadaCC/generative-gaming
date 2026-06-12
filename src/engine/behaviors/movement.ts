@@ -533,7 +533,7 @@ const stepAwayFromPlayer = (
 
   const currentDistance = chebyshevDistance(enemy.position, playerPosition);
   let bestDistance = currentDistance;
-  let bestCandidates = candidates;
+  let bestCandidates: typeof candidates = [];
 
   for (const candidate of candidates) {
     const nextDistance = chebyshevDistance(candidate.position, playerPosition);

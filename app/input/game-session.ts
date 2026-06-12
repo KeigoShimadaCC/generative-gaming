@@ -8,7 +8,6 @@ import {
   isWorldPaused,
 } from "@engine/npc";
 import {
-  runGameplayTurnHooks,
   startRun,
   stepRun,
   type FloorContentProvider,
@@ -201,12 +200,9 @@ const stepPlayerAction = (
 ): RunLoopResult => {
   const turnBefore = state.run.turn;
   const shouldFreezeWorld = action.kind === "talk" || isWorldPaused(state);
-  const result = stepRun(
-    state,
-    action,
-    provider,
-    { hooks: shouldFreezeWorld ? frozenWorldTurnHooks() : runGameplayTurnHooks() },
-  );
+  const result = shouldFreezeWorld
+    ? stepRun(state, action, provider, { hooks: frozenWorldTurnHooks() })
+    : stepRun(state, action, provider);
 
   if (!result.ok) {
     return result;

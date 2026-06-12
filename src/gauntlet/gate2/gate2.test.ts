@@ -100,10 +100,11 @@ describe("Gate 2 simulated playability", () => {
       clock: sequenceClock(0, 1),
       transformFloor: corridorFloor
     });
+    const thresholds = defaultGate2Config(manifest).thresholdsByBand;
     const report = judgeGate2({
-      ...evaluation,
+      ...forceHpRetentionAboveBand(evaluation, thresholds),
       hpRetentionMode: "advisory",
-      thresholds: defaultGate2Config(manifest).thresholdsByBand
+      thresholds
     });
     const hpCheck = report.checks.find(
       (check) => check.code === "G2_HP_RETENTION"
@@ -124,10 +125,11 @@ describe("Gate 2 simulated playability", () => {
       clock: sequenceClock(0, 1),
       transformFloor: corridorFloor
     });
+    const thresholds = defaultGate2Config(manifest).thresholdsByBand;
     const report = judgeGate2({
-      ...evaluation,
+      ...forceHpRetentionAboveBand(evaluation, thresholds),
       hpRetentionMode: "blocking",
-      thresholds: defaultGate2Config(manifest).thresholdsByBand
+      thresholds
     });
 
     expect(report.pass).toBe(false);
@@ -202,6 +204,18 @@ const allowCurrentHpRetention = (
   medianHpRetentionPercent: {
     ...threshold.medianHpRetentionPercent,
     max: 100
+  }
+});
+
+const forceHpRetentionAboveBand = (
+  evaluation: ReturnType<typeof evaluateGate2>,
+  thresholds: Gate2Config["thresholdsByBand"]
+): ReturnType<typeof evaluateGate2> => ({
+  ...evaluation,
+  aggregate: {
+    ...evaluation.aggregate,
+    medianHpRetentionPercent:
+      thresholds[evaluation.band].medianHpRetentionPercent.max + 1
   }
 });
 

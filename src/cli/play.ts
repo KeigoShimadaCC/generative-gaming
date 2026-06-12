@@ -9,7 +9,6 @@ import "../engine/systems/movement.js";
 import { config } from "../config/index.js";
 import { itemCardKnowledge } from "../engine/items/identify.js";
 import {
-  dialogueTurnHooks,
   freezeTurnCount,
   getCurrentDialogueNode,
   isWorldPaused,
@@ -29,6 +28,7 @@ import {
   type RunAction,
   type RunLoopResult,
 } from "../engine/run/loop.js";
+import type { TurnHooks } from "../engine/turn/index.js";
 import type { ItemDefinition } from "../schemas/entities/index.js";
 import {
   dropItem,
@@ -352,7 +352,10 @@ const stepPlayerAction = (
   provider: FloorContentProvider,
 ): RunLoopResult => {
   const turnBefore = state.run.turn;
-  const result = stepRun(state, action, provider, { hooks: dialogueTurnHooks() });
+  const shouldFreezeWorld = action.kind === "talk" || isWorldPaused(state);
+  const result = shouldFreezeWorld
+    ? stepRun(state, action, provider, { hooks: frozenWorldTurnHooks() })
+    : stepRun(state, action, provider);
 
   if (!result.ok) {
     return result;
@@ -371,6 +374,16 @@ const stepPlayerAction = (
     events,
   };
 };
+
+const frozenWorldTurnHooks = (): TurnHooks => ({
+  actorTurn: ({ state }) => state,
+  ticks: {
+    damageOverTime: ({ state }) => state,
+    durations: ({ state }) => state,
+    hunger: ({ state }) => state,
+    regen: ({ state }) => state,
+  },
+});
 
 const paint = (context: PlayContext): void => {
   const state = context.session.getState();
