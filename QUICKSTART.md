@@ -9,8 +9,11 @@ gauntlet of validators makes sure it can never break the game.
 git clone https://github.com/KeigoShimadaCC/generative-gaming.git
 cd generative-gaming
 pnpm install
-pnpm run play
+pnpm run play -- --seed my-first-delve
 ```
+
+(Give each run its own seed name — traces are append-only, so the default
+dev seed collides on a second launch until the queued runId fix lands.)
 
 Arrows move · move into enemies to fight · `g` pick up · `i` inventory ·
 `>` descend on stairs · reach floor 12 and take one thing from the Hoard.
