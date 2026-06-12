@@ -72,11 +72,7 @@ export function ArtifactViewer({ model, runId = null }: ArtifactViewerProps) {
     return (
       <section className={styles.empty} aria-label="Artifact viewer">
         <h2>Artifacts</h2>
-        <p>
-          {loadState === "loading"
-            ? "Loading generation artifacts..."
-            : "No generation artifacts recorded for this run."}
-        </p>
+        <p>{artifactEmptyMessage(loadState, runId)}</p>
       </section>
     );
   }
@@ -183,6 +179,23 @@ export function ArtifactViewer({ model, runId = null }: ArtifactViewerProps) {
     </section>
   );
 }
+
+const artifactEmptyMessage = (
+  loadState: "idle" | "loading" | "loaded" | "error",
+  runId: string | null,
+): string => {
+  if (loadState === "loading") {
+    return "Loading generation artifacts...";
+  }
+
+  if (loadState === "error") {
+    return "Artifact records are unavailable; fallback play remains intact.";
+  }
+
+  return runId === null
+    ? "No generation artifacts selected."
+    : "No generation artifacts recorded for this run; fallback play remains intact.";
+};
 
 function DocumentPane({
   document,

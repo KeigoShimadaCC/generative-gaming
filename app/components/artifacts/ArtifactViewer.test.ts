@@ -55,6 +55,15 @@ describe("ArtifactViewer", () => {
     expect(filtered.map((document) => document.kind)).toContain("gate");
   });
 
+  it("renders a presentable empty state for runs without artifacts", () => {
+    const markup = renderToStaticMarkup(
+      createElement(ArtifactViewer, { model: null, runId: "missing-run" }),
+    );
+
+    expect(markup).toContain("No generation artifacts recorded for this run");
+    expect(markup).toContain("fallback play remains intact");
+  });
+
   it("loads the Tab artifact pane model through the read-only API bridge", async () => {
     const fs = fixtureArtifactFs();
     const listResult = readArtifactsRoute("http://localhost/api/artifacts", {

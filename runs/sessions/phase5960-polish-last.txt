@@ -1,0 +1,12 @@
+Blocked before edits.
+
+`git branch --show-current` reports `main`, and `AGENTS.md` says workers must work only in the assigned worktree branch and never write in `main`. The task brief did not assign a `phase-XX/<slug>` branch, so I cannot safely modify the owned files yet.
+
+Current repo state before any edits:
+```text
+main
+?? runs/briefs/phase5960-polish.md
+?? runs/sessions/phase5960-polish.jsonl
+```
+
+Please provide or switch me to the intended phase branch/worktree, then I’ll continue from the required read/claim step.

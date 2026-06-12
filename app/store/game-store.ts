@@ -350,7 +350,6 @@ const enterResolvedFloor = (
   );
   persistActiveRun(gameSession);
   gameSession.prefetchNextFloor();
-  console.info("[stairs-to-playable]", latencySample);
 
   set({
     gameState: result.state,
