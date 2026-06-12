@@ -1,0 +1,29 @@
+**Complete**
+
+Implemented Gate 2 under `src/gauntlet/gate2/`:
+
+- [run.ts](/Users/keigoshimada/Documents/generative-gaming/src/gauntlet/gate2/run.ts): local `TODO-PHASE-35` materializer, single-floor bot ensemble, metrics, injected clock timing.
+- [judge.ts](/Users/keigoshimada/Documents/generative-gaming/src/gauntlet/gate2/judge.ts): frozen `G2_*` report codes, clear-rate / HP-band / hard-reject / zero-threat / wall-clock checks.
+- [gate2.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/gauntlet/gate2/gate2.test.ts): 2 policies x 2 seeds fixtures for fallback pass, walled-stairs reject, zero-threat reject, determinism, and judge threshold codes.
+- [PROGRESS.md](/Users/keigoshimada/Documents/generative-gaming/PROGRESS.md): minimal claim/validation update per worker contract.
+
+**Verification**
+
+`pnpm run typecheck` -> passed  
+`pnpm exec eslint src/gauntlet/gate2` -> passed  
+`pnpm exec vitest run src/gauntlet/gate2` -> passed: 1 file, 5 tests passed
+
+No commit made.
+
+**Phase Completion Check**
+
+Status: Complete for the narrowed PHASE-34 Gate 2 brief.  
+Plan checked: `phase-plans/PHASE-34-GATE-2-SIMULATION.md`.
+
+Scope deviations: none in implementation files. `PROGRESS.md` was updated for coordination. Existing unrelated dirty state remains: `scripts/ledger.tsv`, `runs/**`, and sibling `src/gauntlet/gates01/`; I left those untouched.
+
+Residual risks: HP retention is measured and judged, but current bot/engine reality still tends toward 100% HP, so the passing fallback fixture uses current-bot calibration while the strict §11 default remains in the judge. PHASE-35 still owns shared materialization; PHASE-58 owns tuning.
+
+Environment discoveries: none.
+
+Actual time: about 12 minutes vs 45 minute estimate.

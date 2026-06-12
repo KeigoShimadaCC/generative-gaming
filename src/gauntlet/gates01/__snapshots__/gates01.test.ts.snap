@@ -1,0 +1,61 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`gate 0 > accepts valid band fixtures 1`] = `
+"Gate 0: PASS
+  [ok] G0_SCHEMA: manifest schema valid"
+`;
+
+exports[`gate 0 > accepts valid band fixtures 2`] = `
+"Gate 0: PASS
+  [ok] G0_SCHEMA: manifest schema valid"
+`;
+
+exports[`gate 0 > accepts valid band fixtures 3`] = `
+"Gate 0: PASS
+  [ok] G0_SCHEMA: manifest schema valid"
+`;
+
+exports[`gate 1 > accepts valid band fixtures after gate 0 1`] = `
+"Gate 1: PASS
+  [ok] G1_PROTOCOL_VERSION: protocolVersion 1.2.0
+  [ok] G1_REF_INTEGRITY: entity references resolve within manifest
+  [ok] G1_CALLBACK_REF: callback tags match narration observation triggerTags
+  [ok] G1_PLACEMENT_HINT: placement hint room indexes fit params.roomCountRange
+  [ok] G1_ENEMY_STATS: all roster stats within shallows band
+  [ok] G1_ROSTER_BUDGET: roster cost 4 within shallows spawn budget 20
+  [ok] G1_ITEM_VALUE: all item values match shallows economy band
+  [ok] G1_TRAP_LETHALITY: trap bundles are non-lethal from band-typical full HP
+  [ok] G1_ENTITY_CAP: entity counts within configured caps
+  [ok] G1_TEXT_CAP: text fields within configured caps
+  [ok] G1_SIGNATURE: signature flag not set"
+`;
+
+exports[`gate 1 > accepts valid band fixtures after gate 0 2`] = `
+"Gate 1: PASS
+  [ok] G1_PROTOCOL_VERSION: protocolVersion 1.2.0
+  [ok] G1_REF_INTEGRITY: entity references resolve within manifest
+  [ok] G1_CALLBACK_REF: callback tags match narration observation triggerTags
+  [ok] G1_PLACEMENT_HINT: placement hint room indexes fit params.roomCountRange
+  [ok] G1_ENEMY_STATS: all roster stats within middle band
+  [ok] G1_ROSTER_BUDGET: roster cost 10 within middle spawn budget 45
+  [ok] G1_ITEM_VALUE: all item values match middle economy band
+  [ok] G1_TRAP_LETHALITY: trap bundles are non-lethal from band-typical full HP
+  [ok] G1_ENTITY_CAP: entity counts within configured caps
+  [ok] G1_TEXT_CAP: text fields within configured caps
+  [ok] G1_SIGNATURE: signature allowed in middle band"
+`;
+
+exports[`gate 1 > accepts valid band fixtures after gate 0 3`] = `
+"Gate 1: PASS
+  [ok] G1_PROTOCOL_VERSION: protocolVersion 1.2.0
+  [ok] G1_REF_INTEGRITY: entity references resolve within manifest
+  [ok] G1_CALLBACK_REF: callback tags match narration observation triggerTags
+  [ok] G1_PLACEMENT_HINT: placement hint room indexes fit params.roomCountRange
+  [ok] G1_ENEMY_STATS: all roster stats within lowest band
+  [ok] G1_ROSTER_BUDGET: roster cost 18 within lowest spawn budget 70
+  [ok] G1_ITEM_VALUE: all item values match lowest economy band
+  [ok] G1_TRAP_LETHALITY: trap bundles are non-lethal from band-typical full HP
+  [ok] G1_ENTITY_CAP: entity counts within configured caps
+  [ok] G1_TEXT_CAP: text fields within configured caps
+  [ok] G1_SIGNATURE: signature flag not set"
+`;

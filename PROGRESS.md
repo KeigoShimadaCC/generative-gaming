@@ -23,6 +23,7 @@ This file records *state*, never *design* — design lives in the doc spine
 | 23R-1 | Trace/replay format reconciliation | Codex | main (src/harness/{trace,replay}, tests/golden) | ready-for-verify | canonical recorder/replayer round-trip green 3x; full gate green; no commit |
 | 31-1 | Provider seam mock + ambient adapters | Codex | main (src/director/provider) | ready-for-verify | typed seam, ambient subprocess adapter, fixture mock, config selection; scoped gates green; deterministic scan clean; no commit |
 | 31/32-RT | Round-trip verifier fixes: ambient test seam, judge taxonomy, prompt hardening | Codex | main (src/schemas, src/director/{provider,prompt}) | ready-for-verify | full gate green; no commit per brief |
+| 34-1 | Gate 2 simulated playability | Codex | main (src/gauntlet/gate2) | ready-for-verify | scoped gates green; local materializer TODO-PHASE-35; no commit per brief |
 | 26-1 | Fallback content pack (Old Stock) | Cursor | main (content/, loader) | in-progress | |
 | 21/26-I | Wire fallback pack to run loop + unified events | Codex | main (integration) | ready-for-verify | fallback provider wired; full-run smoke over real fallback content; full gate green; no commit |
 | — | Wave B merged through 16/20 (b1ccd1d): 06–20,22 all verified | — | — | merged | engine complete except run loop |
@@ -61,6 +62,7 @@ Format: `YYYY-MM-DD · phase/task · who · what was verified · evidence (comma
 | 2026-06-12 | 23R-1 | Codex | Trace/replay format reconciliation: replay parses canonical recorder header/contentRef/runId/modelId; shared hash; post-step turn convention; golden trace re-minted; real two-floor recorder→replayer integration green 3x | `pnpm exec vitest run src/harness/replay/replay.test.ts -t "real recorder records a two-floor fixture run and real replayer verifies it identical"` → 1 file, 1 passed, 5 skipped (ran 3x); `pnpm exec vitest run src/harness/replay/replay.test.ts` → 1 file, 6 tests passed; `pnpm run check` → 50 files, 369 tests passed |
 | 2026-06-12 | 31-1 | Codex | Provider seam mock + ambient adapters complete: typed taxonomy, parse/validate mapping, timeout kill, judge verdict, config selection | `pnpm run typecheck` → pass; `pnpm exec eslint src/director/provider` → pass; `pnpm exec vitest run src/director/provider` → 1 file, 12 passed, 1 skipped; `rg 'Math.random\|Date.now' src/director/` → no matches |
 | 2026-06-12 | 31/32-RT | Codex | Round-trip verifier fixes: duplicate ambient schema subprocess test removed, ambient judge failures covered, prompt example hardened for item/trap schemas | `pnpm exec vitest run src/director/provider src/director/prompt` → 4 files, 28 passed, 1 skipped; `pnpm run check` → 60 files, 424 passed, 1 skipped |
+| 2026-06-12 | 34-1 | Codex | Gate 2 simulated playability complete: single-floor bot ensemble, G2 report/judge, unwinnable and zero-threat rejects, fallback pass, deterministic verdict, injected wall-clock | `pnpm run typecheck` → pass; `pnpm exec eslint src/gauntlet/gate2` → pass; `pnpm exec vitest run src/gauntlet/gate2` → 1 file, 5 tests passed |
 
 ## Worktrees & Branches
 
