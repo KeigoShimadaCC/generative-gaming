@@ -1,8 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import styles from "./ArtifactViewer.module.css";
+import { loadArtifactViewerModelFromApi } from "./api-client";
 import {
   filterArtifactDocuments,
   type ArtifactDocumentView,
@@ -11,27 +12,71 @@ import {
 
 type ArtifactViewerProps = {
   readonly model: ArtifactViewerModel | null;
+  readonly runId?: string | null;
 };
 
-export function ArtifactViewer({ model }: ArtifactViewerProps) {
+export function ArtifactViewer({ model, runId = null }: ArtifactViewerProps) {
   const [query, setQuery] = useState("");
   const [selectedDocumentId, setSelectedDocumentId] = useState<string | null>(
     null,
   );
+  const [remoteModel, setRemoteModel] = useState<ArtifactViewerModel | null>(
+    null,
+  );
+  const [loadState, setLoadState] = useState<
+    "idle" | "loading" | "loaded" | "error"
+  >("idle");
+  const effectiveModel = model ?? remoteModel;
   const documents = useMemo(
-    () => (model === null ? [] : filterArtifactDocuments(model.documents, query)),
-    [model, query],
+    () =>
+      effectiveModel === null
+        ? []
+        : filterArtifactDocuments(effectiveModel.documents, query),
+    [effectiveModel, query],
   );
   const selected =
     documents.find((document) => document.id === selectedDocumentId) ??
     documents[0] ??
     null;
 
-  if (model === null) {
+  useEffect(() => {
+    if (model !== null || runId === null) {
+      return;
+    }
+
+    const controller = new AbortController();
+    setLoadState("loading");
+    setRemoteModel(null);
+
+    void loadArtifactViewerModelFromApi(runId, {
+      signal: controller.signal,
+    }).then(
+      (loaded) => {
+        if (!controller.signal.aborted) {
+          setRemoteModel(loaded);
+          setLoadState("loaded");
+        }
+      },
+      () => {
+        if (!controller.signal.aborted) {
+          setRemoteModel(null);
+          setLoadState("error");
+        }
+      },
+    );
+
+    return () => controller.abort();
+  }, [model, runId]);
+
+  if (effectiveModel === null) {
     return (
       <section className={styles.empty} aria-label="Artifact viewer">
         <h2>Artifacts</h2>
-        <p>No generation artifacts recorded for this run.</p>
+        <p>
+          {loadState === "loading"
+            ? "Loading generation artifacts..."
+            : "No generation artifacts recorded for this run."}
+        </p>
       </section>
     );
   }
@@ -42,7 +87,8 @@ export function ArtifactViewer({ model }: ArtifactViewerProps) {
         <div>
           <h2>Artifacts</h2>
           <p>
-            Run {model.runId} · {model.modelId} · seed {model.seed}
+            Run {effectiveModel.runId} · {effectiveModel.modelId} · seed{" "}
+            {effectiveModel.seed}
           </p>
         </div>
         <label className={styles.search}>
@@ -59,7 +105,7 @@ export function ArtifactViewer({ model }: ArtifactViewerProps) {
 
       <div className={styles.layout}>
         <div className={styles.tree} aria-label="Generation tree">
-          {model.floors.map((floor) => (
+          {effectiveModel.floors.map((floor) => (
             <section
               className={[
                 styles.floor,

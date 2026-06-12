@@ -163,6 +163,7 @@ export function GameShell() {
         <DiaryLayer
           activeTab={ui.artifactOpen ? "artifacts" : "diary"}
           artifactModel={null}
+          artifactRunId={gameState.run.runId}
           diary={diary}
           onClose={() => patchUi({ diaryOpen: false, artifactOpen: false })}
           onSelectTab={(tab: DiaryLayerTab) =>

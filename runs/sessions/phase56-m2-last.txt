@@ -1,0 +1,22 @@
+Implemented and stopped without committing.
+
+Changed the M2 integration surface:
+- Added read-only `GET /api/artifacts` list/load bridge and wired the Tab artifact pane to fetch by `runId`.
+- Added bridge/component coverage in `ArtifactViewer.test.ts`.
+- Added `tests/integration/m2.test.ts` covering persisted two-run memory, diary faithfulness, responsiveness against the committed Phase 47 baseline, and transition budget instrumentation.
+- Added M2 evidence report: [report.md](/Users/keigoshimada/Documents/generative-gaming/runs/milestones/m2/report.md).
+
+Verification run:
+
+```text
+pnpm exec vitest run --config app/components/artifacts/vitest.config.ts --reporter verbose
+exit 0; 1 file, 3 tests passed
+
+pnpm exec vitest run --config tests/integration/vitest.config.ts tests/integration/m2.test.ts --reporter verbose
+exit 0; 1 file, 4 tests passed
+
+pnpm run check
+exit 0; 79 test files passed, 532 tests passed, 2 skipped
+```
+
+Scope notes: no browser e2e or human session run, per gate scope. Report marks `M2 VERDICT (mechanical): MET` and `HUMAN SESSION PENDING` with the morning checklist script. Actual time: ~11m vs 45m estimate. Environment discoveries: none new. Full check generated untracked `runs/bot-*178127223*` artifacts; I left them intact as run evidence.

@@ -9,7 +9,10 @@ import {
   type TransportHandlers,
 } from "../../../src/director/orchestration/transport.js";
 import { MockDirectorProvider } from "../../../src/director/provider/mock.js";
-import { MemoryArtifactFs } from "../../../src/harness/artifacts/index.js";
+import {
+  MemoryArtifactFs,
+  type ArtifactReadOptions,
+} from "../../../src/harness/artifacts/index.js";
 import { validShallowsManifestFixture } from "../../../src/schemas/fixtures/manifest.js";
 import type { FloorManifest } from "../../../src/schemas/manifest.js";
 
@@ -43,25 +46,40 @@ const passingGate2 = (manifest: FloorManifest): Gate2RunOptions => ({
   },
 });
 
-const createWebTransportHandlers = (): TransportHandlers => {
+type WebTransportState = {
+  readonly handlers: TransportHandlers;
+  readonly artifacts: ArtifactReadOptions;
+};
+
+const createWebTransportState = (): WebTransportState => {
   const registry = createRunControllerRegistry();
   const fs = new MemoryArtifactFs();
+  const artifacts = { fs, rootDir: ROOT_DIR };
 
-  return createTransportHandlers(registry, {
-    seed: SEED,
-    modelId: MODEL_ID,
-    provider: new MockDirectorProvider({ latencyMs: 0 }),
-    gate2: passingGate2(validShallowsManifestFixture),
-    artifacts: { fs, rootDir: ROOT_DIR },
-    now: () => CREATED_AT,
-  });
+  return {
+    artifacts,
+    handlers: createTransportHandlers(registry, {
+      seed: SEED,
+      modelId: MODEL_ID,
+      provider: new MockDirectorProvider({ latencyMs: 0 }),
+      gate2: passingGate2(validShallowsManifestFixture),
+      artifacts,
+      now: () => CREATED_AT,
+    }),
+  };
 };
 
 const transportGlobal = globalThis as typeof globalThis & {
-  __ggWebTransportHandlers?: TransportHandlers;
+  __ggWebTransportState?: WebTransportState;
 };
 
-export const getTransportHandlers = (): TransportHandlers => {
-  transportGlobal.__ggWebTransportHandlers ??= createWebTransportHandlers();
-  return transportGlobal.__ggWebTransportHandlers;
+const getWebTransportState = (): WebTransportState => {
+  transportGlobal.__ggWebTransportState ??= createWebTransportState();
+  return transportGlobal.__ggWebTransportState;
 };
+
+export const getTransportHandlers = (): TransportHandlers =>
+  getWebTransportState().handlers;
+
+export const getArtifactReadOptions = (): ArtifactReadOptions =>
+  getWebTransportState().artifacts;

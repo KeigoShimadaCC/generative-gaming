@@ -8,7 +8,10 @@ import {
   type RunGenerationIndex,
 } from "@harness/artifacts";
 
+import { readArtifactsRoute } from "@/api/artifacts/route-core";
+
 import { ArtifactViewer } from "./ArtifactViewer";
+import { loadArtifactViewerModelFromApi } from "./api-client";
 import {
   filterArtifactDocuments,
   reachableArtifactPaths,
@@ -50,6 +53,49 @@ describe("ArtifactViewer", () => {
 
     const filtered = filterArtifactDocuments(model.documents, "invalid JSON");
     expect(filtered.map((document) => document.kind)).toContain("gate");
+  });
+
+  it("loads the Tab artifact pane model through the read-only API bridge", async () => {
+    const fs = fixtureArtifactFs();
+    const listResult = readArtifactsRoute("http://localhost/api/artifacts", {
+      fs,
+      rootDir: "runs",
+    });
+    const loadResult = readArtifactsRoute(
+      `http://localhost/api/artifacts?runId=${encodeURIComponent(RUN_ID)}`,
+      { fs, rootDir: "runs" },
+    );
+    const unsafeResult = readArtifactsRoute(
+      "http://localhost/api/artifacts?runId=../secret",
+      { fs, rootDir: "runs" },
+    );
+
+    expect(listResult.status).toBe(200);
+    expect(
+      listResult.payload.ok && listResult.payload.action === "list"
+        ? listResult.payload.runs.map((run) => run.runId)
+        : [],
+    ).toEqual([RUN_ID]);
+    expect(loadResult.status).toBe(200);
+    expect(unsafeResult.status).toBe(400);
+    if (!loadResult.payload.ok || loadResult.payload.action !== "load") {
+      throw new Error("fixture artifact bridge did not load the run model");
+    }
+
+    const fetched = await loadArtifactViewerModelFromApi(RUN_ID, {
+      fetcher: async () =>
+        new Response(JSON.stringify(loadResult.payload), {
+          status: loadResult.status,
+          headers: { "content-type": "application/json" },
+        }),
+    });
+    const markup = renderToStaticMarkup(
+      createElement(ArtifactViewer, { model: fetched }),
+    );
+
+    expect(fetched?.runId).toBe(RUN_ID);
+    expect(markup).toContain("Repair attempt 1");
+    expect(markup).toContain("Gate 0 failed");
   });
 });
 

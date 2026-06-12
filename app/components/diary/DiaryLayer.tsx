@@ -13,6 +13,7 @@ export type DiaryLayerTab = "diary" | "artifacts";
 type DiaryLayerProps = {
   readonly diary: DungeonDiary;
   readonly artifactModel: ArtifactViewerModel | null;
+  readonly artifactRunId?: string | null;
   readonly activeTab: DiaryLayerTab;
   readonly onSelectTab: (tab: DiaryLayerTab) => void;
   readonly onClose: () => void;
@@ -21,6 +22,7 @@ type DiaryLayerProps = {
 export function DiaryLayer({
   diary,
   artifactModel,
+  artifactRunId = null,
   activeTab,
   onSelectTab,
   onClose,
@@ -72,7 +74,7 @@ export function DiaryLayer({
           {activeTab === "diary" ? (
             <DiaryPanel diary={diary} variant="partial" />
           ) : (
-            <ArtifactViewer model={artifactModel} />
+            <ArtifactViewer model={artifactModel} runId={artifactRunId} />
           )}
         </div>
       </section>
