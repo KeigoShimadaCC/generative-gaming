@@ -236,8 +236,48 @@ reconstruction. **Start the decision log at minute zero.**
 
 ---
 
+## 10. Later Findings (Waves C–D)
+
+- **Discipline that fails twice gets mechanized, not re-resolved.** The
+  orchestrator skipped its own mandatory stall watch twice under throughput
+  pressure (stalls #4–5 sat undetected). Fix: the watchdog moved INTO
+  codex-run.sh (grace 60s, static-under-500B for 5m → process-group kill, exit
+  124, ledger row). It fired correctly on a real stall within minutes of being
+  built. Rules for the orchestrator must live in the tools, not in resolve —
+  the same lesson as workers' "the brief is the court order," one level up.
+- **The stall mystery had a root cause all along: codex session concurrency.**
+  A watchdog-instrumented smoke stalled exactly while a concurrent live ambient
+  call ran, and completed in 5s alone. All five no-event stalls fit the
+  pattern. Consequence: one codex process at a time is a *system-wide*
+  invariant — including the shipped game's runtime ambient calls (enforced by
+  a global single-flight semaphore in the prefetch controller).
+- **Ambient CLIs are a viable $0 inference backend** behind a provider seam:
+  ~30s/manifest via `codex exec`, pure-JSON output at high parse rates once the
+  prompt embeds a full example; your own validation gauntlet replaces provider-
+  side schema enforcement. Constraints: host-side only (nested codex needs a
+  writable CODEX_HOME), strictly serialized, watchdogged.
+- **Timebox kills can salvage, not just abort.** PHASE-24's worker was killed
+  at 2× timebox — its implementation was complete and green; it had spent the
+  overrun re-running a slow test to format its report table. Inspect before
+  re-briefing: the kill is a checkpoint, not a verdict.
+- **Live measurement beats green tests for LLM-integrated work, again.** The
+  M1 evidence run's 10/10 "served" hid a serving defect (gate-failing floors
+  shipped as generated) discovered only by reading the artifact chain, and a
+  calibration deadlock (playability thresholds tuned for a balance that
+  doesn't exist yet — every floor "fails", so the gate either blocks
+  everything or gets silently bypassed). Staging answer: config-flagged
+  advisory mode for uncalibratable checks, recorded in every report, blocking
+  restored when calibration lands. Never silently bypass; never block on a
+  meaningless threshold.
+- **Tune prompts like code: forensics → hypothesis → measured rounds, capped.**
+  The validity gap closed in 2 rounds (0/5 → passing) by cataloging actual Zod
+  error paths and hardening exactly those — with an honest recorded trade
+  (conservative content) and a capped iteration count to prevent thrash.
+
 ## Append Log
 
 | Date | Finding added | Trigger |
 |---|---|---|
 | 2026-06-11 | Initial document: §1–§9 from the first day's run (Waves A + half of B: 16 phases, 35+ sessions, 5 failures recovered, 3 doc ambiguities adjudicated) | human request |
+| 2026-06-12 | Trap 2b (prose spec ≠ frozen interface); authorability vs table coverage (§4) | 23 reconciliation; 14 STOPs |
+| 2026-06-12 | §10: watchdog mechanization, concurrency root cause, ambient backend, timebox salvage, advisory-mode staging, prompt forensics | Waves C–D close |

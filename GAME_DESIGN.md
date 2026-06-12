@@ -261,6 +261,11 @@ Also rejected regardless of band: floor solvable only with a specific consumable
 zero-threat floors below depth 2 (boredom is a defect too), and any floor whose
 spawn budget, item values, or entity stats exceed the [HARD] tables — that's Gate 1.
 
+Calibration staging [T]: until PHASE-58 calibrates real balance, the
+HP-retention band check runs in **advisory mode** (recorded in every Gate 2
+report, never blocking — config `gate2.hpRetentionMode`); clear-rate and the
+hard rejects (unwinnable, zero-threat, shallow-death) are always blocking.
+
 **The difficulty *curve* belongs to the Director** (it may compose a breather floor
 or a gauntlet floor deliberately); the *band* belongs to the engine. Freedom inside
 fences, the project's whole thesis in miniature.

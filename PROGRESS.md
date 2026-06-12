@@ -89,6 +89,9 @@ spike ≤ 15 min (hard).
 | 04C·1+2 | implement | Codex+Cursor | 20m | 30m | ~6m combined | clean |
 | 05·1 | implement | Codex | 45m | 90m | 13m session | 67 tests; 1 doc ambiguity (text caps) |
 | 05·1a | implement | Codex | 10m | 20m | ~5m | caps wired from config |
+| Wave B (06–22) | mixed | both | ~10h plan | — | ~3.5h real | 2 contract STOPs, 2 stalls, 3 schema addenda; assembly 0.2–0.5× est |
+| Wave C (23–28) | mixed | both | ~4h plan | — | ~1.5h real | spec-parallel reconciliation 7 findings; 24 timebox salvage |
+| Wave D (29–38) | mixed | both | ~5h plan | — | ~2.7h real | ambient pivot; watchdog mechanized; stall cause found (concurrency) |
 
 ## Future Backlog (out-of-scope discoveries land here, not in code)
 
