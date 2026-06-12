@@ -1,0 +1,37 @@
+Implemented PHASE-57/58 combined and did not commit.
+
+**End State**
+- Balance report: [report.md](/Users/keigoshimada/Documents/generative-gaming/runs/milestones/balance-01/report.md)
+- Final config: unchanged, by design. `src/config` has no diff.
+- Goldens added/regenerated under [tests/golden](/Users/keigoshimada/Documents/generative-gaming/tests/golden)
+- Determinism audit suite added under [tests/determinism-audit](/Users/keigoshimada/Documents/generative-gaming/tests/determinism-audit)
+- `PROGRESS.md` updated with status, validation evidence, and backlog items.
+
+**Balance Result**
+Baseline full fallback batch: 3 policies x 15 seeds, max turns 8000.
+
+| metric | result |
+|---|---:|
+| WIN | 0/45 |
+| ABORT | 45/45 |
+| LOSS | 0/45 |
+| balanced WIN rate | 0% |
+| Shallows HP retention median | 100% |
+| Shallow deaths floors 1-2 | 0 |
+| player damage | 0 |
+| enemy actor turns | 44,603 |
+| enemy behavior events | 0 |
+
+Diagnosis: config tuning is blocked by a non-config issue. Bot/replay simulation emits enemy `actor_turn` events, but no enemy movement/wait/ability/attack events occur because the simulation path calls `stepRun` without the existing enemy behavior actor hook. Tuning spawn budgets, regen, or enemy stats would not move HP retention while enemies never act. Also, bots take the Hoard if visible, but do not search for an unknown Hoard on floor 12 before floor-budget aborting.
+
+**Verification**
+- `npm_config_cache=/private/tmp/gg-npm-cache pnpm run simulate -- --batch --policies cautious,balanced,aggressive --seeds 15 --max-turns 8000 --out runs/milestones/balance-01/baseline-quick.json` -> exit 0
+- `npm_config_cache=/private/tmp/gg-npm-cache npx --yes tsx runs/milestones/balance-01/batch-analysis.ts --label=baseline` -> exit 0
+- `pnpm exec vitest run --config tests/golden/vitest.config.ts --reporter verbose` -> 1 file, 9 passed
+- `npm_config_cache=/private/tmp/gg-npm-cache pnpm exec vitest run --config tests/determinism-audit/vitest.config.ts --reporter verbose` -> 1 file, 3 passed
+- Cross-process hash spot x2 -> `tests/golden/persona-balanced.ndjson`, turn 596, `ABORTED`, hash `ffa947ba` both times
+- `pnpm run check` -> exit 0, 79 files passed, 532 passed, 2 skipped
+
+`pnpm run evals` without args failed with `--mode is required`; I did not rerun it with `--mode mock` because that command writes under `runs/evals/**`, outside the owned files for this brief.
+
+Actual time: ~80m vs 90m estimate. No new environment discoveries beyond the already documented npm cache issue.
