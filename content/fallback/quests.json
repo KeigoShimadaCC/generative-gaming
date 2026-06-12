@@ -1,0 +1,136 @@
+[
+  {
+    "id": "oldstock-quest-lost-token",
+    "title": "The dropped tally",
+    "objective": {
+      "kind": "fetch",
+      "fetch": {
+        "itemId": "oldstock-brass-token",
+        "floorScope": "this_floor"
+      },
+      "kill": null,
+      "reach": null,
+      "deliver": null,
+      "escort": null,
+      "constraint": null
+    },
+    "reward": {
+      "valueMultiplier": 1.5,
+      "coin": 12,
+      "itemIds": [],
+      "identifyItemIds": []
+    }
+  },
+  {
+    "id": "oldstock-quest-clear-spores",
+    "title": "Clear the spore warden",
+    "objective": {
+      "kind": "kill",
+      "fetch": null,
+      "kill": {
+        "targetTag": "oldstock-spore-warden"
+      },
+      "reach": null,
+      "deliver": null,
+      "escort": null,
+      "constraint": null
+    },
+    "reward": {
+      "valueMultiplier": 2,
+      "coin": 40,
+      "itemIds": [
+        "oldstock-salt-fish"
+      ],
+      "identifyItemIds": []
+    }
+  },
+  {
+    "id": "oldstock-quest-wax-delivery",
+    "title": "Bring the wax seal",
+    "objective": {
+      "kind": "deliver",
+      "fetch": null,
+      "kill": null,
+      "reach": null,
+      "deliver": {
+        "itemId": "oldstock-wax-seal",
+        "npcId": "oldstock-keeper-penn"
+      },
+      "escort": null,
+      "constraint": null
+    },
+    "reward": {
+      "valueMultiplier": 2,
+      "coin": 50,
+      "itemIds": [],
+      "identifyItemIds": [
+        "oldstock-bitter-purge"
+      ]
+    }
+  },
+  {
+    "id": "oldstock-quest-quiet-crossing",
+    "title": "Cross without a scratch",
+    "objective": {
+      "kind": "constraint",
+      "fetch": null,
+      "kill": null,
+      "reach": null,
+      "deliver": null,
+      "escort": null,
+      "constraint": {
+        "engineFlag": "take_no_damage"
+      }
+    },
+    "reward": {
+      "valueMultiplier": 2.5,
+      "coin": 60,
+      "itemIds": [
+        "oldstock-ward-chalk"
+      ],
+      "identifyItemIds": []
+    }
+  },
+  {
+    "id": "oldstock-quest-escort-mira",
+    "title": "Walk Mira to the stairs",
+    "objective": {
+      "kind": "escort",
+      "fetch": null,
+      "kill": null,
+      "reach": null,
+      "deliver": null,
+      "escort": {
+        "npcId": "oldstock-keeper-mira"
+      },
+      "constraint": null
+    },
+    "reward": {
+      "valueMultiplier": 2,
+      "coin": 20,
+      "itemIds": [],
+      "identifyItemIds": []
+    }
+  },
+  {
+    "id": "oldstock-quest-reach-stairs",
+    "title": "Find the descent",
+    "objective": {
+      "kind": "reach",
+      "fetch": null,
+      "kill": null,
+      "reach": {
+        "featureId": "stairs"
+      },
+      "deliver": null,
+      "escort": null,
+      "constraint": null
+    },
+    "reward": {
+      "valueMultiplier": 2,
+      "coin": 70,
+      "itemIds": [],
+      "identifyItemIds": []
+    }
+  }
+]

@@ -1,0 +1,21 @@
+{
+  "depth": 6,
+  "flavor": "warren",
+  "enemyRosterIds": [
+    "oldstock-cave-slug",
+    "oldstock-drip-leech",
+    "oldstock-stalagmite-tick"
+  ],
+  "itemIds": [
+    "oldstock-cave-moss",
+    "oldstock-scratched-mail",
+    "oldstock-bitter-purge",
+    "oldstock-salt-fish"
+  ],
+  "trapIds": [
+    "oldstock-pitch-pan",
+    "oldstock-tumbling-rock"
+  ],
+  "npcIds": [],
+  "questId": null
+}

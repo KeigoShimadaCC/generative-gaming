@@ -1,0 +1,20 @@
+{
+  "depth": 11,
+  "flavor": "ring",
+  "enemyRosterIds": [
+    "oldstock-stone-lamprey",
+    "oldstock-false-coffer-grub"
+  ],
+  "itemIds": [
+    "oldstock-ward-chalk",
+    "oldstock-bind-wrap",
+    "oldstock-bronze-bell",
+    "oldstock-piton-line"
+  ],
+  "trapIds": [
+    "oldstock-rot-trigger",
+    "oldstock-crush-plate"
+  ],
+  "npcIds": [],
+  "questId": null
+}

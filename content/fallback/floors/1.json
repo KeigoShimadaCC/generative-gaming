@@ -1,0 +1,20 @@
+{
+  "depth": 1,
+  "flavor": "open",
+  "enemyRosterIds": [
+    "oldstock-cellar-rat",
+    "oldstock-trembling-mouse",
+    "oldstock-cave-cricket"
+  ],
+  "itemIds": [
+    "oldstock-hardtack",
+    "oldstock-bone-knife",
+    "oldstock-patched-hide",
+    "oldstock-sour-cordial"
+  ],
+  "trapIds": [
+    "oldstock-needle-pit"
+  ],
+  "npcIds": [],
+  "questId": null
+}

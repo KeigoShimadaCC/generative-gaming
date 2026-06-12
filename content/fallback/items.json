@@ -1,0 +1,1372 @@
+[
+  {
+    "id": "oldstock-bone-knife",
+    "name": "a notched bone knife",
+    "glyph": ")",
+    "kind": "weapon",
+    "value": {
+      "band": "shallows",
+      "coin": 10
+    },
+    "weapon": {
+      "attackBonus": 2,
+      "cursed": false,
+      "onHit": {
+        "chancePercent": 15,
+        "bundle": {
+          "effects": [
+            {
+              "kind": "damage",
+              "damage": {
+                "amount": 2
+              },
+              "heal": null,
+              "applyStatus": null,
+              "cureStatus": null,
+              "buffStat": null,
+              "nutrition": null,
+              "teleportSelf": null,
+              "teleportTarget": null,
+              "blink": null,
+              "knockback": null,
+              "reveal": null,
+              "identify": null,
+              "enchant": null,
+              "summon": null,
+              "transform": null,
+              "dig": null
+            }
+          ],
+          "trigger": {
+            "kind": "on_hit",
+            "quaff": null,
+            "read": null,
+            "throwHit": null,
+            "equipPassive": null,
+            "onHit": {
+              "procChancePercent": 15
+            },
+            "onStruck": null,
+            "step": null,
+            "use": null
+          },
+          "targeting": {
+            "kind": "melee",
+            "self": null,
+            "melee": {},
+            "bolt": null,
+            "burst": null,
+            "floor": null
+          }
+        }
+      }
+    },
+    "armor": null,
+    "charm": null,
+    "draught": null,
+    "note": null,
+    "throwable": null,
+    "food": null,
+    "tool": null,
+    "keyItem": null,
+    "coin": null
+  },
+  {
+    "id": "oldstock-hook-spear",
+    "name": "a hooked iron spear",
+    "glyph": ")",
+    "kind": "weapon",
+    "value": {
+      "band": "middle",
+      "coin": 35
+    },
+    "weapon": {
+      "attackBonus": 3,
+      "cursed": false,
+      "onHit": null
+    },
+    "armor": null,
+    "charm": null,
+    "draught": null,
+    "note": null,
+    "throwable": null,
+    "food": null,
+    "tool": null,
+    "keyItem": null,
+    "coin": null
+  },
+  {
+    "id": "oldstock-lead-hook",
+    "name": "a leaded hook",
+    "glyph": ")",
+    "kind": "weapon",
+    "value": {
+      "band": "shallows",
+      "coin": 12
+    },
+    "weapon": {
+      "attackBonus": 2,
+      "cursed": true,
+      "onHit": null
+    },
+    "armor": null,
+    "charm": null,
+    "draught": null,
+    "note": null,
+    "throwable": null,
+    "food": null,
+    "tool": null,
+    "keyItem": null,
+    "coin": null
+  },
+  {
+    "id": "oldstock-splinter-club",
+    "name": "a splintered club",
+    "glyph": ")",
+    "kind": "weapon",
+    "value": {
+      "band": "shallows",
+      "coin": 8
+    },
+    "weapon": {
+      "attackBonus": 1,
+      "cursed": false,
+      "onHit": {
+        "chancePercent": 20,
+        "bundle": {
+          "effects": [
+            {
+              "kind": "apply_status",
+              "damage": null,
+              "heal": null,
+              "applyStatus": {
+                "status": "slow",
+                "duration": 4
+              },
+              "cureStatus": null,
+              "buffStat": null,
+              "nutrition": null,
+              "teleportSelf": null,
+              "teleportTarget": null,
+              "blink": null,
+              "knockback": null,
+              "reveal": null,
+              "identify": null,
+              "enchant": null,
+              "summon": null,
+              "transform": null,
+              "dig": null
+            }
+          ],
+          "trigger": {
+            "kind": "on_hit",
+            "quaff": null,
+            "read": null,
+            "throwHit": null,
+            "equipPassive": null,
+            "onHit": {
+              "procChancePercent": 20
+            },
+            "onStruck": null,
+            "step": null,
+            "use": null
+          },
+          "targeting": {
+            "kind": "melee",
+            "self": null,
+            "melee": {},
+            "bolt": null,
+            "burst": null,
+            "floor": null
+          }
+        }
+      }
+    },
+    "armor": null,
+    "charm": null,
+    "draught": null,
+    "note": null,
+    "throwable": null,
+    "food": null,
+    "tool": null,
+    "keyItem": null,
+    "coin": null
+  },
+  {
+    "id": "oldstock-patched-hide",
+    "name": "a patched hide vest",
+    "glyph": "[",
+    "kind": "armor",
+    "value": {
+      "band": "shallows",
+      "coin": 9
+    },
+    "weapon": null,
+    "armor": {
+      "defenseBonus": 1,
+      "cursed": false,
+      "onStruck": null
+    },
+    "charm": null,
+    "draught": null,
+    "note": null,
+    "throwable": null,
+    "food": null,
+    "tool": null,
+    "keyItem": null,
+    "coin": null
+  },
+  {
+    "id": "oldstock-scratched-mail",
+    "name": "scratched ring mail",
+    "glyph": "[",
+    "kind": "armor",
+    "value": {
+      "band": "middle",
+      "coin": 40
+    },
+    "weapon": null,
+    "armor": {
+      "defenseBonus": 2,
+      "cursed": false,
+      "onStruck": {
+        "chancePercent": 15,
+        "bundle": {
+          "effects": [
+            {
+              "kind": "apply_status",
+              "damage": null,
+              "heal": null,
+              "applyStatus": {
+                "status": "poison",
+                "duration": 4
+              },
+              "cureStatus": null,
+              "buffStat": null,
+              "nutrition": null,
+              "teleportSelf": null,
+              "teleportTarget": null,
+              "blink": null,
+              "knockback": null,
+              "reveal": null,
+              "identify": null,
+              "enchant": null,
+              "summon": null,
+              "transform": null,
+              "dig": null
+            }
+          ],
+          "trigger": {
+            "kind": "on_struck",
+            "quaff": null,
+            "read": null,
+            "throwHit": null,
+            "equipPassive": null,
+            "onHit": null,
+            "onStruck": {
+              "procChancePercent": 15
+            },
+            "step": null,
+            "use": null
+          },
+          "targeting": {
+            "kind": "melee",
+            "self": null,
+            "melee": {},
+            "bolt": null,
+            "burst": null,
+            "floor": null
+          }
+        }
+      }
+    },
+    "charm": null,
+    "draught": null,
+    "note": null,
+    "throwable": null,
+    "food": null,
+    "tool": null,
+    "keyItem": null,
+    "coin": null
+  },
+  {
+    "id": "oldstock-bind-wrap",
+    "name": "a bind wrap",
+    "glyph": "[",
+    "kind": "armor",
+    "value": {
+      "band": "middle",
+      "coin": 25
+    },
+    "weapon": null,
+    "armor": {
+      "defenseBonus": 1,
+      "cursed": true,
+      "onStruck": null
+    },
+    "charm": null,
+    "draught": null,
+    "note": null,
+    "throwable": null,
+    "food": null,
+    "tool": null,
+    "keyItem": null,
+    "coin": null
+  },
+  {
+    "id": "oldstock-beetle-charm",
+    "name": "a copper beetle charm",
+    "glyph": "\"",
+    "kind": "charm",
+    "value": {
+      "band": "shallows",
+      "coin": 14
+    },
+    "weapon": null,
+    "armor": null,
+    "charm": {
+      "cursed": false,
+      "passive": {
+        "effects": [
+          {
+            "kind": "buff_stat",
+            "damage": null,
+            "heal": null,
+            "applyStatus": null,
+            "cureStatus": null,
+            "buffStat": {
+              "stat": "DEF",
+              "magnitude": 1,
+              "duration": 10
+            },
+            "nutrition": null,
+            "teleportSelf": null,
+            "teleportTarget": null,
+            "blink": null,
+            "knockback": null,
+            "reveal": null,
+            "identify": null,
+            "enchant": null,
+            "summon": null,
+            "transform": null,
+            "dig": null
+          }
+        ],
+        "trigger": {
+          "kind": "equip_passive",
+          "quaff": null,
+          "read": null,
+          "throwHit": null,
+          "equipPassive": {},
+          "onHit": null,
+          "onStruck": null,
+          "step": null,
+          "use": null
+        },
+        "targeting": {
+          "kind": "self",
+          "self": {},
+          "melee": null,
+          "bolt": null,
+          "burst": null,
+          "floor": null
+        }
+      }
+    },
+    "draught": null,
+    "note": null,
+    "throwable": null,
+    "food": null,
+    "tool": null,
+    "keyItem": null,
+    "coin": null
+  },
+  {
+    "id": "oldstock-damp-talisman",
+    "name": "a damp talisman",
+    "glyph": "\"",
+    "kind": "charm",
+    "value": {
+      "band": "lowest",
+      "coin": 90
+    },
+    "weapon": null,
+    "armor": null,
+    "charm": {
+      "cursed": true,
+      "passive": {
+        "effects": [
+          {
+            "kind": "apply_status",
+            "damage": null,
+            "heal": null,
+            "applyStatus": {
+              "status": "regen",
+              "duration": 5
+            },
+            "cureStatus": null,
+            "buffStat": null,
+            "nutrition": null,
+            "teleportSelf": null,
+            "teleportTarget": null,
+            "blink": null,
+            "knockback": null,
+            "reveal": null,
+            "identify": null,
+            "enchant": null,
+            "summon": null,
+            "transform": null,
+            "dig": null
+          }
+        ],
+        "trigger": {
+          "kind": "equip_passive",
+          "quaff": null,
+          "read": null,
+          "throwHit": null,
+          "equipPassive": {},
+          "onHit": null,
+          "onStruck": null,
+          "step": null,
+          "use": null
+        },
+        "targeting": {
+          "kind": "self",
+          "self": {},
+          "melee": null,
+          "bolt": null,
+          "burst": null,
+          "floor": null
+        }
+      }
+    },
+    "draught": null,
+    "note": null,
+    "throwable": null,
+    "food": null,
+    "tool": null,
+    "keyItem": null,
+    "coin": null
+  },
+  {
+    "id": "oldstock-sour-cordial",
+    "name": "a sour cordial",
+    "glyph": "!",
+    "kind": "draught",
+    "value": {
+      "band": "shallows",
+      "coin": 7
+    },
+    "weapon": null,
+    "armor": null,
+    "charm": null,
+    "draught": {
+      "effect": {
+        "effects": [
+          {
+            "kind": "heal",
+            "damage": null,
+            "heal": {
+              "amount": 6
+            },
+            "applyStatus": null,
+            "cureStatus": null,
+            "buffStat": null,
+            "nutrition": null,
+            "teleportSelf": null,
+            "teleportTarget": null,
+            "blink": null,
+            "knockback": null,
+            "reveal": null,
+            "identify": null,
+            "enchant": null,
+            "summon": null,
+            "transform": null,
+            "dig": null
+          }
+        ],
+        "trigger": {
+          "kind": "quaff",
+          "quaff": {},
+          "read": null,
+          "throwHit": null,
+          "equipPassive": null,
+          "onHit": null,
+          "onStruck": null,
+          "step": null,
+          "use": null
+        },
+        "targeting": {
+          "kind": "self",
+          "self": {},
+          "melee": null,
+          "bolt": null,
+          "burst": null,
+          "floor": null
+        }
+      }
+    },
+    "note": null,
+    "throwable": null,
+    "food": null,
+    "tool": null,
+    "keyItem": null,
+    "coin": null
+  },
+  {
+    "id": "oldstock-bitter-purge",
+    "name": "a bitter purge",
+    "glyph": "!",
+    "kind": "draught",
+    "value": {
+      "band": "middle",
+      "coin": 28
+    },
+    "weapon": null,
+    "armor": null,
+    "charm": null,
+    "draught": {
+      "effect": {
+        "effects": [
+          {
+            "kind": "cure_status",
+            "damage": null,
+            "heal": null,
+            "applyStatus": null,
+            "cureStatus": {
+              "status": "all"
+            },
+            "buffStat": null,
+            "nutrition": null,
+            "teleportSelf": null,
+            "teleportTarget": null,
+            "blink": null,
+            "knockback": null,
+            "reveal": null,
+            "identify": null,
+            "enchant": null,
+            "summon": null,
+            "transform": null,
+            "dig": null
+          }
+        ],
+        "trigger": {
+          "kind": "quaff",
+          "quaff": {},
+          "read": null,
+          "throwHit": null,
+          "equipPassive": null,
+          "onHit": null,
+          "onStruck": null,
+          "step": null,
+          "use": null
+        },
+        "targeting": {
+          "kind": "self",
+          "self": {},
+          "melee": null,
+          "bolt": null,
+          "burst": null,
+          "floor": null
+        }
+      }
+    },
+    "note": null,
+    "throwable": null,
+    "food": null,
+    "tool": null,
+    "keyItem": null,
+    "coin": null
+  },
+  {
+    "id": "oldstock-grease-scrap",
+    "name": "a grease-stained scrap",
+    "glyph": "?",
+    "kind": "note",
+    "value": {
+      "band": "shallows",
+      "coin": 5
+    },
+    "weapon": null,
+    "armor": null,
+    "charm": null,
+    "draught": null,
+    "note": {
+      "effect": {
+        "effects": [
+          {
+            "kind": "identify",
+            "damage": null,
+            "heal": null,
+            "applyStatus": null,
+            "cureStatus": null,
+            "buffStat": null,
+            "nutrition": null,
+            "teleportSelf": null,
+            "teleportTarget": null,
+            "blink": null,
+            "knockback": null,
+            "reveal": null,
+            "identify": {
+              "mode": "category",
+              "carriedItemId": null,
+              "category": "draught"
+            },
+            "enchant": null,
+            "summon": null,
+            "transform": null,
+            "dig": null
+          }
+        ],
+        "trigger": {
+          "kind": "read",
+          "quaff": null,
+          "read": {},
+          "throwHit": null,
+          "equipPassive": null,
+          "onHit": null,
+          "onStruck": null,
+          "step": null,
+          "use": null
+        },
+        "targeting": {
+          "kind": "self",
+          "self": {},
+          "melee": null,
+          "bolt": null,
+          "burst": null,
+          "floor": null
+        }
+      }
+    },
+    "throwable": null,
+    "food": null,
+    "tool": null,
+    "keyItem": null,
+    "coin": null
+  },
+  {
+    "id": "oldstock-tally-scrap",
+    "name": "a tally scrap",
+    "glyph": "?",
+    "kind": "note",
+    "value": {
+      "band": "middle",
+      "coin": 22
+    },
+    "weapon": null,
+    "armor": null,
+    "charm": null,
+    "draught": null,
+    "note": {
+      "effect": {
+        "effects": [
+          {
+            "kind": "reveal",
+            "damage": null,
+            "heal": null,
+            "applyStatus": null,
+            "cureStatus": null,
+            "buffStat": null,
+            "nutrition": null,
+            "teleportSelf": null,
+            "teleportTarget": null,
+            "blink": null,
+            "knockback": null,
+            "reveal": {
+              "target": "map"
+            },
+            "identify": null,
+            "enchant": null,
+            "summon": null,
+            "transform": null,
+            "dig": null
+          }
+        ],
+        "trigger": {
+          "kind": "read",
+          "quaff": null,
+          "read": {},
+          "throwHit": null,
+          "equipPassive": null,
+          "onHit": null,
+          "onStruck": null,
+          "step": null,
+          "use": null
+        },
+        "targeting": {
+          "kind": "floor",
+          "self": null,
+          "melee": null,
+          "bolt": null,
+          "burst": null,
+          "floor": {}
+        }
+      }
+    },
+    "throwable": null,
+    "food": null,
+    "tool": null,
+    "keyItem": null,
+    "coin": null
+  },
+  {
+    "id": "oldstock-clay-bowl",
+    "name": "a clay spit-bowl",
+    "glyph": "(",
+    "kind": "throwable",
+    "value": {
+      "band": "shallows",
+      "coin": 6
+    },
+    "weapon": null,
+    "armor": null,
+    "charm": null,
+    "draught": null,
+    "note": null,
+    "throwable": {
+      "effect": {
+        "effects": [
+          {
+            "kind": "damage",
+            "damage": {
+              "amount": 3
+            },
+            "heal": null,
+            "applyStatus": null,
+            "cureStatus": null,
+            "buffStat": null,
+            "nutrition": null,
+            "teleportSelf": null,
+            "teleportTarget": null,
+            "blink": null,
+            "knockback": null,
+            "reveal": null,
+            "identify": null,
+            "enchant": null,
+            "summon": null,
+            "transform": null,
+            "dig": null
+          }
+        ],
+        "trigger": {
+          "kind": "throw_hit",
+          "quaff": null,
+          "read": null,
+          "throwHit": {},
+          "equipPassive": null,
+          "onHit": null,
+          "onStruck": null,
+          "step": null,
+          "use": null
+        },
+        "targeting": {
+          "kind": "melee",
+          "self": null,
+          "melee": {},
+          "bolt": null,
+          "burst": null,
+          "floor": null
+        }
+      }
+    },
+    "food": null,
+    "tool": null,
+    "keyItem": null,
+    "coin": null
+  },
+  {
+    "id": "oldstock-resin-lamp",
+    "name": "a resin lamp",
+    "glyph": "(",
+    "kind": "throwable",
+    "value": {
+      "band": "middle",
+      "coin": 30
+    },
+    "weapon": null,
+    "armor": null,
+    "charm": null,
+    "draught": null,
+    "note": null,
+    "throwable": {
+      "effect": {
+        "effects": [
+          {
+            "kind": "teleport_target",
+            "damage": null,
+            "heal": null,
+            "applyStatus": null,
+            "cureStatus": null,
+            "buffStat": null,
+            "nutrition": null,
+            "teleportSelf": null,
+            "teleportTarget": {},
+            "blink": null,
+            "knockback": null,
+            "reveal": null,
+            "identify": null,
+            "enchant": null,
+            "summon": null,
+            "transform": null,
+            "dig": null
+          }
+        ],
+        "trigger": {
+          "kind": "throw_hit",
+          "quaff": null,
+          "read": null,
+          "throwHit": {},
+          "equipPassive": null,
+          "onHit": null,
+          "onStruck": null,
+          "step": null,
+          "use": null
+        },
+        "targeting": {
+          "kind": "burst",
+          "self": null,
+          "melee": null,
+          "bolt": null,
+          "burst": {
+            "radiusTiles": 1,
+            "center": "impact"
+          },
+          "floor": null
+        }
+      }
+    },
+    "food": null,
+    "tool": null,
+    "keyItem": null,
+    "coin": null
+  },
+  {
+    "id": "oldstock-hardtack",
+    "name": "a hardtack lump",
+    "glyph": "%",
+    "kind": "food",
+    "value": {
+      "band": "shallows",
+      "coin": 6
+    },
+    "weapon": null,
+    "armor": null,
+    "charm": null,
+    "draught": null,
+    "note": null,
+    "throwable": null,
+    "food": {
+      "effect": {
+        "effects": [
+          {
+            "kind": "nutrition",
+            "damage": null,
+            "heal": null,
+            "applyStatus": null,
+            "cureStatus": null,
+            "buffStat": null,
+            "nutrition": {
+              "fullness": 40
+            },
+            "teleportSelf": null,
+            "teleportTarget": null,
+            "blink": null,
+            "knockback": null,
+            "reveal": null,
+            "identify": null,
+            "enchant": null,
+            "summon": null,
+            "transform": null,
+            "dig": null
+          }
+        ],
+        "trigger": {
+          "kind": "quaff",
+          "quaff": {},
+          "read": null,
+          "throwHit": null,
+          "equipPassive": null,
+          "onHit": null,
+          "onStruck": null,
+          "step": null,
+          "use": null
+        },
+        "targeting": {
+          "kind": "self",
+          "self": {},
+          "melee": null,
+          "bolt": null,
+          "burst": null,
+          "floor": null
+        }
+      }
+    },
+    "tool": null,
+    "keyItem": null,
+    "coin": null
+  },
+  {
+    "id": "oldstock-cave-moss",
+    "name": "dried cave moss",
+    "glyph": "%",
+    "kind": "food",
+    "value": {
+      "band": "middle",
+      "coin": 24
+    },
+    "weapon": null,
+    "armor": null,
+    "charm": null,
+    "draught": null,
+    "note": null,
+    "throwable": null,
+    "food": {
+      "effect": {
+        "effects": [
+          {
+            "kind": "nutrition",
+            "damage": null,
+            "heal": null,
+            "applyStatus": null,
+            "cureStatus": null,
+            "buffStat": null,
+            "nutrition": {
+              "fullness": 50
+            },
+            "teleportSelf": null,
+            "teleportTarget": null,
+            "blink": null,
+            "knockback": null,
+            "reveal": null,
+            "identify": null,
+            "enchant": null,
+            "summon": null,
+            "transform": null,
+            "dig": null
+          }
+        ],
+        "trigger": {
+          "kind": "quaff",
+          "quaff": {},
+          "read": null,
+          "throwHit": null,
+          "equipPassive": null,
+          "onHit": null,
+          "onStruck": null,
+          "step": null,
+          "use": null
+        },
+        "targeting": {
+          "kind": "self",
+          "self": {},
+          "melee": null,
+          "bolt": null,
+          "burst": null,
+          "floor": null
+        }
+      }
+    },
+    "tool": null,
+    "keyItem": null,
+    "coin": null
+  },
+  {
+    "id": "oldstock-salt-fish",
+    "name": "a salt fish strip",
+    "glyph": "%",
+    "kind": "food",
+    "value": {
+      "band": "middle",
+      "coin": 26
+    },
+    "weapon": null,
+    "armor": null,
+    "charm": null,
+    "draught": null,
+    "note": null,
+    "throwable": null,
+    "food": {
+      "effect": {
+        "effects": [
+          {
+            "kind": "nutrition",
+            "damage": null,
+            "heal": null,
+            "applyStatus": null,
+            "cureStatus": null,
+            "buffStat": null,
+            "nutrition": {
+              "fullness": 60
+            },
+            "teleportSelf": null,
+            "teleportTarget": null,
+            "blink": null,
+            "knockback": null,
+            "reveal": null,
+            "identify": null,
+            "enchant": null,
+            "summon": null,
+            "transform": null,
+            "dig": null
+          }
+        ],
+        "trigger": {
+          "kind": "quaff",
+          "quaff": {},
+          "read": null,
+          "throwHit": null,
+          "equipPassive": null,
+          "onHit": null,
+          "onStruck": null,
+          "step": null,
+          "use": null
+        },
+        "targeting": {
+          "kind": "self",
+          "self": {},
+          "melee": null,
+          "bolt": null,
+          "burst": null,
+          "floor": null
+        }
+      }
+    },
+    "tool": null,
+    "keyItem": null,
+    "coin": null
+  },
+  {
+    "id": "oldstock-tallow-candle",
+    "name": "a tallow candle",
+    "glyph": "=",
+    "kind": "tool",
+    "value": {
+      "band": "shallows",
+      "coin": 11
+    },
+    "weapon": null,
+    "armor": null,
+    "charm": null,
+    "draught": null,
+    "note": null,
+    "throwable": null,
+    "food": null,
+    "tool": {
+      "effect": {
+        "effects": [
+          {
+            "kind": "reveal",
+            "damage": null,
+            "heal": null,
+            "applyStatus": null,
+            "cureStatus": null,
+            "buffStat": null,
+            "nutrition": null,
+            "teleportSelf": null,
+            "teleportTarget": null,
+            "blink": null,
+            "knockback": null,
+            "reveal": {
+              "target": "items"
+            },
+            "identify": null,
+            "enchant": null,
+            "summon": null,
+            "transform": null,
+            "dig": null
+          }
+        ],
+        "trigger": {
+          "kind": "use",
+          "quaff": null,
+          "read": null,
+          "throwHit": null,
+          "equipPassive": null,
+          "onHit": null,
+          "onStruck": null,
+          "step": null,
+          "use": {
+            "charges": 3
+          }
+        },
+        "targeting": {
+          "kind": "self",
+          "self": {},
+          "melee": null,
+          "bolt": null,
+          "burst": null,
+          "floor": null
+        }
+      }
+    },
+    "keyItem": null,
+    "coin": null
+  },
+  {
+    "id": "oldstock-bronze-bell",
+    "name": "a bronze bell",
+    "glyph": "=",
+    "kind": "tool",
+    "value": {
+      "band": "middle",
+      "coin": 32
+    },
+    "weapon": null,
+    "armor": null,
+    "charm": null,
+    "draught": null,
+    "note": null,
+    "throwable": null,
+    "food": null,
+    "tool": {
+      "effect": {
+        "effects": [
+          {
+            "kind": "reveal",
+            "damage": null,
+            "heal": null,
+            "applyStatus": null,
+            "cureStatus": null,
+            "buffStat": null,
+            "nutrition": null,
+            "teleportSelf": null,
+            "teleportTarget": null,
+            "blink": null,
+            "knockback": null,
+            "reveal": {
+              "target": "traps"
+            },
+            "identify": null,
+            "enchant": null,
+            "summon": null,
+            "transform": null,
+            "dig": null
+          }
+        ],
+        "trigger": {
+          "kind": "use",
+          "quaff": null,
+          "read": null,
+          "throwHit": null,
+          "equipPassive": null,
+          "onHit": null,
+          "onStruck": null,
+          "step": null,
+          "use": {
+            "charges": 2
+          }
+        },
+        "targeting": {
+          "kind": "floor",
+          "self": null,
+          "melee": null,
+          "bolt": null,
+          "burst": null,
+          "floor": {}
+        }
+      }
+    },
+    "keyItem": null,
+    "coin": null
+  },
+  {
+    "id": "oldstock-piton-line",
+    "name": "a piton and line",
+    "glyph": "=",
+    "kind": "tool",
+    "value": {
+      "band": "middle",
+      "coin": 34
+    },
+    "weapon": null,
+    "armor": null,
+    "charm": null,
+    "draught": null,
+    "note": null,
+    "throwable": null,
+    "food": null,
+    "tool": {
+      "effect": {
+        "effects": [
+          {
+            "kind": "dig",
+            "damage": null,
+            "heal": null,
+            "applyStatus": null,
+            "cureStatus": null,
+            "buffStat": null,
+            "nutrition": null,
+            "teleportSelf": null,
+            "teleportTarget": null,
+            "blink": null,
+            "knockback": null,
+            "reveal": null,
+            "identify": null,
+            "enchant": null,
+            "summon": null,
+            "transform": null,
+            "dig": {
+              "lengthTiles": 3
+            }
+          }
+        ],
+        "trigger": {
+          "kind": "use",
+          "quaff": null,
+          "read": null,
+          "throwHit": null,
+          "equipPassive": null,
+          "onHit": null,
+          "onStruck": null,
+          "step": null,
+          "use": {
+            "charges": 2
+          }
+        },
+        "targeting": {
+          "kind": "self",
+          "self": {},
+          "melee": null,
+          "bolt": null,
+          "burst": null,
+          "floor": null
+        }
+      }
+    },
+    "keyItem": null,
+    "coin": null
+  },
+  {
+    "id": "oldstock-ward-chalk",
+    "name": "a stick of ward chalk",
+    "glyph": "=",
+    "kind": "tool",
+    "value": {
+      "band": "lowest",
+      "coin": 75
+    },
+    "weapon": null,
+    "armor": null,
+    "charm": null,
+    "draught": null,
+    "note": null,
+    "throwable": null,
+    "food": null,
+    "tool": {
+      "effect": {
+        "effects": [
+          {
+            "kind": "enchant",
+            "damage": null,
+            "heal": null,
+            "applyStatus": null,
+            "cureStatus": null,
+            "buffStat": null,
+            "nutrition": null,
+            "teleportSelf": null,
+            "teleportTarget": null,
+            "blink": null,
+            "knockback": null,
+            "reveal": null,
+            "identify": null,
+            "enchant": {
+              "target": "weapon",
+              "bonus": 1
+            },
+            "summon": null,
+            "transform": null,
+            "dig": null
+          }
+        ],
+        "trigger": {
+          "kind": "use",
+          "quaff": null,
+          "read": null,
+          "throwHit": null,
+          "equipPassive": null,
+          "onHit": null,
+          "onStruck": null,
+          "step": null,
+          "use": {
+            "charges": 1
+          }
+        },
+        "targeting": {
+          "kind": "self",
+          "self": {},
+          "melee": null,
+          "bolt": null,
+          "burst": null,
+          "floor": null
+        }
+      }
+    },
+    "keyItem": null,
+    "coin": null
+  },
+  {
+    "id": "oldstock-brass-token",
+    "name": "a brass tally token",
+    "glyph": "*",
+    "kind": "key_item",
+    "value": {
+      "band": "shallows",
+      "coin": 8
+    },
+    "weapon": null,
+    "armor": null,
+    "charm": null,
+    "draught": null,
+    "note": null,
+    "throwable": null,
+    "food": null,
+    "tool": null,
+    "keyItem": {
+      "questHookId": "oldstock-quest-lost-token"
+    },
+    "coin": null
+  },
+  {
+    "id": "oldstock-wax-seal",
+    "name": "a sealed wax lump",
+    "glyph": "*",
+    "kind": "key_item",
+    "value": {
+      "band": "middle",
+      "coin": 30
+    },
+    "weapon": null,
+    "armor": null,
+    "charm": null,
+    "draught": null,
+    "note": null,
+    "throwable": null,
+    "food": null,
+    "tool": null,
+    "keyItem": {
+      "questHookId": "oldstock-quest-wax-delivery"
+    },
+    "coin": null
+  },
+  {
+    "id": "oldstock-deep-penny",
+    "name": "a deep penny",
+    "glyph": "$",
+    "kind": "coin",
+    "value": {
+      "band": "shallows",
+      "coin": 5
+    },
+    "weapon": null,
+    "armor": null,
+    "charm": null,
+    "draught": null,
+    "note": null,
+    "throwable": null,
+    "food": null,
+    "tool": null,
+    "keyItem": null,
+    "coin": {}
+  }
+]

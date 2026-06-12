@@ -14,6 +14,20 @@ export const formatLogEvent = (event: EngineLogEvent): string => {
       return `t${turn} state serialized (${data.format})`;
     case "state_deserialized":
       return `t${turn} state deserialized (${data.format})`;
+    case "run_action_resolved":
+      return `t${turn} ${data.actionKind} resolved`;
+    case "run_action_illegal":
+      return `t${turn} cannot ${data.actionKind}: ${data.reason}`;
+    case "run_floor_entered":
+      return `t${turn} entered d${data.depth} ${data.band} (${data.rosterCost}/${data.spawnBudget})`;
+    case "run_placement_deviation":
+      return `t${turn} placement adjusted ${data.requestId}: ${data.reasons.join(", ")}`;
+    case "run_boredom":
+      return `t${turn} boredom wave ${data.wave} on d${data.depth}: ${formatBoredomReason(data.reason)}`;
+    case "run_reinforcement_spawned":
+      return `t${turn} reinforcement ${data.definitionId} at ${formatPos(data.position)} (${data.budgetRemaining} budget left)`;
+    case "hoard_taken":
+      return `t${turn} claimed ${data.name} at ${formatPos(data.position)}`;
     case "moved":
       return `t${turn} ${data.actorId} moved ${data.direction} ${formatPos(data.from)}->${formatPos(data.to)}`;
     case "bumped_wall":
@@ -133,7 +147,7 @@ export const formatLogEvent = (event: EngineLogEvent): string => {
     case "tick_hook":
       return `t${turn} tick ${data.hook}`;
     case "terminal_state":
-      return `t${turn} terminal ${data.status}: ${data.reason}`;
+      return `t${turn} ${data.status}: ${data.reason}`;
     case "resolver_probe":
       return `t${turn} resolver probe ${data.actionKind}: ${data.label}`;
     case "tick_registry_probe":
@@ -154,6 +168,19 @@ const formatEquipSlot = (
 ): string =>
   slot.kind === "charm" ? `charm[${slot.index}]` : slot.kind;
 
+const formatBoredomReason = (
+  reason: "reinforcement_spawned" | "budget_exhausted" | "no_legal_cell",
+): string => {
+  switch (reason) {
+    case "reinforcement_spawned":
+      return "reinforcements arrive";
+    case "budget_exhausted":
+      return "no budget remains";
+    case "no_legal_cell":
+      return "no room to enter";
+  }
+};
+
 const assertNever = (value: never): never => {
   throw new Error(`unhandled log event: ${JSON.stringify(value)}`);
 };
@@ -162,6 +189,13 @@ export const ALL_LOG_EVENT_TYPES = [
   "state_created",
   "state_serialized",
   "state_deserialized",
+  "run_action_resolved",
+  "run_action_illegal",
+  "run_floor_entered",
+  "run_placement_deviation",
+  "run_boredom",
+  "run_reinforcement_spawned",
+  "hoard_taken",
   "moved",
   "bumped_wall",
   "door_opened",
@@ -256,6 +290,56 @@ const dummyEventData = (
       return { format: "stable-json" };
     case "state_deserialized":
       return { format: "stable-json" };
+    case "run_action_resolved":
+      return {
+        actionKind: "take_hoard",
+      };
+    case "run_action_illegal":
+      return {
+        actionKind: "take_hoard",
+        reason: "not here",
+      };
+    case "run_floor_entered":
+      return {
+        floorId: "floor#1",
+        depth: 1,
+        band: "shallows",
+        seed: "dummy-floor",
+        rosterCost: 3,
+        spawnBudget: 20,
+        placementDeviationCount: 0,
+        hoardFeatureId: null,
+      };
+    case "run_placement_deviation":
+      return {
+        requestId: "enemy:0:rat",
+        reasons: ["preferred cell occupied"],
+      };
+    case "run_boredom":
+      return {
+        depth: 1,
+        floorTurn: 900,
+        wave: 1,
+        budgetRemaining: 8,
+        reason: "reinforcement_spawned",
+      };
+    case "run_reinforcement_spawned":
+      return {
+        entityId: "enemy#1",
+        definitionId: "oldstock-cellar-rat",
+        depth: 1,
+        position: { x: 2, y: 3 },
+        cost: 2,
+        budgetRemaining: 6,
+        wave: 1,
+      };
+    case "hoard_taken":
+      return {
+        featureId: "hoard",
+        name: "The Hoard",
+        depth: 12,
+        position: { x: 5, y: 5 },
+      };
     case "moved":
       return {
         actorId: "player",

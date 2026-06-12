@@ -1,0 +1,23 @@
+{
+  "depth": 2,
+  "flavor": "warren",
+  "enemyRosterIds": [
+    "oldstock-cellar-rat",
+    "oldstock-tunnel-beetle",
+    "oldstock-fungal-crawler"
+  ],
+  "itemIds": [
+    "oldstock-hardtack",
+    "oldstock-splinter-club",
+    "oldstock-grease-scrap",
+    "oldstock-clay-bowl",
+    "oldstock-brass-token"
+  ],
+  "trapIds": [
+    "oldstock-snare-cord"
+  ],
+  "npcIds": [
+    "oldstock-keeper-mira"
+  ],
+  "questId": "oldstock-quest-lost-token"
+}

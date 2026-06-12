@@ -18,8 +18,9 @@ This file records *state*, never *design* — design lives in the doc spine
 
 | ID | Task | Owner (agent) | Worktree / branch | Status | Notes |
 |---|---|---|---|---|---|
-| 21-1 | Run loop, caps, Hoard, endings | Codex | main (src/engine/run) | in-progress | r2 after stall #4; watched |
+| 21-1 | Run loop, caps, Hoard, endings | Codex | main (src/engine/run) | ready-for-verify | provider contract frozen in `src/engine/run/loop.ts`; full gate green; deterministic scan clean; no commit |
 | 26-1 | Fallback content pack (Old Stock) | Cursor | main (content/, loader) | in-progress | |
+| 21/26-I | Wire fallback pack to run loop + unified events | Codex | main (integration) | ready-for-verify | fallback provider wired; full-run smoke over real fallback content; full gate green; no commit |
 | — | Wave B merged through 16/20 (b1ccd1d): 06–20,22 all verified | — | — | merged | engine complete except run loop |
 
 Status values: `queued` → `claimed` → `in-progress` → `ready-for-verify` →
@@ -50,6 +51,8 @@ Format: `YYYY-MM-DD · phase/task · who · what was verified · evidence (comma
 | 2026-06-12 | 14-1 | Codex | BLOCKED before implementation retry r2: proc trigger vocabulary exists, but weapon/armor item payloads have no schema field for on_hit/on_struck effect bundles; pure-data on-hit weapon thesis test cannot be authored | `rg -n "WeaponItemPayloadSchema\|ArmorItemPayloadSchema\|CharmItemPayloadSchema\|on_hit\|onHit\|on_struck\|onStruck\|proc\|effect" src/schemas/entities/items.ts src/schemas/vocab/triggers.ts src/schemas/fixtures/entities.ts` |
 | 2026-06-12 | 14-1 | Codex | Item triggers, identification, charges, curses, and THESIS TEST implemented; local touched-path verification and full tests green; full gate blocked at lint by unrelated untracked behavior files | `pnpm run typecheck` → pass; `pnpm exec eslint src/engine/items src/engine/effects/core.ts src/engine/effects/core.test.ts src/engine/state/types.ts src/engine/state/init.ts src/engine/state/serialize.ts src/engine/turn/actions.ts src/engine/systems/inventory.ts` → pass; `pnpm test` → 33 files, 265 tests passed; `pnpm run check` → fails in `src/engine/behaviors/**`; `rg -n 'Math\.random\|Date\.now' src/engine/items/` → no matches |
 | 2026-06-12 | 16-1 | Codex | Enemy assembly/cost implementation complete; scoped gates green; full gate blocked by unrelated untracked quest files | `pnpm exec eslint src/engine/enemies` → pass; `pnpm exec vitest run src/engine/enemies` → 1 file, 6 tests passed; `pnpm exec eslint src/engine/enemies src/engine/effects/spatial.ts src/config/index.ts` → pass; `pnpm exec vitest run src/engine/effects/spatial.test.ts` → 1 file, 17 tests passed; `rg 'Math.random\|Date.now' src/engine/enemies/` → no matches; `pnpm run typecheck` / `pnpm run check` → fail in untracked `src/engine/quests/**` and quest render-log exhaustiveness |
+| 2026-06-12 | 21-1 | Codex | Run loop complete: provider contract, floor descent, Hoard WIN, soft-cap reinforcements, endings, summaries, malformed-provider errors | `pnpm exec vitest run src/engine/run` → 1 file, 7 tests passed; `pnpm run check` → 47 test files, 356 tests passed; `rg 'Math.random\|Date.now' src/engine/run/` → no matches |
+| 2026-06-12 | 21/26-I | Codex | Fallback provider wired to run loop; run events merged into global log union; full-run real fallback smoke and LOSS path green | `pnpm exec vitest run src/harness/fallback-provider.test.ts src/engine/render/log.test.ts src/engine/run/loop.test.ts` → 3 files, 12 tests passed; `pnpm run check` → 48 test files, 359 tests passed |
 
 ## Worktrees & Branches
 

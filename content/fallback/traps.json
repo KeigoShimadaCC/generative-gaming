@@ -1,0 +1,400 @@
+[
+  {
+    "id": "oldstock-needle-pit",
+    "name": "a needle pit",
+    "hidden": true,
+    "effectBundle": {
+      "effects": [
+        {
+          "kind": "damage",
+          "damage": {
+            "amount": 2
+          },
+          "heal": null,
+          "applyStatus": null,
+          "cureStatus": null,
+          "buffStat": null,
+          "nutrition": null,
+          "teleportSelf": null,
+          "teleportTarget": null,
+          "blink": null,
+          "knockback": null,
+          "reveal": null,
+          "identify": null,
+          "enchant": null,
+          "summon": null,
+          "transform": null,
+          "dig": null
+        }
+      ],
+      "trigger": {
+        "kind": "step",
+        "quaff": null,
+        "read": null,
+        "throwHit": null,
+        "equipPassive": null,
+        "onHit": null,
+        "onStruck": null,
+        "step": {},
+        "use": null
+      },
+      "targeting": {
+        "kind": "self",
+        "self": {},
+        "melee": null,
+        "bolt": null,
+        "burst": null,
+        "floor": null
+      }
+    }
+  },
+  {
+    "id": "oldstock-snare-cord",
+    "name": "a snare cord",
+    "hidden": true,
+    "effectBundle": {
+      "effects": [
+        {
+          "kind": "damage",
+          "damage": {
+            "amount": 3
+          },
+          "heal": null,
+          "applyStatus": null,
+          "cureStatus": null,
+          "buffStat": null,
+          "nutrition": null,
+          "teleportSelf": null,
+          "teleportTarget": null,
+          "blink": null,
+          "knockback": null,
+          "reveal": null,
+          "identify": null,
+          "enchant": null,
+          "summon": null,
+          "transform": null,
+          "dig": null
+        }
+      ],
+      "trigger": {
+        "kind": "step",
+        "quaff": null,
+        "read": null,
+        "throwHit": null,
+        "equipPassive": null,
+        "onHit": null,
+        "onStruck": null,
+        "step": {},
+        "use": null
+      },
+      "targeting": {
+        "kind": "self",
+        "self": {},
+        "melee": null,
+        "bolt": null,
+        "burst": null,
+        "floor": null
+      }
+    }
+  },
+  {
+    "id": "oldstock-spore-mat",
+    "name": "a spore mat",
+    "hidden": true,
+    "effectBundle": {
+      "effects": [
+        {
+          "kind": "apply_status",
+          "damage": null,
+          "heal": null,
+          "applyStatus": {
+            "status": "poison",
+            "duration": 3
+          },
+          "cureStatus": null,
+          "buffStat": null,
+          "nutrition": null,
+          "teleportSelf": null,
+          "teleportTarget": null,
+          "blink": null,
+          "knockback": null,
+          "reveal": null,
+          "identify": null,
+          "enchant": null,
+          "summon": null,
+          "transform": null,
+          "dig": null
+        }
+      ],
+      "trigger": {
+        "kind": "step",
+        "quaff": null,
+        "read": null,
+        "throwHit": null,
+        "equipPassive": null,
+        "onHit": null,
+        "onStruck": null,
+        "step": {},
+        "use": null
+      },
+      "targeting": {
+        "kind": "self",
+        "self": {},
+        "melee": null,
+        "bolt": null,
+        "burst": null,
+        "floor": null
+      }
+    }
+  },
+  {
+    "id": "oldstock-pitch-pan",
+    "name": "a pitch pan",
+    "hidden": true,
+    "effectBundle": {
+      "effects": [
+        {
+          "kind": "apply_status",
+          "damage": null,
+          "heal": null,
+          "applyStatus": {
+            "status": "slow",
+            "duration": 4
+          },
+          "cureStatus": null,
+          "buffStat": null,
+          "nutrition": null,
+          "teleportSelf": null,
+          "teleportTarget": null,
+          "blink": null,
+          "knockback": null,
+          "reveal": null,
+          "identify": null,
+          "enchant": null,
+          "summon": null,
+          "transform": null,
+          "dig": null
+        }
+      ],
+      "trigger": {
+        "kind": "step",
+        "quaff": null,
+        "read": null,
+        "throwHit": null,
+        "equipPassive": null,
+        "onHit": null,
+        "onStruck": null,
+        "step": {},
+        "use": null
+      },
+      "targeting": {
+        "kind": "self",
+        "self": {},
+        "melee": null,
+        "bolt": null,
+        "burst": null,
+        "floor": null
+      }
+    }
+  },
+  {
+    "id": "oldstock-tumbling-rock",
+    "name": "a tumbling rock",
+    "hidden": true,
+    "effectBundle": {
+      "effects": [
+        {
+          "kind": "knockback",
+          "damage": null,
+          "heal": null,
+          "applyStatus": null,
+          "cureStatus": null,
+          "buffStat": null,
+          "nutrition": null,
+          "teleportSelf": null,
+          "teleportTarget": null,
+          "blink": null,
+          "knockback": {
+            "pushTiles": 2,
+            "collisionDamage": 2
+          },
+          "reveal": null,
+          "identify": null,
+          "enchant": null,
+          "summon": null,
+          "transform": null,
+          "dig": null
+        }
+      ],
+      "trigger": {
+        "kind": "step",
+        "quaff": null,
+        "read": null,
+        "throwHit": null,
+        "equipPassive": null,
+        "onHit": null,
+        "onStruck": null,
+        "step": {},
+        "use": null
+      },
+      "targeting": {
+        "kind": "melee",
+        "self": null,
+        "melee": {},
+        "bolt": null,
+        "burst": null,
+        "floor": null
+      }
+    }
+  },
+  {
+    "id": "oldstock-gas-vent",
+    "name": "a gas vent",
+    "hidden": true,
+    "effectBundle": {
+      "effects": [
+        {
+          "kind": "damage",
+          "damage": {
+            "amount": 4
+          },
+          "heal": null,
+          "applyStatus": null,
+          "cureStatus": null,
+          "buffStat": null,
+          "nutrition": null,
+          "teleportSelf": null,
+          "teleportTarget": null,
+          "blink": null,
+          "knockback": null,
+          "reveal": null,
+          "identify": null,
+          "enchant": null,
+          "summon": null,
+          "transform": null,
+          "dig": null
+        }
+      ],
+      "trigger": {
+        "kind": "step",
+        "quaff": null,
+        "read": null,
+        "throwHit": null,
+        "equipPassive": null,
+        "onHit": null,
+        "onStruck": null,
+        "step": {},
+        "use": null
+      },
+      "targeting": {
+        "kind": "burst",
+        "self": null,
+        "melee": null,
+        "bolt": null,
+        "burst": {
+          "radiusTiles": 1,
+          "center": "self"
+        },
+        "floor": null
+      }
+    }
+  },
+  {
+    "id": "oldstock-rot-trigger",
+    "name": "a rot trigger",
+    "hidden": true,
+    "effectBundle": {
+      "effects": [
+        {
+          "kind": "damage",
+          "damage": {
+            "amount": 6
+          },
+          "heal": null,
+          "applyStatus": null,
+          "cureStatus": null,
+          "buffStat": null,
+          "nutrition": null,
+          "teleportSelf": null,
+          "teleportTarget": null,
+          "blink": null,
+          "knockback": null,
+          "reveal": null,
+          "identify": null,
+          "enchant": null,
+          "summon": null,
+          "transform": null,
+          "dig": null
+        }
+      ],
+      "trigger": {
+        "kind": "step",
+        "quaff": null,
+        "read": null,
+        "throwHit": null,
+        "equipPassive": null,
+        "onHit": null,
+        "onStruck": null,
+        "step": {},
+        "use": null
+      },
+      "targeting": {
+        "kind": "self",
+        "self": {},
+        "melee": null,
+        "bolt": null,
+        "burst": null,
+        "floor": null
+      }
+    }
+  },
+  {
+    "id": "oldstock-crush-plate",
+    "name": "a crush plate",
+    "hidden": true,
+    "effectBundle": {
+      "effects": [
+        {
+          "kind": "damage",
+          "damage": {
+            "amount": 8
+          },
+          "heal": null,
+          "applyStatus": null,
+          "cureStatus": null,
+          "buffStat": null,
+          "nutrition": null,
+          "teleportSelf": null,
+          "teleportTarget": null,
+          "blink": null,
+          "knockback": null,
+          "reveal": null,
+          "identify": null,
+          "enchant": null,
+          "summon": null,
+          "transform": null,
+          "dig": null
+        }
+      ],
+      "trigger": {
+        "kind": "step",
+        "quaff": null,
+        "read": null,
+        "throwHit": null,
+        "equipPassive": null,
+        "onHit": null,
+        "onStruck": null,
+        "step": {},
+        "use": null
+      },
+      "targeting": {
+        "kind": "self",
+        "self": {},
+        "melee": null,
+        "bolt": null,
+        "burst": null,
+        "floor": null
+      }
+    }
+  }
+]

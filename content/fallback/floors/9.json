@@ -1,0 +1,22 @@
+{
+  "depth": 9,
+  "flavor": "halls",
+  "enemyRosterIds": [
+    "oldstock-brood-keeper",
+    "oldstock-cave-slug"
+  ],
+  "itemIds": [
+    "oldstock-cave-moss",
+    "oldstock-damp-talisman",
+    "oldstock-cave-moss",
+    "oldstock-ward-chalk"
+  ],
+  "trapIds": [
+    "oldstock-tumbling-rock",
+    "oldstock-gas-vent"
+  ],
+  "npcIds": [
+    "oldstock-keeper-wren"
+  ],
+  "questId": "oldstock-quest-quiet-crossing"
+}

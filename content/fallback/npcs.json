@@ -1,0 +1,313 @@
+[
+  {
+    "id": "oldstock-keeper-mira",
+    "name": "Mira",
+    "glyph": "M",
+    "origin": "kept",
+    "dialogue": {
+      "rootNodeId": "root",
+      "nodes": [
+        {
+          "id": "root",
+          "text": "You dropped something near the entrance. I saw it roll.",
+          "choices": [
+            {
+              "id": "ask",
+              "label": "What did I drop?",
+              "nextNodeId": "answer",
+              "closesDialogue": false,
+              "questHookId": null
+            },
+            {
+              "id": "leave",
+              "label": "Leave her",
+              "nextNodeId": null,
+              "closesDialogue": true,
+              "questHookId": null
+            }
+          ]
+        },
+        {
+          "id": "answer",
+          "text": "A brass tally. Bring it back if you find it.",
+          "choices": [
+            {
+              "id": "accept",
+              "label": "I will look",
+              "nextNodeId": null,
+              "closesDialogue": true,
+              "questHookId": "oldstock-quest-lost-token"
+            },
+            {
+              "id": "decline",
+              "label": "Not now",
+              "nextNodeId": null,
+              "closesDialogue": true,
+              "questHookId": null
+            }
+          ]
+        }
+      ]
+    },
+    "merchantInventoryItemIds": [
+      "oldstock-hardtack",
+      "oldstock-sour-cordial"
+    ],
+    "questHook": {
+      "id": "oldstock-quest-lost-token",
+      "title": "The dropped tally",
+      "objective": {
+        "kind": "fetch",
+        "fetch": {
+          "itemId": "oldstock-brass-token",
+          "floorScope": "this_floor"
+        },
+        "kill": null,
+        "reach": null,
+        "deliver": null,
+        "escort": null,
+        "constraint": null
+      },
+      "reward": {
+        "valueMultiplier": 1.5,
+        "coin": 12,
+        "itemIds": [],
+        "identifyItemIds": []
+      }
+    }
+  },
+  {
+    "id": "oldstock-keeper-tomas",
+    "name": "Tomas",
+    "glyph": "T",
+    "origin": "kept",
+    "dialogue": {
+      "rootNodeId": "root",
+      "nodes": [
+        {
+          "id": "root",
+          "text": "The spore warden blocks the lower crawl. It has to go.",
+          "choices": [
+            {
+              "id": "ask",
+              "label": "Why that one?",
+              "nextNodeId": "why",
+              "closesDialogue": false,
+              "questHookId": null
+            },
+            {
+              "id": "leave",
+              "label": "Walk away",
+              "nextNodeId": null,
+              "closesDialogue": true,
+              "questHookId": null
+            }
+          ]
+        },
+        {
+          "id": "why",
+          "text": "It poisons the air. Kill it and I will share what I carry.",
+          "choices": [
+            {
+              "id": "accept",
+              "label": "I will hunt it",
+              "nextNodeId": null,
+              "closesDialogue": true,
+              "questHookId": "oldstock-quest-clear-spores"
+            },
+            {
+              "id": "decline",
+              "label": "Another time",
+              "nextNodeId": null,
+              "closesDialogue": true,
+              "questHookId": null
+            }
+          ]
+        }
+      ]
+    },
+    "merchantInventoryItemIds": [
+      "oldstock-cave-moss",
+      "oldstock-piton-line"
+    ],
+    "questHook": {
+      "id": "oldstock-quest-clear-spores",
+      "title": "Clear the spore warden",
+      "objective": {
+        "kind": "kill",
+        "fetch": null,
+        "kill": {
+          "targetTag": "oldstock-spore-warden"
+        },
+        "reach": null,
+        "deliver": null,
+        "escort": null,
+        "constraint": null
+      },
+      "reward": {
+        "valueMultiplier": 2,
+        "coin": 40,
+        "itemIds": [
+          "oldstock-salt-fish"
+        ],
+        "identifyItemIds": []
+      }
+    }
+  },
+  {
+    "id": "oldstock-keeper-penn",
+    "name": "Penn",
+    "glyph": "P",
+    "origin": "kept",
+    "dialogue": {
+      "rootNodeId": "root",
+      "nodes": [
+        {
+          "id": "root",
+          "text": "I need a wax seal carried down from the upper shelves.",
+          "choices": [
+            {
+              "id": "ask",
+              "label": "What seal?",
+              "nextNodeId": "seal",
+              "closesDialogue": false,
+              "questHookId": null
+            },
+            {
+              "id": "leave",
+              "label": "Not today",
+              "nextNodeId": null,
+              "closesDialogue": true,
+              "questHookId": null
+            }
+          ]
+        },
+        {
+          "id": "seal",
+          "text": "The one stamped with my mark. Bring it here unbroken.",
+          "choices": [
+            {
+              "id": "accept",
+              "label": "I will deliver it",
+              "nextNodeId": null,
+              "closesDialogue": true,
+              "questHookId": "oldstock-quest-wax-delivery"
+            },
+            {
+              "id": "decline",
+              "label": "I cannot",
+              "nextNodeId": null,
+              "closesDialogue": true,
+              "questHookId": null
+            }
+          ]
+        }
+      ]
+    },
+    "merchantInventoryItemIds": [
+      "oldstock-bronze-bell",
+      "oldstock-scratched-mail"
+    ],
+    "questHook": {
+      "id": "oldstock-quest-wax-delivery",
+      "title": "Bring the wax seal",
+      "objective": {
+        "kind": "deliver",
+        "fetch": null,
+        "kill": null,
+        "reach": null,
+        "deliver": {
+          "itemId": "oldstock-wax-seal",
+          "npcId": "oldstock-keeper-penn"
+        },
+        "escort": null,
+        "constraint": null
+      },
+      "reward": {
+        "valueMultiplier": 2,
+        "coin": 50,
+        "itemIds": [],
+        "identifyItemIds": [
+          "oldstock-bitter-purge"
+        ]
+      }
+    }
+  },
+  {
+    "id": "oldstock-keeper-wren",
+    "name": "Wren",
+    "glyph": "W",
+    "origin": "kept",
+    "dialogue": {
+      "rootNodeId": "root",
+      "nodes": [
+        {
+          "id": "root",
+          "text": "Cross this floor without taking harm. The Deep is watching.",
+          "choices": [
+            {
+              "id": "ask",
+              "label": "Why that rule?",
+              "nextNodeId": "rule",
+              "closesDialogue": false,
+              "questHookId": null
+            },
+            {
+              "id": "leave",
+              "label": "Leave",
+              "nextNodeId": null,
+              "closesDialogue": true,
+              "questHookId": null
+            }
+          ]
+        },
+        {
+          "id": "rule",
+          "text": "Because you can. Do it and I will mark your pack.",
+          "choices": [
+            {
+              "id": "accept",
+              "label": "I accept",
+              "nextNodeId": null,
+              "closesDialogue": true,
+              "questHookId": "oldstock-quest-quiet-crossing"
+            },
+            {
+              "id": "decline",
+              "label": "Too risky",
+              "nextNodeId": null,
+              "closesDialogue": true,
+              "questHookId": null
+            }
+          ]
+        }
+      ]
+    },
+    "merchantInventoryItemIds": [
+      "oldstock-salt-fish"
+    ],
+    "questHook": {
+      "id": "oldstock-quest-quiet-crossing",
+      "title": "Cross without a scratch",
+      "objective": {
+        "kind": "constraint",
+        "fetch": null,
+        "kill": null,
+        "reach": null,
+        "deliver": null,
+        "escort": null,
+        "constraint": {
+          "engineFlag": "take_no_damage"
+        }
+      },
+      "reward": {
+        "valueMultiplier": 2.5,
+        "coin": 60,
+        "itemIds": [
+          "oldstock-ward-chalk"
+        ],
+        "identifyItemIds": []
+      }
+    }
+  }
+]

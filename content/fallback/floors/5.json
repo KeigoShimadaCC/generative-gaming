@@ -1,0 +1,22 @@
+{
+  "depth": 5,
+  "flavor": "open",
+  "enemyRosterIds": [
+    "oldstock-cave-slug",
+    "oldstock-drip-leech",
+    "oldstock-gravel-skitter"
+  ],
+  "itemIds": [
+    "oldstock-cave-moss",
+    "oldstock-hook-spear",
+    "oldstock-cave-moss",
+    "oldstock-tally-scrap"
+  ],
+  "trapIds": [
+    "oldstock-spore-mat"
+  ],
+  "npcIds": [
+    "oldstock-keeper-tomas"
+  ],
+  "questId": "oldstock-quest-clear-spores"
+}

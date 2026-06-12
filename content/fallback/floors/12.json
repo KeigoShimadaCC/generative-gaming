@@ -1,0 +1,19 @@
+{
+  "depth": 12,
+  "flavor": "sanctum",
+  "enemyRosterIds": [
+    "oldstock-stone-lamprey",
+    "oldstock-deep-rot-congealer"
+  ],
+  "itemIds": [
+    "oldstock-damp-talisman",
+    "oldstock-ward-chalk",
+    "oldstock-hook-spear",
+    "oldstock-scratched-mail"
+  ],
+  "trapIds": [
+    "oldstock-crush-plate"
+  ],
+  "npcIds": [],
+  "questId": null
+}

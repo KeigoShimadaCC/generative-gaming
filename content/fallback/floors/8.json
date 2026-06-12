@@ -1,0 +1,19 @@
+{
+  "depth": 8,
+  "flavor": "ring",
+  "enemyRosterIds": [
+    "oldstock-spore-warden",
+    "oldstock-cave-slug"
+  ],
+  "itemIds": [
+    "oldstock-cave-moss",
+    "oldstock-bind-wrap",
+    "oldstock-resin-lamp",
+    "oldstock-salt-fish"
+  ],
+  "trapIds": [
+    "oldstock-pitch-pan"
+  ],
+  "npcIds": [],
+  "questId": null
+}

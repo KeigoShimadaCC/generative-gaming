@@ -1,0 +1,26 @@
+Implemented Phase 21 and stopped without committing.
+
+**Changed**
+- [loop.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/run/loop.ts:72): frozen `FloorContentProvider`, floor generation/placement/assembly, descend progression, run RNG fork, typed provider errors, soft-cap reinforcements.
+- [endings.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/run/endings.ts:56): Hoard `take_hoard` WIN path and run summary derivation.
+- [events.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/run/events.ts:1): run-local event types.
+- [loop.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/run/loop.test.ts:1): full descent WIN, soft cap schedule/budget exhaustion, all endings, summary, malformed provider, serialization.
+- [PROGRESS.md](/Users/keigoshimada/Documents/generative-gaming/PROGRESS.md:21): marked `21-1` ready-for-verify with evidence.
+
+**Verification**
+- `pnpm exec vitest run src/engine/run` -> 1 file, 7 tests passed.
+- `pnpm run check` -> typecheck + lint + tests green; 47 test files, 356 tests passed.
+- `rg 'Math.random|Date.now' src/engine/run/` -> no matches.
+
+**Phase Completion Check**
+Status: Complete / ready-for-verify. Plan checked: `phase-plans/PHASE-21-RUN-LOOP.md`.
+
+Scope stayed inside `src/engine/run/**` plus required `PROGRESS.md`. I did not commit. Existing unrelated/sibling changes remain untouched: `content/fallback/`, `src/harness/content-loader*`, `scripts/ledger.tsv`, and session logs.
+
+**AMBIGUITIES**
+- “Escalating” reinforcements are implemented as wave-numbered one-enemy spawns every interval, budget-bound, rather than increasing multi-enemy wave size.
+- Run-specific events are kept in `src/engine/run/events.ts` rather than globally augmenting render-log handling, to avoid editing files outside ownership.
+
+Environment discoveries: none new.
+
+Actual time: ~45m vs 35m estimate.

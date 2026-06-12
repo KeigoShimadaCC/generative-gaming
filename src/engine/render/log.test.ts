@@ -34,5 +34,14 @@ describe("formatLogEvent", () => {
     expect(formatLogEvent(dummyLogEvent("bumped_wall", 2))).toBe(
       "t2 player bumped east: wall",
     );
+    expect(formatLogEvent(dummyLogEvent("run_boredom", 9))).toBe(
+      "t9 boredom wave 1 on d1: reinforcements arrive",
+    );
+    expect(formatLogEvent(dummyLogEvent("hoard_taken", 12))).toBe(
+      "t12 claimed The Hoard at (5,5)",
+    );
+    expect(formatLogEvent(dummyLogEvent("terminal_state", 12))).toBe(
+      "t12 WIN: stairs",
+    );
   });
 });

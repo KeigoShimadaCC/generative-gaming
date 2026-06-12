@@ -1,0 +1,1302 @@
+[
+  {
+    "id": "oldstock-cellar-rat",
+    "name": "a cellar rat",
+    "glyph": "r",
+    "origin": "old_stock",
+    "stats": {
+      "band": "shallows",
+      "hp": 4,
+      "attack": 2,
+      "defense": 0,
+      "xpYield": 2
+    },
+    "behaviors": [
+      {
+        "kind": "approach_melee",
+        "approachMelee": {},
+        "keepRange": null,
+        "fleeLowHp": null,
+        "packHunter": null,
+        "ambusher": null,
+        "territorial": null,
+        "guard": null,
+        "patrol": null,
+        "thief": null,
+        "caster": null,
+        "bodyguard": null,
+        "mimic": null
+      }
+    ],
+    "abilities": []
+  },
+  {
+    "id": "oldstock-tunnel-beetle",
+    "name": "a tunnel beetle",
+    "glyph": "b",
+    "origin": "old_stock",
+    "stats": {
+      "band": "shallows",
+      "hp": 5,
+      "attack": 3,
+      "defense": 0,
+      "xpYield": 3
+    },
+    "behaviors": [
+      {
+        "kind": "patrol",
+        "approachMelee": null,
+        "keepRange": null,
+        "fleeLowHp": null,
+        "packHunter": null,
+        "ambusher": null,
+        "territorial": null,
+        "guard": null,
+        "patrol": {},
+        "thief": null,
+        "caster": null,
+        "bodyguard": null,
+        "mimic": null
+      },
+      {
+        "kind": "approach_melee",
+        "approachMelee": {},
+        "keepRange": null,
+        "fleeLowHp": null,
+        "packHunter": null,
+        "ambusher": null,
+        "territorial": null,
+        "guard": null,
+        "patrol": null,
+        "thief": null,
+        "caster": null,
+        "bodyguard": null,
+        "mimic": null
+      }
+    ],
+    "abilities": []
+  },
+  {
+    "id": "oldstock-cave-cricket",
+    "name": "a cave cricket",
+    "glyph": "c",
+    "origin": "old_stock",
+    "stats": {
+      "band": "shallows",
+      "hp": 5,
+      "attack": 2,
+      "defense": 0,
+      "xpYield": 2
+    },
+    "behaviors": [
+      {
+        "kind": "ambusher",
+        "approachMelee": null,
+        "keepRange": null,
+        "fleeLowHp": null,
+        "packHunter": null,
+        "ambusher": {
+          "wakeRadiusTiles": 1
+        },
+        "territorial": null,
+        "guard": null,
+        "patrol": null,
+        "thief": null,
+        "caster": null,
+        "bodyguard": null,
+        "mimic": null
+      },
+      {
+        "kind": "approach_melee",
+        "approachMelee": {},
+        "keepRange": null,
+        "fleeLowHp": null,
+        "packHunter": null,
+        "ambusher": null,
+        "territorial": null,
+        "guard": null,
+        "patrol": null,
+        "thief": null,
+        "caster": null,
+        "bodyguard": null,
+        "mimic": null
+      }
+    ],
+    "abilities": []
+  },
+  {
+    "id": "oldstock-trembling-mouse",
+    "name": "a trembling cave mouse",
+    "glyph": "m",
+    "origin": "old_stock",
+    "stats": {
+      "band": "shallows",
+      "hp": 4,
+      "attack": 2,
+      "defense": 0,
+      "xpYield": 2
+    },
+    "behaviors": [
+      {
+        "kind": "flee_low_hp",
+        "approachMelee": null,
+        "keepRange": null,
+        "fleeLowHp": {
+          "thresholdPercent": 30
+        },
+        "packHunter": null,
+        "ambusher": null,
+        "territorial": null,
+        "guard": null,
+        "patrol": null,
+        "thief": null,
+        "caster": null,
+        "bodyguard": null,
+        "mimic": null
+      },
+      {
+        "kind": "approach_melee",
+        "approachMelee": {},
+        "keepRange": null,
+        "fleeLowHp": null,
+        "packHunter": null,
+        "ambusher": null,
+        "territorial": null,
+        "guard": null,
+        "patrol": null,
+        "thief": null,
+        "caster": null,
+        "bodyguard": null,
+        "mimic": null
+      }
+    ],
+    "abilities": []
+  },
+  {
+    "id": "oldstock-fungal-crawler",
+    "name": "a fungal crawler",
+    "glyph": "f",
+    "origin": "old_stock",
+    "stats": {
+      "band": "shallows",
+      "hp": 6,
+      "attack": 3,
+      "defense": 1,
+      "xpYield": 3
+    },
+    "behaviors": [
+      {
+        "kind": "pack_hunter",
+        "approachMelee": null,
+        "keepRange": null,
+        "fleeLowHp": null,
+        "packHunter": {
+          "allyCount": 2
+        },
+        "ambusher": null,
+        "territorial": null,
+        "guard": null,
+        "patrol": null,
+        "thief": null,
+        "caster": null,
+        "bodyguard": null,
+        "mimic": null
+      },
+      {
+        "kind": "approach_melee",
+        "approachMelee": {},
+        "keepRange": null,
+        "fleeLowHp": null,
+        "packHunter": null,
+        "ambusher": null,
+        "territorial": null,
+        "guard": null,
+        "patrol": null,
+        "thief": null,
+        "caster": null,
+        "bodyguard": null,
+        "mimic": null
+      }
+    ],
+    "abilities": []
+  },
+  {
+    "id": "oldstock-spitting-frog",
+    "name": "a spitting cave frog",
+    "glyph": "g",
+    "origin": "old_stock",
+    "stats": {
+      "band": "shallows",
+      "hp": 8,
+      "attack": 3,
+      "defense": 1,
+      "xpYield": 4
+    },
+    "behaviors": [
+      {
+        "kind": "keep_range",
+        "approachMelee": null,
+        "keepRange": {
+          "distanceTiles": 3
+        },
+        "fleeLowHp": null,
+        "packHunter": null,
+        "ambusher": null,
+        "territorial": null,
+        "guard": null,
+        "patrol": null,
+        "thief": null,
+        "caster": null,
+        "bodyguard": null,
+        "mimic": null
+      },
+      {
+        "kind": "caster",
+        "approachMelee": null,
+        "keepRange": null,
+        "fleeLowHp": null,
+        "packHunter": null,
+        "ambusher": null,
+        "territorial": null,
+        "guard": null,
+        "patrol": null,
+        "thief": null,
+        "caster": {
+          "cooldownTurns": 4
+        },
+        "bodyguard": null,
+        "mimic": null
+      }
+    ],
+    "abilities": [
+      {
+        "effects": [
+          {
+            "kind": "damage",
+            "damage": {
+              "amount": 3
+            },
+            "heal": null,
+            "applyStatus": null,
+            "cureStatus": null,
+            "buffStat": null,
+            "nutrition": null,
+            "teleportSelf": null,
+            "teleportTarget": null,
+            "blink": null,
+            "knockback": null,
+            "reveal": null,
+            "identify": null,
+            "enchant": null,
+            "summon": null,
+            "transform": null,
+            "dig": null
+          }
+        ],
+        "trigger": {
+          "kind": "use",
+          "quaff": null,
+          "read": null,
+          "throwHit": null,
+          "equipPassive": null,
+          "onHit": null,
+          "onStruck": null,
+          "step": null,
+          "use": {
+            "charges": 1
+          }
+        },
+        "targeting": {
+          "kind": "bolt",
+          "self": null,
+          "melee": null,
+          "bolt": {
+            "rangeTiles": 4
+          },
+          "burst": null,
+          "floor": null
+        }
+      }
+    ]
+  },
+  {
+    "id": "oldstock-ceiling-lurker",
+    "name": "a ceiling lurker",
+    "glyph": "l",
+    "origin": "old_stock",
+    "stats": {
+      "band": "shallows",
+      "hp": 6,
+      "attack": 3,
+      "defense": 0,
+      "xpYield": 3
+    },
+    "behaviors": [
+      {
+        "kind": "ambusher",
+        "approachMelee": null,
+        "keepRange": null,
+        "fleeLowHp": null,
+        "packHunter": null,
+        "ambusher": {
+          "wakeRadiusTiles": 2
+        },
+        "territorial": null,
+        "guard": null,
+        "patrol": null,
+        "thief": null,
+        "caster": null,
+        "bodyguard": null,
+        "mimic": null
+      },
+      {
+        "kind": "territorial",
+        "approachMelee": null,
+        "keepRange": null,
+        "fleeLowHp": null,
+        "packHunter": null,
+        "ambusher": null,
+        "territorial": {
+          "radiusTiles": 2
+        },
+        "guard": null,
+        "patrol": null,
+        "thief": null,
+        "caster": null,
+        "bodyguard": null,
+        "mimic": null
+      }
+    ],
+    "abilities": []
+  },
+  {
+    "id": "oldstock-gutter-grub",
+    "name": "a gutter grub",
+    "glyph": "w",
+    "origin": "old_stock",
+    "stats": {
+      "band": "shallows",
+      "hp": 8,
+      "attack": 3,
+      "defense": 1,
+      "xpYield": 5
+    },
+    "behaviors": [
+      {
+        "kind": "thief",
+        "approachMelee": null,
+        "keepRange": null,
+        "fleeLowHp": null,
+        "packHunter": null,
+        "ambusher": null,
+        "territorial": null,
+        "guard": null,
+        "patrol": null,
+        "thief": {},
+        "caster": null,
+        "bodyguard": null,
+        "mimic": null
+      },
+      {
+        "kind": "flee_low_hp",
+        "approachMelee": null,
+        "keepRange": null,
+        "fleeLowHp": {
+          "thresholdPercent": 25
+        },
+        "packHunter": null,
+        "ambusher": null,
+        "territorial": null,
+        "guard": null,
+        "patrol": null,
+        "thief": null,
+        "caster": null,
+        "bodyguard": null,
+        "mimic": null
+      }
+    ],
+    "abilities": [
+      {
+        "effects": [
+          {
+            "kind": "blink",
+            "damage": null,
+            "heal": null,
+            "applyStatus": null,
+            "cureStatus": null,
+            "buffStat": null,
+            "nutrition": null,
+            "teleportSelf": null,
+            "teleportTarget": null,
+            "blink": {
+              "distanceTiles": 2
+            },
+            "knockback": null,
+            "reveal": null,
+            "identify": null,
+            "enchant": null,
+            "summon": null,
+            "transform": null,
+            "dig": null
+          }
+        ],
+        "trigger": {
+          "kind": "use",
+          "quaff": null,
+          "read": null,
+          "throwHit": null,
+          "equipPassive": null,
+          "onHit": null,
+          "onStruck": null,
+          "step": null,
+          "use": {
+            "charges": 1
+          }
+        },
+        "targeting": {
+          "kind": "self",
+          "self": {},
+          "melee": null,
+          "bolt": null,
+          "burst": null,
+          "floor": null
+        }
+      }
+    ]
+  },
+  {
+    "id": "oldstock-cave-slug",
+    "name": "a cave slug",
+    "glyph": "s",
+    "origin": "old_stock",
+    "stats": {
+      "band": "middle",
+      "hp": 12,
+      "attack": 5,
+      "defense": 1,
+      "xpYield": 5
+    },
+    "behaviors": [
+      {
+        "kind": "approach_melee",
+        "approachMelee": {},
+        "keepRange": null,
+        "fleeLowHp": null,
+        "packHunter": null,
+        "ambusher": null,
+        "territorial": null,
+        "guard": null,
+        "patrol": null,
+        "thief": null,
+        "caster": null,
+        "bodyguard": null,
+        "mimic": null
+      }
+    ],
+    "abilities": []
+  },
+  {
+    "id": "oldstock-drip-leech",
+    "name": "a drip-feed leech",
+    "glyph": "d",
+    "origin": "old_stock",
+    "stats": {
+      "band": "middle",
+      "hp": 14,
+      "attack": 6,
+      "defense": 1,
+      "xpYield": 6
+    },
+    "behaviors": [
+      {
+        "kind": "keep_range",
+        "approachMelee": null,
+        "keepRange": {
+          "distanceTiles": 3
+        },
+        "fleeLowHp": null,
+        "packHunter": null,
+        "ambusher": null,
+        "territorial": null,
+        "guard": null,
+        "patrol": null,
+        "thief": null,
+        "caster": null,
+        "bodyguard": null,
+        "mimic": null
+      },
+      {
+        "kind": "flee_low_hp",
+        "approachMelee": null,
+        "keepRange": null,
+        "fleeLowHp": {
+          "thresholdPercent": 30
+        },
+        "packHunter": null,
+        "ambusher": null,
+        "territorial": null,
+        "guard": null,
+        "patrol": null,
+        "thief": null,
+        "caster": null,
+        "bodyguard": null,
+        "mimic": null
+      }
+    ],
+    "abilities": [
+      {
+        "effects": [
+          {
+            "kind": "damage",
+            "damage": {
+              "amount": 4
+            },
+            "heal": null,
+            "applyStatus": null,
+            "cureStatus": null,
+            "buffStat": null,
+            "nutrition": null,
+            "teleportSelf": null,
+            "teleportTarget": null,
+            "blink": null,
+            "knockback": null,
+            "reveal": null,
+            "identify": null,
+            "enchant": null,
+            "summon": null,
+            "transform": null,
+            "dig": null
+          }
+        ],
+        "trigger": {
+          "kind": "use",
+          "quaff": null,
+          "read": null,
+          "throwHit": null,
+          "equipPassive": null,
+          "onHit": null,
+          "onStruck": null,
+          "step": null,
+          "use": {
+            "charges": 1
+          }
+        },
+        "targeting": {
+          "kind": "bolt",
+          "self": null,
+          "melee": null,
+          "bolt": {
+            "rangeTiles": 4
+          },
+          "burst": null,
+          "floor": null
+        }
+      }
+    ]
+  },
+  {
+    "id": "oldstock-gravel-skitter",
+    "name": "a gravel skitter",
+    "glyph": "k",
+    "origin": "old_stock",
+    "stats": {
+      "band": "middle",
+      "hp": 16,
+      "attack": 7,
+      "defense": 2,
+      "xpYield": 7
+    },
+    "behaviors": [
+      {
+        "kind": "pack_hunter",
+        "approachMelee": null,
+        "keepRange": null,
+        "fleeLowHp": null,
+        "packHunter": {
+          "allyCount": 3
+        },
+        "ambusher": null,
+        "territorial": null,
+        "guard": null,
+        "patrol": null,
+        "thief": null,
+        "caster": null,
+        "bodyguard": null,
+        "mimic": null
+      },
+      {
+        "kind": "approach_melee",
+        "approachMelee": {},
+        "keepRange": null,
+        "fleeLowHp": null,
+        "packHunter": null,
+        "ambusher": null,
+        "territorial": null,
+        "guard": null,
+        "patrol": null,
+        "thief": null,
+        "caster": null,
+        "bodyguard": null,
+        "mimic": null
+      }
+    ],
+    "abilities": []
+  },
+  {
+    "id": "oldstock-spore-warden",
+    "name": "a spore warden",
+    "glyph": "p",
+    "origin": "old_stock",
+    "stats": {
+      "band": "middle",
+      "hp": 18,
+      "attack": 5,
+      "defense": 2,
+      "xpYield": 8
+    },
+    "behaviors": [
+      {
+        "kind": "territorial",
+        "approachMelee": null,
+        "keepRange": null,
+        "fleeLowHp": null,
+        "packHunter": null,
+        "ambusher": null,
+        "territorial": {
+          "radiusTiles": 3
+        },
+        "guard": null,
+        "patrol": null,
+        "thief": null,
+        "caster": null,
+        "bodyguard": null,
+        "mimic": null
+      },
+      {
+        "kind": "caster",
+        "approachMelee": null,
+        "keepRange": null,
+        "fleeLowHp": null,
+        "packHunter": null,
+        "ambusher": null,
+        "territorial": null,
+        "guard": null,
+        "patrol": null,
+        "thief": null,
+        "caster": {
+          "cooldownTurns": 5
+        },
+        "bodyguard": null,
+        "mimic": null
+      }
+    ],
+    "abilities": [
+      {
+        "effects": [
+          {
+            "kind": "apply_status",
+            "damage": null,
+            "heal": null,
+            "applyStatus": {
+              "status": "burn",
+              "duration": 2
+            },
+            "cureStatus": null,
+            "buffStat": null,
+            "nutrition": null,
+            "teleportSelf": null,
+            "teleportTarget": null,
+            "blink": null,
+            "knockback": null,
+            "reveal": null,
+            "identify": null,
+            "enchant": null,
+            "summon": null,
+            "transform": null,
+            "dig": null
+          }
+        ],
+        "trigger": {
+          "kind": "use",
+          "quaff": null,
+          "read": null,
+          "throwHit": null,
+          "equipPassive": null,
+          "onHit": null,
+          "onStruck": null,
+          "step": null,
+          "use": {
+            "charges": 1
+          }
+        },
+        "targeting": {
+          "kind": "bolt",
+          "self": null,
+          "melee": null,
+          "bolt": {
+            "rangeTiles": 4
+          },
+          "burst": null,
+          "floor": null
+        }
+      },
+      {
+        "effects": [
+          {
+            "kind": "summon",
+            "damage": null,
+            "heal": null,
+            "applyStatus": null,
+            "cureStatus": null,
+            "buffStat": null,
+            "nutrition": null,
+            "teleportSelf": null,
+            "teleportTarget": null,
+            "blink": null,
+            "knockback": null,
+            "reveal": null,
+            "identify": null,
+            "enchant": null,
+            "summon": {
+              "count": 1,
+              "rosterEntityId": "oldstock-cellar-rat"
+            },
+            "transform": null,
+            "dig": null
+          }
+        ],
+        "trigger": {
+          "kind": "use",
+          "quaff": null,
+          "read": null,
+          "throwHit": null,
+          "equipPassive": null,
+          "onHit": null,
+          "onStruck": null,
+          "step": null,
+          "use": {
+            "charges": 1
+          }
+        },
+        "targeting": {
+          "kind": "self",
+          "self": {},
+          "melee": null,
+          "bolt": null,
+          "burst": null,
+          "floor": null
+        }
+      }
+    ]
+  },
+  {
+    "id": "oldstock-stalagmite-tick",
+    "name": "a stalagmite tick",
+    "glyph": "t",
+    "origin": "old_stock",
+    "stats": {
+      "band": "middle",
+      "hp": 20,
+      "attack": 7,
+      "defense": 3,
+      "xpYield": 8
+    },
+    "behaviors": [
+      {
+        "kind": "guard",
+        "approachMelee": null,
+        "keepRange": null,
+        "fleeLowHp": null,
+        "packHunter": null,
+        "ambusher": null,
+        "territorial": null,
+        "guard": {
+          "tetherId": "guard-post",
+          "tetherRadiusTiles": 2
+        },
+        "patrol": null,
+        "thief": null,
+        "caster": null,
+        "bodyguard": null,
+        "mimic": null
+      },
+      {
+        "kind": "approach_melee",
+        "approachMelee": {},
+        "keepRange": null,
+        "fleeLowHp": null,
+        "packHunter": null,
+        "ambusher": null,
+        "territorial": null,
+        "guard": null,
+        "patrol": null,
+        "thief": null,
+        "caster": null,
+        "bodyguard": null,
+        "mimic": null
+      }
+    ],
+    "abilities": []
+  },
+  {
+    "id": "oldstock-blind-sump-eel",
+    "name": "a blind sump eel",
+    "glyph": "e",
+    "origin": "old_stock",
+    "stats": {
+      "band": "middle",
+      "hp": 22,
+      "attack": 8,
+      "defense": 2,
+      "xpYield": 10
+    },
+    "behaviors": [
+      {
+        "kind": "territorial",
+        "approachMelee": null,
+        "keepRange": null,
+        "fleeLowHp": null,
+        "packHunter": null,
+        "ambusher": null,
+        "territorial": {
+          "radiusTiles": 4
+        },
+        "guard": null,
+        "patrol": null,
+        "thief": null,
+        "caster": null,
+        "bodyguard": null,
+        "mimic": null
+      },
+      {
+        "kind": "approach_melee",
+        "approachMelee": {},
+        "keepRange": null,
+        "fleeLowHp": null,
+        "packHunter": null,
+        "ambusher": null,
+        "territorial": null,
+        "guard": null,
+        "patrol": null,
+        "thief": null,
+        "caster": null,
+        "bodyguard": null,
+        "mimic": null
+      }
+    ],
+    "abilities": [
+      {
+        "effects": [
+          {
+            "kind": "damage",
+            "damage": {
+              "amount": 5
+            },
+            "heal": null,
+            "applyStatus": null,
+            "cureStatus": null,
+            "buffStat": null,
+            "nutrition": null,
+            "teleportSelf": null,
+            "teleportTarget": null,
+            "blink": null,
+            "knockback": null,
+            "reveal": null,
+            "identify": null,
+            "enchant": null,
+            "summon": null,
+            "transform": null,
+            "dig": null
+          }
+        ],
+        "trigger": {
+          "kind": "use",
+          "quaff": null,
+          "read": null,
+          "throwHit": null,
+          "equipPassive": null,
+          "onHit": null,
+          "onStruck": null,
+          "step": null,
+          "use": {
+            "charges": 1
+          }
+        },
+        "targeting": {
+          "kind": "bolt",
+          "self": null,
+          "melee": null,
+          "bolt": {
+            "rangeTiles": 5
+          },
+          "burst": null,
+          "floor": null
+        }
+      }
+    ]
+  },
+  {
+    "id": "oldstock-brood-keeper",
+    "name": "a brood keeper",
+    "glyph": "h",
+    "origin": "old_stock",
+    "stats": {
+      "band": "middle",
+      "hp": 24,
+      "attack": 8,
+      "defense": 4,
+      "xpYield": 11
+    },
+    "behaviors": [
+      {
+        "kind": "bodyguard",
+        "approachMelee": null,
+        "keepRange": null,
+        "fleeLowHp": null,
+        "packHunter": null,
+        "ambusher": null,
+        "territorial": null,
+        "guard": null,
+        "patrol": null,
+        "thief": null,
+        "caster": null,
+        "bodyguard": {},
+        "mimic": null
+      },
+      {
+        "kind": "guard",
+        "approachMelee": null,
+        "keepRange": null,
+        "fleeLowHp": null,
+        "packHunter": null,
+        "ambusher": null,
+        "territorial": null,
+        "guard": {
+          "tetherId": "brood-nest",
+          "tetherRadiusTiles": 2
+        },
+        "patrol": null,
+        "thief": null,
+        "caster": null,
+        "bodyguard": null,
+        "mimic": null
+      },
+      {
+        "kind": "approach_melee",
+        "approachMelee": {},
+        "keepRange": null,
+        "fleeLowHp": null,
+        "packHunter": null,
+        "ambusher": null,
+        "territorial": null,
+        "guard": null,
+        "patrol": null,
+        "thief": null,
+        "caster": null,
+        "bodyguard": null,
+        "mimic": null
+      }
+    ],
+    "abilities": []
+  },
+  {
+    "id": "oldstock-stone-lamprey",
+    "name": "a stone lamprey",
+    "glyph": "y",
+    "origin": "old_stock",
+    "stats": {
+      "band": "lowest",
+      "hp": 28,
+      "attack": 10,
+      "defense": 3,
+      "xpYield": 14
+    },
+    "behaviors": [
+      {
+        "kind": "approach_melee",
+        "approachMelee": {},
+        "keepRange": null,
+        "fleeLowHp": null,
+        "packHunter": null,
+        "ambusher": null,
+        "territorial": null,
+        "guard": null,
+        "patrol": null,
+        "thief": null,
+        "caster": null,
+        "bodyguard": null,
+        "mimic": null
+      },
+      {
+        "kind": "territorial",
+        "approachMelee": null,
+        "keepRange": null,
+        "fleeLowHp": null,
+        "packHunter": null,
+        "ambusher": null,
+        "territorial": {
+          "radiusTiles": 3
+        },
+        "guard": null,
+        "patrol": null,
+        "thief": null,
+        "caster": null,
+        "bodyguard": null,
+        "mimic": null
+      }
+    ],
+    "abilities": []
+  },
+  {
+    "id": "oldstock-deep-rot-congealer",
+    "name": "a deep rot congealer",
+    "glyph": "o",
+    "origin": "old_stock",
+    "stats": {
+      "band": "lowest",
+      "hp": 32,
+      "attack": 11,
+      "defense": 4,
+      "xpYield": 16
+    },
+    "behaviors": [
+      {
+        "kind": "caster",
+        "approachMelee": null,
+        "keepRange": null,
+        "fleeLowHp": null,
+        "packHunter": null,
+        "ambusher": null,
+        "territorial": null,
+        "guard": null,
+        "patrol": null,
+        "thief": null,
+        "caster": {
+          "cooldownTurns": 5
+        },
+        "bodyguard": null,
+        "mimic": null
+      },
+      {
+        "kind": "ambusher",
+        "approachMelee": null,
+        "keepRange": null,
+        "fleeLowHp": null,
+        "packHunter": null,
+        "ambusher": {
+          "wakeRadiusTiles": 2
+        },
+        "territorial": null,
+        "guard": null,
+        "patrol": null,
+        "thief": null,
+        "caster": null,
+        "bodyguard": null,
+        "mimic": null
+      }
+    ],
+    "abilities": [
+      {
+        "effects": [
+          {
+            "kind": "transform",
+            "damage": null,
+            "heal": null,
+            "applyStatus": null,
+            "cureStatus": null,
+            "buffStat": null,
+            "nutrition": null,
+            "teleportSelf": null,
+            "teleportTarget": null,
+            "blink": null,
+            "knockback": null,
+            "reveal": null,
+            "identify": null,
+            "enchant": null,
+            "summon": null,
+            "transform": {
+              "rosterEntityId": "oldstock-cellar-rat"
+            },
+            "dig": null
+          }
+        ],
+        "trigger": {
+          "kind": "use",
+          "quaff": null,
+          "read": null,
+          "throwHit": null,
+          "equipPassive": null,
+          "onHit": null,
+          "onStruck": null,
+          "step": null,
+          "use": {
+            "charges": 1
+          }
+        },
+        "targeting": {
+          "kind": "melee",
+          "self": null,
+          "melee": {},
+          "bolt": null,
+          "burst": null,
+          "floor": null
+        }
+      },
+      {
+        "effects": [
+          {
+            "kind": "teleport_self",
+            "damage": null,
+            "heal": null,
+            "applyStatus": null,
+            "cureStatus": null,
+            "buffStat": null,
+            "nutrition": null,
+            "teleportSelf": {},
+            "teleportTarget": null,
+            "blink": null,
+            "knockback": null,
+            "reveal": null,
+            "identify": null,
+            "enchant": null,
+            "summon": null,
+            "transform": null,
+            "dig": null
+          }
+        ],
+        "trigger": {
+          "kind": "use",
+          "quaff": null,
+          "read": null,
+          "throwHit": null,
+          "equipPassive": null,
+          "onHit": null,
+          "onStruck": null,
+          "step": null,
+          "use": {
+            "charges": 1
+          }
+        },
+        "targeting": {
+          "kind": "self",
+          "self": {},
+          "melee": null,
+          "bolt": null,
+          "burst": null,
+          "floor": null
+        }
+      }
+    ]
+  },
+  {
+    "id": "oldstock-false-coffer-grub",
+    "name": "a false coffer grub",
+    "glyph": "x",
+    "origin": "old_stock",
+    "stats": {
+      "band": "lowest",
+      "hp": 40,
+      "attack": 13,
+      "defense": 5,
+      "xpYield": 18
+    },
+    "behaviors": [
+      {
+        "kind": "mimic",
+        "approachMelee": null,
+        "keepRange": null,
+        "fleeLowHp": null,
+        "packHunter": null,
+        "ambusher": null,
+        "territorial": null,
+        "guard": null,
+        "patrol": null,
+        "thief": null,
+        "caster": null,
+        "bodyguard": null,
+        "mimic": {}
+      },
+      {
+        "kind": "ambusher",
+        "approachMelee": null,
+        "keepRange": null,
+        "fleeLowHp": null,
+        "packHunter": null,
+        "ambusher": {
+          "wakeRadiusTiles": 2
+        },
+        "territorial": null,
+        "guard": null,
+        "patrol": null,
+        "thief": null,
+        "caster": null,
+        "bodyguard": null,
+        "mimic": null
+      },
+      {
+        "kind": "approach_melee",
+        "approachMelee": {},
+        "keepRange": null,
+        "fleeLowHp": null,
+        "packHunter": null,
+        "ambusher": null,
+        "territorial": null,
+        "guard": null,
+        "patrol": null,
+        "thief": null,
+        "caster": null,
+        "bodyguard": null,
+        "mimic": null
+      }
+    ],
+    "abilities": [
+      {
+        "effects": [
+          {
+            "kind": "knockback",
+            "damage": null,
+            "heal": null,
+            "applyStatus": null,
+            "cureStatus": null,
+            "buffStat": null,
+            "nutrition": null,
+            "teleportSelf": null,
+            "teleportTarget": null,
+            "blink": null,
+            "knockback": {
+              "pushTiles": 2,
+              "collisionDamage": 2
+            },
+            "reveal": null,
+            "identify": null,
+            "enchant": null,
+            "summon": null,
+            "transform": null,
+            "dig": null
+          }
+        ],
+        "trigger": {
+          "kind": "use",
+          "quaff": null,
+          "read": null,
+          "throwHit": null,
+          "equipPassive": null,
+          "onHit": null,
+          "onStruck": null,
+          "step": null,
+          "use": {
+            "charges": 1
+          }
+        },
+        "targeting": {
+          "kind": "melee",
+          "self": null,
+          "melee": {},
+          "bolt": null,
+          "burst": null,
+          "floor": null
+        }
+      }
+    ]
+  }
+]

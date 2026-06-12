@@ -1,0 +1,28 @@
+Implemented and verified. No commit made.
+
+Changed:
+- `src/harness/fallback-provider.ts`
+- `src/harness/fallback-provider.test.ts`
+- `src/engine/run/events.ts`
+- `src/engine/render/log.ts`
+- `src/engine/render/log.test.ts`
+- `PROGRESS.md` coordination row/log
+
+Full-run smoke test name: `"scripts a bot-free full run through all 12 real fallback floors to a Hoard WIN"`.
+
+Verification:
+```text
+pnpm exec vitest run src/harness/fallback-provider.test.ts src/engine/render/log.test.ts src/engine/run/loop.test.ts
+→ Test Files 3 passed (3), Tests 12 passed (12)
+
+pnpm run check
+→ typecheck passed
+→ lint passed
+→ Test Files 48 passed (48), Tests 359 passed (359)
+```
+
+Scope deviations: none.  
+Residual risks: none found.  
+Out-of-scope discoveries: none.  
+Environment discoveries: none.  
+Actual time: ~7m vs 25m estimate.

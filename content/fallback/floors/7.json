@@ -1,0 +1,22 @@
+{
+  "depth": 7,
+  "flavor": "halls",
+  "enemyRosterIds": [
+    "oldstock-cave-slug",
+    "oldstock-drip-leech",
+    "oldstock-gravel-skitter"
+  ],
+  "itemIds": [
+    "oldstock-cave-moss",
+    "oldstock-piton-line",
+    "oldstock-wax-seal",
+    "oldstock-bronze-bell"
+  ],
+  "trapIds": [
+    "oldstock-gas-vent"
+  ],
+  "npcIds": [
+    "oldstock-keeper-penn"
+  ],
+  "questId": "oldstock-quest-wax-delivery"
+}

@@ -1,0 +1,20 @@
+{
+  "depth": 4,
+  "flavor": "warren",
+  "enemyRosterIds": [
+    "oldstock-tunnel-beetle",
+    "oldstock-cellar-rat",
+    "oldstock-fungal-crawler"
+  ],
+  "itemIds": [
+    "oldstock-hardtack",
+    "oldstock-lead-hook",
+    "oldstock-hardtack",
+    "oldstock-bone-knife"
+  ],
+  "trapIds": [
+    "oldstock-snare-cord"
+  ],
+  "npcIds": [],
+  "questId": null
+}

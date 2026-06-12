@@ -1,0 +1,19 @@
+{
+  "depth": 10,
+  "flavor": "halls",
+  "enemyRosterIds": [
+    "oldstock-stone-lamprey",
+    "oldstock-deep-rot-congealer"
+  ],
+  "itemIds": [
+    "oldstock-ward-chalk",
+    "oldstock-damp-talisman",
+    "oldstock-hook-spear",
+    "oldstock-scratched-mail"
+  ],
+  "trapIds": [
+    "oldstock-rot-trigger"
+  ],
+  "npcIds": [],
+  "questId": "oldstock-quest-reach-stairs"
+}

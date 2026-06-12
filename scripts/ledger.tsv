@@ -62,3 +62,7 @@ timestamp	label	agent	model	effort	seconds	input_tokens	output_tokens	total_toke
 2026-06-11T23:55:52Z	phase22-quest-events	cursor	composer-2.5	default	47	NA	NA	NA	0
 2026-06-11T23:57:07Z	phase1620-verify	cursor	composer-2.5	default	77	NA	NA	NA	0
 2026-06-11T23:59:06Z	phase21-runloop	codex	default	default	2473	0	0	0	137
+2026-06-12T00:40:42Z	phase26-fallback	cursor	composer-2.5	default	361	NA	NA	NA	0
+2026-06-12T00:40:19Z	phase21-runloop-r2	codex	default	default	988	11215394	55992	11271386	0
+2026-06-12T00:57:31Z	phase21-26-integration	codex	default	default	346	2076746	20468	2097214	0
+2026-06-12T01:04:02Z	phaseB-final-verify	cursor	composer-2.5	default	105	NA	NA	NA	0

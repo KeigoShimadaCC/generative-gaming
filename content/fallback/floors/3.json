@@ -1,0 +1,21 @@
+{
+  "depth": 3,
+  "flavor": "open",
+  "enemyRosterIds": [
+    "oldstock-cellar-rat",
+    "oldstock-trembling-mouse",
+    "oldstock-cave-cricket"
+  ],
+  "itemIds": [
+    "oldstock-hardtack",
+    "oldstock-beetle-charm",
+    "oldstock-tallow-candle",
+    "oldstock-deep-penny"
+  ],
+  "trapIds": [
+    "oldstock-needle-pit",
+    "oldstock-spore-mat"
+  ],
+  "npcIds": [],
+  "questId": null
+}
