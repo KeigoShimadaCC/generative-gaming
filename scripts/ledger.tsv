@@ -142,3 +142,4 @@ timestamp	label	agent	model	effort	seconds	input_tokens	output_tokens	total_toke
 2026-06-12T13:55:47Z	phase5758-hardening	codex	default	default	1052	11705717	44146	11749863	0
 2026-06-12T14:15:47Z	phase5960-polish	codex	default	default	30	36123	1179	37302	0
 2026-06-12T14:17:14Z	phase5960-polish-r2	codex	default	default	678	6309753	28672	6338425	0
+2026-06-12T14:30:41Z	phase61-close	codex	default	default	728	5725804	34334	5760138	0

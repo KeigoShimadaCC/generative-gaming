@@ -1,0 +1,428 @@
+{
+  "protocolVersion": "1.2.0",
+  "depth": 6,
+  "band": "middle",
+  "params": {
+    "bandOrSize": "middle",
+    "roomCountRange": {
+      "min": 5,
+      "max": 9
+    },
+    "flavor": "ring",
+    "seed": "m3-closeout-mock-middle-completionist-1:seed"
+  },
+  "roster": [
+    {
+      "id": "middle-candle-thief",
+      "name": "candle thief",
+      "glyph": "t",
+      "origin": "made",
+      "stats": {
+        "band": "middle",
+        "hp": 12,
+        "attack": 5,
+        "defense": 1,
+        "xpYield": 5
+      },
+      "behaviors": [
+        {
+          "kind": "approach_melee",
+          "approachMelee": {},
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": null,
+          "ambusher": null,
+          "territorial": null,
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": 0,
+        "distance": null,
+        "spread": false
+      }
+    },
+    {
+      "id": "middle-iron-mute",
+      "name": "iron mute",
+      "glyph": "i",
+      "origin": "made",
+      "stats": {
+        "band": "middle",
+        "hp": 12,
+        "attack": 5,
+        "defense": 1,
+        "xpYield": 5
+      },
+      "behaviors": [
+        {
+          "kind": "approach_melee",
+          "approachMelee": {},
+          "keepRange": null,
+          "fleeLowHp": null,
+          "packHunter": null,
+          "ambusher": null,
+          "territorial": null,
+          "guard": null,
+          "patrol": null,
+          "thief": null,
+          "caster": null,
+          "bodyguard": null,
+          "mimic": null
+        }
+      ],
+      "abilities": [],
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "middle-glass-knife",
+      "name": "glass knife",
+      "glyph": "?",
+      "kind": "weapon",
+      "value": {
+        "band": "middle",
+        "coin": 20
+      },
+      "weapon": {
+        "attackBonus": 1,
+        "cursed": false,
+        "onHit": null
+      },
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    },
+    {
+      "id": "middle-rivet-coat",
+      "name": "rivet coat",
+      "glyph": "?",
+      "kind": "armor",
+      "value": {
+        "band": "middle",
+        "coin": 20
+      },
+      "weapon": null,
+      "armor": {
+        "defenseBonus": 1,
+        "cursed": false,
+        "onStruck": null
+      },
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "near_entrance",
+        "spread": false
+      }
+    },
+    {
+      "id": "middle-cold-loaf",
+      "name": "cold loaf",
+      "glyph": "?",
+      "kind": "food",
+      "value": {
+        "band": "middle",
+        "coin": 20
+      },
+      "weapon": null,
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": {
+        "effect": {
+          "effects": [
+            {
+              "kind": "damage",
+              "damage": {
+                "amount": 1
+              },
+              "heal": null,
+              "applyStatus": null,
+              "cureStatus": null,
+              "buffStat": null,
+              "nutrition": null,
+              "teleportSelf": null,
+              "teleportTarget": null,
+              "blink": null,
+              "knockback": null,
+              "reveal": null,
+              "identify": null,
+              "enchant": null,
+              "summon": null,
+              "transform": null,
+              "dig": null
+            }
+          ],
+          "trigger": {
+            "kind": "quaff",
+            "quaff": {},
+            "read": null,
+            "throwHit": null,
+            "equipPassive": null,
+            "onHit": null,
+            "onStruck": null,
+            "step": null,
+            "use": null
+          },
+          "targeting": {
+            "kind": "self",
+            "self": {},
+            "melee": null,
+            "bolt": null,
+            "burst": null,
+            "floor": null
+          }
+        }
+      },
+      "tool": null,
+      "keyItem": null,
+      "coin": null,
+      "placementHint": null
+    },
+    {
+      "id": "middle-bright-scrip",
+      "name": "bright scrip",
+      "glyph": "?",
+      "kind": "coin",
+      "value": {
+        "band": "middle",
+        "coin": 20
+      },
+      "weapon": null,
+      "armor": null,
+      "charm": null,
+      "draught": null,
+      "note": null,
+      "throwable": null,
+      "food": null,
+      "tool": null,
+      "keyItem": null,
+      "coin": {},
+      "placementHint": {
+        "roomIndex": 0,
+        "distance": null,
+        "spread": false
+      }
+    }
+  ],
+  "traps": [
+    {
+      "id": "middle-silver-snare",
+      "name": "silver snare",
+      "hidden": true,
+      "effectBundle": {
+        "effects": [
+          {
+            "kind": "damage",
+            "damage": {
+              "amount": 1
+            },
+            "heal": null,
+            "applyStatus": null,
+            "cureStatus": null,
+            "buffStat": null,
+            "nutrition": null,
+            "teleportSelf": null,
+            "teleportTarget": null,
+            "blink": null,
+            "knockback": null,
+            "reveal": null,
+            "identify": null,
+            "enchant": null,
+            "summon": null,
+            "transform": null,
+            "dig": null
+          }
+        ],
+        "trigger": {
+          "kind": "step",
+          "quaff": null,
+          "read": null,
+          "throwHit": null,
+          "equipPassive": null,
+          "onHit": null,
+          "onStruck": null,
+          "step": {},
+          "use": null
+        },
+        "targeting": {
+          "kind": "self",
+          "self": {},
+          "melee": null,
+          "bolt": null,
+          "burst": null,
+          "floor": null
+        }
+      },
+      "placementHint": {
+        "roomIndex": null,
+        "distance": "far_from_entrance",
+        "spread": true
+      }
+    }
+  ],
+  "npcs": [
+    {
+      "id": "middle-kept-scrivener",
+      "name": "kept scrivener",
+      "glyph": "k",
+      "origin": "kept",
+      "dialogue": {
+        "rootNodeId": "root",
+        "nodes": [
+          {
+            "id": "root",
+            "text": "The Deep keeps count.",
+            "choices": [
+              {
+                "id": "root-a",
+                "label": "Ask",
+                "nextNodeId": "answer",
+                "closesDialogue": false,
+                "questHookId": null
+              },
+              {
+                "id": "root-b",
+                "label": "Leave",
+                "nextNodeId": null,
+                "closesDialogue": true,
+                "questHookId": null
+              }
+            ]
+          },
+          {
+            "id": "answer",
+            "text": "Bring back what was dropped.",
+            "choices": [
+              {
+                "id": "answer-a",
+                "label": "Accept",
+                "nextNodeId": null,
+                "closesDialogue": true,
+                "questHookId": "quest-1"
+              },
+              {
+                "id": "answer-b",
+                "label": "Decline",
+                "nextNodeId": null,
+                "closesDialogue": true,
+                "questHookId": null
+              }
+            ]
+          }
+        ]
+      },
+      "merchantInventoryItemIds": [
+        "weapon-1",
+        "food-1"
+      ],
+      "questHook": {
+        "id": "quest-1",
+        "title": "Fixture Quest",
+        "objective": {
+          "kind": "fetch",
+          "fetch": {
+            "itemId": "item-1",
+            "floorScope": "this_floor"
+          },
+          "kill": null,
+          "reach": null,
+          "deliver": null,
+          "escort": null,
+          "constraint": null
+        },
+        "reward": {
+          "valueMultiplier": 1.5,
+          "coin": 5,
+          "itemIds": [],
+          "identifyItemIds": []
+        }
+      },
+      "placementHint": {
+        "roomIndex": 0,
+        "distance": null,
+        "spread": false
+      }
+    }
+  ],
+  "quest": {
+    "id": "quest-1",
+    "title": "Fixture Quest",
+    "objective": {
+      "kind": "fetch",
+      "fetch": {
+        "itemId": "item-1",
+        "floorScope": "this_floor"
+      },
+      "kill": null,
+      "reach": null,
+      "deliver": null,
+      "escort": null,
+      "constraint": null
+    },
+    "reward": {
+      "valueMultiplier": 1.5,
+      "coin": 5,
+      "itemIds": [],
+      "identifyItemIds": []
+    }
+  },
+  "narration": {
+    "floorIntro": "The ring of rooms waits like it knows your name.",
+    "observations": [
+      {
+        "id": "middle-obs-first-blood",
+        "triggerTag": "first-blood",
+        "text": "The candle thief smiles after the first wound."
+      },
+      {
+        "id": "middle-obs-scrivener",
+        "triggerTag": "npc-met",
+        "text": "Ink dries before the kept one finishes speaking."
+      }
+    ]
+  },
+  "metadata": {
+    "originTags": {
+      "made": 2,
+      "old_stock": 0,
+      "kept": 1
+    },
+    "callbacks": [
+      "first-blood",
+      "npc-met"
+    ],
+    "signature": true
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "recordType": "generation-index",
+  "protocolVersion": "1.2.0",
+  "engineVersion": "0.0.0",
+  "modelId": "director:mock",
+  "seed": "m3-closeout-mock-shallows-pacifist-1:seed",
+  "createdAt": "2026-06-12T14:41:03.998Z",
+  "runId": "m3-closeout-mock-shallows-pacifist-1",
+  "updatedAt": "2026-06-12T14:41:03.998Z",
+  "floors": [
+    {
+      "depth": 3,
+      "recordPath": "floors/3/generation.json",
+      "outcome": {
+        "kind": "manifest"
+      },
+      "recordedAt": "2026-06-12T14:41:03.998Z"
+    }
+  ]
+}

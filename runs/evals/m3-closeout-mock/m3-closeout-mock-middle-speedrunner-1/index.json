@@ -1,0 +1,21 @@
+{
+  "recordType": "generation-index",
+  "protocolVersion": "1.2.0",
+  "engineVersion": "0.0.0",
+  "modelId": "director:mock",
+  "seed": "m3-closeout-mock-middle-speedrunner-1:seed",
+  "createdAt": "2026-06-12T14:41:04.637Z",
+  "runId": "m3-closeout-mock-middle-speedrunner-1",
+  "updatedAt": "2026-06-12T14:41:04.637Z",
+  "floors": [
+    {
+      "depth": 6,
+      "recordPath": "floors/6/generation.json",
+      "outcome": {
+        "kind": "fallback",
+        "fallbackId": "fallback:old-stock:middle-6"
+      },
+      "recordedAt": "2026-06-12T14:41:04.637Z"
+    }
+  ]
+}

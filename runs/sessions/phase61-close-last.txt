@@ -1,0 +1,21 @@
+**Mechanical close-out complete.** No commit made.
+
+Created/updated:
+- [observation-sheet.md](/Users/keigoshimada/Documents/generative-gaming/runs/milestones/m3/observation-sheet.md)
+- [report-draft.md](/Users/keigoshimada/Documents/generative-gaming/runs/milestones/m3/report-draft.md)
+- [HUMAN-CHECKLIST.md](/Users/keigoshimada/Documents/generative-gaming/runs/milestones/HUMAN-CHECKLIST.md)
+- [PROGRESS.md](/Users/keigoshimada/Documents/generative-gaming/PROGRESS.md) rotated to checklist-active state
+- [ORCHESTRATION_LOG.md](/Users/keigoshimada/Documents/generative-gaming/docs/ORCHESTRATION_LOG.md) appended one completion row
+
+Verification run:
+- `pnpm run check` -> green: typecheck pass, lint pass, Vitest 79 files / 532 passed / 2 skipped
+- `pnpm exec vitest run --config tests/golden/vitest.config.ts --reporter verbose` -> green: 1 file / 9 passed
+- `pnpm exec vitest run --config tests/determinism-audit/vitest.config.ts --reporter verbose` -> green: 1 file / 3 passed
+- `pnpm run evals -- --mode mock --n 1 --eval-id m3-closeout-mock && pnpm dlx tsx tests/eval-baselines/compare.ts tests/eval-baselines/mock-baseline.json runs/evals/m3-closeout-mock/report.json` -> green: eval complete, 15 records, threshold check passed across 112 metrics
+
+Important caveat: latest HEAD CI is **red**, not green: `https://github.com/KeigoShimadaCC/generative-gaming/actions/runs/27422222478`. I left the CI green link explicitly pending in the M3 draft.
+
+Residual pending items: 3+ player sessions, final human verdict, CI green link.  
+Generated artifacts were left intact under `runs/evals/m3-closeout-mock/` and `runs/bot-*` per artifact persistence.  
+Environment discoveries: none new.  
+Actual vs 30m: ~20m.
