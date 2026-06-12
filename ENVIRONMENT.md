@@ -17,6 +17,10 @@ tools and must be re-verified by the Phase 01 environment spike; facts marked
   fact is REFUTED for this CLI version. Codex workers use AGENTS.md's
   direct-commit path under `Codex Agent <agent@codex.local>`; COMMIT_PLAN.md
   remains the fallback if a future version re-blocks.
+  **[nuance 2026-06-12, phase 35]** Branch creation (`.git` ref writes) FAILED
+  in one session while commits work — git capability in-sandbox is per-
+  operation, not all-or-nothing. Workers needing branches should report rather
+  than retry.
 - **[verified 2026-06-11, spike 01A]** Non-destructive `&&` chaining WORKS —
   inherited "chained commands blocked" REFUTED. `rm -rf` is rejected by policy
   before execution (CONFIRMED) — use Node `fs` removals.

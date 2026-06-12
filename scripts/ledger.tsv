@@ -86,3 +86,6 @@ timestamp	label	agent	model	effort	seconds	input_tokens	output_tokens	total_toke
 2026-06-12T03:33:36Z	phase34-gate2	codex	default	default	794	7030967	45002	7075969	0
 2026-06-12T03:48:41Z	phase3334-verify	cursor	composer-2.5	default	357	NA	NA	NA	0
 2026-06-12T03:54:56Z	phase34-clock-fix	cursor	composer-2.5	default	51	NA	NA	NA	0
+2026-06-12T03:58:04Z	phase37-artifacts	cursor	composer-2.5	default	359	NA	NA	NA	0
+2026-06-12T03:57:47Z	phase35-materialize	codex	default	default	647	4391637	31239	4422876	0
+2026-06-12T04:10:32Z	phase3537-verify	cursor	composer-2.5	default	250	NA	NA	NA	0

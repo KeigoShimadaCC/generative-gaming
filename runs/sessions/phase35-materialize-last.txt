@@ -1,0 +1,42 @@
+Implemented Phase 35 materialization and did not commit.
+
+**Changed**
+- Added shared materializer: [materialize.ts](/Users/keigoshimada/Documents/generative-gaming/src/director/apply/materialize.ts:122)
+  - `materialize(manifest, seed)` / `buildFloor(...)`
+  - floorgen from `manifest.params`
+  - placement via placement API using `createRng(seed).fork("run").fork("place:<depth>")`
+  - legal fallback placements with `PlacementDeviation[]`
+  - runtime entities assembled with placement hints stripped from definitions
+  - quest, narration, metadata, and runtime floor knowledge attached
+- Added export: [index.ts](/Users/keigoshimada/Documents/generative-gaming/src/director/apply/index.ts:1)
+- Swapped Gate 2 candidate creation to shared materialization: [run.ts](/Users/keigoshimada/Documents/generative-gaming/src/gauntlet/gate2/run.ts:245)
+- Added tests: [materialize.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/director/apply/materialize.test.ts:28)
+
+**Verification**
+```text
+pnpm exec vitest run src/director/apply/materialize.test.ts
+Test Files  1 passed (1)
+Tests       6 passed (6)
+```
+
+```text
+pnpm exec vitest run src/gauntlet/gate2/gate2.test.ts
+Test Files  1 passed (1)
+Tests       5 passed (5)
+```
+
+Gate 2 tests were not modified.
+
+```text
+pnpm run check
+typecheck: pass
+lint: pass
+Test Files  64 passed (64)
+Tests       461 passed | 1 skipped (462)
+```
+
+**Notes**
+- `src/engine/run/loop.ts` was not changed. Importing this Director apply path into the engine run loop would be a larger provider-shape refactor than the brief’s 10-line stop condition allowed.
+- Workspace has out-of-scope/generated dirt: `scripts/ledger.tsv`, `src/harness/artifacts/`, and `runs/...` artifacts. I left them untouched.
+- Environment discovery: branch creation failed in this session with `.git` ref write failure, despite `ENVIRONMENT.md` saying `.git` writes are generally allowed.
+- Actual time: ~10m vs 35m estimate.

@@ -9,60 +9,24 @@ import "../../engine/systems/player.js";
 import "../../engine/systems/status.js";
 
 import { bounds, config as defaultConfig } from "../../config/index.js";
-import { assembleEnemy, rosterCost } from "../../engine/enemies/index.js";
+import { type GeneratedFloor } from "../../engine/floorgen/index.js";
 import {
-  generateFloor,
-  type GeneratedFloor,
-} from "../../engine/floorgen/index.js";
-import {
-  allocateCells,
   type PlacementAllocation,
   type PlacementDeviation,
-  type PlacementGrid,
-  type PlacementHint,
-  type PlacementRequest,
 } from "../../engine/floorgen/place.js";
-import {
-  createFloorGeometrySlot,
-  getTile,
-  Terrain,
-  type TileGrid,
-} from "../../engine/map/index.js";
+import { getTile, Terrain, type TileGrid } from "../../engine/map/index.js";
 import { path } from "../../engine/map/path.js";
-import { createRng } from "../../engine/rng/index.js";
 import type { RunAction } from "../../engine/run/loop.js";
 import { stepRun, type FloorContentProvider } from "../../engine/run/loop.js";
 import {
-  allocateEntityId,
-  createInitialState,
-  type EntityIdCounters,
-  type EntityInstance,
   type EntityMap,
   type GameState,
-  type GroundItemEntityInstance,
-  type NpcEntityInstance,
   type Position,
-  type QuestRuntime,
-  type SerializableRecord,
   type TerminalStatus,
-  type TrapEntityInstance,
 } from "../../engine/state/index.js";
-import type {
-  DepthBand,
-  EnemyDefinition,
-  ItemDefinition,
-  NpcDefinition,
-  QuestDefinition,
-  TrapDefinition,
-} from "../../schemas/entities/index.js";
-import type {
-  FloorManifest,
-  ManifestItemEntry,
-  ManifestNpcEntry,
-  ManifestPlacementHint,
-  ManifestRosterEntry,
-  ManifestTrapEntry,
-} from "../../schemas/manifest.js";
+import { materialize } from "../../director/apply/index.js";
+import type { DepthBand } from "../../schemas/entities/index.js";
+import type { FloorManifest } from "../../schemas/manifest.js";
 import {
   createBotStateView,
   createEmptyBotMemory,
@@ -190,28 +154,6 @@ export type Gate2Evaluation = {
   readonly wallClockBudgetMs: number;
 };
 
-type CandidateContentRequest =
-  | {
-      readonly request: PlacementRequest;
-      readonly kind: "enemy";
-      readonly definition: ManifestRosterEntry;
-    }
-  | {
-      readonly request: PlacementRequest;
-      readonly kind: "item";
-      readonly definition: ManifestItemEntry;
-    }
-  | {
-      readonly request: PlacementRequest;
-      readonly kind: "trap";
-      readonly definition: ManifestTrapEntry;
-    }
-  | {
-      readonly request: PlacementRequest;
-      readonly kind: "npc";
-      readonly definition: ManifestNpcEntry;
-    };
-
 type StallTracker = {
   readonly previousActionKey: string | null;
   readonly previousProgressKey: string | null;
@@ -300,53 +242,34 @@ export const evaluateGate2 = (
   };
 };
 
-// TODO-PHASE-35: replace this local materializer with the shared materialize().
 export const makeCandidateFloor = (
   manifest: FloorManifest,
   options: Pick<Gate2RunOptions, "transformFloor"> = {},
 ): CandidateFloor => {
-  const generated = generateFloor(manifest.params);
-  if (!generated.ok) {
-    throw new Error(`Gate 2 floor generation failed: ${generated.error.message}`);
-  }
-
-  const floor = options.transformFloor?.(generated.floor, manifest) ?? generated.floor;
-  const requests = contentRequests(manifest);
-  const allocation = allocateCells(
-    placementGrid(floor),
-    requests.map(({ request }) => request),
-    createRng(manifest.params.seed).fork("gate2").fork(`place:${manifest.depth}`),
-  );
-
-  if (!allocation.ok) {
-    throw new Error(`Gate 2 placement failed: ${allocation.error.message}`);
-  }
-
-  const baseState = createInitialState(manifest.params.seed);
-  const assembled = assembleEntities(
-    baseState.ids.entityCounters,
-    requests,
-    allocation.placements,
-  );
+  const materialized = materialize(manifest, manifest.params.seed, {
+    ...(options.transformFloor === undefined
+      ? {}
+      : { transformFloor: options.transformFloor }),
+    revealMap: true,
+  });
+  const floor = materialized.floor.generated;
   const pathToStairs = path(floor.grid, floor.entrance, floor.stairsDown, {
     openDoors: true,
   });
-  const state = withCandidateFloorState(
-    baseState,
-    manifest,
-    floor,
-    assembled.entities,
-    assembled.counters,
-  );
 
   return {
     manifest,
-    initialState: state,
+    initialState: materialized.floor.state,
     generated: floor,
-    placements: allocation.placements,
-    placementDeviations: allocation.deviations,
+    placements: materialized.floor.placements,
+    placementDeviations: materialized.deviations,
     pathToStairs,
-    hasThreatOnPath: threatPossibleOnPath(floor.grid, floor.entrance, pathToStairs, assembled.entities),
+    hasThreatOnPath: threatPossibleOnPath(
+      floor.grid,
+      floor.entrance,
+      pathToStairs,
+      materialized.floor.entities,
+    ),
   };
 };
 
@@ -466,258 +389,6 @@ const aggregateRuns = (
   };
 };
 
-const contentRequests = (
-  manifest: FloorManifest,
-): readonly CandidateContentRequest[] => [
-  ...manifest.roster.map((definition, index) => ({
-    request: {
-      id: `enemy:${index}:${definition.id}`,
-      kind: "enemy" as const,
-      hint: placementHint(definition.placementHint),
-    },
-    kind: "enemy" as const,
-    definition,
-  })),
-  ...manifest.items.map((definition, index) => ({
-    request: {
-      id: `item:${index}:${definition.id}`,
-      kind: "item" as const,
-      hint: placementHint(definition.placementHint),
-    },
-    kind: "item" as const,
-    definition,
-  })),
-  ...manifest.traps.map((definition, index) => ({
-    request: {
-      id: `trap:${index}:${definition.id}`,
-      kind: "trap" as const,
-      hint: placementHint(definition.placementHint),
-    },
-    kind: "trap" as const,
-    definition,
-  })),
-  ...manifest.npcs.map((definition, index) => ({
-    request: {
-      id: `npc:${index}:${definition.id}`,
-      kind: "npc" as const,
-      hint: placementHint(definition.placementHint),
-    },
-    kind: "npc" as const,
-    definition,
-  })),
-];
-
-const placementHint = (
-  hint: ManifestPlacementHint | null,
-): PlacementHint | undefined => {
-  if (hint === null) {
-    return undefined;
-  }
-
-  return {
-    ...(hint.roomIndex === null ? {} : { roomIndex: hint.roomIndex }),
-    ...(hint.distance === null ? {} : { distance: hint.distance }),
-    ...(hint.spread ? { spread: true } : {}),
-  };
-};
-
-const assembleEntities = (
-  counters: EntityIdCounters,
-  requests: readonly CandidateContentRequest[],
-  placements: readonly PlacementAllocation[],
-): { readonly counters: EntityIdCounters; readonly entities: EntityMap } => {
-  let nextCounters = counters;
-  const entities: Record<string, EntityInstance> = {};
-  const byRequestId = new Map(
-    requests.map((request) => [request.request.id, request]),
-  );
-
-  for (const placement of placements) {
-    const request = byRequestId.get(placement.requestId);
-    if (request === undefined) {
-      continue;
-    }
-
-    const allocation = allocateEntityId(nextCounters, request.kind);
-    nextCounters = allocation.entityCounters;
-
-    switch (request.kind) {
-      case "enemy": {
-        const definition = enemyDefinition(request.definition);
-        const entity = assembleEnemy(definition, {
-          id: allocation.id,
-          position: placement.position,
-        });
-        entities[entity.id] = entity;
-        break;
-      }
-      case "item": {
-        const definition = itemDefinition(request.definition);
-        const entity: GroundItemEntityInstance = {
-          id: allocation.id,
-          kind: "item",
-          definition,
-          position: placement.position,
-          currentHP: null,
-          statuses: [],
-          behaviorRuntime: {},
-          quantity: 1,
-          identified: !["draught", "note", "charm"].includes(definition.kind),
-        };
-        entities[entity.id] = entity;
-        break;
-      }
-      case "trap": {
-        const definition = trapDefinition(request.definition);
-        const entity: TrapEntityInstance = {
-          id: allocation.id,
-          kind: "trap",
-          definition,
-          position: placement.position,
-          currentHP: null,
-          statuses: [],
-          behaviorRuntime: {},
-          armed: true,
-        };
-        entities[entity.id] = entity;
-        break;
-      }
-      case "npc": {
-        const definition = npcDefinition(request.definition);
-        const entity: NpcEntityInstance = {
-          id: allocation.id,
-          kind: "npc",
-          definition,
-          position: placement.position,
-          currentHP: null,
-          statuses: [],
-          behaviorRuntime: {},
-          dialogueRuntime: {},
-        };
-        entities[entity.id] = entity;
-        break;
-      }
-    }
-  }
-
-  return {
-    counters: nextCounters,
-    entities,
-  };
-};
-
-const withCandidateFloorState = (
-  state: GameState,
-  manifest: FloorManifest,
-  floor: GeneratedFloor,
-  entities: EntityMap,
-  counters: EntityIdCounters,
-): GameState => ({
-  ...state,
-  run: {
-    ...state.run,
-    depth: manifest.depth,
-    band: manifest.band,
-    turn: 0,
-    terminalStatus: "ACTIVE",
-  },
-  floor: {
-    floorId: `floor#${manifest.depth}`,
-    depth: manifest.depth,
-    band: manifest.band,
-    geometry: createCandidateGeometrySlot(manifest, floor),
-  },
-  player: {
-    ...state.player,
-    position: floor.entrance,
-  },
-  entities,
-  quests: withFloorQuest(state, manifest.quest),
-  ids: {
-    ...state.ids,
-    entityCounters: counters,
-  },
-});
-
-const createCandidateGeometrySlot = (
-  manifest: FloorManifest,
-  floor: GeneratedFloor,
-) => {
-  const roster = manifest.roster.map(enemyDefinition);
-  const runtime = {
-    depth: manifest.depth,
-    enteredTurn: 0,
-    seed: manifest.params.seed,
-    entrance: floor.entrance,
-    stairsDown: floor.stairsDown,
-    roster,
-    initialSpawnBudgetSpent: rosterCost(roster),
-    reinforcementSpawnBudgetSpent: 0,
-    hoard: null,
-  };
-  const opaque: TileGrid & {
-    readonly knowledge: SerializableRecord;
-  } = {
-    ...floor.grid,
-    knowledge: {
-      mapRevealed: true,
-      run: runtime,
-    } as unknown as SerializableRecord,
-  };
-
-  return createFloorGeometrySlot(
-    `gate2-floor-geometry#${manifest.depth}`,
-    opaque,
-  );
-};
-
-const withFloorQuest = (
-  state: GameState,
-  quest: QuestDefinition | null,
-): GameState["quests"] => {
-  if (quest === null) {
-    return state.quests;
-  }
-
-  const runtime: QuestRuntime = {
-    definition: quest,
-    status: "available",
-    progress: {},
-  };
-
-  return {
-    ...state.quests,
-    quests: {
-      ...state.quests.quests,
-      [quest.id]: runtime,
-    },
-  };
-};
-
-const enemyDefinition = (entry: ManifestRosterEntry): EnemyDefinition =>
-  withoutPlacementHint(entry);
-
-const itemDefinition = (entry: ManifestItemEntry): ItemDefinition =>
-  withoutPlacementHint(entry);
-
-const trapDefinition = (entry: ManifestTrapEntry): TrapDefinition =>
-  withoutPlacementHint(entry);
-
-const npcDefinition = (entry: ManifestNpcEntry): NpcDefinition =>
-  withoutPlacementHint(entry);
-
-const withoutPlacementHint = <
-  T extends { readonly placementHint: ManifestPlacementHint | null },
->(
-  entry: T,
-): Omit<T, "placementHint"> => {
-  const copy = { ...entry } as {
-    placementHint?: ManifestPlacementHint | null;
-  } & Record<string, unknown>;
-  delete copy.placementHint;
-  return copy as Omit<T, "placementHint">;
-};
-
 const threatPossibleOnPath = (
   grid: TileGrid,
   entrance: Position,
@@ -747,7 +418,7 @@ const threatPossibleOnPath = (
 
 const floorQuestCompleted = (
   state: GameState,
-  quest: QuestDefinition | null,
+  quest: FloorManifest["quest"],
 ): boolean => quest !== null && state.quests.completedQuestIds.includes(quest.id);
 
 const legalizeDecision = (
@@ -833,13 +504,6 @@ const progressSignature = (
       enemy.hp.current,
     ]),
   });
-
-const placementGrid = (floor: GeneratedFloor): PlacementGrid => ({
-  grid: floor.grid,
-  entrance: floor.entrance,
-  stairsDown: floor.stairsDown,
-  rooms: floor.rooms,
-});
 
 const median = (values: readonly number[]): number => {
   if (values.length === 0) {
