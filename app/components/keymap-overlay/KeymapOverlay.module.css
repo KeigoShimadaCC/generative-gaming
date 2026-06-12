@@ -1,0 +1,82 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  background: rgb(0 0 0 / 65%);
+  padding: 1rem;
+}
+
+.panel {
+  width: min(44rem, 100%);
+  max-height: min(42rem, calc(100vh - 2rem));
+  overflow: auto;
+  border: 1px solid rgb(148 163 184 / 35%);
+  border-radius: 8px;
+  background: #111318;
+  color: #e5e7eb;
+  box-shadow: 0 18px 50px rgb(0 0 0 / 45%);
+}
+
+.header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid rgb(148 163 184 / 20%);
+  padding: 0.875rem 1rem;
+}
+
+.title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.dismiss {
+  color: #aeb6c4;
+  font-size: 0.8rem;
+}
+
+.sections {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem 1rem;
+}
+
+.sectionTitle {
+  margin: 0 0 0.35rem;
+  color: #aeb6c4;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.table td {
+  border-top: 1px solid rgb(148 163 184 / 14%);
+  padding: 0.42rem 0;
+  vertical-align: top;
+}
+
+.keys {
+  width: 42%;
+  padding-right: 1rem;
+  color: #f8fafc;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  font-size: 0.82rem;
+  overflow-wrap: anywhere;
+}
+
+.action {
+  color: #d1d5db;
+  font-size: 0.88rem;
+}

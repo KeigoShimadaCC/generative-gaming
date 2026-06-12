@@ -1,0 +1,21 @@
+Implemented Phase 50 and did not commit.
+
+Changed:
+- Shared key table + handler in [keys.ts](/Users/keigoshimada/Documents/generative-gaming/app/input/keys.ts:62) and [dispatcher.ts](/Users/keigoshimada/Documents/generative-gaming/app/input/dispatcher.ts:69).
+- Client engine session holder in [game-session.ts](/Users/keigoshimada/Documents/generative-gaming/app/input/game-session.ts:38), wired through [game-store.ts](/Users/keigoshimada/Documents/generative-gaming/app/store/game-store.ts:55).
+- Auto-travel stops in [travel.ts](/Users/keigoshimada/Documents/generative-gaming/app/input/travel.ts:16).
+- Single input owner, inline confirm, and keymap overlay wired into [GameShell.tsx](/Users/keigoshimada/Documents/generative-gaming/app/components/GameShell.tsx:20).
+- Keymap overlay renders from the same table in [KeymapOverlay.tsx](/Users/keigoshimada/Documents/generative-gaming/app/components/keymap-overlay/KeymapOverlay.tsx:10).
+- Engine has no confirm-required protocol; implemented the requested client-side MVP for descend-with-adjacent-enemy.
+- Normalized the browser fallback provider so manifest-only `placementHint` data does not fail engine `FloorContent` validation.
+
+Verification:
+- `pnpm exec vitest run --config app/input/vitest.config.ts --reporter verbose` -> exit 0, 2 files / 6 tests passed.
+- Key-table summary: 51 key/context pairs across 22 bindings; overlay renders 21 rows from the table.
+- `pnpm run check` -> exit 0, 78 test files passed, 529 tests passed, 2 skipped.
+
+Notes:
+- No commit made.
+- `PROGRESS.md` updated to `ready-for-verify`.
+- Actual time: ~55m vs 35m estimate; overrun came from app/engine import-boundary cleanup and browser fallback content normalization.
+- Scope caveat: phase plan mentions minimal mouse click handling and manual browser smoke; this brief’s gate was keyboard/input ownership plus full `pnpm run check`, so I did not implement mouse handling or run a browser smoke.

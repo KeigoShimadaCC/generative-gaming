@@ -2,17 +2,17 @@
 
 import { useEffect } from "react";
 
-import { createDevFixtureState } from "@/store/fixture";
+import { DEV_FIXTURE_SEED } from "@/store/fixture";
 import { useGameStore } from "@/store/game-store";
 
 export function DevFixtureHydrator() {
-  const setGameState = useGameStore((state) => state.setGameState);
+  const startGameSession = useGameStore((state) => state.startGameSession);
 
   useEffect(() => {
     if (process.env.NODE_ENV === "development") {
-      setGameState(createDevFixtureState());
+      startGameSession({ seed: DEV_FIXTURE_SEED });
     }
-  }, [setGameState]);
+  }, [startGameSession]);
 
   return null;
 }
