@@ -34,11 +34,11 @@ Generate a new floor manifest for depth 6 in the middle band.
 Run seed: fixture-middle-6
 
 Band budgets (hard limits):
-- spawn budget: 45 points
-- max enemies alive per floor: 12
-- items per floor: 4-8
-- traps per floor: 0-4
-- npcs per floor: 0-2
+- spawn budget: 57 points (signature relaxed from 45 points by 25%)
+- max enemies alive per floor: 15 (signature relaxed from 12 by 25%)
+- items per floor: 4-10 (signature relaxed from 8 by 25%)
+- traps per floor: 0-5 (signature relaxed from 4 by 25%)
+- npcs per floor: 0-3 (signature relaxed from 2 by 25%)
 - room count: 5-9
 - allowed flavors: open, warren, halls, ring
 - enemy stats hp 12-30, attack 5-10, defense 1-4, xpYield 5-14
@@ -47,6 +47,19 @@ Band budgets (hard limits):
 - name max chars: 40
 - dialogue/description max chars: 200
 - signature floors: metadata.signature true only in middle band (1 per run)
+
+SIGNATURE MOMENT ASK
+This is the run's one allowed signature moment. Set metadata.signature to true and spend the 25% relaxed budget shown above.
+Author one bold, personal Made beat: a named Made entity, encounter, or quest hook that directly answers the player summary.
+Keep it fair, concrete, second-person, present-tense, and playable through the manifest schema; do not explain the beat outside JSON.
+Player summary to answer:
+PLAYER TRACE SUMMARY
+Combat: engagement 55% (40 fights picked, 33 avoided); retreats 1 (0.5% of turns).
+Items: 12 pickups, 4 uses; hoarding signal 3.00; profile food:2, weapon:2.
+Exploration: 173 cells seen (~18.0% of floor); close calls 1.
+Social: 2 talks initiated; quests accepted 1, refused 0, completed 0.
+Kills: enemy#5:5, enemy#9:2.
+Turns recorded: 400.
 
 MANIFEST SCHEMA DISCIPLINE
 
@@ -396,6 +409,9 @@ Band budgets (hard limits):
 - name max chars: 40
 - dialogue/description max chars: 200
 - signature floors: metadata.signature true only in middle band (1 per run)
+
+SIGNATURE MOMENT
+Do not spend the run's signature moment on this floor. Set metadata.signature to false.
 
 MANIFEST SCHEMA DISCIPLINE
 

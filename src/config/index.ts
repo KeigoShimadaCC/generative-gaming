@@ -19,6 +19,7 @@ const deepFreeze = <const T>(value: T): DeepReadonly<T> => {
 };
 
 export type DirectorProviderSelection = "mock" | "ambient" | "api-future";
+export type Gate3JudgeMode = "advisory" | "blocking";
 
 export const config = deepFreeze({
   runStructure: {
@@ -336,12 +337,20 @@ export const config = deepFreeze({
       }
     }
   },
+  gate3: {
+    judge: {
+      enabled: false as boolean, // PHASE-46 calibration staging: heuristics-only by default
+      mode: "advisory" as Gate3JudgeMode,
+      timeoutMs: 60_000 // PHASE-46 ambient judge watchdog
+    }
+  },
   directorManifest: {
     narrationBeats: {
       floorIntroLines: 1, // GAME_DESIGN §12
       triggeredObservationLinesMax: 3 // GAME_DESIGN §12
     },
     signatureMoment: {
+      enabled: true, // GAME_DESIGN §12
       budgetRelaxPercent: 25 // GAME_DESIGN §12
     }
   },

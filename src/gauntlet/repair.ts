@@ -23,6 +23,7 @@ import {
 } from "../harness/artifacts/index.js";
 import type { FloorManifest } from "../schemas/manifest.js";
 import type { Gate2Check, Gate2Report } from "./gate2/judge.js";
+import type { Gate3Check, Gate3Report } from "./gate3/heuristics.js";
 import {
   defaultGate2Config,
   runGate2,
@@ -51,6 +52,7 @@ export type GenerateFloorContext = {
   readonly now?: RepairClock;
   readonly gate1?: Gate1Context;
   readonly gate2?: Gate2RunOptions;
+  readonly gate3?: unknown;
   readonly fallbackProvider?: FloorContentProvider;
   readonly artifacts?: WriteGenerationRecordOptions;
   readonly repairCap?: number;
@@ -62,26 +64,35 @@ export type GenerateFloorResult = {
   readonly record: GenerationRecord;
 };
 
+type AttemptGateReportsWithGate3 =
+  NonNullable<GenerationAttemptInput["gateReports"]> & {
+    readonly gate3?: Gate3Report;
+  };
+
+type SuccessfulGateReports = Required<
+  NonNullable<GenerationAttemptInput["gateReports"]>
+> & { readonly gate3?: Gate3Report };
+
 type EvaluatedAttempt =
   | {
       readonly kind: "manifest";
       readonly floor: MaterializedFloor;
-      readonly gateReports: Required<GenerationAttemptInput["gateReports"]>;
+      readonly gateReports: SuccessfulGateReports;
     }
   | {
       readonly kind: "repairable";
-      readonly gateReports: GenerationAttemptInput["gateReports"];
+      readonly gateReports: AttemptGateReportsWithGate3;
       readonly manifest?: FloorManifest;
     }
   | {
       readonly kind: "fallback";
-      readonly gateReports?: GenerationAttemptInput["gateReports"];
+      readonly gateReports?: AttemptGateReportsWithGate3;
     };
 
 type RepairPromptInput = {
   readonly originalPrompt: string;
   readonly providerResult: ProviderResult;
-  readonly gateReports: NonNullable<GenerationAttemptInput["gateReports"]>;
+  readonly gateReports: AttemptGateReportsWithGate3;
   readonly manifest?: FloorManifest;
 };
 
@@ -103,6 +114,22 @@ const IMMEDIATE_FALLBACK_PROVIDER_CODES = new Set<ProviderFailureCode>([
 const DEFAULT_ROOT_DIR = "runs";
 const FRAGMENT_MAX_CHARS = 4_000;
 
+export type Gate3Hook = (
+  manifest: FloorManifest,
+  ctx: GenerateFloorContext
+) => Gate3Report | Promise<Gate3Report>;
+
+let registeredGate3Hook: Gate3Hook | null = null;
+
+export const registerGate3 = (hook: Gate3Hook): (() => void) => {
+  const previous = registeredGate3Hook;
+  registeredGate3Hook = hook;
+
+  return () => {
+    registeredGate3Hook = previous;
+  };
+};
+
 export const generateFloor = async (
   ctx: GenerateFloorContext
 ): Promise<GenerateFloorResult> => {
@@ -117,7 +144,7 @@ export const generateFloor = async (
         ctx.providerOptions?.timeoutMs ??
         defaultConfig.director.manifestTimeoutMs
     });
-    const evaluation = evaluateProviderResult(providerResult, ctx);
+    const evaluation = await evaluateProviderResult(providerResult, ctx);
     attempts.push({
       prompt,
       providerResult,
@@ -203,10 +230,10 @@ const generateManifest = async (
   }
 };
 
-const evaluateProviderResult = (
+const evaluateProviderResult = async (
   providerResult: ProviderResult,
   ctx: GenerateFloorContext
-): EvaluatedAttempt => {
+): Promise<EvaluatedAttempt> => {
   if (
     !providerResult.ok &&
     IMMEDIATE_FALLBACK_PROVIDER_CODES.has(providerResult.error.code)
@@ -242,7 +269,7 @@ const evaluateProviderResult = (
   }
 
   const gate2Evaluation = evaluateGate2(providerResult.manifest, ctx.gate2);
-  const gateReports = {
+  const gateReports: SuccessfulGateReports = {
     gate0,
     gate1,
     gate2: gate2Evaluation.report
@@ -256,12 +283,29 @@ const evaluateProviderResult = (
     };
   }
 
+  const gate3 = await evaluateGate3(providerResult.manifest, ctx);
+  const reportsWithGate3: SuccessfulGateReports =
+    gate3 === null ? gateReports : { ...gateReports, gate3 };
+
+  if (gate3 !== null && !gate3.pass) {
+    return {
+      kind: "repairable",
+      gateReports: reportsWithGate3,
+      manifest: providerResult.manifest
+    };
+  }
+
   return {
     kind: "manifest",
     floor: gate2Evaluation.floor,
-    gateReports
+    gateReports: reportsWithGate3
   };
 };
+
+const evaluateGate3 = async (
+  manifest: FloorManifest,
+  ctx: GenerateFloorContext
+): Promise<Gate3Report | null> => registeredGate3Hook?.(manifest, ctx) ?? null;
 
 const evaluateGate2 = (
   manifest: FloorManifest,
@@ -358,10 +402,10 @@ const materializationFailureReport = (
 };
 
 const collectFailedChecks = (
-  gateReports: NonNullable<GenerationAttemptInput["gateReports"]>
+  gateReports: AttemptGateReportsWithGate3
 ): readonly {
-  readonly gate: 0 | 1 | 2;
-  readonly code: GateCheck["code"] | Gate2Check["code"];
+  readonly gate: 0 | 1 | 2 | 3;
+  readonly code: GateCheck["code"] | Gate2Check["code"] | Gate3Check["code"];
   readonly detail: string;
 }[] => [
   ...(gateReports.gate0 === undefined
@@ -376,6 +420,15 @@ const collectFailedChecks = (
         .filter((check) => !check.pass)
         .map((check) => ({
           gate: 2 as const,
+          code: check.code,
+          detail: check.detail
+        }))),
+  ...(gateReports.gate3 === undefined
+    ? []
+    : gateReports.gate3.checks
+        .filter((check) => !check.pass)
+        .map((check) => ({
+          gate: 3 as const,
           code: check.code,
           detail: check.detail
         })))

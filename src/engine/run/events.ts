@@ -57,6 +57,13 @@ declare module "../state/types.js" {
       readonly depth: number;
       readonly position: Position;
     };
+    readonly deep_narration: {
+      readonly depth: number;
+      readonly beatId: string;
+      readonly beatKind: "floor_intro" | "observation";
+      readonly triggerTag: string | null;
+      readonly text: string;
+    };
   }
 }
 
@@ -67,7 +74,8 @@ export type RunCustomEventType =
   | "run_placement_deviation"
   | "run_boredom"
   | "run_reinforcement_spawned"
-  | "hoard_taken";
+  | "hoard_taken"
+  | "deep_narration";
 
 export type RunActionResolvedEvent = Extract<
   EngineLogEvent,
@@ -96,6 +104,10 @@ export type RunReinforcementSpawnedEvent = Extract<
 export type HoardTakenEvent = Extract<
   EngineLogEvent,
   { readonly type: "hoard_taken" }
+>;
+export type DeepNarrationEvent = Extract<
+  EngineLogEvent,
+  { readonly type: "deep_narration" }
 >;
 
 export type RunCustomEvent = Extract<

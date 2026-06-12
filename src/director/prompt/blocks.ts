@@ -9,6 +9,12 @@ import {
 } from "../../schemas/fixtures/entities.js";
 import { fingerprintText } from "./world-sync.js";
 import type { ManifestItemEntry, ManifestPlacementHint } from "../../schemas/manifest.js";
+import {
+  buildSignatureInstructionBlock,
+  buildSignaturePromptPlan,
+  type SignatureBudgetValue,
+  type SignaturePromptPlan,
+} from "./signature.js";
 
 export const CANON_VERSION = "world-10-v1" as const;
 
@@ -54,6 +60,7 @@ export type TaskBlockInput = {
   readonly bounds: GameBounds;
   readonly seed: string;
   readonly playerSummary: string;
+  readonly signature?: SignaturePromptPlan;
 };
 
 type ItemExampleSpec = {
@@ -177,6 +184,7 @@ const fieldShapeExampleForBand = (
   band: DepthBand,
   depth: number,
   seed: string,
+  signature: boolean,
 ) => {
   const statBounds = bounds.enemyDesign.statBudgetsByBand[band];
   const geometry = config.runStructure.floorGeometry[band];
@@ -251,7 +259,7 @@ const fieldShapeExampleForBand = (
     metadata: {
       originTags: { made: 2, old_stock: 0, kept: 0 },
       callbacks: ["first-room"],
-      signature: band === bounds.directorManifest.signatureMomentBand,
+      signature,
     },
   };
 };
@@ -299,7 +307,14 @@ export const buildTaskBlock = (input: TaskBlockInput): string => {
   const geometry = gameConfig.runStructure.floorGeometry[band];
   const valueBand = gameConfig.itemsEconomy.valueBandsCoin[band];
   const textCaps = gameBounds.directorManifest.textCaps;
-  const example = fieldShapeExampleForBand(band, depth, seed);
+  const signature =
+    input.signature ??
+    buildSignaturePromptPlan({
+      band,
+      config: gameConfig,
+      bounds: gameBounds,
+    });
+  const example = fieldShapeExampleForBand(band, depth, seed, signature.ask);
 
   return `FLOOR MANIFEST TASK
 
@@ -307,11 +322,11 @@ Generate a new floor manifest for depth ${depth} in the ${band} band.
 Run seed: ${seed}
 
 Band budgets (hard limits):
-- spawn budget: ${gameConfig.enemyDesign.spawnBudgetPoints[band]} points
-- max enemies alive per floor: ${statBounds.maxEnemiesAlivePerFloor}
-- items per floor: ${gameConfig.itemsEconomy.itemsPerFloor.min}-${gameConfig.itemsEconomy.itemsPerFloor.max}
-- traps per floor: ${gameBounds.trapsNpcsQuests.traps.perFloor.min}-${gameBounds.trapsNpcsQuests.traps.perFloor.max}
-- npcs per floor: ${gameBounds.trapsNpcsQuests.npcs.perFloor.min}-${gameBounds.trapsNpcsQuests.npcs.perFloor.max}
+- spawn budget: ${formatBudget(signature.budgets.spawnBudget, " points", signature)}
+- max enemies alive per floor: ${formatBudget(signature.budgets.maxEnemiesAlive, "", signature)}
+- items per floor: ${gameConfig.itemsEconomy.itemsPerFloor.min}-${formatBudget(signature.budgets.itemsPerFloorMax, "", signature)}
+- traps per floor: ${gameBounds.trapsNpcsQuests.traps.perFloor.min}-${formatBudget(signature.budgets.trapsPerFloorMax, "", signature)}
+- npcs per floor: ${gameBounds.trapsNpcsQuests.npcs.perFloor.min}-${formatBudget(signature.budgets.npcsPerFloorMax, "", signature)}
 - room count: ${geometry.rooms.min}-${geometry.rooms.max}
 - allowed flavors: ${geometry.layoutFlavors.join(", ")}
 - enemy stats hp ${statBounds.hp.min}-${statBounds.hp.max}, attack ${statBounds.attack.min}-${statBounds.attack.max}, defense ${statBounds.defense.min}-${statBounds.defense.max}, xpYield ${statBounds.xpYield.min}-${statBounds.xpYield.max}
@@ -320,6 +335,8 @@ Band budgets (hard limits):
 - name max chars: ${textCaps.nameMaxChars}
 - dialogue/description max chars: ${textCaps.descriptionDialogueLineMaxChars}
 - signature floors: metadata.signature true only in ${gameBounds.directorManifest.signatureMomentBand} band (${gameBounds.directorManifest.signatureMomentsPerRun} per run)
+
+${buildSignatureInstructionBlock(signature, playerSummary)}
 
 ${schemaDisciplineBlock(band)}
 
@@ -331,6 +348,15 @@ ${playerSummary}
 
 Reply with ONLY the JSON manifest object. No prose, no markdown fences, no commentary.`;
 };
+
+const formatBudget = (
+  value: SignatureBudgetValue,
+  suffix: string,
+  signature: SignaturePromptPlan,
+): string =>
+  value.prompt === value.base
+    ? `${value.base}${suffix}`
+    : `${value.prompt}${suffix} (signature relaxed from ${value.base}${suffix} by ${signature.relaxPercent}%)`;
 
 export const verifyCanonFingerprint = (worldSection: string): void => {
   const fingerprint = fingerprintText(worldSection);

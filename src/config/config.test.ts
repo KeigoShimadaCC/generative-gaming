@@ -24,6 +24,7 @@ describe("game config", () => {
       "enemyDesign",
       "trapsNpcsQuests",
       "difficultyGate",
+      "gate3",
       "directorManifest"
     ]) {
       expect(config).toHaveProperty(group);
@@ -69,12 +70,16 @@ describe("game config", () => {
     expect(config.difficultyGate.botEnsemble.policies).toHaveLength(3);
     expect(config.difficultyGate.botEnsemble.seedsPerPolicy).toBe(5);
     expect(config.difficultyGate.hpRetentionMode).toBe("advisory");
+    expect(config.gate3.judge.enabled).toBe(false);
+    expect(config.gate3.judge.mode).toBe("advisory");
+    expect(config.gate3.judge.timeoutMs).toBe(60_000);
     expect(
       config.difficultyGate.thresholdsByBand.lowest.clearRateMinPercent
     ).toBe(70);
     expect(
       config.difficultyGate.thresholdsByBand.middle.medianHpRetentionPercent.min
     ).toBe(30);
+    expect(config.directorManifest.signatureMoment.enabled).toBe(true);
     expect(config.directorManifest.signatureMoment.budgetRelaxPercent).toBe(25);
 
     expect(bounds.runStructure.perRunHardCapTurns).toBe(8000);

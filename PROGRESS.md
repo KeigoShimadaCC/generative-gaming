@@ -26,6 +26,8 @@ This file records *state*, never *design* — design lives in the doc spine
 | 34-1 | Gate 2 simulated playability | Codex | main (src/gauntlet/gate2) | ready-for-verify | scoped gates green; local materializer TODO-PHASE-35; no commit per brief |
 | 36-1 | Repair loop & fallback degradation | Codex | main (src/gauntlet/repair) | ready-for-verify | full gate green; repair prompt snapshot covered; no commit per brief |
 | 42-1 | Novelty & responsiveness thesis metrics | Codex | main (src/evals/metrics, src/evals/runner/report.ts) | ready-for-verify | fallback-pack novelty baseline, responsiveness detectors, report wiring; scoped gates green; no commit per brief |
+| 45-1 | Narration beats & Gate 3 heuristics | Codex | main (narration/gate3) | ready-for-verify | full gate green; violation/on-canon corpora and beat triggers covered; no commit per brief |
+| 46-1 | Ambient judge gate + signature moment | Codex | main (gate3/prompt/config/tests) | ready-for-verify | full gate green; ambient live judge test env-gated/skipped by default; no commit per brief |
 | 26-1 | Fallback content pack (Old Stock) | Cursor | main (content/, loader) | in-progress | |
 | 21/26-I | Wire fallback pack to run loop + unified events | Codex | main (integration) | ready-for-verify | fallback provider wired; full-run smoke over real fallback content; full gate green; no commit |
 | — | Wave B merged through 16/20 (b1ccd1d): 06–20,22 all verified | — | — | merged | engine complete except run loop |
@@ -67,6 +69,8 @@ Format: `YYYY-MM-DD · phase/task · who · what was verified · evidence (comma
 | 2026-06-12 | 34-1 | Codex | Gate 2 simulated playability complete: single-floor bot ensemble, G2 report/judge, unwinnable and zero-threat rejects, fallback pass, deterministic verdict, injected wall-clock | `pnpm run typecheck` → pass; `pnpm exec eslint src/gauntlet/gate2` → pass; `pnpm exec vitest run src/gauntlet/gate2` → 1 file, 5 tests passed |
 | 2026-06-12 | 36-1 | Codex | Repair loop complete: gate 0→1→2 sequencing, reason-coded repair prompts, cap-2 retries, immediate timeout fallback, Old Stock degradation, full generation chain artifacts | `pnpm exec vitest run src/gauntlet/repair.test.ts` → 1 file, 5 tests passed; `pnpm run typecheck` → pass; `pnpm run lint` → pass; `pnpm run check` → 65 files, 466 passed, 1 skipped |
 | 2026-06-12 | 42-1 | Codex | Novelty and responsiveness thesis metrics complete: near-dup/fresh fixtures, same-persona/cross-persona detectors, report thesis summary + detector proposal | `pnpm run typecheck` → pass; `pnpm exec eslint src/evals/metrics` → pass; `pnpm exec vitest run src/evals/metrics` → 3 files, 11 tests passed |
+| 2026-06-12 | 45-1 | Codex | Narration beat evaluator, Deep log event, Gate 3 heuristics, banned vocab, and repair hook complete | `pnpm exec vitest run src/director/narration src/gauntlet/gate3 src/gauntlet/repair.test.ts` → 3 files, 15 tests passed; `pnpm run check` → 76 files, 517 passed, 1 skipped |
+| 2026-06-12 | 46-1 | Codex | Ambient judge gate default-off/advisory, mock calibration corpus, and once-per-run signature prompt complete | `pnpm run typecheck` → pass; `pnpm run lint` → pass; `pnpm exec vitest run src/director/prompt/assemble.test.ts src/director/prompt/signature.test.ts -u` → 2 files, 7 passed, 2 snapshots updated; `pnpm exec vitest run src/gauntlet/gate3` → 2 files, 10 passed, 1 skipped; `pnpm run check` → 78 files, 526 passed, 2 skipped |
 
 ## Worktrees & Branches
 
@@ -94,6 +98,8 @@ spike ≤ 15 min (hard).
 | Wave B (06–22) | mixed | both | ~10h plan | — | ~3.5h real | 2 contract STOPs, 2 stalls, 3 schema addenda; assembly 0.2–0.5× est |
 | Wave C (23–28) | mixed | both | ~4h plan | — | ~1.5h real | spec-parallel reconciliation 7 findings; 24 timebox salvage |
 | Wave D (29–38) | mixed | both | ~5h plan | — | ~2.7h real | ambient pivot; watchdog mechanized; stall cause found (concurrency) |
+| 45-1 | implement | Codex | 40m | 40m | ~15m | clean; full suite generated run artifacts as existing tests do |
+| 46-1 | implement | Codex | 40m | 40m | ~37m | async judge hook required because provider seam judge is promise-based; full gate green |
 
 ## Future Backlog (out-of-scope discoveries land here, not in code)
 

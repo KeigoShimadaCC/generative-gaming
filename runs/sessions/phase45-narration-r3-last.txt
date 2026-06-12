@@ -1,0 +1,29 @@
+Implemented PHASE-45. No commit made.
+
+**Phase Completion Check**
+Status: Complete  
+Plan checked: `phase-plans/PHASE-45-NARRATION-GATE3-HEURISTICS.md`
+
+What changed:
+- Added narration beat evaluation with floor intro, first-sight, flee/hoard/quaff triggers, once-only firing, and per-floor cap tracking in [src/director/narration/index.ts](/Users/keigoshimada/Documents/generative-gaming/src/director/narration/index.ts:45).
+- Added `deep_narration` run event and renderer log line in [events.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/run/events.ts:60) and [log.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/render/log.ts:31).
+- Added Gate 3 heuristics, banned vocab loading, text caps, second-person checks, item naming check, and narration near-dup check in [heuristics.ts](/Users/keigoshimada/Documents/generative-gaming/src/gauntlet/gate3/heuristics.ts:64).
+- Added pluggable `registerGate3` repair hook and post-Gate-2 repairable semantics in [repair.ts](/Users/keigoshimada/Documents/generative-gaming/src/gauntlet/repair.ts:124).
+- Seeded `content/banned-vocab.json` with 60+ word-boundary regex patterns.
+
+Validation:
+- Precondition: `pnpm exec vitest run src/gauntlet/repair.test.ts` -> 1 file, 7 passed.
+- Focused: `pnpm exec vitest run src/director/narration src/gauntlet/gate3 src/gauntlet/repair.test.ts` -> 3 files, 15 passed.
+- Full: `pnpm run check` -> typecheck + lint + tests green; 76 files, 517 passed, 1 skipped.
+
+Corpora:
+- Violation corpus: 25 strings, all caught with expected `G3_*` codes.
+- On-canon corpus: 20 actual fallback-pack strings, 0 false positives.
+
+Scope / risks:
+- Did not modify gates 0-2 or `repair.test.ts`.
+- `PROGRESS.md` updated with evidence and velocity.
+- Existing unrelated dirty files remain, including `scripts/ledger.tsv`, `runs/**`, and `src/director/memory/`. Full test run also generated additional `runs/bot-*178125519*` artifacts; I left them in place.
+- Environment discoveries: none.
+
+Actual time: ~15m vs 40m estimate.

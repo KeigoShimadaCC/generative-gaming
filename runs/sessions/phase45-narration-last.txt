@@ -1,0 +1,13 @@
+I’m stopping before implementation because the brief’s constraints conflict with the required changes.
+
+Blocking scope issues found:
+
+1. Player-visible narration log lines require changing [src/engine/render/log.ts](/Users/keigoshimada/Documents/generative-gaming/src/engine/render/log.ts), which is not in owned files. The formatter is a closed switch over `EngineLogEvent`; adding a `deep_narration` event from `src/director/narration/**` alone would either not render or break exhaustiveness.
+
+2. Gate 3 cannot “participate in the repair chain” without changing [src/gauntlet/repair.ts](/Users/keigoshimada/Documents/generative-gaming/src/gauntlet/repair.ts). `evaluateProviderResult` currently runs Gate 0 → Gate 1 → Gate 2 → serve manifest. `AttemptGateReports` only has `gate0`, `gate1`, and `gate2`, and `collectFailedChecks` only formats those gates for repair prompts.
+
+3. The “standard GateReport” assumption does not match the code. [src/gauntlet/gates01/report.ts](/Users/keigoshimada/Documents/generative-gaming/src/gauntlet/gates01/report.ts) freezes `GateReport.gate` as `0 | 1` and reason codes as `G0_* | G1_*`; Gate 2 already uses a separate report shape.
+
+4. `novelty.ts` has text similarity code, but its edit-similarity helper is not exported, and [src/evals/metrics/novelty.ts](/Users/keigoshimada/Documents/generative-gaming/src/evals/metrics/novelty.ts) is not owned.
+
+No files were changed, no tests were run, and no commit was made. Actual time spent: ~10m vs 40m estimate.

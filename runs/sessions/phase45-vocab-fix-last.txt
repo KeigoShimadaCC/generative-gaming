@@ -1,0 +1,22 @@
+Implemented the scoped Gate 3 vocab fix.
+
+Changed:
+- `content/banned-vocab.json`
+  - Narrowed `ui_click` and `ui_press` to UI-object contexts.
+  - Removed generic `apple` from brand bans.
+  - Narrowed `bug` to software-like collocations.
+  - Added a targeted `brand logo` violation.
+- `src/gauntlet/gate3/heuristics.test.ts`
+  - On-canon corpus expanded to 24 cases, including the four verifier phrases.
+  - Violation corpus expanded to 27 cases, including `click the inventory button` and `the brand logo`.
+
+Verified:
+```text
+pnpm exec vitest run src/gauntlet/gate3
+
+Test Files  2 passed (2)
+Tests       10 passed | 1 skipped (11)
+Duration    481ms
+```
+
+No commit made.

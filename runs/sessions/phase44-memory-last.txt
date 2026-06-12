@@ -1,0 +1,30 @@
+Implemented Phase 44 memory under `src/director/memory/` only. No commit made.
+
+**Phase Completion Check**
+Status: Complete  
+Plan checked: `phase-plans/PHASE-44-MEMORY.md`
+
+What changed:
+- [select.ts](/Users/keigoshimada/Documents/generative-gaming/src/director/memory/select.ts:56): `selectMemories`, salience/recency/type weighting, deterministic tie-breaks, token-bounded `renderMemoryBlock`.
+- [callbacks.ts](/Users/keigoshimada/Documents/generative-gaming/src/director/memory/callbacks.ts:55): in-run entity/quest callback tracker plus `buildLearnedSummary`.
+- [index.ts](/Users/keigoshimada/Documents/generative-gaming/src/director/memory/index.ts:47): composed `buildPromptMemoryBlock` helper for prompt callers.
+- Tests in [select.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/director/memory/select.test.ts:47) and [callbacks.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/director/memory/callbacks.test.ts:42).
+
+Required two-run test name: `"propagates run 1 death into run 2 memory block"`.
+
+Verification:
+- `pnpm run typecheck` -> passed
+- `pnpm exec eslint src/director/memory` -> passed
+- `pnpm exec vitest run src/director/memory` -> `2 passed`, `6 tests passed`
+- `pnpm run check` -> passed:
+  - `Test Files 74 passed (74)`
+  - `Tests 509 passed | 1 skipped (510)`
+
+Scope / notes:
+- No persistence schema changes.
+- No `assemblePrompt` signature change.
+- No orchestration file edits outside owned scope; the new helper is ready for orchestration to call.
+- Full check generated untracked `runs/bot-*` artifact directories; I left them intact.
+- Environment discoveries: none new.
+
+Actual: ~40m vs 40m estimate.

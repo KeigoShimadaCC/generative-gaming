@@ -28,6 +28,8 @@ export const formatLogEvent = (event: EngineLogEvent): string => {
       return `t${turn} reinforcement ${data.definitionId} at ${formatPos(data.position)} (${data.budgetRemaining} budget left)`;
     case "hoard_taken":
       return `t${turn} claimed ${data.name} at ${formatPos(data.position)}`;
+    case "deep_narration":
+      return `t${turn} Deep: ${data.text}`;
     case "moved":
       return `t${turn} ${data.actorId} moved ${data.direction} ${formatPos(data.from)}->${formatPos(data.to)}`;
     case "bumped_wall":
@@ -196,6 +198,7 @@ export const ALL_LOG_EVENT_TYPES = [
   "run_boredom",
   "run_reinforcement_spawned",
   "hoard_taken",
+  "deep_narration",
   "moved",
   "bumped_wall",
   "door_opened",
@@ -339,6 +342,14 @@ const dummyEventData = (
         name: "The Hoard",
         depth: 12,
         position: { x: 5, y: 5 },
+      };
+    case "deep_narration":
+      return {
+        depth: 1,
+        beatId: "floor-intro",
+        beatKind: "floor_intro",
+        triggerTag: null,
+        text: "You hear the Deep breathe.",
       };
     case "moved":
       return {

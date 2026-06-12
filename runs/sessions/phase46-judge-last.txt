@@ -1,0 +1,32 @@
+Implemented Phase 46 and did not commit.
+
+**What changed**
+- Added default-off Gate 3 judge path using `provider.judge()` with `{onTone, coherent, specific}` parsing, advisory/blocking config, and mock calibration corpus.
+- Added once-per-run signature prompt planning via run context, including 25% relaxed budget numbers and prompt snapshots.
+- Made the existing Gate 3 hook awaitable so the async provider judge can register alongside heuristics.
+- Updated `PROGRESS.md` with ready-for-verify status and evidence.
+
+**Validation**
+```text
+pnpm run check
+
+> tsc --noEmit
+> eslint .
+> vitest run
+
+Test Files  78 passed (78)
+Tests       526 passed | 2 skipped (528)
+Duration    86.89s
+```
+
+Scoped checks also passed:
+- `pnpm exec vitest run src/gauntlet/gate3` -> 10 passed, 1 skipped
+- `pnpm exec vitest run src/director/prompt/assemble.test.ts src/director/prompt/signature.test.ts -u` -> 7 passed, 2 snapshots updated
+
+The optional `@ambient-judge` live attempt remains env-gated behind `AMBIENT_LIVE=1` and was skipped by default; mock calibration passed against the 10-case corpus.
+
+**Notes**
+- No commits made.
+- Actual time: ~37m vs 40m estimate.
+- Environment discoveries: none new.
+- Scope deviation: minimal `src/gauntlet/repair.ts` hook async change was required because the provider seam’s `judge()` is promise-based; gates 0-2 and the provider seam were not changed.

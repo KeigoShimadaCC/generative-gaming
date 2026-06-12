@@ -5,6 +5,7 @@ import type { TraceSummaryResult } from "./summarize.js";
 export type RunContext = {
   readonly seed: string;
   readonly runId?: string;
+  readonly signatureMomentUsedThisRun?: boolean;
 };
 
 export type AssemblePromptInput = {

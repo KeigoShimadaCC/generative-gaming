@@ -114,3 +114,10 @@ timestamp	label	agent	model	effort	seconds	input_tokens	output_tokens	total_toke
 2026-06-12T08:21:05Z	phaseE-verify	cursor	composer-2.5	default	191	NA	NA	NA	137
 2026-06-12T08:24:16Z	phaseE-verify-codex	codex	default	default	388	1970070	14502	1984572	0
 2026-06-12T08:31:18Z	phaseE-nullfix	codex	default	default	310	1771548	16668	1788216	0
+2026-06-12T08:38:29Z	phase44-memory	codex	default	default	497	2135955	26485	2162440	0
+2026-06-12T08:47:23Z	phase45-narration	codex	default	default	146	951312	7683	958995	0
+2026-06-12T08:50:22Z	phase45-narration-r2	codex	default	default	59	154007	3031	157038	0
+2026-06-12T08:53:15Z	phase45-narration-r3	codex	default	default	1007	8500186	52515	8552701	0
+2026-06-12T09:10:45Z	phase46-judge	codex	default	default	765	6197933	38697	6236630	0
+2026-06-12T09:24:00Z	phaseF-verify	codex	default	default	282	1359340	10345	1369685	0
+2026-06-12T09:29:10Z	phase45-vocab-fix	codex	default	default	101	295234	6674	301908	0

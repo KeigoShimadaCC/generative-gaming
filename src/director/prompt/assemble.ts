@@ -3,6 +3,7 @@ import {
   buildPersonaBlock,
   buildTaskBlock,
 } from "./blocks.js";
+import { buildSignaturePromptPlan } from "./signature.js";
 import type { AssemblePromptInput } from "./types.js";
 import { PROMPT_MAX_CHAR_LENGTH } from "./types.js";
 
@@ -25,6 +26,12 @@ export const assemblePrompt = (input: AssemblePromptInput): string => {
       bounds: input.bounds,
       seed: input.runContext.seed,
       playerSummary: input.traceFacts.textBlock,
+      signature: buildSignaturePromptPlan({
+        band: input.band,
+        config: input.config,
+        bounds: input.bounds,
+        signatureUsedThisRun: input.runContext.signatureMomentUsedThisRun,
+      }),
     }),
   );
 

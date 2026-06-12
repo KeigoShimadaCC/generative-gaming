@@ -258,7 +258,7 @@ const averageNameSimilarity = (
   return mean(similarities);
 };
 
-const normalizedEditSimilarity = (left: string, right: string): number => {
+export const normalizedEditSimilarity = (left: string, right: string): number => {
   if (left === right) {
     return 1;
   }
