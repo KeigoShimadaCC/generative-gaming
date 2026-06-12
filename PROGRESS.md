@@ -19,6 +19,8 @@ This file records *state*, never *design* — design lives in the doc spine
 | ID | Task | Owner (agent) | Worktree / branch | Status | Notes |
 |---|---|---|---|---|---|
 | 21-1 | Run loop, caps, Hoard, endings | Codex | main (src/engine/run) | ready-for-verify | provider contract frozen in `src/engine/run/loop.ts`; full gate green; deterministic scan clean; no commit |
+| 23A-1 | Trace recording | Codex | main (src/harness/trace) | ready-for-verify | scoped gates green; deterministic scan clean; no commit |
+| 23R-1 | Trace/replay format reconciliation | Codex | main (src/harness/{trace,replay}, tests/golden) | ready-for-verify | canonical recorder/replayer round-trip green 3x; full gate green; no commit |
 | 26-1 | Fallback content pack (Old Stock) | Cursor | main (content/, loader) | in-progress | |
 | 21/26-I | Wire fallback pack to run loop + unified events | Codex | main (integration) | ready-for-verify | fallback provider wired; full-run smoke over real fallback content; full gate green; no commit |
 | — | Wave B merged through 16/20 (b1ccd1d): 06–20,22 all verified | — | — | merged | engine complete except run loop |
@@ -53,6 +55,8 @@ Format: `YYYY-MM-DD · phase/task · who · what was verified · evidence (comma
 | 2026-06-12 | 16-1 | Codex | Enemy assembly/cost implementation complete; scoped gates green; full gate blocked by unrelated untracked quest files | `pnpm exec eslint src/engine/enemies` → pass; `pnpm exec vitest run src/engine/enemies` → 1 file, 6 tests passed; `pnpm exec eslint src/engine/enemies src/engine/effects/spatial.ts src/config/index.ts` → pass; `pnpm exec vitest run src/engine/effects/spatial.test.ts` → 1 file, 17 tests passed; `rg 'Math.random\|Date.now' src/engine/enemies/` → no matches; `pnpm run typecheck` / `pnpm run check` → fail in untracked `src/engine/quests/**` and quest render-log exhaustiveness |
 | 2026-06-12 | 21-1 | Codex | Run loop complete: provider contract, floor descent, Hoard WIN, soft-cap reinforcements, endings, summaries, malformed-provider errors | `pnpm exec vitest run src/engine/run` → 1 file, 7 tests passed; `pnpm run check` → 47 test files, 356 tests passed; `rg 'Math.random\|Date.now' src/engine/run/` → no matches |
 | 2026-06-12 | 21/26-I | Codex | Fallback provider wired to run loop; run events merged into global log union; full-run real fallback smoke and LOSS path green | `pnpm exec vitest run src/harness/fallback-provider.test.ts src/engine/render/log.test.ts src/engine/run/loop.test.ts` → 3 files, 12 tests passed; `pnpm run check` → 48 test files, 359 tests passed |
+| 2026-06-12 | 23A-1 | Codex | Trace recorder complete: stamped NDJSON header, per-turn action/events/stateHash lines, injected fs writer, deterministic hash, purity proof, full fallback WIN smoke | `pnpm run typecheck` → pass; `pnpm exec eslint src/harness/trace` → pass; `pnpm exec vitest run src/harness/trace` → 1 file, 4 tests passed; `rg 'Math.random\|Date.now' src/harness/trace` → no matches |
+| 2026-06-12 | 23R-1 | Codex | Trace/replay format reconciliation: replay parses canonical recorder header/contentRef/runId/modelId; shared hash; post-step turn convention; golden trace re-minted; real two-floor recorder→replayer integration green 3x | `pnpm exec vitest run src/harness/replay/replay.test.ts -t "real recorder records a two-floor fixture run and real replayer verifies it identical"` → 1 file, 1 passed, 5 skipped (ran 3x); `pnpm exec vitest run src/harness/replay/replay.test.ts` → 1 file, 6 tests passed; `pnpm run check` → 50 files, 369 tests passed |
 
 ## Worktrees & Branches
 

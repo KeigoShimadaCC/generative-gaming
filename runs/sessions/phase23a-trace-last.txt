@@ -1,0 +1,19 @@
+**Phase Completion Check**
+Status: Complete / ready-for-verify
+
+Implemented trace recording under `src/harness/trace`:
+- [recorder.ts](/Users/keigoshimada/Documents/generative-gaming/src/harness/trace/recorder.ts:101): stamped header, run-id from seed + injected timestamp, pure `step` observer wrapper.
+- [recorder.ts](/Users/keigoshimada/Documents/generative-gaming/src/harness/trace/recorder.ts:161): injected fs writer to `runs/<run-id>/trace.ndjson`, Node fs default.
+- [recorder.ts](/Users/keigoshimada/Documents/generative-gaming/src/harness/trace/recorder.ts:181): stable `serialize(state)` -> FNV-1a state hash.
+- [recorder.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/harness/trace/recorder.test.ts:42): parseable stamped NDJSON, deterministic hash, purity proof, full fallback WIN smoke through 12 floors.
+
+Verification run:
+- `pnpm run typecheck` -> passed
+- `pnpm exec eslint src/harness/trace` -> passed
+- `pnpm exec vitest run src/harness/trace` -> 1 file, 4 tests passed
+- `rg 'Math.random|Date.now' src/harness/trace` -> no matches
+- `git diff --check` -> passed
+
+Scope notes: no engine modules modified, no commit made. I updated `PROGRESS.md` only for the required task claim/evidence. Existing unrelated dirty paths remain untouched (`scripts/ledger.tsv`, `src/harness/replay/`, `tests/`, session artifacts).
+
+Residual risk: `contentRef.packVersion` is caller-supplied because the fallback pack does not yet expose a canonical version field. Environment discoveries: none. Actual time: ~25m vs 30m estimate.

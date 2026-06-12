@@ -1,0 +1,15 @@
+Implemented and verified. Phase completion check: **Complete** against `PHASE-23A` / `PHASE-23B`.
+
+Changed:
+- Canonical recorder header now includes `modelId` and keeps post-step turn convention comments in [recorder.ts](/Users/keigoshimada/Documents/generative-gaming/src/harness/trace/recorder.ts:12).
+- Shared `computeStateHash` lives in [hash.ts](/Users/keigoshimada/Documents/generative-gaming/src/harness/trace/hash.ts:1); replay-local duplicate deleted.
+- Replayer now parses recorder header/contentRef shape, resolves `fallback:old-stock`, and compares post-step turn/hash in [parse.ts](/Users/keigoshimada/Documents/generative-gaming/src/harness/replay/parse.ts:38) and [replay.ts](/Users/keigoshimada/Documents/generative-gaming/src/harness/replay/replay.ts:31).
+- Golden helper is recorder-backed in [golden.ts](/Users/keigoshimada/Documents/generative-gaming/src/harness/replay/golden.ts:31); golden NDJSON re-minted at [replay-mini-wait.ndjson](/Users/keigoshimada/Documents/generative-gaming/tests/golden/replay-mini-wait.ndjson:1).
+- Added integration test: `"real recorder records a two-floor fixture run and real replayer verifies it identical"` in [replay.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/harness/replay/replay.test.ts:61).
+
+Verification:
+- Targeted integration test run 3x: each run `1 passed | 5 skipped`.
+- `pnpm exec vitest run src/harness/replay/replay.test.ts` -> `1 file, 6 tests passed`.
+- `pnpm run check` -> typecheck, lint, test all green; `50 files, 369 tests passed`.
+
+No commit made. Scope deviations: none. Environment discoveries: none. Residual risk: existing dirty/untracked worktree entries outside this task remain untouched. Actual time: ~8m vs 25m estimate.

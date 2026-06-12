@@ -103,6 +103,13 @@ The structure that has one-shotted ~90% of tasks here:
   (effects registry, perception helpers) builds and freezes it in the first ~15
   minutes and announces it; the other sibling consumes it read-only. Worked
   twice without drift (13A/13B; planned for 15A/15B).
+- **Trap 2b — a prose spec is NOT a frozen interface.** 23A (recorder) and 23B
+  (replayer) built to the same TECH_SPEC §5 paragraph independently and did not
+  round-trip: 7 reconciliation findings (field shapes, id schemes, off-by-one
+  turn semantics, duplicated hash code). Freeze-first only works when the
+  frozen thing is machine-checkable — a type, a schema, or a committed example
+  file — never a doc section both sides "interpret." Producer/consumer pairs
+  must either share a frozen artifact or be serialized. (phase23-reconcile)
 - **Serialize Codex, parallelize Cursor.** The ambient-auth concurrency risk
   (inherited, deliberately untested) has cost nothing to respect: Codex
   sessions are fast enough that the Cursor lane, verifications, and brief
