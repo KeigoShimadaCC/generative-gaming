@@ -1,0 +1,36 @@
+**Status:** Complete. No commit made.
+
+Implemented the Phase 30 floor manifest contract in [src/schemas/manifest.ts](/Users/keigoshimada/Documents/generative-gaming/src/schemas/manifest.ts:88): strict `FloorManifestSchema`, placement hints aligned to `place.ts` names (`roomIndex`, `distance`, `spread`), required-nullable `quest` and `placementHint`, protocol version stamping, metadata, band/layout consistency, and `parseManifest(raw)` with fence stripping plus first-object extraction.
+
+Added fixtures and tests:
+- [src/schemas/fixtures/manifest.ts](/Users/keigoshimada/Documents/generative-gaming/src/schemas/fixtures/manifest.ts:252): valid Shallows/Middle/Lowest fixtures, 8 malformed fixtures, and annotated Phase 29 host-output expectations.
+- [src/schemas/manifest.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/schemas/manifest.test.ts:16): fixture validation, malformed rejection, parser behavior, and real spike-output distance assertions.
+- [src/schemas/manifest.ambient.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/schemas/manifest.ambient.test.ts:19): `@ambient` real `codex exec` test, skipped unless `AMBIENT_LIVE=1`.
+
+**Coverage**
+| §12 element | Schema field |
+|---|---|
+| depth / band / protocol | `depth`, `band`, `protocolVersion` |
+| floorgen params | `params.bandOrSize`, `roomCountRange`, `flavor`, `seed` |
+| roster/items/traps/NPCs + hints | extended entry schemas with `placementHint` |
+| 0-2 NPCs / quest nullable | `npcs`, `quest: nullable` |
+| narration intro + <=3 beats | existing `NarrationBeatsSchema` |
+| metadata/signature | `metadata.originTags`, `callbacks`, `signature` |
+
+**Verification**
+- `pnpm exec vitest run src/schemas/manifest.test.ts src/schemas/manifest.ambient.test.ts --reporter verbose` -> 6 passed, 1 skipped.
+- `pnpm exec eslint src/schemas/manifest.ts src/schemas/manifest.test.ts src/schemas/manifest.ambient.test.ts src/schemas/fixtures/manifest.ts` -> passed.
+- `pnpm run check` -> typecheck + lint + tests passed. Final test summary: 56 passed, 1 skipped; 396 tests passed, 1 skipped; duration 92.31s.
+
+**Spike Output Summary**
+All three host outputs parse as JSON but fail Phase 30 validation as expected:
+- `host-1`: missing `protocolVersion`, `metadata`, `placementHint`; missing behavior payload params; missing `use.charges`; invalid `note.text`.
+- `host-2`: missing envelope fields/hints; missing `ambusher.wakeRadiusTiles` and `territorial.radiusTiles`.
+- `host-3`: missing envelope fields/hints; missing `ambusher`, `pack_hunter`, and `territorial` payload params.
+
+**Ambiguities**
+- `GAME_DESIGN §12` says theme/palette, but current executable floorgen contract only has `flavor`; I did not invent an unused palette field.
+- User metadata shape named `signature: boolean`; I kept the budget relax percent in config rather than adding a second schema marker.
+- `PROGRESS.md` has no Phase 30 row and says workers update only rows their brief names, so I did not edit it.
+
+Full check generated untracked `runs/bot-*` artifacts; I left them intact. No new environment discoveries. Actual time: ~50m vs 40m estimate.

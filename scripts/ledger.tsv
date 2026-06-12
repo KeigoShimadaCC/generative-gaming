@@ -77,3 +77,4 @@ timestamp	label	agent	model	effort	seconds	input_tokens	output_tokens	total_toke
 2026-06-12T02:24:46Z	phase25b-simulate	cursor	composer-2.5	default	192	NA	NA	NA	0
 2026-06-12T02:28:21Z	phase28-m0	codex	default	default	592	2288002	23028	2311030	0
 2026-06-12T02:42:11Z	phase29-ambient-spike	codex	default	default	318	1558296	17532	1575828	0
+2026-06-12T02:50:42Z	phase30-manifest	codex	default	default	689	4760307	32852	4793159	0
