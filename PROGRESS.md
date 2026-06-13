@@ -114,7 +114,7 @@ spike ≤ 15 min (hard).
 | 2026-06-11 | orchestrator | CI red-path demo (intentional failure blocks PR) deferred from 04A | with PHASE-43 |
 | 2026-06-11 | verifier | Prefer @types/node over growing state/node-fs.d.ts shim | when Node APIs grow |
 | 2026-06-12 | orchestrator | M0 finding: bots never WIN (15/15 ABORTED at maxTurns, 100% hp retention) — balance too soft + bot descent drive weak; feeds Gate-2 thresholds + PHASE-58 | PHASE-34 / PHASE-58 |
-| 2026-06-12 | worker | Root vitest config doesn't discover tests/integration/** (explicit config workaround in place) — consider root include | PHASE-57 hygiene |
+| ~~2026-06-12~~ | ~~worker~~ | RESOLVED 2026-06-13: `pnpm run verify:ci` discovers and runs every vitest config under `tests/` and `app/` (root `pnpm run check` still covers `src/**` only) | ~~PHASE-57 hygiene~~ |
 | 2026-06-12 | orchestrator | In-script stall watchdogs unreliable in live use (fired only in own smoke); cron-loop is the dependable net — debug both scripts | PHASE-57 hygiene |
 | 2026-06-12 | orchestrator | Cursor lane degraded ~17:00 JST (3 silent hangs, host auth fine) — re-test before Wave G; if persistent, Wave G goes Codex-serial | before PHASE-48 |
 | 2026-06-12 | worker | Root Vitest `include` excludes `app/**/*.test.ts`; 49A uses a grid-local Vitest config for explicit component tests | PHASE-57 hygiene |

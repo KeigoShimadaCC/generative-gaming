@@ -93,6 +93,7 @@ Use [docs/demo-script.md](./docs/demo-script.md) for exact keys, expected outcom
 | `pnpm run replay -- <trace.ndjson> --watch` | Re-render any recorded run turn by turn |
 | `pnpm run evals -- --mode mock --n 1` | The eval suite against the mock provider |
 | `pnpm run check` | The full gate: typecheck + lint + 530+ tests |
+| `pnpm run verify:ci` | Every suite CI runs (typecheck, lint, all vitest configs) |
 | `pnpm run e2e` | The single Playwright happy path (host-side) |
 
 ## Controls (browser & CLI)
