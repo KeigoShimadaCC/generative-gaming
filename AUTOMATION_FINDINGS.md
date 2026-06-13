@@ -483,7 +483,13 @@ cleared the game twice (seeds fullclear-1 in 2.9m, fullclear-4 in 2.5m).
     burned three iterations. Rule: when a failure is intermittent, the FIRST
     task is a deterministic repro (instrument the suspected handoff, force
     the interleaving), not a speculative fix. A fix you can't watch fail
-    first is a guess.
+    first is a guess. (Coda: once I finally instrumented the real browser
+    path — env-gated [GG-TRACE] in store + transport + prefetch — the cause
+    fell out in one traced wedge: a successfully-resolved floor hung because
+    a one-shot auto-enter timer gave up where the parallel arrival path
+    re-armed. The instrument-first approach found in one run what three
+    speculative fixes missed over hours. Fixed and behaviorally verified
+    (0 wedges where ~50% before). Commit 851dbe83.)
 
 12. **Verify the test harness actually exercises the path you think.**
     `AMBIENT=1` full-clear runs were silently serving fallback content: the
