@@ -29,7 +29,7 @@ Initial worktree note: before this report was created, the worktree already had
 | PHASE-01B | FULFILLED | None. |
 | PHASE-02 | FULFILLED-AS-AMENDED | None; plan's no-`NA` token wording narrowed for Cursor text mode. See `docs/ORCHESTRATION_LOG.md` ~09:38 and `docs/progress-archive/WAVE-A.md` validation log. |
 | PHASE-03 | FULFILLED | None. |
-| PHASE-04A | GAP | No repo evidence found for the required intentionally broken-test red CI run; only green CI and later deferred red-path notes found. |
+| PHASE-04A | CLOSED (2026-06-13, by stronger evidence) | The CI-green campaign produced TEN organically red runs at HEAD (rounds 1-10: real failures in determinism audit, eval thresholds, materialize expectations, e2e hang), each diagnosed from CI logs and fixed — demonstrating the red path end-to-end far beyond a synthetic broken-test smoke. Final green: run 27452465767. |
 | PHASE-04B | FULFILLED | None. |
 | PHASE-04C | FULFILLED | None. |
 | PHASE-05 | FULFILLED | None. |

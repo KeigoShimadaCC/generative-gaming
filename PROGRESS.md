@@ -12,7 +12,7 @@ This file records *state*, never *design* — design lives in the doc spine
 **Phase:** M3 final acceptance - human checklist
 **Phase plan:** phase-plans/PHASE-61-M3-ACCEPTANCE.md
 **Started:** 2026-06-12
-**Status:** mechanical close-out complete; Waves A-H mechanically closed; CI green link, player sessions, and final human verdict pending
+**Status:** mechanical close-out COMPLETE incl. CI green at HEAD (https://github.com/KeigoShimadaCC/generative-gaming/actions/runs/27452465767, both jobs). Remaining: player sessions and final human verdict (HUMAN-CHECKLIST.md)
 **Active human item:** runs/milestones/HUMAN-CHECKLIST.md
 
 ## Task Queue
@@ -31,6 +31,7 @@ runs/milestones/HUMAN-CHECKLIST.md.
 | combat-math-investigation | merged | Codex | Diagnosis chain merged across 3d2f5bb5/53335b3a; ledger proved 1-vs-5 exchange and dead retreat branch. |
 | status-duration-serialization | merged | Codex | 35245702; verified GREEN. |
 | full-clear browser campaign | **CLEARED** | orchestrator | 24 runs, 11 real defects found+fixed. WINs: fullclear-1 (2.9m, run 20), fullclear-4 (2.5m, run 24); honest LOSSes d10/d11 (fullclear-2/3). Batch merged 873a7520..dbbe92aa, verified GREEN (one RED round-trip on prefetch rejections, fixed). |
+| ci-green-at-HEAD | **DONE** | orchestrator+workers | Run 27452465767: check + e2e both green. 16 rounds total; final blocker was Playwright's downloader wedging on runners post-100%-download (3 instrumented rounds) — solved by channel:'chrome' (preinstalled, zero downloads). Closes the M3 CI evidence gap. |
 
 Status values: `queued` → `claimed` → `in-progress` → `ready-for-verify` →
 `verified` → `merged` (or `blocked` / `returned` with a note).
