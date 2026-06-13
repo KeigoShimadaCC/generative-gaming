@@ -671,8 +671,11 @@ const createWebProvider = (): DirectorProvider => {
   return new DepthAwareFixtureProvider();
 };
 
+const hasBundledFallbackProvider = (): boolean =>
+  isFallbackDirector() || isAmbientDirector();
+
 const createWebFallbackProvider = (): FloorContentProvider | undefined =>
-  isFallbackDirector() ? bundledFallbackProvider : undefined;
+  hasBundledFallbackProvider() ? bundledFallbackProvider : undefined;
 
 type WebTransportState = {
   readonly handlers: TransportHandlers;
@@ -681,6 +684,8 @@ type WebTransportState = {
   readonly createdAt: string;
   readonly artifactRunId: string;
   readonly fallbackDirector: boolean;
+  readonly ambientDirector: boolean;
+  readonly fallbackProvider: FloorContentProvider | undefined;
 };
 
 const pendingGetFloorByKey = new Map<string, Promise<ServedFloor>>();
@@ -734,9 +739,10 @@ export const createWebTransportState = (
 
   const fallbackProvider = createWebFallbackProvider();
   const fallbackDirector = isFallbackDirector();
+  const ambientDirector = isAmbientDirector();
   const baseHandlers = createTransportHandlers(registry, {
     seed,
-    modelId: isAmbientDirector()
+    modelId: ambientDirector
       ? "ambient-web-transport"
       : fallbackDirector
         ? FALLBACK_MODEL_ID
@@ -746,12 +752,16 @@ export const createWebTransportState = (
     clock: createPrefetchWallClock(),
     now: () => createdAt,
     artifacts: prefetchArtifacts,
-    ...(fallbackDirector
-      ? {
+    ...(fallbackProvider === undefined
+      ? {}
+      : {
           fallbackProvider,
-          providerGenerationTimeoutMs: FALLBACK_PROVIDER_TIMEOUT_MS
-        }
-      : {})
+          ...(fallbackDirector
+            ? {
+                providerGenerationTimeoutMs: FALLBACK_PROVIDER_TIMEOUT_MS
+              }
+            : {})
+        })
   });
   const resolveGetFloor = async (
     request: Parameters<TransportHandlers["getFloor"]>[0]
@@ -791,6 +801,8 @@ export const createWebTransportState = (
     createdAt,
     artifactRunId,
     fallbackDirector,
+    ambientDirector,
+    fallbackProvider,
     handlers
   };
 };
@@ -801,8 +813,13 @@ const transportGlobal = globalThis as typeof globalThis & {
 
 const getWebTransportState = (): WebTransportState => {
   const wantsFallback = isFallbackDirector();
+  const wantsAmbient = isAmbientDirector();
   const existing = transportGlobal.__ggWebTransportState;
-  if (existing !== undefined && existing.fallbackDirector === wantsFallback) {
+  if (
+    existing !== undefined &&
+    existing.fallbackDirector === wantsFallback &&
+    existing.ambientDirector === wantsAmbient
+  ) {
     return existing;
   }
 

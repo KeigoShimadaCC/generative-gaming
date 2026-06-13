@@ -129,6 +129,35 @@ describe("web director transport", () => {
     }
   });
 
+  it("wires bundled fallback provider when AMBIENT=1 without DIRECTOR=fallback", async () => {
+    const previousAmbient = process.env.AMBIENT;
+    const previousDirector = process.env.DIRECTOR;
+    process.env.AMBIENT = "1";
+    delete process.env.DIRECTOR;
+
+    try {
+      const state = createWebTransportState();
+      expect(state.ambientDirector).toBe(true);
+      expect(state.fallbackDirector).toBe(false);
+      expect(state.fallbackProvider).toBeDefined();
+      expect(
+        state.fallbackProvider?.getFloor(5, "ambient-fallback-seed").params.bandOrSize
+      ).toBe("middle");
+    } finally {
+      if (previousAmbient === undefined) {
+        delete process.env.AMBIENT;
+      } else {
+        process.env.AMBIENT = previousAmbient;
+      }
+      if (previousDirector === undefined) {
+        delete process.env.DIRECTOR;
+      } else {
+        process.env.DIRECTOR = previousDirector;
+      }
+      resetWebTransportStateForTests();
+    }
+  });
+
   it("serves calibrated fallback pack content for a depth 5 request when DIRECTOR=fallback", async () => {
     const previousDirector = process.env.DIRECTOR;
     process.env.DIRECTOR = "fallback";

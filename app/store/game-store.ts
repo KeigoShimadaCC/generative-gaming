@@ -329,7 +329,6 @@ const resolveTransitionFloor = async ({
   readonly startedAtMs: number;
 }): Promise<void> => {
   const deadlineMs = startedAtMs + DESCEND_FLOOR_RETRY_BUDGET_MS;
-  let retryIndex = 0;
 
   while (sameDescendingTransition(get().transition, descendingToken(depth, startedAtMs))) {
     if (nowMs() >= deadlineMs) {
@@ -343,7 +342,7 @@ const resolveTransitionFloor = async ({
       session,
       depth,
       startedAtMs,
-      retryIndex
+      deadlineMs
     });
     if (resolved) {
       if (get().transition?.phase !== "arrival") {
@@ -351,8 +350,6 @@ const resolveTransitionFloor = async ({
       }
       return;
     }
-
-    retryIndex += 1;
 
     if (!sameDescendingTransition(get().transition, descendingToken(depth, startedAtMs))) {
       return;
@@ -371,22 +368,30 @@ const attemptResolveDescendFloor = async ({
   session,
   depth,
   startedAtMs,
-  retryIndex
+  deadlineMs
 }: {
   readonly get: StoreGet;
   readonly set: StoreSet;
   readonly session: ClientGameSession;
   readonly depth: number;
   readonly startedAtMs: number;
-  readonly retryIndex: number;
+  readonly deadlineMs: number;
 }): Promise<boolean> => {
   const token = descendingToken(depth, startedAtMs);
 
   try {
+    const pollTimeoutMs = Math.min(
+      DESCEND_FLOOR_RETRY_MS,
+      Math.max(0, deadlineMs - nowMs())
+    );
+    if (pollTimeoutMs <= 0) {
+      return false;
+    }
+
     const snapshotBeforePoll = get().transition;
     const controllerState = await withTimeout(
       session.pollFloor(depth),
-      DESCEND_FLOOR_RETRY_MS
+      pollTimeoutMs
     );
     const transitionAfterPoll = rebindDescendingTransition(
       get,
@@ -403,10 +408,18 @@ const attemptResolveDescendFloor = async ({
     });
 
     const snapshotBeforeResolve = get().transition;
-    const useTimedResolve =
-      retryIndex > 0 || controllerState === "in_flight";
-    const served = useTimedResolve
-      ? await withTimeout(session.resolveFloor(depth), DESCEND_FLOOR_RETRY_MS)
+    const resolveTimeoutMs = Math.min(
+      DESCEND_FLOOR_RETRY_MS,
+      Math.max(0, deadlineMs - nowMs())
+    );
+    if (resolveTimeoutMs <= 0) {
+      return false;
+    }
+
+    const needsResolveTimeout =
+      controllerState === "in_flight" || controllerState === "ready";
+    const served = needsResolveTimeout
+      ? await withTimeout(session.resolveFloor(depth), resolveTimeoutMs)
       : await session.resolveFloor(depth);
     const transitionAfterResolve = rebindDescendingTransition(
       get,
