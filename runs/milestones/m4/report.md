@@ -57,3 +57,19 @@ R5 polish (accessibility depth, perf profiling) is documented, non-blocking.
   is a 1-line-each follow-up.
 - Generated art covers core entities for 3 band themes; broadening coverage +
   optional live per-floor generation (with caching) is the next art increment.
+
+## Close (2026-06-14, commit 4850534a)
+
+Two final-polish items, then M4 is closed:
+- **Floor readability.** The one tuning note from review — floor tiles competed
+  with the foreground — fixed render-side: `terrain.floor` recedes (alpha 0.6,
+  tint 0x8f8f8f) so walls, entities, items, and the player pop. Pure render-layer,
+  gated on the floor sprite id, stacks with fog; determinism + goldens unchanged.
+- **Audio actually on.** The R4 procedural audio engine landed in f34032ac but was
+  never mounted; `GameShell` now calls `useGameAudio()`, so SFX + per-band ambient
+  play in-game (autoplay-gesture gated, mute/volume persisted).
+
+`verify:ci` green (typecheck, lint, root vitest, all 18 package configs incl. the
+stage suite + determinism audit + golden suite). A themed visual smoke confirmed
+the floor recedes and the foreground reads cleanly. **M4 core: MET.** Residual
+items above are backlog, non-blocking.
