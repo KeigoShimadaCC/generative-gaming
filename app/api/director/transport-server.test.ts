@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
   rosterAffordable,
@@ -22,11 +22,90 @@ import fallbackFloor10Json from "../../../content/fallback/floors/10.json" with 
 import fallbackFloor12Json from "../../../content/fallback/floors/12.json" with { type: "json" };
 import fallbackEnemiesJson from "../../../content/fallback/enemies.json" with { type: "json" };
 
+const ambientMock = vi.hoisted(() => ({
+  delayMs: 50,
+  shouldFail: false
+}));
+
+vi.mock("../../../src/director/provider/ambient.js", async () => {
+  const { MockDirectorProvider } = await import(
+    "../../../src/director/provider/mock.js"
+  );
+  const { depthBandForDepth: bandForDepth } = await import(
+    "../../../src/engine/state/init.js"
+  );
+  const {
+    validShallowsManifestFixture,
+    validMiddleManifestFixture,
+    validLowestManifestFixture
+  } = await import("../../../src/schemas/fixtures/manifest.js");
+  const { failure } = await import("../../../src/director/provider/types.js");
+  type GenerateManifestOptions = import(
+    "../../../src/director/provider/types.js"
+  ).GenerateManifestOptions;
+  type JudgeOptions = import("../../../src/director/provider/types.js").JudgeOptions;
+
+  const fixtureByBand = {
+    shallows: validShallowsManifestFixture,
+    middle: validMiddleManifestFixture,
+    lowest: validLowestManifestFixture
+  } as const;
+
+  const depthFromPrompt = (prompt: string): number => {
+    const match = /depth (\d+)/u.exec(prompt);
+    return match === null ? 1 : Number.parseInt(match[1] ?? "", 10);
+  };
+
+  class AmbientDirectorProvider {
+    async generateManifest(prompt: string, options: GenerateManifestOptions = {}) {
+      if (ambientMock.delayMs > 0) {
+        await new Promise<void>((resolve) => {
+          setTimeout(resolve, ambientMock.delayMs);
+        });
+      }
+
+      if (ambientMock.shouldFail) {
+        return failure("process_error", "mock ambient failure", {
+          latencyMs: ambientMock.delayMs,
+          tokens: null
+        });
+      }
+
+      const depth = depthFromPrompt(prompt);
+      const band = bandForDepth(depth);
+      const manifest = {
+        ...fixtureByBand[band],
+        depth,
+        band,
+        params: {
+          ...fixtureByBand[band].params,
+          bandOrSize: band,
+          seed: `ambient-mock-${depth}`
+        }
+      };
+      const inner = new MockDirectorProvider({ manifest, latencyMs: 0 });
+      return inner.generateManifest(prompt, options);
+    }
+
+    async judge(prompt: string, options: JudgeOptions = {}) {
+      const inner = new MockDirectorProvider({ latencyMs: 0 });
+      return inner.judge(prompt, options);
+    }
+  }
+
+  return { AmbientDirectorProvider };
+});
+
 import { createWebTransportState, resetWebTransportStateForTests, formatAmbientSourceMarker, formatProviderFailureReason } from "./transport-server";
 
 afterEach(() => {
   resetGlobalGenerationSemaphoreForTests();
   resetWebTransportStateForTests();
+  ambientMock.delayMs = 50;
+  ambientMock.shouldFail = false;
+  delete process.env.AMBIENT_REAL;
+  delete process.env.AMBIENT;
+  delete process.env.DIRECTOR;
 });
 
 describe("web director transport", () => {
@@ -205,6 +284,102 @@ describe("web director transport", () => {
         state.fallbackProvider?.getFloor(5, "ambient-real-fallback-seed").params
           .bandOrSize
       ).toBe("middle");
+    } finally {
+      if (previousAmbientReal === undefined) {
+        delete process.env.AMBIENT_REAL;
+      } else {
+        process.env.AMBIENT_REAL = previousAmbientReal;
+      }
+      if (previousDirector === undefined) {
+        delete process.env.DIRECTOR;
+      } else {
+        process.env.DIRECTOR = previousDirector;
+      }
+      resetWebTransportStateForTests();
+    }
+  });
+
+  it("waits for generated floors when AMBIENT_REAL=1 and generation succeeds", async () => {
+    const previousAmbientReal = process.env.AMBIENT_REAL;
+    const previousDirector = process.env.DIRECTOR;
+    process.env.AMBIENT_REAL = "1";
+    delete process.env.DIRECTOR;
+    ambientMock.delayMs = 120;
+    ambientMock.shouldFail = false;
+
+    try {
+      const state = createWebTransportState();
+      const { handlers } = state;
+      const runId = "transport-ambient-real-wait";
+      const seed = "transport-ambient-real-wait-seed";
+
+      handlers.startGeneration({
+        runId,
+        depth: 1,
+        trace: emptyTrace(runId, seed)
+      });
+
+      const startedAtMs = performance.now();
+      const served = await handlers.getFloor({
+        runId,
+        depth: 2,
+        seed
+      });
+      const elapsedMs = performance.now() - startedAtMs;
+
+      expect(served.source).toBe("generated");
+      expect(served.depth).toBe(2);
+      expect(elapsedMs).toBeGreaterThanOrEqual(100);
+      expect(elapsedMs).toBeLessThan(10_000);
+      expect(rosterAffordable(served.content.roster, depthBandForDepth(2))).toBe(
+        true
+      );
+    } finally {
+      if (previousAmbientReal === undefined) {
+        delete process.env.AMBIENT_REAL;
+      } else {
+        process.env.AMBIENT_REAL = previousAmbientReal;
+      }
+      if (previousDirector === undefined) {
+        delete process.env.DIRECTOR;
+      } else {
+        process.env.DIRECTOR = previousDirector;
+      }
+      resetWebTransportStateForTests();
+    }
+  }, 15_000);
+
+  it("falls back when AMBIENT_REAL=1 and generation fails", async () => {
+    const previousAmbientReal = process.env.AMBIENT_REAL;
+    const previousDirector = process.env.DIRECTOR;
+    process.env.AMBIENT_REAL = "1";
+    process.env.DIRECTOR = "fallback";
+    ambientMock.delayMs = 0;
+    ambientMock.shouldFail = true;
+
+    try {
+      const state = createWebTransportState();
+      const { handlers } = state;
+      const runId = "transport-ambient-real-fallback";
+      const seed = "transport-ambient-real-fallback-seed";
+
+      handlers.startGeneration({
+        runId,
+        depth: 4,
+        trace: emptyTrace(runId, seed)
+      });
+
+      const served = await handlers.getFloor({
+        runId,
+        depth: 5,
+        seed
+      });
+
+      expect(served.source).toBe("fallback");
+      expect(served.depth).toBe(5);
+      expect(served.content.roster.map((enemy) => enemy.id)).toEqual(
+        fallbackFloor5Json.enemyRosterIds
+      );
     } finally {
       if (previousAmbientReal === undefined) {
         delete process.env.AMBIENT_REAL;

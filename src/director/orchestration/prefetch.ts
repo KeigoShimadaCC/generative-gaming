@@ -45,8 +45,13 @@ import {
 } from "./types.js";
 
 const DEFAULT_STAIRS_CAP_MS = 8_000;
+const DEFAULT_AMBIENT_REAL_SERVE_WAIT_MS = 45_000;
 const SYNC_WAIT_SLICE_MS = 10;
 const AMBIENT_GEN_LIFECYCLE =
+  (process as { env?: Record<string, string | undefined> }).env?.AMBIENT_REAL
+  === "1";
+
+const readAmbientRealOnce = (): boolean =>
   (process as { env?: Record<string, string | undefined> }).env?.AMBIENT_REAL
   === "1";
 
@@ -226,7 +231,11 @@ export const createPrefetchController = (
 ): PrefetchController => {
   const gameConfig = options.gameConfig ?? config;
   const gameBounds = options.gameBounds ?? bounds;
+  const preferGeneratedServe = readAmbientRealOnce();
   const stairsCapMs = options.prefetch?.stairsCapMs ?? DEFAULT_STAIRS_CAP_MS;
+  const serveWaitMs = preferGeneratedServe
+    ? (options.providerGenerationTimeoutMs ?? DEFAULT_AMBIENT_REAL_SERVE_WAIT_MS)
+    : stairsCapMs;
   const clock = options.clock ?? createPrefetchCounterClock();
   const fallbackProvider =
     options.fallbackProvider ?? createFallbackFloorContentProvider();
@@ -457,7 +466,7 @@ export const createPrefetchController = (
     depth: number,
     startedAtMs: number,
   ): Promise<ReadySlot | null> => {
-    const deadline = startedAtMs + stairsCapMs;
+    const deadline = startedAtMs + serveWaitMs;
 
     while (clock() < deadline) {
       const ready = consumeReady(depth);
@@ -512,6 +521,14 @@ export const createPrefetchController = (
     }
 
     startPrefetch(depth, emptyTrace(options.runId, options.seed));
+
+    if (preferGeneratedServe && inFlightSlot?.depth === depth) {
+      const waited = await waitForReadySlot(depth, inFlightSlot.startedAtMs);
+      if (waited !== null) {
+        return servedFromReady(waited, seed);
+      }
+    }
+
     return serveFallback(depth, seed);
   };
 
@@ -537,7 +554,7 @@ export const createPrefetchController = (
     if (inFlightSlot?.depth === depth) {
       const remainingMs = Math.max(
         0,
-        stairsCapMs - (clock() - inFlightSlot.startedAtMs),
+        serveWaitMs - (clock() - inFlightSlot.startedAtMs),
       );
       const resolved = waitForPromiseSync(
         inFlightSlot.promise.then(() => consumeReady(depth)),
@@ -562,6 +579,31 @@ export const createPrefetchController = (
     }
 
     startPrefetch(depth, emptyTrace(options.runId, options.seed));
+
+    if (preferGeneratedServe && inFlightSlot?.depth === depth) {
+      const remainingMs = Math.max(
+        0,
+        serveWaitMs - (clock() - inFlightSlot.startedAtMs),
+      );
+      const resolved = waitForPromiseSync(
+        inFlightSlot.promise.then(() => consumeReady(depth)),
+        remainingMs,
+        clock,
+      );
+
+      if (resolved !== null) {
+        servedSources.set(depth, resolved.source);
+        startPrefetch(depth + 1, emptyTrace(options.runId, options.seed));
+        return {
+          ...resolved.content,
+          params: {
+            ...resolved.content.params,
+            seed,
+          },
+        };
+      }
+    }
+
     return serveFallback(depth, seed).content;
   };
 

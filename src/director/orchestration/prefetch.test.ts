@@ -31,6 +31,9 @@ const MODEL_ID = "mock-prefetch";
 const CREATED_AT = "2026-06-12T00:00:00.000Z";
 const STAIRS_CAP_MS = 8_000;
 
+const readTestEnv = (): Record<string, string | undefined> =>
+  (process as { env?: Record<string, string | undefined> }).env ?? {};
+
 afterEach(() => {
   resetGlobalGenerationSemaphoreForTests();
   vi.useRealTimers();
@@ -143,6 +146,70 @@ describe("prefetch controller", () => {
     await vi.runAllTimersAsync();
     expect(vi.getTimerCount()).toBe(0);
     expect(controller.pollStatus()).toEqual({ status: "idle" });
+  });
+
+  it("waits for generated floors up to provider timeout when AMBIENT_REAL=1", async () => {
+    const env = readTestEnv();
+    const previousAmbientReal = env.AMBIENT_REAL;
+    env.AMBIENT_REAL = "1";
+
+    try {
+      const fs = new MemoryArtifactFs();
+      const provider = new DelayedMockDirectorProvider({ delayMs: 120 });
+      const timing = createElapsedMsClock();
+      const controller = createController(fs, provider, {
+        stairsCapMs: 50,
+        clock: timing.clock,
+      });
+
+      controller.onFloorEnter(2, trace());
+      expect(controller.pollStatus().status).toBe("in_flight");
+
+      const startedAt = timing.clock();
+      const served = await controller.resolveFloor(3, `${SEED}:floor:3`);
+      const elapsed = timing.clock() - startedAt;
+
+      expect(elapsed).toBeGreaterThanOrEqual(100);
+      expect(served.source).toBe("generated");
+      expect(served.content.roster.length).toBeGreaterThan(0);
+      expect(provider.getGenerationCount()).toBe(1);
+    } finally {
+      if (previousAmbientReal === undefined) {
+        delete env.AMBIENT_REAL;
+      } else {
+        env.AMBIENT_REAL = previousAmbientReal;
+      }
+    }
+  });
+
+  it("falls back on provider failure when AMBIENT_REAL=1", async () => {
+    const env = readTestEnv();
+    const previousAmbientReal = env.AMBIENT_REAL;
+    env.AMBIENT_REAL = "1";
+
+    try {
+      const fs = new MemoryArtifactFs();
+      const provider = new DelayedMockDirectorProvider({
+        delayMs: 0,
+        failureMode: "timeout",
+      });
+      const controller = createController(fs, provider);
+
+      controller.onFloorEnter(1, trace());
+      await flushAsync(10);
+
+      const served = await controller.resolveFloor(2, `${SEED}:floor:2`);
+      expect(served.source).toBe("fallback");
+      expect(loadGenerationChain(RUN_ID, 2, { fs, rootDir: ROOT_DIR }).outcome.kind).toBe(
+        "fallback",
+      );
+    } finally {
+      if (previousAmbientReal === undefined) {
+        delete env.AMBIENT_REAL;
+      } else {
+        env.AMBIENT_REAL = previousAmbientReal;
+      }
+    }
   });
 });
 
