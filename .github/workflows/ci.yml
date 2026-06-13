@@ -189,7 +189,7 @@ jobs:
             playwright-${{ runner.os }}-chromium-
 
       - name: Install Playwright Chromium
-        run: pnpm exec playwright install --with-deps chromium
+        run: pnpm exec playwright install chromium
 
       - name: Diagnose e2e environment
         run: |
