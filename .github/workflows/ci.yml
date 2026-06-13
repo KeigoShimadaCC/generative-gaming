@@ -184,12 +184,16 @@ jobs:
         uses: actions/cache@v4.2.4
         with:
           path: .cache/ms-playwright
-          key: playwright-${{ runner.os }}-chromium-${{ hashFiles('pnpm-lock.yaml') }}
+          key: playwright-${{ runner.os }}-chromium-headless-shell-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: |
-            playwright-${{ runner.os }}-chromium-
+            playwright-${{ runner.os }}-chromium-headless-shell-
 
       - name: Install Playwright Chromium
-        run: pnpm exec playwright install chromium
+        timeout-minutes: 5
+        env:
+          PLAYWRIGHT_DOWNLOAD_CONNECTION_TIMEOUT: '60000'
+        run: |
+          pnpm exec playwright install chromium --only-shell || pnpm exec playwright install chromium --only-shell
 
       - name: Diagnose e2e environment
         run: |
