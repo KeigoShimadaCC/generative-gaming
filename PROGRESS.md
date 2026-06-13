@@ -12,7 +12,7 @@ This file records *state*, never *design* — design lives in the doc spine
 **Phase:** M4 — Make It a Game (visual/UX overhaul), Wave R0 (risk-retirement spikes)
 **Phase plan:** phase-plans/M4-VISUAL-OVERHAUL.md (approved 2026-06-13, "execute till done")
 **Started:** 2026-06-13
-**Status (M4):** R0 dispatched — Phase 62 (AI-sprite-as-code spike, Codex) + Phase 63 (PixiJS+Next+a11y spike, Cursor), file-disjoint parallel. Both are GATES: retire before R1. AI art = code-generated sprites ($0 ambient codex), PixiJS renderer. Pure render layer — engine/gauntlet/director/schema untouched; determinism+replay must stay green.
+**Status (M4):** R0 COMPLETE (c0dc772c). Both spikes GO: 62 art-as-code (live codex rendered a recognizable AI cave slug at $0, sprite-manifest v1 frozen) + 63 PixiJS (render seam frozen, a11y mirror). ART.md authored. NOW: Phase 65 (art pipeline: validator/atlas/resolver + curated fallback sprite set) dispatched to Codex — the gate before R1 render phases. AI art = code-generated sprites ($0 ambient codex), PixiJS renderer. Pure render layer — engine/gauntlet/director/schema untouched; determinism+replay stay green (verify:ci).
 
 **Phase (prior):** M3 final acceptance - human checklist
 **Phase plan (prior):** phase-plans/PHASE-61-M3-ACCEPTANCE.md

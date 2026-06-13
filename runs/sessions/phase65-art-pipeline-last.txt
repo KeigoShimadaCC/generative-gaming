@@ -1,0 +1,30 @@
+Implemented Phase 65 within the owned paths only: `src/art/**` and `content/art/fallback/**`. No commits, no branches, no AI generation.
+
+What changed:
+- Added sprite-manifest v1 validation and RGBA rasterization in `src/art/sprite-manifest.ts`.
+- Added deterministic atlas cache in `src/art/atlas.ts`.
+- Added schema/render-state sprite resolver in `src/art/resolver.ts`.
+- Added fallback set validation helpers in `src/art/fallback.ts`.
+- Added ArtDirector seam interface only in `src/art/art-director.ts`.
+- Added curated Old Stock fallback sprites in `content/art/fallback/index.json`: 17 sprites total, Hoard is `24x24`, all others `16x16`.
+- Added focused tests under `src/art/*.test.ts`.
+
+Verification:
+- `pnpm run verify:ci` → exit 0.
+  - typecheck PASS
+  - lint PASS
+  - root vitest PASS: 84 files, 563 passed, 2 skipped
+  - all discovered app/tests vitest configs PASS
+- `pnpm exec vitest run src/art/fallback.test.ts --reporter verbose` → exit 0:
+  - `curated fallback sprites validated=17 rasterized=17 rgbaBytes=18688`
+
+Resolver mapping table:
+- Terrain: `floor→terrain.floor`, `wall→terrain.wall`, `door→terrain.door`, `water→terrain.water`, `stairs_down→terrain.stairs_down`, `entrance→terrain.entrance`, `empty→terrain.floor`.
+- Items: `weapon/armor/charm→item.gear`; `draught/note/throwable/food/tool→item.consumable`; `key_item/coin→item.treasure`.
+- Enemies: `approach_melee/pack_hunter/territorial/guard/bodyguard→enemy.brute`; `keep_range/flee_low_hp/ambusher/patrol/thief→enemy.skirmisher`; `caster/mimic→enemy.caster`.
+- Other: `player→actor.player`, `NPC→npc.keeper`, `Hoard→feature.hoard`, `trap.hidden→trap.hidden`, `trap.revealed→trap.revealed`.
+- Normal cell resolution does not reveal hidden traps; hidden trap sprite is available for explicit/debug resolution.
+
+Atlas key scheme: `(themeId | "fallback", entityId, seed)`, serialized as URI-encoded `themeId|entityId|seed`, defaulting to `fallback` and `GameState.run.seed`.
+
+Scope deviations: none. `PROGRESS.md` was read but not edited because the brief constrained writes to the owned art paths. Environment discoveries: none. Actual time: ~45m vs 30m estimate, within 60m timebox.
