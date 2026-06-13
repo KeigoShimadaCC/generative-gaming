@@ -22,7 +22,7 @@ import fallbackFloor10Json from "../../../content/fallback/floors/10.json" with 
 import fallbackFloor12Json from "../../../content/fallback/floors/12.json" with { type: "json" };
 import fallbackEnemiesJson from "../../../content/fallback/enemies.json" with { type: "json" };
 
-import { createWebTransportState, resetWebTransportStateForTests } from "./transport-server";
+import { createWebTransportState, resetWebTransportStateForTests, formatAmbientSourceMarker, formatProviderFailureReason } from "./transport-server";
 
 afterEach(() => {
   resetGlobalGenerationSemaphoreForTests();
@@ -30,6 +30,65 @@ afterEach(() => {
 });
 
 describe("web director transport", () => {
+  it("formats ambient fallback source markers with provider failure reasons", () => {
+    const reason = formatProviderFailureReason({
+      code: "process_error",
+      message: "spawn codex ENOENT"
+    });
+    expect(reason).toBe("process_error: spawn codex ENOENT");
+    expect(
+      formatAmbientSourceMarker(
+        {
+          depth: 3,
+          source: "fallback",
+          content: {
+            params: {
+              bandOrSize: "shallows",
+              seed: "x",
+              roomCountRange: { min: 3, max: 5 },
+              flavor: "warren"
+            },
+            roster: [],
+            items: [],
+            traps: [],
+            npcs: []
+          }
+        },
+        reason
+      )
+    ).toBe(
+      "[AMBIENT-SOURCE] depth=3 source=fallback reason=process_error: spawn codex ENOENT"
+    );
+    expect(
+      formatAmbientSourceMarker(
+        {
+          depth: 3,
+          source: "generated",
+          content: {
+            params: {
+              bandOrSize: "shallows",
+              seed: "x",
+              roomCountRange: { min: 3, max: 5 },
+              flavor: "warren"
+            },
+            roster: [],
+            items: [],
+            traps: [],
+            npcs: []
+          }
+        }
+      )
+    ).toBe("[AMBIENT-SOURCE] depth=3 source=generated");
+  });
+
+  it("truncates long ambient fallback reasons to 200 characters of message text", () => {
+    const reason = formatProviderFailureReason({
+      code: "process_error",
+      message: "x".repeat(250)
+    });
+    expect(reason).toBe(`process_error: ${"x".repeat(200)}`);
+  });
+
   it("serves middle-band generated content for a depth 5 request", async () => {
     const state = createWebTransportState();
     const { handlers } = state;

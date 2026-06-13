@@ -23,6 +23,7 @@ import {
   type GenerateManifestOptions,
   type JudgeOptions,
   type JudgeResult,
+  type ProviderError,
   type ProviderResult
 } from "../../../src/director/provider/types.js";
 import type {
@@ -33,6 +34,7 @@ import type {
 import type { LayoutFlavor } from "../../../src/engine/floorgen/flavors.js";
 import { depthBandForDepth } from "../../../src/engine/state/init.js";
 import {
+  loadGenerationChain,
   MemoryArtifactFs,
   type ArtifactReadOptions,
   type WriteGenerationRecordOptions
@@ -694,6 +696,95 @@ type WebTransportState = {
 };
 
 const pendingGetFloorByKey = new Map<string, Promise<ServedFloor>>();
+const ambientFallbackReasons = new Map<number, string>();
+const AMBIENT_FALLBACK_REASON_MAX_CHARS = 200;
+
+const truncateAmbientReason = (message: string): string =>
+  message.length <= AMBIENT_FALLBACK_REASON_MAX_CHARS
+    ? message
+    : message.slice(0, AMBIENT_FALLBACK_REASON_MAX_CHARS);
+
+export const formatProviderFailureReason = (error: ProviderError): string => {
+  const details = error.details?.[0];
+  const message =
+    details !== undefined && details.length > 0
+      ? `${error.message} | ${details}`
+      : error.message;
+
+  return `${error.code}: ${truncateAmbientReason(message)}`;
+};
+
+export const formatAmbientSourceMarker = (
+  served: ServedFloor,
+  reason?: string
+): string => {
+  if (served.source === "fallback" && reason !== undefined) {
+    return `[AMBIENT-SOURCE] depth=${served.depth} source=fallback reason=${reason}`;
+  }
+
+  return `[AMBIENT-SOURCE] depth=${served.depth} source=${served.source}`;
+};
+
+const wrapProviderForAmbientDiagnostics = (
+  provider: DirectorProvider
+): DirectorProvider => {
+  if (!isRealAmbient()) {
+    return provider;
+  }
+
+  return {
+    async generateManifest(prompt, options) {
+      const result = await provider.generateManifest(prompt, options);
+      if (!result.ok) {
+        ambientFallbackReasons.set(
+          requestedDepth(prompt),
+          formatProviderFailureReason(result.error)
+        );
+      }
+      return result;
+    },
+    judge: (prompt, options) => provider.judge(prompt, options)
+  };
+};
+
+const resolveAmbientFallbackReason = (
+  served: ServedFloor,
+  artifacts: ArtifactReadOptions,
+  artifactRunId: string
+): string | undefined => {
+  const cached = ambientFallbackReasons.get(served.depth);
+  if (cached !== undefined) {
+    return cached;
+  }
+
+  try {
+    const record = loadGenerationChain(artifactRunId, served.depth, artifacts);
+    const lastAttempt = record.attempts.at(-1);
+    if (lastAttempt?.provider.error !== undefined) {
+      return formatProviderFailureReason(lastAttempt.provider.error);
+    }
+  } catch {
+    return undefined;
+  }
+
+  return undefined;
+};
+
+const logAmbientSource = (
+  served: ServedFloor,
+  artifacts: ArtifactReadOptions,
+  artifactRunId: string
+): void => {
+  if (!isRealAmbient()) {
+    return;
+  }
+
+  const reason =
+    served.source === "fallback"
+      ? resolveAmbientFallbackReason(served, artifacts, artifactRunId)
+      : undefined;
+  console.warn(formatAmbientSourceMarker(served, reason));
+};
 
 type WebTransportStateOptions = {
   readonly seed?: string;
@@ -762,7 +853,7 @@ export const createWebTransportState = (
         : fallbackDirector
           ? FALLBACK_MODEL_ID
           : MODEL_ID,
-    provider: createWebProvider(),
+    provider: wrapProviderForAmbientDiagnostics(createWebProvider()),
     gate2: passingGate2(),
     clock: createPrefetchWallClock(),
     now: () => createdAt,
@@ -799,15 +890,10 @@ export const createWebTransportState = (
         return pending;
       }
 
-      const flight = resolveGetFloor(request)
-        .then((served) => {
-          if (realAmbientDirector) {
-            console.warn(
-              `[AMBIENT-SOURCE] depth=${served.depth} source=${served.source}`
-            );
-          }
-          return served;
-        })
+      const flight = resolveGetFloor(request).then((served) => {
+        logAmbientSource(served, artifacts, artifactRunId);
+        return served;
+      })
         .finally(() => {
           if (pendingGetFloorByKey.get(key) === flight) {
             pendingGetFloorByKey.delete(key);
@@ -857,6 +943,7 @@ const getWebTransportState = (): WebTransportState => {
 
 export const resetWebTransportStateForTests = (): void => {
   pendingGetFloorByKey.clear();
+  ambientFallbackReasons.clear();
   delete transportGlobal.__ggWebTransportState;
 };
 
