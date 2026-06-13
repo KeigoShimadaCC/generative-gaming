@@ -9,8 +9,13 @@ This file records *state*, never *design* — design lives in the doc spine
 
 ## Active Phase
 
-**Phase:** M3 final acceptance - human checklist
-**Phase plan:** phase-plans/PHASE-61-M3-ACCEPTANCE.md
+**Phase:** M4 — Make It a Game (visual/UX overhaul), Wave R0 (risk-retirement spikes)
+**Phase plan:** phase-plans/M4-VISUAL-OVERHAUL.md (approved 2026-06-13, "execute till done")
+**Started:** 2026-06-13
+**Status (M4):** R0 dispatched — Phase 62 (AI-sprite-as-code spike, Codex) + Phase 63 (PixiJS+Next+a11y spike, Cursor), file-disjoint parallel. Both are GATES: retire before R1. AI art = code-generated sprites ($0 ambient codex), PixiJS renderer. Pure render layer — engine/gauntlet/director/schema untouched; determinism+replay must stay green.
+
+**Phase (prior):** M3 final acceptance - human checklist
+**Phase plan (prior):** phase-plans/PHASE-61-M3-ACCEPTANCE.md
 **Started:** 2026-06-12
 **Status:** mechanical close-out COMPLETE. CI green at HEAD (b8e177da, both jobs) with the consolidated verify:ci gate (auto-discovers every suite; app/store + app/api/director now CI-gated). Full-clear browser campaign CLEARED (2 wins). Remaining is human-only: player sessions + final M3 verdict (HUMAN-CHECKLIST.md).
 **Active human item:** runs/milestones/HUMAN-CHECKLIST.md
