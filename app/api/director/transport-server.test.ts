@@ -18,12 +18,15 @@ import {
   PROTOCOL_VERSION
 } from "../../../src/schemas/protocol.js";
 import fallbackFloor5Json from "../../../content/fallback/floors/5.json" with { type: "json" };
+import fallbackFloor10Json from "../../../content/fallback/floors/10.json" with { type: "json" };
 import fallbackFloor12Json from "../../../content/fallback/floors/12.json" with { type: "json" };
+import fallbackEnemiesJson from "../../../content/fallback/enemies.json" with { type: "json" };
 
-import { createWebTransportState } from "./transport-server";
+import { createWebTransportState, resetWebTransportStateForTests } from "./transport-server";
 
 afterEach(() => {
   resetGlobalGenerationSemaphoreForTests();
+  resetWebTransportStateForTests();
 });
 
 describe("web director transport", () => {
@@ -62,6 +65,68 @@ describe("web director transport", () => {
           ) === true
       )
     ).toBe(true);
+  });
+
+  it("derives mock floors with fallback-calibrated roster density at depths 5 and 10", async () => {
+    const fallbackEnemiesById = new Map(
+      (fallbackEnemiesJson as Array<{ id: string; stats: { xpYield: number } }>).map(
+        (enemy) => [enemy.id, enemy]
+      )
+    );
+    const fallbackXpTotal = (floor: {
+      enemyRosterIds: readonly string[];
+    }): number =>
+      floor.enemyRosterIds.reduce(
+        (total, enemyId) =>
+          total + (fallbackEnemiesById.get(enemyId)?.stats.xpYield ?? 0),
+        0
+      );
+
+    for (const { depth, fallbackFloor } of [
+      { depth: 5, fallbackFloor: fallbackFloor5Json },
+      { depth: 10, fallbackFloor: fallbackFloor10Json }
+    ]) {
+      const state = createWebTransportState();
+      const runId = `transport-calibrated-depth-${depth}`;
+      const seed = `transport-calibrated-depth-${depth}-seed`;
+      const band = depthBandForDepth(depth);
+      const fallbackXp = fallbackXpTotal(fallbackFloor);
+
+      state.handlers.startGeneration({
+        runId,
+        depth: depth - 1,
+        trace: emptyTrace(runId, seed)
+      });
+
+      const served = await state.handlers.getFloor({
+        runId,
+        depth,
+        seed
+      });
+      const derivedXp = served.content.roster.reduce(
+        (total, enemy) => total + enemy.stats.xpYield,
+        0
+      );
+      const xpDeltaRatio =
+        fallbackXp === 0 ? 0 : Math.abs(derivedXp - fallbackXp) / fallbackXp;
+
+      expect(served.source).toBe("generated");
+      expect(served.content.roster.length).toBeGreaterThanOrEqual(
+        fallbackFloor.enemyRosterIds.length - 1
+      );
+      expect(served.content.roster.length).toBeLessThanOrEqual(
+        fallbackFloor.enemyRosterIds.length + 1
+      );
+      expect(xpDeltaRatio).toBeLessThanOrEqual(0.3);
+      expect(
+        served.content.items.some(
+          (item) =>
+            (item.kind === "weapon" || item.kind === "armor") &&
+            item.value.band === band
+        )
+      ).toBe(true);
+      expect(rosterAffordable(served.content.roster, band)).toBe(true);
+    }
   });
 
   it("serves calibrated fallback pack content for a depth 5 request when DIRECTOR=fallback", async () => {
@@ -203,6 +268,85 @@ describe("web director transport", () => {
       }
     }
   }, 20_000);
+
+  it("coalesces concurrent depth-12 getFloor calls while depth-12 prefetch is in flight", async () => {
+    const previousDirector = process.env.DIRECTOR;
+    process.env.DIRECTOR = "fallback";
+
+    try {
+      const state = createWebTransportState({
+        seed: "transport-fallback-depth-12-coalesce-seed",
+        createdAt: "2026-06-13T00:00:02.000Z"
+      });
+      const { handlers } = state;
+      const runId = "transport-fallback-depth-12-coalesce";
+      const seed = "transport-fallback-depth-12-coalesce-seed";
+      const trace = emptyTrace(runId, seed);
+
+      handlers.startGeneration({ runId, depth: 11, trace });
+      expect(handlers.pollStatus({ runId })).toMatchObject({
+        status: "in_flight",
+        depth: 12
+      });
+
+      const [first, second] = await Promise.all([
+        handlers.getFloor({ runId, depth: 12, seed }),
+        handlers.getFloor({ runId, depth: 12, seed })
+      ]);
+
+      expect(first).toEqual(second);
+      expect(first.source).toBe("fallback");
+      expect(first.depth).toBe(12);
+      expect(first.content.params.hoard?.id).toBe("hoard");
+    } finally {
+      if (previousDirector === undefined) {
+        delete process.env.DIRECTOR;
+      } else {
+        process.env.DIRECTOR = previousDirector;
+      }
+    }
+  });
+
+  it("uses the terminal fallback fast path after DIRECTOR=fallback is enabled post-init", async () => {
+    const previousDirector = process.env.DIRECTOR;
+    delete process.env.DIRECTOR;
+    resetWebTransportStateForTests();
+
+    try {
+      const withoutFallback = createWebTransportState({
+        seed: "transport-fallback-rebind-seed",
+        createdAt: "2026-06-13T00:00:03.000Z"
+      });
+      expect(withoutFallback.fallbackDirector).toBe(false);
+
+      process.env.DIRECTOR = "fallback";
+      resetWebTransportStateForTests();
+      const withFallback = createWebTransportState({
+        seed: "transport-fallback-rebind-seed",
+        createdAt: "2026-06-13T00:00:03.000Z"
+      });
+      const { handlers } = withFallback;
+      const runId = "transport-fallback-rebind";
+      const seed = "transport-fallback-rebind-seed";
+      const trace = emptyTrace(runId, seed);
+
+      handlers.startGeneration({ runId, depth: 11, trace });
+      const served = await handlers.getFloor({ runId, depth: 12, seed });
+
+      expect(served.source).toBe("fallback");
+      expect(served.depth).toBe(12);
+      expect(served.content.roster.map((enemy) => enemy.id)).toEqual(
+        fallbackFloor12Json.enemyRosterIds
+      );
+    } finally {
+      if (previousDirector === undefined) {
+        delete process.env.DIRECTOR;
+      } else {
+        process.env.DIRECTOR = previousDirector;
+      }
+      resetWebTransportStateForTests();
+    }
+  });
 
   it("uses createdAt in the artifact run identity for new transport states", async () => {
     const seed = "transport-session-seed";

@@ -38,8 +38,11 @@ import {
 import type { RunAction } from "@engine/run";
 import { serialize, type GameState } from "@engine/state";
 import { checkActionLegality } from "@engine/turn";
+import { createFallbackFloorContentProvider } from "@/api/director/fallback-provider-web";
 
 const ARRIVAL_COMPLETION_RETRY_MS = 100;
+const DESCEND_FLOOR_RETRY_MS = 2_000;
+const DESCEND_FLOOR_RETRY_BUDGET_MS = 30_000;
 const BOT_STATE_BRIDGE_QUERY_PARAM = "botBridge";
 const BOT_STATE_BRIDGE_ENABLED_VALUE = "1";
 
@@ -322,26 +325,99 @@ const resolveTransitionFloor = async ({
   readonly depth: number;
   readonly startedAtMs: number;
 }): Promise<void> => {
-  const controllerState = await session.pollFloor(depth);
-  patchCurrentTransition(get, set, {
-    controllerState: controllerStateForStore(controllerState)
-  });
+  const deadlineMs = startedAtMs + DESCEND_FLOOR_RETRY_BUDGET_MS;
 
-  const served = await session.resolveFloor(depth);
-  const readyAtMs = nowMs();
+  while (sameDescendingTransition(get().transition, descendingToken(depth, startedAtMs))) {
+    if (nowMs() >= deadlineMs) {
+      await recoverDescendWithFallback(get, set, session, depth, startedAtMs);
+      return;
+    }
+
+    const resolved = await attemptResolveDescendFloor({
+      get,
+      set,
+      session,
+      depth,
+      startedAtMs
+    });
+    if (resolved) {
+      completeDescendTransition(get, set, depth, startedAtMs);
+      return;
+    }
+
+    if (!sameDescendingTransition(get().transition, descendingToken(depth, startedAtMs))) {
+      return;
+    }
+
+    const waitMs = Math.min(DESCEND_FLOOR_RETRY_MS, deadlineMs - nowMs());
+    if (waitMs > 0) {
+      await sleep(waitMs);
+    }
+  }
+};
+
+const attemptResolveDescendFloor = async ({
+  get,
+  set,
+  session,
+  depth,
+  startedAtMs
+}: {
+  readonly get: StoreGet;
+  readonly set: StoreSet;
+  readonly session: ClientGameSession;
+  readonly depth: number;
+  readonly startedAtMs: number;
+}): Promise<boolean> => {
+  const token = descendingToken(depth, startedAtMs);
+
+  try {
+    const controllerState = await withTimeout(
+      session.pollFloor(depth),
+      DESCEND_FLOOR_RETRY_MS
+    );
+    if (!sameDescendingTransition(get().transition, token)) {
+      return false;
+    }
+
+    patchCurrentTransition(get, set, {
+      controllerState: controllerStateForStore(controllerState)
+    });
+
+    const served = await withTimeout(
+      session.resolveFloor(depth),
+      DESCEND_FLOOR_RETRY_MS
+    );
+    if (!sameDescendingTransition(get().transition, token)) {
+      return false;
+    }
+
+    const transition = get().transition;
+    if (transition === null || transition.floorReady) {
+      return transition?.floorReady === true;
+    }
+
+    set({
+      transition: markTransitionFloorReady(transition, nowMs(), served.source)
+    });
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+const completeDescendTransition = (
+  get: StoreGet,
+  set: StoreSet,
+  depth: number,
+  startedAtMs: number
+): void => {
+  const token = descendingToken(depth, startedAtMs);
   const transition = get().transition;
-  if (
-    transition === null ||
-    transition.phase !== "descending" ||
-    transition.depth !== depth ||
-    transition.startedAtMs !== startedAtMs
-  ) {
+  if (!sameDescendingTransition(transition, token) || !transition.floorReady) {
     return;
   }
 
-  set({
-    transition: markTransitionFloorReady(transition, readyAtMs, served.source)
-  });
   completeArrivalWhenReady(get, set);
 
   const next = get().transition;
@@ -357,11 +433,79 @@ const resolveTransitionFloor = async ({
   const delayMs = Math.max(0, READY_THEATER_MS - (nowMs() - next.startedAtMs));
   globalThis.setTimeout(() => {
     const current = get().transition;
-    if (current !== null && shouldAutoEnterFloor(current, nowMs())) {
+    if (
+      current !== null &&
+      sameDescendingTransition(current, token) &&
+      shouldAutoEnterFloor(current, nowMs())
+    ) {
       enterResolvedFloor(get, set);
     }
   }, delayMs);
 };
+
+const recoverDescendWithFallback = async (
+  get: StoreGet,
+  set: StoreSet,
+  session: ClientGameSession,
+  depth: number,
+  startedAtMs: number
+): Promise<void> => {
+  const token = descendingToken(depth, startedAtMs);
+  if (!sameDescendingTransition(get().transition, token)) {
+    return;
+  }
+
+  let fallback = await withTimeout(
+    resolveFallbackAfterEntryFailure(session, depth),
+    DESCEND_FLOOR_RETRY_MS
+  ).catch(() => null);
+
+  if (fallback === null) {
+    fallback = {
+      depth,
+      source: "fallback",
+      content: createFallbackFloorContentProvider().getFloor(
+        depth,
+        session.state.run.seed
+      )
+    };
+  }
+
+  if (
+    fallback.source !== "fallback" ||
+    !sameDescendingTransition(get().transition, token)
+  ) {
+    clearFailedTransition(get, set);
+    return;
+  }
+
+  session.setServedFloor(fallback);
+  const transition = get().transition;
+  if (transition === null || !sameDescendingTransition(transition, token)) {
+    return;
+  }
+
+  set({
+    transition: markTransitionFloorReady(transition, nowMs(), "fallback")
+  });
+  enterResolvedFloor(get, set);
+};
+
+const descendingToken = (
+  depth: number,
+  startedAtMs: number
+): FloorTransitionState => ({
+  phase: "descending",
+  depth,
+  startedAtMs,
+  whisper: "",
+  controllerState: "none",
+  floorReady: false,
+  readyAtMs: null,
+  servedSource: null,
+  arrivalStartedAtMs: null,
+  playableAtMs: null
+});
 
 const enterResolvedFloor = (get: StoreGet, set: StoreSet): void => {
   void enterResolvedFloorAsync(get, set);
@@ -660,3 +804,31 @@ const clearBotStateBridge = (target: BotStateBridgeTarget | null): void => {
 
 const nowMs = (): number =>
   typeof performance === "undefined" ? Date.now() : performance.now();
+
+const sleep = (delayMs: number): Promise<void> =>
+  new Promise((resolve) => {
+    globalThis.setTimeout(resolve, delayMs);
+  });
+
+const withTimeout = async <T>(
+  promise: Promise<T>,
+  timeoutMs: number
+): Promise<T> => {
+  let timeoutId: ReturnType<typeof globalThis.setTimeout> | undefined;
+
+  try {
+    return await Promise.race([
+      promise,
+      new Promise<T>((_resolve, reject) => {
+        timeoutId = globalThis.setTimeout(
+          () => reject(new Error("descend floor request timed out")),
+          timeoutMs
+        );
+      })
+    ]);
+  } finally {
+    if (timeoutId !== undefined) {
+      globalThis.clearTimeout(timeoutId);
+    }
+  }
+};

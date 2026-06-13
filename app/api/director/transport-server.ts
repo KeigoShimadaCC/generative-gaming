@@ -1,4 +1,4 @@
-import { config } from "../../../src/config/index.js";
+import { bounds, config } from "../../../src/config/index.js";
 import {
   defaultGate2Config,
   type Gate2Config,
@@ -54,7 +54,8 @@ import {
 } from "../../../src/schemas/fixtures/manifest.js";
 import type {
   FloorManifest,
-  ManifestItemEntry
+  ManifestItemEntry,
+  ManifestRosterEntry
 } from "../../../src/schemas/manifest.js";
 import fallbackEnemiesJson from "../../../content/fallback/enemies.json" with { type: "json" };
 import fallbackFloor10Json from "../../../content/fallback/floors/10.json" with { type: "json" };
@@ -357,6 +358,145 @@ const buildBundledFallbackFloors = (): ReadonlyMap<number, BundledFallbackFloor>
 
 const BUNDLED_FALLBACK_FLOORS = buildBundledFallbackFloors();
 
+const FALLBACK_ENEMIES_BY_ID = entityTable(
+  "enemy",
+  fallbackEnemiesJson as EnemyDefinition[]
+);
+
+const FALLBACK_FLOOR_BY_DEPTH = new Map<number, FallbackFloorDefinition>(
+  FALLBACK_FLOOR_DEFINITIONS.map((floor) => [floor.depth, floor])
+);
+
+type FallbackRosterMetrics = {
+  readonly count: number;
+  readonly xpTotal: number;
+};
+
+const fallbackRosterMetrics = (depth: number): FallbackRosterMetrics => {
+  const floor = FALLBACK_FLOOR_BY_DEPTH.get(depth);
+  if (floor === undefined) {
+    throw new Error(`fallback floor ${depth} is not available for calibration`);
+  }
+
+  let xpTotal = 0;
+  for (const enemyId of floor.enemyRosterIds) {
+    const enemy = FALLBACK_ENEMIES_BY_ID.get(enemyId);
+    if (enemy === undefined) {
+      throw new Error(
+        `fallback floor ${depth} references unknown enemy ${enemyId}`
+      );
+    }
+    xpTotal += enemy.stats.xpYield;
+  }
+
+  return {
+    count: floor.enemyRosterIds.length,
+    xpTotal
+  };
+};
+
+const distributeXpYields = (
+  count: number,
+  targetTotal: number,
+  band: DepthBand
+): readonly number[] => {
+  const xpBounds = bounds.enemyDesign.statBudgetsByBand[band].xpYield;
+  const yields = Array.from({ length: count }, () => xpBounds.min);
+  let remaining = targetTotal - xpBounds.min * count;
+  let guard = 0;
+
+  while (remaining > 0 && guard < count * (xpBounds.max - xpBounds.min + 1)) {
+    const slot = guard % count;
+    if (yields[slot]! < xpBounds.max) {
+      yields[slot]! += 1;
+      remaining -= 1;
+    }
+    guard += 1;
+  }
+
+  return yields;
+};
+
+const deriveCalibratedRoster = (
+  templates: readonly ManifestRosterEntry[],
+  depth: number,
+  band: DepthBand
+): ManifestRosterEntry[] => {
+  if (templates.length === 0) {
+    throw new Error(`band ${band} fixture roster is empty`);
+  }
+
+  const { count, xpTotal } = fallbackRosterMetrics(depth);
+  const xpYields = distributeXpYields(count, xpTotal, band);
+
+  return xpYields.map((xpYield, index) => {
+    const template = templates[index % templates.length]!;
+    const idSuffix = index === 0 ? "" : `-c${index}`;
+
+    return {
+      ...template,
+      id: `${template.id}-d${depth}${idSuffix}`,
+      stats: {
+        ...template.stats,
+        xpYield
+      }
+    };
+  });
+};
+
+const fallbackFloorHasGearKind = (
+  depth: number,
+  kind: "weapon" | "armor"
+): boolean => {
+  const floor = FALLBACK_FLOOR_BY_DEPTH.get(depth);
+  if (floor === undefined) {
+    return false;
+  }
+
+  return floor.itemIds.some((itemId) => {
+    const item = fallbackItems.find((candidate) => candidate.id === itemId);
+    return item?.kind === kind;
+  });
+};
+
+const deriveCalibratedItems = (
+  items: readonly ManifestItemEntry[],
+  depth: number,
+  band: DepthBand
+): ManifestItemEntry[] => {
+  const calibrated = [...items];
+  const hasBandGear = (kind: "weapon" | "armor"): boolean =>
+    calibrated.some((item) => item.kind === kind && item.value.band === band);
+
+  const ensureBandGear = (kind: "weapon" | "armor"): void => {
+    if (hasBandGear(kind)) {
+      return;
+    }
+
+    const template = items.find(
+      (item) => item.kind === kind && item.value.band === band
+    );
+    if (template === undefined) {
+      throw new Error(`band ${band} fixture is missing a ${kind} template`);
+    }
+
+    calibrated.push({
+      ...template,
+      id: `${template.id}-d${depth}`,
+      placementHint: null
+    });
+  };
+
+  if (fallbackFloorHasGearKind(depth, "weapon")) {
+    ensureBandGear("weapon");
+  }
+  if (fallbackFloorHasGearKind(depth, "armor")) {
+    ensureBandGear("armor");
+  }
+
+  return calibrated;
+};
+
 class BundledFallbackFloorContentProvider implements FloorContentProvider {
   getFloor(depth: number, seed: string): FloorContent {
     const floor = BUNDLED_FALLBACK_FLOORS.get(depth);
@@ -447,17 +587,30 @@ const requestedDepth = (prompt: string): number => {
 const manifestForDepth = (depth: number): FloorManifest => {
   const band = depthBandForDepth(depth);
   const fixture = fixtureByBand[band];
+  const roster = deriveCalibratedRoster(fixture.roster, depth, band);
+  const items = deriveCalibratedItems(fixture.items, depth, band);
 
-  return withFloorLocalRefs(withBandHealingItem({
-    ...fixture,
-    depth,
-    band,
-    params: {
-      ...fixture.params,
-      bandOrSize: band,
-      seed: `web-transport-${band}-${depth}`
-    }
-  } satisfies FloorManifest));
+  return withFloorLocalRefs(
+    withBandHealingItem({
+      ...fixture,
+      depth,
+      band,
+      params: {
+        ...fixture.params,
+        bandOrSize: band,
+        seed: `web-transport-${band}-${depth}`
+      },
+      roster,
+      items,
+      metadata: {
+        ...fixture.metadata,
+        originTags: {
+          ...fixture.metadata.originTags,
+          made: roster.length
+        }
+      }
+    } satisfies FloorManifest)
+  );
 };
 
 const withBandHealingItem = (manifest: FloorManifest): FloorManifest => {
@@ -527,7 +680,10 @@ type WebTransportState = {
   readonly seed: string;
   readonly createdAt: string;
   readonly artifactRunId: string;
+  readonly fallbackDirector: boolean;
 };
+
+const pendingGetFloorByKey = new Map<string, Promise<ServedFloor>>();
 
 type WebTransportStateOptions = {
   readonly seed?: string;
@@ -577,7 +733,7 @@ export const createWebTransportState = (
   const prefetchArtifacts = createPrefetchArtifactOptions(artifacts);
 
   const fallbackProvider = createWebFallbackProvider();
-  const fallbackDirector = fallbackProvider !== undefined;
+  const fallbackDirector = isFallbackDirector();
   const baseHandlers = createTransportHandlers(registry, {
     seed,
     modelId: isAmbientDirector()
@@ -597,24 +753,44 @@ export const createWebTransportState = (
         }
       : {})
   });
-  const handlers: TransportHandlers = fallbackDirector
-    ? {
-        ...baseHandlers,
-        getFloor: async (request) => {
-          if (request.depth === config.runStructure.depthFloors) {
-            return serveBundledFallbackFloor(request.depth, request.seed);
-          }
+  const resolveGetFloor = async (
+    request: Parameters<TransportHandlers["getFloor"]>[0]
+  ): Promise<ServedFloor> => {
+    if (
+      isFallbackDirector() &&
+      request.depth === config.runStructure.depthFloors
+    ) {
+      return serveBundledFallbackFloor(request.depth, request.seed);
+    }
 
-          return baseHandlers.getFloor(request);
-        }
+    return baseHandlers.getFloor(request);
+  };
+
+  const handlers: TransportHandlers = {
+    ...baseHandlers,
+    getFloor: async (request) => {
+      const key = `${request.runId}\0${request.depth}\0${request.seed}`;
+      const pending = pendingGetFloorByKey.get(key);
+      if (pending !== undefined) {
+        return pending;
       }
-    : baseHandlers;
+
+      const flight = resolveGetFloor(request).finally(() => {
+        if (pendingGetFloorByKey.get(key) === flight) {
+          pendingGetFloorByKey.delete(key);
+        }
+      });
+      pendingGetFloorByKey.set(key, flight);
+      return flight;
+    }
+  };
 
   return {
     artifacts,
     seed,
     createdAt,
     artifactRunId,
+    fallbackDirector,
     handlers
   };
 };
@@ -624,8 +800,19 @@ const transportGlobal = globalThis as typeof globalThis & {
 };
 
 const getWebTransportState = (): WebTransportState => {
-  transportGlobal.__ggWebTransportState ??= createWebTransportState();
+  const wantsFallback = isFallbackDirector();
+  const existing = transportGlobal.__ggWebTransportState;
+  if (existing !== undefined && existing.fallbackDirector === wantsFallback) {
+    return existing;
+  }
+
+  transportGlobal.__ggWebTransportState = createWebTransportState();
   return transportGlobal.__ggWebTransportState;
+};
+
+export const resetWebTransportStateForTests = (): void => {
+  pendingGetFloorByKey.clear();
+  delete transportGlobal.__ggWebTransportState;
 };
 
 export const getTransportHandlers = (): TransportHandlers =>

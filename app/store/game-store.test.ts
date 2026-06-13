@@ -24,6 +24,97 @@ vi.mock("@engine/turn", () => ({
   checkActionLegality: vi.fn(() => ({ status: "legal" }))
 }));
 
+describe("game store descending floor resolution", () => {
+  beforeEach(() => {
+    vi.useFakeTimers({
+      now: 0,
+      toFake: ["Date", "performance", "setTimeout", "clearTimeout"]
+    });
+    resetGameStore();
+  });
+
+  afterEach(() => {
+    resetGameStore();
+    vi.useRealTimers();
+    vi.clearAllMocks();
+  });
+
+  it("retries resolveFloor after a hung first request and marks floorReady", async () => {
+    let resolveCalls = 0;
+    const session = createFakeSession("descend-repoll", {
+      startDepth: 11,
+      resolveFloor: vi.fn(async (depth: number) => {
+        resolveCalls += 1;
+        if (resolveCalls === 1) {
+          await new Promise<void>(() => {});
+        }
+
+        return {
+          depth,
+          content: {} as ClientServedFloor["content"],
+          source: "fallback" as const
+        };
+      })
+    });
+
+    useGameStore.setState({
+      gameSession: session,
+      gameState: session.state,
+      screen: "playing",
+      transition: null,
+      arrivalIntroLine: null,
+      ui: defaultUi
+    });
+
+    expect(
+      useGameStore.getState().dispatchAction({ kind: "descend" })
+    ).toBeNull();
+    await vi.advanceTimersByTimeAsync(0);
+    expect(useGameStore.getState().transition?.floorReady).toBe(false);
+
+    await vi.advanceTimersByTimeAsync(4_000);
+    expect(resolveCalls).toBeGreaterThanOrEqual(2);
+    expect(useGameStore.getState().transition?.phase).toBe("arrival");
+    expect(useGameStore.getState().transition?.floorReady).toBe(true);
+  });
+
+  it("serves fallback and enters the floor when descend resolution exhausts the retry budget", async () => {
+    const session = createFakeSession("descend-exhaust", {
+      startDepth: 11,
+      pollFloor: vi.fn(async () => "in_flight" as const),
+      resolveFloor: vi.fn(async (depth: number) => {
+        await new Promise<void>(() => {});
+        return {
+          depth,
+          content: {} as ClientServedFloor["content"],
+          source: "fallback" as const
+        };
+      })
+    });
+
+    useGameStore.setState({
+      gameSession: session,
+      gameState: session.state,
+      screen: "playing",
+      transition: null,
+      arrivalIntroLine: null,
+      ui: defaultUi
+    });
+
+    expect(
+      useGameStore.getState().dispatchAction({ kind: "descend" })
+    ).toBeNull();
+
+    await vi.advanceTimersByTimeAsync(32_000);
+
+    expect(session.setServedFloor).toHaveBeenCalledWith(
+      expect.objectContaining({ depth: 12, source: "fallback" })
+    );
+    expect(useGameStore.getState().transition?.phase).toBe("arrival");
+    expect(useGameStore.getState().transition?.servedSource).toBe("fallback");
+  });
+});
+
 describe("game store arrival transition", () => {
   beforeEach(() => {
     vi.useFakeTimers({
@@ -187,6 +278,9 @@ const beginArrival = async (session: ClientGameSession): Promise<void> => {
 type FakeSessionOptions = {
   readonly failFirstDescend?: boolean;
   readonly resolvedSources?: readonly ClientServedFloor["source"][];
+  readonly startDepth?: number;
+  readonly pollFloor?: ClientGameSession["pollFloor"];
+  readonly resolveFloor?: ClientGameSession["resolveFloor"];
 };
 
 const createFakeSession = (
@@ -194,6 +288,9 @@ const createFakeSession = (
   options: FakeSessionOptions = {}
 ): ClientGameSession => {
   let state = createInitialState(seed);
+  if (options.startDepth !== undefined) {
+    state = stateAtDepth(state, options.startDepth);
+  }
   let descendCalls = 0;
   let resolveCalls = 0;
 
@@ -220,24 +317,26 @@ const createFakeSession = (
       state = nextState;
     }),
     setServedFloor: vi.fn(),
-    pollFloor: vi.fn(
-      (): Promise<ClientPrefetchState> => Promise.resolve("none")
-    ),
-    resolveFloor: vi.fn((depth: number): Promise<ClientServedFloor> => {
-      const sources = options.resolvedSources;
-      const source =
-        sources === undefined
-          ? "generated"
-          : (sources[Math.min(resolveCalls, sources.length - 1)] ??
-            "generated");
-      resolveCalls += 1;
+    pollFloor:
+      options.pollFloor ??
+      vi.fn((): Promise<ClientPrefetchState> => Promise.resolve("none")),
+    resolveFloor:
+      options.resolveFloor ??
+      vi.fn((depth: number): Promise<ClientServedFloor> => {
+        const sources = options.resolvedSources;
+        const source =
+          sources === undefined
+            ? "generated"
+            : (sources[Math.min(resolveCalls, sources.length - 1)] ??
+              "generated");
+        resolveCalls += 1;
 
-      return Promise.resolve({
-        depth,
-        content: {} as ClientServedFloor["content"],
-        source
-      });
-    }),
+        return Promise.resolve({
+          depth,
+          content: {} as ClientServedFloor["content"],
+          source
+        });
+      }),
     prefetchNextFloor: vi.fn()
   };
 
