@@ -10,6 +10,10 @@
           "path": "ferrous-fungal-middle/actor.player.json"
         },
         {
+          "entityId": "enemy.brute",
+          "path": "ferrous-fungal-middle/enemy.brute.json"
+        },
+        {
           "entityId": "enemy.caster",
           "path": "ferrous-fungal-middle/enemy.caster.json"
         },
@@ -22,12 +26,44 @@
           "path": "ferrous-fungal-middle/feature.hoard.json"
         },
         {
+          "entityId": "item.consumable",
+          "path": "ferrous-fungal-middle/item.consumable.json"
+        },
+        {
+          "entityId": "item.gear",
+          "path": "ferrous-fungal-middle/item.gear.json"
+        },
+        {
+          "entityId": "item.treasure",
+          "path": "ferrous-fungal-middle/item.treasure.json"
+        },
+        {
+          "entityId": "npc.keeper",
+          "path": "ferrous-fungal-middle/npc.keeper.json"
+        },
+        {
+          "entityId": "terrain.door",
+          "path": "ferrous-fungal-middle/terrain.door.json"
+        },
+        {
+          "entityId": "terrain.entrance",
+          "path": "ferrous-fungal-middle/terrain.entrance.json"
+        },
+        {
           "entityId": "terrain.floor",
           "path": "ferrous-fungal-middle/terrain.floor.json"
         },
         {
+          "entityId": "terrain.stairs_down",
+          "path": "ferrous-fungal-middle/terrain.stairs_down.json"
+        },
+        {
           "entityId": "terrain.wall",
           "path": "ferrous-fungal-middle/terrain.wall.json"
+        },
+        {
+          "entityId": "trap.revealed",
+          "path": "ferrous-fungal-middle/trap.revealed.json"
         }
       ]
     },
@@ -35,6 +71,10 @@
       "themeId": "torchlit-limestone",
       "seed": "art-batch-shallows",
       "sprites": [
+        {
+          "entityId": "actor.player",
+          "path": "torchlit-limestone/actor.player.json"
+        },
         {
           "entityId": "enemy.brute",
           "path": "torchlit-limestone/enemy.brute.json"
@@ -52,12 +92,48 @@
           "path": "torchlit-limestone/feature.hoard.json"
         },
         {
+          "entityId": "item.consumable",
+          "path": "torchlit-limestone/item.consumable.json"
+        },
+        {
+          "entityId": "item.treasure",
+          "path": "torchlit-limestone/item.treasure.json"
+        },
+        {
+          "entityId": "npc.keeper",
+          "path": "torchlit-limestone/npc.keeper.json"
+        },
+        {
+          "entityId": "terrain.door",
+          "path": "torchlit-limestone/terrain.door.json"
+        },
+        {
+          "entityId": "terrain.entrance",
+          "path": "torchlit-limestone/terrain.entrance.json"
+        },
+        {
           "entityId": "terrain.floor",
           "path": "torchlit-limestone/terrain.floor.json"
         },
         {
+          "entityId": "terrain.stairs_down",
+          "path": "torchlit-limestone/terrain.stairs_down.json"
+        },
+        {
           "entityId": "terrain.wall",
           "path": "torchlit-limestone/terrain.wall.json"
+        },
+        {
+          "entityId": "terrain.water",
+          "path": "torchlit-limestone/terrain.water.json"
+        },
+        {
+          "entityId": "trap.hidden",
+          "path": "torchlit-limestone/trap.hidden.json"
+        },
+        {
+          "entityId": "trap.revealed",
+          "path": "torchlit-limestone/trap.revealed.json"
         }
       ]
     },
@@ -86,12 +162,48 @@
           "path": "void-ember-lowest/feature.hoard.json"
         },
         {
+          "entityId": "item.consumable",
+          "path": "void-ember-lowest/item.consumable.json"
+        },
+        {
+          "entityId": "item.treasure",
+          "path": "void-ember-lowest/item.treasure.json"
+        },
+        {
+          "entityId": "npc.keeper",
+          "path": "void-ember-lowest/npc.keeper.json"
+        },
+        {
+          "entityId": "terrain.door",
+          "path": "void-ember-lowest/terrain.door.json"
+        },
+        {
+          "entityId": "terrain.entrance",
+          "path": "void-ember-lowest/terrain.entrance.json"
+        },
+        {
           "entityId": "terrain.floor",
           "path": "void-ember-lowest/terrain.floor.json"
         },
         {
+          "entityId": "terrain.stairs_down",
+          "path": "void-ember-lowest/terrain.stairs_down.json"
+        },
+        {
           "entityId": "terrain.wall",
           "path": "void-ember-lowest/terrain.wall.json"
+        },
+        {
+          "entityId": "terrain.water",
+          "path": "void-ember-lowest/terrain.water.json"
+        },
+        {
+          "entityId": "trap.hidden",
+          "path": "void-ember-lowest/trap.hidden.json"
+        },
+        {
+          "entityId": "trap.revealed",
+          "path": "void-ember-lowest/trap.revealed.json"
         }
       ]
     }

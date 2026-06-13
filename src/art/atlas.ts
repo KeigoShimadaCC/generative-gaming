@@ -1,24 +1,6 @@
 import type { DepthBand } from "../schemas/entities/index.js";
 import generatedArtIndexJson from "../../content/art/generated/index.json" with { type: "json" };
-import actorPlayerFerrous from "../../content/art/generated/ferrous-fungal-middle/actor.player.json" with { type: "json" };
-import enemyCasterFerrous from "../../content/art/generated/ferrous-fungal-middle/enemy.caster.json" with { type: "json" };
-import enemySkirmisherFerrous from "../../content/art/generated/ferrous-fungal-middle/enemy.skirmisher.json" with { type: "json" };
-import featureHoardFerrous from "../../content/art/generated/ferrous-fungal-middle/feature.hoard.json" with { type: "json" };
-import terrainFloorFerrous from "../../content/art/generated/ferrous-fungal-middle/terrain.floor.json" with { type: "json" };
-import terrainWallFerrous from "../../content/art/generated/ferrous-fungal-middle/terrain.wall.json" with { type: "json" };
-import enemyBruteTorchlit from "../../content/art/generated/torchlit-limestone/enemy.brute.json" with { type: "json" };
-import enemyCasterTorchlit from "../../content/art/generated/torchlit-limestone/enemy.caster.json" with { type: "json" };
-import enemySkirmisherTorchlit from "../../content/art/generated/torchlit-limestone/enemy.skirmisher.json" with { type: "json" };
-import featureHoardTorchlit from "../../content/art/generated/torchlit-limestone/feature.hoard.json" with { type: "json" };
-import terrainFloorTorchlit from "../../content/art/generated/torchlit-limestone/terrain.floor.json" with { type: "json" };
-import terrainWallTorchlit from "../../content/art/generated/torchlit-limestone/terrain.wall.json" with { type: "json" };
-import actorPlayerVoid from "../../content/art/generated/void-ember-lowest/actor.player.json" with { type: "json" };
-import enemyBruteVoid from "../../content/art/generated/void-ember-lowest/enemy.brute.json" with { type: "json" };
-import enemyCasterVoid from "../../content/art/generated/void-ember-lowest/enemy.caster.json" with { type: "json" };
-import enemySkirmisherVoid from "../../content/art/generated/void-ember-lowest/enemy.skirmisher.json" with { type: "json" };
-import featureHoardVoid from "../../content/art/generated/void-ember-lowest/feature.hoard.json" with { type: "json" };
-import terrainFloorVoid from "../../content/art/generated/void-ember-lowest/terrain.floor.json" with { type: "json" };
-import terrainWallVoid from "../../content/art/generated/void-ember-lowest/terrain.wall.json" with { type: "json" };
+import { GENERATED_RECORDS_BY_PATH } from "./generated-records.js";
 import {
   formatSpriteValidationErrors,
   rasterizeSpriteManifest,
@@ -458,28 +440,6 @@ const decodeKeyPart = (part: string): string => decodeURIComponent(part);
 
 const catalogKey = (themeId: string, entityId: string): string =>
   `${themeId}|${entityId}`;
-
-const GENERATED_RECORDS_BY_PATH: Readonly<Record<string, unknown>> = {
-  "ferrous-fungal-middle/actor.player.json": actorPlayerFerrous,
-  "ferrous-fungal-middle/enemy.caster.json": enemyCasterFerrous,
-  "ferrous-fungal-middle/enemy.skirmisher.json": enemySkirmisherFerrous,
-  "ferrous-fungal-middle/feature.hoard.json": featureHoardFerrous,
-  "ferrous-fungal-middle/terrain.floor.json": terrainFloorFerrous,
-  "ferrous-fungal-middle/terrain.wall.json": terrainWallFerrous,
-  "torchlit-limestone/enemy.brute.json": enemyBruteTorchlit,
-  "torchlit-limestone/enemy.caster.json": enemyCasterTorchlit,
-  "torchlit-limestone/enemy.skirmisher.json": enemySkirmisherTorchlit,
-  "torchlit-limestone/feature.hoard.json": featureHoardTorchlit,
-  "torchlit-limestone/terrain.floor.json": terrainFloorTorchlit,
-  "torchlit-limestone/terrain.wall.json": terrainWallTorchlit,
-  "void-ember-lowest/actor.player.json": actorPlayerVoid,
-  "void-ember-lowest/enemy.brute.json": enemyBruteVoid,
-  "void-ember-lowest/enemy.caster.json": enemyCasterVoid,
-  "void-ember-lowest/enemy.skirmisher.json": enemySkirmisherVoid,
-  "void-ember-lowest/feature.hoard.json": featureHoardVoid,
-  "void-ember-lowest/terrain.floor.json": terrainFloorVoid,
-  "void-ember-lowest/terrain.wall.json": terrainWallVoid
-};
 
 let bundledGeneratedCatalog: GeneratedSpriteCatalog | null = null;
 

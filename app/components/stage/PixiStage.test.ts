@@ -38,13 +38,13 @@ describe("PixiStage draw-list seam", () => {
     expect(drawList.sprites.find((sprite) => sprite.key === "1:1:entity:actor.player"))
       .toMatchObject({
         spriteId: "actor.player",
-        atlasKeyString: "fallback|actor.player|grid-mid-action",
+        atlasKeyString: "torchlit-limestone|actor.player|art-batch-shallows",
         reason: "actor.player",
       });
     expect(drawList.sprites.find((sprite) => sprite.key === "2:1:entity:item.consumable"))
       .toMatchObject({
         spriteId: "item.consumable",
-        atlasKeyString: "fallback|item.consumable|grid-mid-action",
+        atlasKeyString: "torchlit-limestone|item.consumable|art-batch-shallows",
         reason: "item.draught",
       });
     expect(drawList.sprites.find((sprite) => sprite.key === "3:1:entity:enemy.brute"))
@@ -56,7 +56,7 @@ describe("PixiStage draw-list seam", () => {
     expect(drawList.sprites.find((sprite) => sprite.key === "3:2:terrain:terrain.water"))
       .toMatchObject({
         spriteId: "terrain.water",
-        atlasKeyString: "fallback|terrain.water|grid-mid-action",
+        atlasKeyString: "torchlit-limestone|terrain.water|art-batch-shallows",
       });
     expect(drawList.sprites.find((sprite) => sprite.key === "3:2:entity:trap.revealed"))
       .toMatchObject({
