@@ -32,56 +32,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Typecheck
-        run: pnpm run typecheck
-
-      - name: Lint
-        run: pnpm run lint
-
-      - name: Root Vitest
-        run: pnpm test
-
-      - name: Integration Vitest
-        run: pnpm exec vitest run --config tests/integration/vitest.config.ts --reporter verbose
-
-      - name: Golden Vitest
-        run: pnpm exec vitest run --config tests/golden/vitest.config.ts --reporter verbose
-
-      - name: App Vitest - input
-        run: pnpm exec vitest run --config app/input/vitest.config.ts --reporter verbose
-
-      - name: App Vitest - artifacts
-        run: pnpm exec vitest run --config app/components/artifacts/vitest.config.ts --reporter verbose
-
-      - name: App Vitest - diary
-        run: pnpm exec vitest run --config app/components/diary/vitest.config.ts --reporter verbose
-
-      - name: App Vitest - grid
-        run: pnpm exec vitest run --config app/components/grid/vitest.config.ts --reporter verbose
-
-      - name: App Vitest - hud
-        run: pnpm exec vitest run --config app/components/hud/vitest.config.ts --reporter verbose
-
-      - name: App Vitest - log
-        run: pnpm exec vitest run --config app/components/log/vitest.config.ts --reporter verbose
-
-      - name: App Vitest - panels
-        run: pnpm exec vitest run --config app/components/panels/vitest.config.ts --reporter verbose
-
-      - name: App Vitest - run index
-        run: pnpm exec vitest run --config app/components/runindex/vitest.config.ts --reporter verbose
-
-      - name: App Vitest - settings
-        run: pnpm exec vitest run --config app/components/settings/vitest.config.ts --reporter verbose
-
-      - name: App Vitest - title
-        run: pnpm exec vitest run --config app/components/title/vitest.config.ts --reporter verbose
-
-      - name: App Vitest - transition
-        run: pnpm exec vitest run --config app/components/transition/vitest.config.ts --reporter verbose
-
-      - name: Determinism Audit Vitest
-        run: pnpm exec vitest run --config tests/determinism-audit/vitest.config.ts --reporter verbose
+      - name: Full vitest gate (verify:ci)
+        run: pnpm run verify:ci
 
       - name: Mocked eval smoke
         env:
