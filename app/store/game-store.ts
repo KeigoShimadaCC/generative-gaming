@@ -30,13 +30,13 @@ import {
   createDescendingTransition,
   floorIntroFromState,
   markTransitionFloorReady,
-  shouldAutoEnterFloor,
   shouldResumePlay,
   startArrivalRitual,
   type FloorControllerState,
   type FloorTransitionState,
   type TransitionLatencySample
 } from "@/components/transition/model";
+import * as floorTransitionRuntime from "@/components/transition/model";
 import type { RunAction } from "@engine/run";
 import { serialize, type GameState } from "@engine/state";
 import { checkActionLegality } from "@engine/turn";
@@ -287,6 +287,12 @@ export const updateBotStateBridge = (
 type StoreSet = typeof useGameStore.setState;
 type StoreGet = typeof useGameStore.getState;
 
+const shouldAutoEnterFloorAt = (
+  transition: FloorTransitionState,
+  atMs: number
+): boolean =>
+  floorTransitionRuntime.shouldAutoEnterFloor(transition, atMs);
+
 const beginDescendTransition = (get: StoreGet, set: StoreSet): void => {
   const { gameSession, gameState } = get();
   if (gameSession === null || gameState === null || get().transition !== null) {
@@ -446,7 +452,7 @@ const attemptResolveDescendFloorIteration = async ({
 
   if (transitionAfterResolve.floorReady) {
     if (
-      shouldAutoEnterFloor(transitionAfterResolve, nowMs()) &&
+      shouldAutoEnterFloorAt(transitionAfterResolve, nowMs()) &&
       shouldFinishReadyDescendFloor(controllerState, served.source)
     ) {
       return (
@@ -468,7 +474,7 @@ const attemptResolveDescendFloorIteration = async ({
   );
   setTransitionState(set, readyTransition);
   if (
-    shouldAutoEnterFloor(readyTransition, nowMs()) &&
+    shouldAutoEnterFloorAt(readyTransition, nowMs()) &&
     shouldFinishReadyDescendFloor(controllerState, served.source)
   ) {
     return finishReadyDescendFloor(get, set, session, readyTransition) || true;
@@ -499,6 +505,60 @@ const rebindDescendingTransition = (
   return null;
 };
 
+const completeDescendFloorEntryWhenReady = (
+  get: StoreGet,
+  set: StoreSet,
+  session: ClientGameSession
+): boolean => {
+  const transition = get().transition;
+  if (
+    transition === null ||
+    transition.phase !== "descending" ||
+    !transition.floorReady
+  ) {
+    return false;
+  }
+
+  if (!shouldAutoEnterFloorAt(transition, nowMs())) {
+    return false;
+  }
+
+  enterResolvedFloor(get, set, session);
+  return true;
+};
+
+const scheduleDescendFloorEntry = (
+  get: StoreGet,
+  set: StoreSet,
+  session: ClientGameSession,
+  token: FloorTransitionState
+): void => {
+  if (completeDescendFloorEntryWhenReady(get, set, session)) {
+    return;
+  }
+
+  const transition = get().transition;
+  if (transition === null || !sameDescendingTransition(transition, token)) {
+    return;
+  }
+
+  const currentMs = nowMs();
+  const theaterEndsAtMs = transition.startedAtMs + READY_THEATER_MS;
+  const delayMs =
+    transition.controllerState === "ready" && theaterEndsAtMs > currentMs
+      ? theaterEndsAtMs - currentMs
+      : ARRIVAL_COMPLETION_RETRY_MS;
+
+  globalThis.setTimeout(() => {
+    const current = get().transition;
+    if (!sameDescendingTransition(current, token)) {
+      return;
+    }
+
+    scheduleDescendFloorEntry(get, set, session, token);
+  }, delayMs);
+};
+
 const completeDescendTransition = async (
   get: StoreGet,
   set: StoreSet,
@@ -519,22 +579,12 @@ const completeDescendTransition = async (
     return;
   }
 
-  if (shouldAutoEnterFloor(next, nowMs())) {
+  if (shouldAutoEnterFloorAt(next, nowMs())) {
     await enterResolvedFloorAsync(get, set, session);
     return;
   }
 
-  const delayMs = Math.max(0, READY_THEATER_MS - (nowMs() - next.startedAtMs));
-  globalThis.setTimeout(() => {
-    const current = get().transition;
-    if (
-      current !== null &&
-      sameDescendingTransition(current, token) &&
-      shouldAutoEnterFloor(current, nowMs())
-    ) {
-      enterResolvedFloor(get, set, session);
-    }
-  }, delayMs);
+  scheduleDescendFloorEntry(get, set, session, token);
 };
 
 const recoverDescendWithFallback = async (

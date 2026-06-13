@@ -1,6 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { ARRIVAL_RITUAL_MS } from "@/components/transition/model";
+import {
+  ARRIVAL_RITUAL_MS,
+  READY_THEATER_MS
+} from "@/components/transition/model";
 import type {
   ClientGameSession,
   ClientGameSessionStep,
@@ -8,6 +11,26 @@ import type {
   ClientServedFloor
 } from "@/input/game-session";
 import { createInitialState, deserialize, type GameState } from "@engine/state";
+
+const autoEnterGate = vi.hoisted(() => ({ failChecks: 0 }));
+
+vi.mock("@/components/transition/model", async (importOriginal) => {
+  const actual =
+    await importOriginal<typeof import("@/components/transition/model")>();
+  return {
+    ...actual,
+    shouldAutoEnterFloor: (
+      transition: Parameters<typeof actual.shouldAutoEnterFloor>[0],
+      now: number
+    ) => {
+      if (autoEnterGate.failChecks > 0) {
+        autoEnterGate.failChecks -= 1;
+        return false;
+      }
+      return actual.shouldAutoEnterFloor(transition, now);
+    }
+  };
+});
 
 import {
   defaultUi,
@@ -26,6 +49,7 @@ vi.mock("@engine/turn", () => ({
 
 describe("game store descending floor resolution", () => {
   beforeEach(() => {
+    autoEnterGate.failChecks = 0;
     vi.useFakeTimers({
       now: 0,
       toFake: ["Date", "performance", "setTimeout", "clearTimeout"]
@@ -188,6 +212,44 @@ describe("game store descending floor resolution", () => {
     expect(useGameStore.getState().transition?.floorReady).toBe(true);
   });
 
+  it("re-arms descend floor entry when auto-enter checks fail at the theater boundary", async () => {
+    autoEnterGate.failChecks = 4;
+    const session = createFakeSession("descend-theater-rearm", {
+      pollFloor: vi.fn(async () => "ready" as const)
+    });
+
+    useGameStore.setState({
+      gameSession: session,
+      gameState: session.state,
+      screen: "playing",
+      transition: null,
+      arrivalIntroLine: null,
+      ui: defaultUi
+    });
+
+    expect(
+      useGameStore.getState().dispatchAction({ kind: "descend" })
+    ).toBeNull();
+    await vi.advanceTimersByTimeAsync(0);
+
+    expect(useGameStore.getState().transition).toMatchObject({
+      phase: "descending",
+      floorReady: true,
+      controllerState: "ready"
+    });
+
+    await vi.advanceTimersByTimeAsync(READY_THEATER_MS);
+    expect(useGameStore.getState().transition?.phase).toBe("descending");
+
+    await vi.advanceTimersByTimeAsync(100);
+    expect(useGameStore.getState().transition?.phase).toBe("arrival");
+    expect(useGameStore.getState().ui.inputLocked).toBe(true);
+
+    await vi.advanceTimersByTimeAsync(ARRIVAL_RITUAL_MS);
+    expect(useGameStore.getState().transition).toBeNull();
+    expect(useGameStore.getState().ui.inputLocked).toBe(false);
+  });
+
   it("preempts a never-resolving resolveFloor when prefetch is ready and serves fallback within the budget", async () => {
     const session = createFakeSession("descend-pending-ready", {
       startDepth: 9,
@@ -228,6 +290,7 @@ describe("game store descending floor resolution", () => {
 
 describe("game store arrival transition", () => {
   beforeEach(() => {
+    autoEnterGate.failChecks = 0;
     vi.useFakeTimers({
       now: 0,
       toFake: ["Date", "performance", "setTimeout", "clearTimeout"]

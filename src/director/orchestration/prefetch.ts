@@ -300,11 +300,13 @@ export const createPrefetchController = (
     globalGate: Promise<void>,
   ): Promise<void> => {
     const prompt = buildPrompt(depth, trace);
-
+    const generateContext = buildGenerateContext(
+      depth,
+      prompt,
+      abortController.signal,
+    );
     try {
-      const result = await generateFloor(
-        buildGenerateContext(depth, prompt, abortController.signal),
-      );
+      const result = await generateFloor(generateContext);
 
       if (cancelled || abortController.signal.aborted) {
         recordDiscard(depth, "cancelled");

@@ -786,10 +786,10 @@ export const createWebTransportState = (
       }
 
       const flight = resolveGetFloor(request).finally(() => {
-        if (pendingGetFloorByKey.get(key) === flight) {
-          pendingGetFloorByKey.delete(key);
-        }
-      });
+          if (pendingGetFloorByKey.get(key) === flight) {
+            pendingGetFloorByKey.delete(key);
+          }
+        });
       pendingGetFloorByKey.set(key, flight);
       return flight;
     }
