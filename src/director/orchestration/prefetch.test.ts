@@ -182,6 +182,37 @@ describe("prefetch controller", () => {
     }
   });
 
+  it("dedupes prefer-generated depth generation across sequential getFloor calls when AMBIENT_REAL=1", async () => {
+    const env = readTestEnv();
+    const previousAmbientReal = env.AMBIENT_REAL;
+    env.AMBIENT_REAL = "1";
+
+    try {
+      const fs = new MemoryArtifactFs();
+      const provider = new DelayedMockDirectorProvider({ delayMs: 120 });
+      const controller = createController(fs, provider);
+
+      const firstPromise = Promise.resolve().then(() =>
+        controller.resolveFloor(3, `${SEED}:floor:3`),
+      );
+      await flushAsync(40);
+      const secondPromise = controller.resolveFloor(3, `${SEED}:floor:3`);
+      const [first, second] = await Promise.all([firstPromise, secondPromise]);
+
+      expect(first.source).toBe("generated");
+      expect(second.source).toBe("generated");
+      expect(first.content.roster).toEqual(second.content.roster);
+      expect(provider.getGenerationCount()).toBe(1);
+      expect(loadGenerationChain(RUN_ID, 3, { fs, rootDir: ROOT_DIR }).attempts.length).toBe(1);
+    } finally {
+      if (previousAmbientReal === undefined) {
+        delete env.AMBIENT_REAL;
+      } else {
+        env.AMBIENT_REAL = previousAmbientReal;
+      }
+    }
+  }, 10_000);
+
   it("falls back on provider failure when AMBIENT_REAL=1", async () => {
     const env = readTestEnv();
     const previousAmbientReal = env.AMBIENT_REAL;

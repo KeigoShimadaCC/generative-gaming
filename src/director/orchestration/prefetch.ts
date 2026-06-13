@@ -243,6 +243,8 @@ export const createPrefetchController = (
   let cancelled = false;
   let readySlot: ReadySlot | null = null;
   let inFlightSlot: InFlightSlot | null = null;
+  const completedByDepth = new Map<number, ReadySlot>();
+  const inFlightByDepth = new Map<number, Promise<void>>();
   let lastStatus: PrefetchStatus = { status: "idle" };
   const discards: DiscardedPrefetch[] = [];
   const servedSources = new Map<number, ServedFloorSource>();
@@ -316,7 +318,11 @@ export const createPrefetchController = (
     }
 
     const priorSource = servedSources.get(depth);
-    if (priorSource === "fallback" && currentFloorDepth >= depth) {
+    if (
+      !preferGeneratedServe
+      && priorSource === "fallback"
+      && currentFloorDepth >= depth
+    ) {
       recordDiscard(depth, "fallback_already_served");
       return;
     }
@@ -325,7 +331,11 @@ export const createPrefetchController = (
       recordDiscard(readySlot.depth, "superseded_by_new_prefetch");
     }
 
-    readySlot = { depth, content, source };
+    const slot: ReadySlot = { depth, content, source };
+    readySlot = slot;
+    if (preferGeneratedServe) {
+      completedByDepth.set(depth, slot);
+    }
     setStatus({ status: "ready", depth });
   };
 
@@ -437,10 +447,37 @@ export const createPrefetchController = (
       promise,
       abortController,
     };
+    inFlightByDepth.set(depth, promise);
+    void promise.finally(() => {
+      if (inFlightByDepth.get(depth) === promise) {
+        inFlightByDepth.delete(depth);
+      }
+    });
     setStatus({ status: "in_flight", depth, startedAtMs });
   };
 
+  const peekReady = (depth: number): ReadySlot | null => {
+    if (preferGeneratedServe) {
+      const cached = completedByDepth.get(depth);
+      if (cached !== undefined) {
+        return cached;
+      }
+    }
+
+    if (readySlot?.depth !== depth) {
+      return null;
+    }
+
+    return readySlot;
+  };
+
   const consumeReady = (depth: number): ReadySlot | null => {
+    if (preferGeneratedServe) {
+      const cached = completedByDepth.get(depth);
+      if (cached !== undefined) {
+        return cached;
+      }
+    }
     if (readySlot?.depth !== depth) {
       return null;
     }
@@ -469,21 +506,88 @@ export const createPrefetchController = (
     const deadline = startedAtMs + serveWaitMs;
 
     while (clock() < deadline) {
-      const ready = consumeReady(depth);
+      const ready = peekReady(depth);
       if (ready !== null) {
         return ready;
       }
 
-      if (inFlightSlot?.depth !== depth) {
+      const inflight = inFlightByDepth.get(depth) ?? (
+        inFlightSlot?.depth === depth ? inFlightSlot.promise : undefined
+      );
+      if (inflight === undefined) {
         return null;
+      }
+
+      await Promise.race([
+        inflight,
+        new Promise<void>((resolve) => {
+          setTimeout(resolve, SYNC_WAIT_SLICE_MS);
+        }),
+      ]);
+    }
+
+    return peekReady(depth);
+  };
+
+  const ensureDepthGeneration = async (depth: number): Promise<void> => {
+    if (completedByDepth.has(depth)) {
+      return;
+    }
+
+    const existing = inFlightByDepth.get(depth);
+    if (existing !== undefined) {
+      await existing;
+      return;
+    }
+
+    const deadline = clock() + serveWaitMs;
+    while (clock() < deadline) {
+      if (completedByDepth.has(depth)) {
+        return;
+      }
+
+      const inflight = inFlightByDepth.get(depth);
+      if (inflight !== undefined) {
+        await inflight;
+        return;
+      }
+
+      startPrefetch(depth, emptyTrace(options.runId, options.seed));
+      const started = inFlightByDepth.get(depth);
+      if (started !== undefined) {
+        await started;
+        return;
+      }
+
+      const blocker = inFlightSlot?.promise ?? globalGenerationInFlight;
+      if (blocker !== null && blocker !== undefined) {
+        await blocker;
+        continue;
       }
 
       await new Promise<void>((resolve) => {
         setTimeout(resolve, SYNC_WAIT_SLICE_MS);
       });
     }
+  };
 
-    return consumeReady(depth);
+  const resolvePreferGeneratedDepth = async (
+    depth: number,
+    seed: string,
+  ): Promise<ServedFloor> => {
+    const cached = completedByDepth.get(depth);
+    if (cached !== undefined) {
+      return servedFromReady(cached, seed);
+    }
+
+    await ensureDepthGeneration(depth);
+
+    const afterGeneration = completedByDepth.get(depth);
+    if (afterGeneration !== undefined) {
+      return servedFromReady(afterGeneration, seed);
+    }
+
+    return serveFallback(depth, seed);
   };
 
   const servedFromReady = (ready: ReadySlot, seed: string): ServedFloor => {
@@ -506,6 +610,10 @@ export const createPrefetchController = (
     depth: number,
     seed: string,
   ): Promise<ServedFloor> => {
+    if (preferGeneratedServe) {
+      return resolvePreferGeneratedDepth(depth, seed);
+    }
+
     const ready = consumeReady(depth);
     if (ready !== null) {
       return servedFromReady(ready, seed);
@@ -522,7 +630,7 @@ export const createPrefetchController = (
 
     startPrefetch(depth, emptyTrace(options.runId, options.seed));
 
-    if (preferGeneratedServe && inFlightSlot?.depth === depth) {
+    if (inFlightSlot?.depth === depth) {
       const waited = await waitForReadySlot(depth, inFlightSlot.startedAtMs);
       if (waited !== null) {
         return servedFromReady(waited, seed);
@@ -537,18 +645,42 @@ export const createPrefetchController = (
     startPrefetch(depth + 1, trace);
   };
 
+  const floorContentFromReady = (ready: ReadySlot, seed: string): FloorContent => {
+    servedSources.set(ready.depth, ready.source);
+    startPrefetch(ready.depth + 1, emptyTrace(options.runId, options.seed));
+    return {
+      ...ready.content,
+      params: {
+        ...ready.content.params,
+        seed,
+      },
+    };
+  };
+
   const getFloor = (depth: number, seed: string): FloorContent => {
+    if (preferGeneratedServe) {
+      const cached = completedByDepth.get(depth);
+      if (cached !== undefined) {
+        return floorContentFromReady(cached, seed);
+      }
+
+      const remainingMs = serveWaitMs;
+      const resolved = waitForPromiseSync(
+        ensureDepthGeneration(depth).then(() => peekReady(depth)),
+        remainingMs,
+        clock,
+      );
+
+      if (resolved !== null) {
+        return floorContentFromReady(resolved, seed);
+      }
+
+      return serveFallback(depth, seed).content;
+    }
+
     const ready = consumeReady(depth);
     if (ready !== null) {
-      servedSources.set(depth, ready.source);
-      startPrefetch(depth + 1, emptyTrace(options.runId, options.seed));
-      return {
-        ...ready.content,
-        params: {
-          ...ready.content.params,
-          seed,
-        },
-      };
+      return floorContentFromReady(ready, seed);
     }
 
     if (inFlightSlot?.depth === depth) {
@@ -557,21 +689,13 @@ export const createPrefetchController = (
         serveWaitMs - (clock() - inFlightSlot.startedAtMs),
       );
       const resolved = waitForPromiseSync(
-        inFlightSlot.promise.then(() => consumeReady(depth)),
+        inFlightSlot.promise.then(() => peekReady(depth)),
         remainingMs,
         clock,
       );
 
       if (resolved !== null) {
-        servedSources.set(depth, resolved.source);
-        startPrefetch(depth + 1, emptyTrace(options.runId, options.seed));
-        return {
-          ...resolved.content,
-          params: {
-            ...resolved.content.params,
-            seed,
-          },
-        };
+        return floorContentFromReady(resolved, seed);
       }
 
       const served = serveFallback(depth, seed);
@@ -580,27 +704,19 @@ export const createPrefetchController = (
 
     startPrefetch(depth, emptyTrace(options.runId, options.seed));
 
-    if (preferGeneratedServe && inFlightSlot?.depth === depth) {
+    if (inFlightSlot?.depth === depth) {
       const remainingMs = Math.max(
         0,
         serveWaitMs - (clock() - inFlightSlot.startedAtMs),
       );
       const resolved = waitForPromiseSync(
-        inFlightSlot.promise.then(() => consumeReady(depth)),
+        inFlightSlot.promise.then(() => peekReady(depth)),
         remainingMs,
         clock,
       );
 
       if (resolved !== null) {
-        servedSources.set(depth, resolved.source);
-        startPrefetch(depth + 1, emptyTrace(options.runId, options.seed));
-        return {
-          ...resolved.content,
-          params: {
-            ...resolved.content.params,
-            seed,
-          },
-        };
+        return floorContentFromReady(resolved, seed);
       }
     }
 
@@ -634,6 +750,8 @@ export const createPrefetchController = (
     inFlightSlot?.abortController.abort();
     inFlightSlot = null;
     readySlot = null;
+    completedByDepth.clear();
+    inFlightByDepth.clear();
     setStatus({ status: "idle" });
   };
 

@@ -349,6 +349,62 @@ describe("web director transport", () => {
     }
   }, 15_000);
 
+  it("dedupes AMBIENT_REAL getFloor retries so generation runs once per depth", async () => {
+    const previousAmbientReal = process.env.AMBIENT_REAL;
+    const previousDirector = process.env.DIRECTOR;
+    process.env.AMBIENT_REAL = "1";
+    delete process.env.DIRECTOR;
+    ambientMock.delayMs = 120;
+    ambientMock.shouldFail = false;
+
+    try {
+      const state = createWebTransportState();
+      const { handlers } = state;
+      const runId = "transport-ambient-real-dedupe";
+      const seed = "transport-ambient-real-dedupe-seed";
+
+      handlers.startGeneration({
+        runId,
+        depth: 1,
+        trace: emptyTrace(runId, seed)
+      });
+
+      const firstPromise = handlers.getFloor({
+        runId,
+        depth: 3,
+        seed
+      });
+      await new Promise<void>((resolve) => {
+        setTimeout(resolve, 40);
+      });
+      const secondPromise = handlers.getFloor({
+        runId,
+        depth: 3,
+        seed
+      });
+      const [first, second] = await Promise.all([firstPromise, secondPromise]);
+
+      expect(first.source).toBe("generated");
+      expect(second.source).toBe("generated");
+      expect(first.content.roster).toEqual(second.content.roster);
+      expect(
+        loadGenerationChain(state.artifactRunId, 3, state.artifacts).attempts.length
+      ).toBe(1);
+    } finally {
+      if (previousAmbientReal === undefined) {
+        delete process.env.AMBIENT_REAL;
+      } else {
+        process.env.AMBIENT_REAL = previousAmbientReal;
+      }
+      if (previousDirector === undefined) {
+        delete process.env.DIRECTOR;
+      } else {
+        process.env.DIRECTOR = previousDirector;
+      }
+      resetWebTransportStateForTests();
+    }
+  }, 15_000);
+
   it("falls back when AMBIENT_REAL=1 and generation fails", async () => {
     const previousAmbientReal = process.env.AMBIENT_REAL;
     const previousDirector = process.env.DIRECTOR;
