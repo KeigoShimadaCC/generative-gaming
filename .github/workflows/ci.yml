@@ -157,7 +157,7 @@ jobs:
   e2e:
     runs-on: ubuntu-latest
     needs: check
-    timeout-minutes: 15
+    timeout-minutes: 12
     env:
       PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/.cache/ms-playwright
       XDG_CACHE_HOME: ${{ github.workspace }}/.cache
@@ -191,5 +191,26 @@ jobs:
       - name: Install Playwright Chromium
         run: pnpm exec playwright install --with-deps chromium
 
+      - name: Diagnose e2e environment
+        run: |
+          node --version
+          pnpm --version
+          pnpm exec playwright --version
+          curl -sI http://localhost:3001 || true
+
       - name: Playwright e2e
-        run: pnpm run e2e
+        env:
+          DEBUG: "pw:webserver"
+        run: |
+          mkdir -p logs
+          pnpm exec playwright test --reporter=line 2>&1 | tee logs/webserver-e2e.log
+
+      - name: Upload e2e diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-diagnostics-${{ github.run_id }}
+          path: |
+            logs/webserver-e2e.log
+            test-results/
+          if-no-files-found: ignore
