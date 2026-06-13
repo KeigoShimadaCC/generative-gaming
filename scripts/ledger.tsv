@@ -179,3 +179,4 @@ timestamp	label	agent	model	effort	seconds	input_tokens	output_tokens	total_toke
 2026-06-13T17:17:09Z	phase62-art-spike	codex	default	default	806	2532078	24268	2556346	0
 2026-06-13T17:38:58Z	phase65-art-pipeline	codex	default	default	826	4368088	38181	4406269	0
 2026-06-13T17:55:09Z	phase66-71-dungeon	codex	default	default	785	6475571	32602	6508173	0
+2026-06-13T18:32:08Z	phase72-75-juice	codex	default	default	906	6710576	42775	6753351	0

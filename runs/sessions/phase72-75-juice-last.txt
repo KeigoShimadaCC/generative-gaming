@@ -1,0 +1,22 @@
+Implemented R2 juice in the owned stage renderer files only.
+
+**Changed**
+- [animation.ts](/Users/keigoshimada/Documents/generative-gaming/app/components/stage/animation.ts:220): pure `(prevState, nextState)` cosmetic plan mapper for movement, attacks, hit flash/shake, floating numbers, death, pickup/equip/item triggers/door effects, and status auras.
+- [PixiStage.tsx](/Users/keigoshimada/Documents/generative-gaming/app/components/stage/PixiStage.tsx:65): tracks previous authoritative frame and reads reduced motion via `?motion=off|reduced|snap`, `?reducedMotion=1`, or browser media preference.
+- [PixiStageCanvas.tsx](/Users/keigoshimada/Documents/generative-gaming/app/components/stage/PixiStageCanvas.tsx:200): ticker-owned animation runtime; effects converge back to current draw-list positions, with no simulation/state writes.
+- [animation.test.ts](/Users/keigoshimada/Documents/generative-gaming/app/components/stage/animation.test.ts:18): pure diff/effect tests for movement, combat hit/damage/death, pickup/interactions, status, and reduced motion.
+
+**Verification**
+- `pnpm exec vitest run --config app/components/stage/vitest.config.ts --reporter verbose` -> exit 0, 2 files / 13 tests passed.
+- `pnpm exec eslint app/components/stage` -> exit 0.
+- `pnpm run typecheck` -> exit 0.
+- `pnpm run verify:ci` -> exit 0. Summary included typecheck, lint, root Vitest `84 passed`, stage suite `13 passed`, determinism audit `3 passed`, golden suite `9 passed`, integration `9 passed | 2 skipped`.
+
+**Scope / Invariants**
+- No commits, per brief.
+- My changed files are only under `app/components/stage/**`.
+- No engine/schema/director/gauntlet/content/grid changes from this task.
+- `rg` found no `Math.random`, `Date.now`, `performance.now`, `new Date`, or `crypto.random` in `app/components/stage`.
+- Browser visual smoke not run here because the brief assigns it to the host/orchestrator.
+
+Residual risk: visual tuning still needs the orchestrator’s real screenshot smoke. Actual time spent: ~30 min vs 60 min estimate / 120 min timebox.

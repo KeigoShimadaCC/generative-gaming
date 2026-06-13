@@ -12,7 +12,7 @@ This file records *state*, never *design* — design lives in the doc spine
 **Phase:** M4 — Make It a Game (visual/UX overhaul), Wave R0 (risk-retirement spikes)
 **Phase plan:** phase-plans/M4-VISUAL-OVERHAUL.md (approved 2026-06-13, "execute till done")
 **Started:** 2026-06-13
-**Status (M4):** R0 COMPLETE (c0dc772c). Both spikes GO: 62 art-as-code (live codex rendered a recognizable AI cave slug at $0, sprite-manifest v1 frozen) + 63 PixiJS (render seam frozen, a11y mirror). ART.md authored. NOW: Phase 65 (art pipeline: validator/atlas/resolver + curated fallback sprite set) dispatched to Codex — the gate before R1 render phases. AI art = code-generated sprites ($0 ambient codex), PixiJS renderer. Pure render layer — engine/gauntlet/director/schema untouched; determinism+replay stay green (verify:ci).
+**Status (M4):** R0 done (spikes GO, ART.md). 65 done (art pipeline + 17 curated fallback sprites, 9b0c915a). **R1 COMPLETE & LIVE (17e2cf60): the dungeon reads as a dungeon** — auto-tiled walls/rooms, fog+light, entity sprites (player/enemies/Hoard/stairs), follow-camera, styled HUD; wired into GameShell (StageRegion, ?stage=dom fallback). A PixiJS async-init crash that all green gates missed was caught by the host-side VISUAL SMOKE and fixed — visual smoke is now mandatory for every render phase. Screenshot: runs/spikes/r1-dungeon-after.png (sent to human). NOW: R2 juice (movement tween, hit flash, screen shake, damage numbers, effects, status auras) dispatched to Codex — cosmetic only, determinism/goldens stay green. AI art = code-generated sprites ($0 ambient codex). Engine/gauntlet/director/schema untouched.
 
 **Phase (prior):** M3 final acceptance - human checklist
 **Phase plan (prior):** phase-plans/PHASE-61-M3-ACCEPTANCE.md
