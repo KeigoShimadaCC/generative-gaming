@@ -4,6 +4,11 @@ const port = Number.parseInt(process.env.PORT ?? "3101", 10);
 const baseURL = `http://127.0.0.1:${Number.isFinite(port) ? port : 3101}`;
 const ambientDirector = process.env.AMBIENT === "1";
 const fullClearCampaign = process.env.FULLCLEAR === "1";
+const isCI = process.env.CI === "true";
+const desktopChrome = {
+  ...devices["Desktop Chrome"],
+  ...(isCI ? { channel: "chrome" as const } : {}),
+};
 
 export default defineConfig({
   testDir: "./e2e",
@@ -24,7 +29,7 @@ export default defineConfig({
     {
       name: "chromium",
       testIgnore: /full-clear\.spec\.ts/,
-      use: { ...devices["Desktop Chrome"] },
+      use: desktopChrome,
     },
     ...(fullClearCampaign
       ? [
@@ -33,7 +38,7 @@ export default defineConfig({
             testMatch: /full-clear\.spec\.ts/,
             timeout: 60 * 60 * 1000,
             use: {
-              ...devices["Desktop Chrome"],
+              ...desktopChrome,
               actionTimeout: 30_000,
             },
           },
