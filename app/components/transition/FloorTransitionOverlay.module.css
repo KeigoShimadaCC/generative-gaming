@@ -4,37 +4,167 @@
   z-index: 40;
   display: grid;
   place-items: center;
-  background: rgba(5, 7, 10, 0.9);
+  overflow: hidden;
   color: var(--gg-text);
+  background: rgba(4, 6, 9, 0.94);
+}
+
+.descending {
+  pointer-events: auto;
+}
+
+.arrival {
+  pointer-events: none;
+  background: rgba(4, 6, 9, 0.52);
+  animation: gg-arrival-fade 2s ease-out forwards;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.inkWash {
+  position: absolute;
+  inset: -20%;
+  background:
+    radial-gradient(circle at 50% 38%, var(--gg-transition-ink), transparent 58%),
+    linear-gradient(180deg, rgba(5, 8, 12, 0.2), rgba(2, 3, 5, 0.92));
+  opacity: 0.95;
+}
+
+.glowOrb {
+  position: absolute;
+  top: 28%;
+  left: 50%;
+  width: min(42rem, 88vw);
+  height: min(42rem, 88vw);
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--gg-transition-glow), transparent 68%);
+  transform: translate(-50%, -50%);
+  filter: blur(18px);
+  opacity: 0.85;
+  animation: gg-glow-breathe 3.6s ease-in-out infinite;
 }
 
 .panel {
+  position: relative;
+  z-index: 1;
   display: grid;
-  width: min(34rem, calc(100vw - 2rem));
-  gap: 0.9rem;
+  width: min(38rem, calc(100vw - 2.4rem));
+  gap: 0.85rem;
   justify-items: center;
   text-align: center;
+  padding: 1.4rem 1.2rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1.1rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01)),
+    rgba(8, 10, 14, 0.72);
+  box-shadow:
+    0 24px 80px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
 }
 
-.floor {
-  font-size: clamp(2.1rem, 9vw, 5rem);
+.panelDescend {
+  animation: gg-panel-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.panelArrival {
+  animation: gg-panel-arrive 0.95s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.panelPulse {
+  animation:
+    gg-panel-arrive 0.95s cubic-bezier(0.16, 1, 0.3, 1) both,
+    gg-theme-pulse 0.9s ease-out;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--gg-transition-accent);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.headline {
+  margin: 0;
+  max-width: 24rem;
+  color: var(--gg-text);
+  font-size: clamp(1.65rem, 5.8vw, 2.55rem);
   font-weight: 800;
-  letter-spacing: 0;
-  line-height: 0.95;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
 }
 
-.whisper {
-  max-width: 30rem;
+.subline {
+  margin: 0;
+  max-width: 28rem;
   color: var(--gg-muted);
-  font-size: 0.98rem;
-  line-height: 1.5;
+  font-size: clamp(0.95rem, 2.8vw, 1.05rem);
+  line-height: 1.55;
+}
+
+.depthCue {
+  margin: 0.2rem 0 0;
+  color: color-mix(in srgb, var(--gg-transition-accent) 72%, var(--gg-text));
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.skipHint {
+  margin: 0.35rem 0 0;
+  color: var(--gg-muted);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.inkReveal {
+  display: grid;
+  width: min(24rem, 72vw);
+  gap: 0.55rem;
+  margin-top: 0.15rem;
+}
+
+.inkStroke,
+.inkStrokeSecondary {
+  height: 0.55rem;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--gg-transition-accent) 35%, transparent),
+    var(--gg-transition-accent),
+    color-mix(in srgb, var(--gg-transition-accent) 35%, transparent),
+    transparent
+  );
+  background-size: 220% 100%;
+  opacity: 0.55;
+  animation: gg-ink-sweep 1.8s ease-in-out infinite;
+}
+
+.inkStrokeSecondary {
+  width: 72%;
+  justify-self: center;
+  animation-delay: 0.35s;
+  opacity: 0.38;
 }
 
 .shimmerTrack {
   position: relative;
-  width: min(21rem, 68vw);
+  width: 100%;
   height: 2px;
   overflow: hidden;
+  border-radius: 999px;
   background: rgba(255, 255, 255, 0.08);
 }
 
@@ -42,27 +172,202 @@
   position: absolute;
   inset: 0 auto 0 0;
   width: max(12%, var(--gg-transition-shimmer));
-  background: linear-gradient(90deg, transparent, var(--gg-accent), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--gg-transition-accent),
+    transparent
+  );
   animation: gg-transition-shimmer 1.1s linear infinite;
 }
 
-.arrival {
-  pointer-events: none;
-  background: rgba(5, 7, 10, 0.42);
-  animation: gg-arrival-fade 2s ease-out forwards;
+.bandTag {
+  margin: 0;
+  color: var(--gg-transition-accent);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
 }
 
-.arrivalLine {
-  width: min(34rem, 84vw);
-  border-top: 1px solid var(--gg-border);
-  padding-top: 0.9rem;
+.themeReveal {
+  margin: 0;
+  max-width: 30rem;
   color: var(--gg-text);
-  font-size: 0.9rem;
+  font-size: clamp(2rem, 8vw, 4.4rem);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.themeNamed {
+  background: linear-gradient(
+    180deg,
+    #ffffff 10%,
+    color-mix(in srgb, var(--gg-transition-accent) 55%, #ffffff) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.themeDerived {
+  color: var(--gg-text);
+}
+
+.themeSubtitle {
+  margin: 0;
+  color: var(--gg-muted);
+  font-size: 0.92rem;
   line-height: 1.45;
 }
 
-.descending {
-  pointer-events: auto;
+.signatureBadge {
+  margin: 0;
+  padding: 0.28rem 0.7rem;
+  border: 1px solid color-mix(in srgb, var(--gg-transition-accent) 45%, transparent);
+  border-radius: 999px;
+  color: var(--gg-transition-accent);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.floorDepth {
+  margin: 0.1rem 0 0;
+  color: color-mix(in srgb, var(--gg-transition-accent) 70%, var(--gg-muted));
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.arrivalLine {
+  width: min(32rem, 84vw);
+  margin: 0.35rem 0 0;
+  padding-top: 0.95rem;
+  border-top: 1px solid color-mix(in srgb, var(--gg-transition-accent) 28%, var(--gg-border));
+  color: var(--gg-text);
+  font-size: clamp(0.92rem, 2.6vw, 1.02rem);
+  line-height: 1.55;
+  opacity: calc(0.35 + (var(--gg-transition-arrival) * 0.65));
+  transform: translateY(calc((1 - var(--gg-transition-arrival)) * 10px));
+  transition: opacity 120ms linear, transform 120ms linear;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.reducedMotion .glowOrb,
+.reducedMotion .inkStroke,
+.reducedMotion .inkStrokeSecondary,
+.reducedMotion .shimmerFill,
+.reducedMotion .panelDescend,
+.reducedMotion .panelArrival,
+.reducedMotion .panelPulse {
+  animation: none !important;
+}
+
+.reducedMotion .arrival {
+  animation: gg-arrival-fade-reduced 1.1s ease-out forwards;
+}
+
+.reducedMotion .arrivalLine {
+  transform: none;
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glowOrb,
+  .inkStroke,
+  .inkStrokeSecondary,
+  .shimmerFill,
+  .panelDescend,
+  .panelArrival,
+  .panelPulse {
+    animation: none !important;
+  }
+
+  .arrival {
+    animation: gg-arrival-fade-reduced 1.1s ease-out forwards;
+  }
+
+  .arrivalLine {
+    transform: none;
+    transition: none;
+  }
+}
+
+@keyframes gg-panel-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes gg-panel-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.94);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes gg-theme-pulse {
+  0% {
+    filter: brightness(1);
+  }
+
+  35% {
+    filter: brightness(1.12);
+  }
+
+  100% {
+    filter: brightness(1);
+  }
+}
+
+@keyframes gg-glow-breathe {
+  0%,
+  100% {
+    opacity: 0.62;
+    transform: translate(-50%, -50%) scale(0.96);
+  }
+
+  50% {
+    opacity: 0.92;
+    transform: translate(-50%, -50%) scale(1.04);
+  }
+}
+
+@keyframes gg-ink-sweep {
+  0% {
+    background-position: 120% 0;
+  }
+
+  100% {
+    background-position: -120% 0;
+  }
 }
 
 @keyframes gg-transition-shimmer {
@@ -82,6 +387,16 @@
 
   70% {
     opacity: 0.65;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes gg-arrival-fade-reduced {
+  0% {
+    opacity: 1;
   }
 
   100% {
