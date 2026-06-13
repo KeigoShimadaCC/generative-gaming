@@ -7,8 +7,7 @@ import type {
 
 // eslint-disable-next-line no-restricted-imports -- Phase 66-71 brief requires the stage seam to consume the phase-65 art atlas.
 import {
-  FALLBACK_THEME_ID,
-  spriteAtlasKey,
+  loadBundledGeneratedSpriteCatalog,
   serializeSpriteAtlasKey,
   type SpriteAtlasKey,
 } from "../../../src/art/atlas.js";
@@ -16,6 +15,8 @@ import {
 import type { FallbackSpriteId } from "../../../src/art/fallback.js";
 // eslint-disable-next-line no-restricted-imports -- Phase 66-71 brief requires the stage draw-list to resolve sprites through src/art.
 import {
+  artResolverOptionsForBand,
+  resolveAtlasKeyForSprite,
   resolveSpriteForCell,
   resolveTerrainSpriteId,
 } from "../../../src/art/resolver.js";
@@ -98,6 +99,7 @@ const DEFAULT_GAP = 0;
 const DEFAULT_PADDING = 0;
 const ENTITY_INSET = 3;
 const HOARD_SCALE = 1.25;
+const GENERATED_SPRITE_CATALOG = loadBundledGeneratedSpriteCatalog();
 
 export type StageDrawListOptions = {
   readonly state: GameState;
@@ -134,6 +136,10 @@ export const createStageDrawList = (
   const signatureHooks: StageSignatureHook[] = [];
   const playerCell = playerCellForModel(model);
   const playerBounds = boundsForCell(playerCell, metrics);
+  const artOptions = artResolverOptionsForBand(
+    model.band,
+    GENERATED_SPRITE_CATALOG,
+  );
   const camera = resolveStageCamera({
     worldWidth,
     worldHeight,
@@ -155,7 +161,7 @@ export const createStageDrawList = (
       { band: options.state.run.band },
     );
     const wallPresentation = wallPresentationForCell(model, cell, bounds);
-    const terrainSprite = terrainSpriteForCell(options.state, cell);
+    const terrainSprite = terrainSpriteForCell(options.state, cell, artOptions);
     sprites.push({
       key: `${cell.key}:terrain:${terrainSprite.spriteId}`,
       cellKey: cell.key,
@@ -171,7 +177,13 @@ export const createStageDrawList = (
     });
     tileOverlays.push(...wallPresentation.overlays);
 
-    const entitySprite = entitySpriteForCell(options.state, cell, bounds, fogPaint);
+    const entitySprite = entitySpriteForCell(
+      options.state,
+      cell,
+      bounds,
+      fogPaint,
+      artOptions,
+    );
     if (entitySprite !== null) {
       sprites.push(entitySprite);
 
@@ -215,13 +227,17 @@ export const createStageDrawList = (
 const terrainSpriteForCell = (
   state: GameState,
   cell: GridCellView,
+  artOptions: ReturnType<typeof artResolverOptionsForBand>,
 ): {
   readonly atlasKey: SpriteAtlasKey;
   readonly spriteId: FallbackSpriteId;
   readonly reason: string;
 } => {
   const spriteId = resolveTerrainSpriteId(cell.terrain);
-  const atlasKey = spriteAtlasKey(FALLBACK_THEME_ID, spriteId, state.run.seed);
+  const atlasKey = resolveAtlasKeyForSprite(spriteId, {
+    ...artOptions,
+    seed: state.run.seed,
+  });
 
   return {
     atlasKey,
@@ -235,12 +251,13 @@ const entitySpriteForCell = (
   cell: GridCellView,
   bounds: { readonly x: number; readonly y: number; readonly width: number; readonly height: number },
   fogPaint: ReturnType<typeof fogPaintForCell>,
+  artOptions: ReturnType<typeof artResolverOptionsForBand>,
 ): StageSpriteDraw | null => {
   if (!shouldDrawEntitySprite(cell)) {
     return null;
   }
 
-  const resolved = resolveSpriteForCell(state, cell);
+  const resolved = resolveSpriteForCell(state, cell, artOptions);
   const size =
     resolved.spriteId === "feature.hoard"
       ? bounds.width * HOARD_SCALE

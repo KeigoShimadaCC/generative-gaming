@@ -14,6 +14,16 @@ import { resolveStageCamera } from "./camera";
 import { createStageDrawList } from "./draw-list";
 import { fogPaintForCell } from "./fog";
 import { WALL_MASK } from "./tilemap";
+import {
+  createInitialState,
+  type EnemyEntityInstance,
+  type GameState,
+} from "@engine/state";
+import {
+  createTile,
+  createTileGrid,
+  Terrain,
+} from "@engine/map";
 
 describe("PixiStage draw-list seam", () => {
   it("emits deterministic sprite draws with resolver-backed atlas keys", () => {
@@ -40,7 +50,7 @@ describe("PixiStage draw-list seam", () => {
     expect(drawList.sprites.find((sprite) => sprite.key === "3:1:entity:enemy.brute"))
       .toMatchObject({
         spriteId: "enemy.brute",
-        atlasKeyString: "fallback|enemy.brute|grid-mid-action",
+        atlasKeyString: "torchlit-limestone|enemy.brute|art-batch-shallows",
         reason: "enemy.behavior.default",
       });
     expect(drawList.sprites.find((sprite) => sprite.key === "3:2:terrain:terrain.water"))
@@ -53,6 +63,78 @@ describe("PixiStage draw-list seam", () => {
         spriteId: "trap.revealed",
         reason: "trap.revealed",
       });
+  });
+
+  it("resolves middle-band caster enemies to the ferrous-fungal generated sprite", () => {
+    const grid = createTileGrid({
+      width: 3,
+      height: 3,
+      tiles: Array.from({ length: 9 }, () => createTile(Terrain.Floor)),
+    });
+    const state: GameState = {
+      ...createInitialState("middle-band-caster"),
+      run: {
+        ...createInitialState("middle-band-caster").run,
+        depth: 5,
+        band: "middle",
+      },
+      floor: {
+        ...createInitialState("middle-band-caster").floor,
+        depth: 5,
+        geometry: {
+          refId: "middle-band-caster-floor",
+          opaque: grid,
+        },
+      },
+      player: {
+        ...createInitialState("middle-band-caster").player,
+        position: { x: 0, y: 0 },
+      },
+      entities: {
+        "enemy#1": {
+          id: "enemy#1",
+          kind: "enemy",
+          definition: {
+            id: "middle-band-caster-enemy",
+            name: "Fungal Channeler",
+            glyph: "e",
+            origin: "fallback",
+            stats: {
+              band: "middle",
+              hp: 8,
+              attack: 2,
+              defense: 0,
+              xpYield: 2,
+            },
+            behaviors: [{ kind: "caster" }],
+            abilities: [],
+          } as unknown as EnemyEntityInstance["definition"],
+          position: { x: 1, y: 0 },
+          currentHP: 8,
+          statuses: [],
+          behaviorRuntime: {},
+        },
+      },
+      ids: {
+        entityCounters: {
+          enemy: 1,
+          item: 0,
+          npc: 0,
+          trap: 0,
+        },
+      },
+    };
+    const model = createGridViewModel(state);
+    const drawList = createStageDrawList(model, { state, cameraLerp: 1 });
+
+    expect(model.band).toBe("middle");
+    expect(
+      drawList.sprites.find((sprite) => sprite.key === "1:0:entity:enemy.caster"),
+    ).toMatchObject({
+      spriteId: "enemy.caster",
+      atlasKeyString: "ferrous-fungal-middle|enemy.caster|art-batch-middle",
+      reason: "enemy.behavior.caster",
+    });
   });
 
   it("adds auto-tile wall masks and depth overlays for exposed wall edges", () => {

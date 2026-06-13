@@ -13,10 +13,12 @@ import {
   FALLBACK_THEME_ID,
   GeneratedSpriteCatalog,
   spriteAtlasKey,
+  themeIdForBand,
   type SpriteAtlasKey,
   type SpriteAtlasThemeId
 } from "./atlas.js";
 import type { FallbackSpriteId } from "./fallback.js";
+import type { DepthBand } from "../schemas/entities/index.js";
 
 export type ArtResolverLayer =
   | "player"
@@ -37,6 +39,7 @@ export type ArtResolverCellView = {
 };
 
 export type ArtResolverOptions = {
+  readonly band?: DepthBand;
   readonly themeId?: SpriteAtlasThemeId;
   readonly seed?: string;
   readonly revealHiddenTraps?: boolean;
@@ -244,12 +247,16 @@ export const resolveTrapSpriteId = (
 export const resolveAtlasKeyForSprite = (
   spriteId: FallbackSpriteId,
   options: {
+    readonly band?: DepthBand;
     readonly themeId?: SpriteAtlasThemeId;
     readonly seed: string;
     readonly generatedCatalog?: GeneratedSpriteCatalog | null;
   }
 ): SpriteAtlasKey => {
-  const themeId = options.themeId ?? FALLBACK_THEME_ID;
+  const themeId =
+    options.themeId ??
+    (options.band === undefined ? undefined : themeIdForBand(options.band)) ??
+    FALLBACK_THEME_ID;
   const catalog = options.generatedCatalog;
 
   if (
@@ -267,6 +274,18 @@ export const resolveAtlasKeyForSprite = (
   return spriteAtlasKey(FALLBACK_THEME_ID, spriteId, options.seed);
 };
 
+export const artResolverOptionsForBand = (
+  band: DepthBand,
+  generatedCatalog: GeneratedSpriteCatalog | null = null
+): Pick<
+  ArtResolverOptions,
+  "band" | "themeId" | "generatedCatalog"
+> => ({
+  band,
+  themeId: themeIdForBand(band),
+  generatedCatalog
+});
+
 const resolved = (
   state: GameState,
   spriteId: FallbackSpriteId,
@@ -275,6 +294,7 @@ const resolved = (
 ): ResolvedSprite => ({
   spriteId,
   atlasKey: resolveAtlasKeyForSprite(spriteId, {
+    band: options.band,
     themeId: options.themeId,
     seed: options.seed ?? state.run.seed,
     generatedCatalog: options.generatedCatalog

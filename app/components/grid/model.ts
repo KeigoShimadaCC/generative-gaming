@@ -84,6 +84,8 @@ export type GridRenderCursor = {
 export type GridViewModel = {
   readonly width: number;
   readonly height: number;
+  readonly depth: number;
+  readonly band: GameState["run"]["band"];
   readonly cells: readonly GridCellView[];
   readonly rows: readonly (readonly GridCellView[])[];
   readonly cursor: GridRenderCursor;
@@ -192,6 +194,8 @@ export const createGridViewModel = (
   return {
     width,
     height,
+    depth: state.floor.depth,
+    band: state.run.band,
     cells,
     rows: rowsForCells(cells, width),
     cursor,
