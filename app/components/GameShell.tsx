@@ -10,7 +10,7 @@ import {
 
 import { useGameStore } from "@/store/game-store";
 import { DiaryLayer, type DiaryLayerTab } from "@/components/diary";
-import { GridRegion } from "@/components/grid";
+import { StageRegion } from "@/components/stage";
 import { HudRegion } from "@/components/hud";
 import { KeymapOverlay } from "@/components/keymap-overlay/KeymapOverlay";
 import { MessageLogRegion } from "@/components/log";
@@ -128,7 +128,7 @@ export function GameShell() {
           onMouseMove={(event) => setHoverPosition(positionFromGridEvent(event))}
           onMouseLeave={() => setHoverPosition(null)}
         >
-          <GridRegion
+          <StageRegion
             className={gridRegionClass}
             glyphSizeRem={GLYPH_SIZE_REM[settings.glyphSize]}
             markers={questMarkers}

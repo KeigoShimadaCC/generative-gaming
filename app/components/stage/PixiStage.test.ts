@@ -10,47 +10,165 @@ import {
 import { createGridViewModel } from "@/components/grid/model";
 
 import { StageA11yMirror } from "./a11y-mirror";
+import { resolveStageCamera } from "./camera";
 import { createStageDrawList } from "./draw-list";
+import { fogPaintForCell } from "./fog";
+import { WALL_MASK } from "./tilemap";
 
 describe("PixiStage draw-list seam", () => {
-  it("maps every grid cell to deterministic background rects", () => {
-    const model = createGridViewModel(createFogMixGridFixtureState());
-    const drawList = createStageDrawList(model);
+  it("emits deterministic sprite draws with resolver-backed atlas keys", () => {
+    const state = createMidActionGridFixtureState();
+    const model = createGridViewModel(state);
+    const drawList = createStageDrawList(model, { state, cameraLerp: 1 });
 
     expect(drawList.width).toBe(5);
     expect(drawList.height).toBe(3);
-    expect(drawList.rects.filter((rect) => rect.key.endsWith(":bg"))).toHaveLength(
-      15,
-    );
-    expect(drawList.canvasWidth).toBe(
-      drawList.padding * 2 +
-        drawList.width * drawList.cellSize +
-        (drawList.width - 1) * drawList.gap,
-    );
+    expect(drawList.sprites.filter((sprite) => sprite.layer === "terrain"))
+      .toHaveLength(15);
+    expect(drawList.sprites.find((sprite) => sprite.key === "1:1:entity:actor.player"))
+      .toMatchObject({
+        spriteId: "actor.player",
+        atlasKeyString: "fallback|actor.player|grid-mid-action",
+        reason: "actor.player",
+      });
+    expect(drawList.sprites.find((sprite) => sprite.key === "2:1:entity:item.consumable"))
+      .toMatchObject({
+        spriteId: "item.consumable",
+        atlasKeyString: "fallback|item.consumable|grid-mid-action",
+        reason: "item.draught",
+      });
+    expect(drawList.sprites.find((sprite) => sprite.key === "3:1:entity:enemy.brute"))
+      .toMatchObject({
+        spriteId: "enemy.brute",
+        atlasKeyString: "fallback|enemy.brute|grid-mid-action",
+        reason: "enemy.behavior.default",
+      });
+    expect(drawList.sprites.find((sprite) => sprite.key === "3:2:terrain:terrain.water"))
+      .toMatchObject({
+        spriteId: "terrain.water",
+        atlasKeyString: "fallback|terrain.water|grid-mid-action",
+      });
+    expect(drawList.sprites.find((sprite) => sprite.key === "3:2:entity:trap.revealed"))
+      .toMatchObject({
+        spriteId: "trap.revealed",
+        reason: "trap.revealed",
+      });
   });
 
-  it("adds entity overlay rects only for visible entity layers", () => {
-    const model = createGridViewModel(createPrecedenceFixtureState());
-    const drawList = createStageDrawList(model);
-    const entityRects = drawList.rects.filter((rect) =>
-      rect.key.endsWith(":entity"),
+  it("adds auto-tile wall masks and depth overlays for exposed wall edges", () => {
+    const state = createMidActionGridFixtureState();
+    const model = createGridViewModel(state);
+    const drawList = createStageDrawList(model, { state, cameraLerp: 1 });
+    const topLeftWall = drawList.sprites.find(
+      (sprite) => sprite.key === "0:0:terrain:terrain.wall",
     );
 
-    expect(entityRects).toHaveLength(5);
-    expect(
-      drawList.rects.find((rect) => rect.key === "0:0:entity")?.fillColor,
-    ).toBe(0xffe680);
-    expect(
-      drawList.rects.find((rect) => rect.key === "1:0:entity")?.fillColor,
-    ).toBe(0xff7474);
+    expect(topLeftWall?.wallMask).not.toBeNull();
+    expect((topLeftWall?.wallMask ?? 0) & WALL_MASK.east).toBe(WALL_MASK.east);
+    expect((topLeftWall?.wallMask ?? 0) & WALL_MASK.south).toBe(WALL_MASK.south);
+    expect(drawList.tileOverlays.some((overlay) => overlay.kind === "wall-shadow"))
+      .toBe(true);
+    expect(drawList.tileOverlays.some((overlay) => overlay.kind === "wall-edge"))
+      .toBe(true);
   });
 
-  it("is a pure function of the view-model", () => {
-    const model = createGridViewModel(createMidActionGridFixtureState());
-    const first = createStageDrawList(model);
-    const second = createStageDrawList(model);
+  it("keeps the draw-list a pure function of the view-model and state", () => {
+    const state = createPrecedenceFixtureState();
+    const model = createGridViewModel(state);
+    const first = createStageDrawList(model, { state, cameraLerp: 1 });
+    const second = createStageDrawList(model, { state, cameraLerp: 1 });
 
     expect(second).toEqual(first);
+  });
+});
+
+describe("PixiStage camera", () => {
+  it("centers on the player target and clamps to floor bounds", () => {
+    const centered = resolveStageCamera({
+      worldWidth: 1_000,
+      worldHeight: 800,
+      viewportWidth: 200,
+      viewportHeight: 100,
+      cellSize: 32,
+      targetX: 500,
+      targetY: 400,
+      zoom: 1,
+      lerp: 1,
+    });
+
+    expect(centered.scrollX).toBe(400);
+    expect(centered.scrollY).toBe(350);
+    expect(centered.transformX).toBe(-400);
+    expect(centered.transformY).toBe(-350);
+
+    const clamped = resolveStageCamera({
+      ...centered,
+      cellSize: 32,
+      targetX: 980,
+      targetY: 780,
+      previous: centered,
+      lerp: 1,
+    });
+
+    expect(clamped.scrollX).toBe(800);
+    expect(clamped.scrollY).toBe(700);
+    expect(clamped.transformX).toBe(-800);
+    expect(clamped.transformY).toBe(-700);
+  });
+
+  it("centers small floors inside the viewport instead of scaling to whole-floor view", () => {
+    const camera = resolveStageCamera({
+      worldWidth: 96,
+      worldHeight: 64,
+      viewportWidth: 200,
+      viewportHeight: 120,
+      cellSize: 32,
+      targetX: 48,
+      targetY: 32,
+      zoom: 1.5,
+      lerp: 1,
+    });
+
+    expect(camera.scrollX).toBe(0);
+    expect(camera.scrollY).toBe(0);
+    expect(camera.transformX).toBe(28);
+    expect(camera.transformY).toBe(12);
+  });
+});
+
+describe("PixiStage fog mapping", () => {
+  it("maps visible, remembered, and unseen cells to lit, dim, and black states", () => {
+    expect(fogPaintForCell("visible", 0, { band: "shallows" })).toMatchObject({
+      fog: "visible",
+      overlayAlpha: 0,
+      spriteAlpha: 1,
+      light: 1,
+    });
+    expect(fogPaintForCell("remembered", 1)).toMatchObject({
+      fog: "remembered",
+      overlayAlpha: 0.68,
+      spriteTint: 0x687180,
+      spriteAlpha: 0.5,
+      light: 0,
+    });
+    expect(fogPaintForCell("unseen", 1)).toMatchObject({
+      fog: "unseen",
+      overlayColor: 0x000000,
+      overlayAlpha: 1,
+      spriteAlpha: 0,
+      light: 0,
+    });
+  });
+
+  it("emits one fog overlay per fixture cell", () => {
+    const state = createFogMixGridFixtureState();
+    const model = createGridViewModel(state);
+    const drawList = createStageDrawList(model, { state, cameraLerp: 1 });
+
+    expect(drawList.fog).toHaveLength(15);
+    expect(drawList.fog.map((fog) => fog.fog)).toEqual(
+      expect.arrayContaining(["visible", "remembered", "unseen"]),
+    );
   });
 });
 

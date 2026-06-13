@@ -1,0 +1,35 @@
+Implemented the R1 dungeon renderer behind the Phase 63 stage seam, with edits only under `app/components/stage/**`. No commits made.
+
+**Changed**
+- [draw-list.ts](/Users/keigoshimada/Documents/generative-gaming/app/components/stage/draw-list.ts): emits terrain/entity sprite draws via `src/art` resolver + atlas keys, wall masks, fog overlays, Hoard glow, signature hook.
+- [PixiStageCanvas.tsx](/Users/keigoshimada/Documents/generative-gaming/app/components/stage/PixiStageCanvas.tsx): paints layered Pixi sprites/textures instead of debug rects.
+- Added [camera.ts](/Users/keigoshimada/Documents/generative-gaming/app/components/stage/camera.ts), [fog.ts](/Users/keigoshimada/Documents/generative-gaming/app/components/stage/fog.ts), [tilemap.ts](/Users/keigoshimada/Documents/generative-gaming/app/components/stage/tilemap.ts), [sprite-layer.ts](/Users/keigoshimada/Documents/generative-gaming/app/components/stage/sprite-layer.ts).
+- [PixiStage.test.ts](/Users/keigoshimada/Documents/generative-gaming/app/components/stage/PixiStage.test.ts): added pure tests for resolver atlas keys, wall auto-tiling, camera clamp, and fog states.
+
+**Renderer Notes**
+- Auto-tiling uses an 8-neighbor wall bitmask. Since the curated fallback set has one wall sprite, depth is applied with deterministic tint plus edge/shadow overlays.
+- Camera interface is `resolveStageCamera`: follows player target, lerps from previous camera state, clamps to floor bounds, applies Pixi container transform.
+- Fog mapping: unseen black, remembered dim/desaturated via tint + overlay, visible lit with band-tinted soft falloff.
+- Hoard uses `feature.hoard` 24x24 sprite, scaled up with deterministic turn-based glow pulse.
+- View-model gap: no facing field is exposed, so entity sprites are drawn neutral.
+
+**Verification**
+`pnpm exec vitest run --config app/components/stage/vitest.config.ts --reporter verbose` -> exit 0  
+Result: 1 file passed, 8 tests passed, including:
+- resolver-backed atlas keys for fixture floor
+- camera centers + clamps
+- fog maps visible/remembered/unseen
+
+`pnpm run verify:ci` -> exit 0  
+Summary:
+- PASS typecheck
+- PASS lint
+- PASS root vitest: 84 files, 563 passed, 2 skipped
+- PASS all discovered app/test Vitest configs
+- Final: `All steps passed.`
+
+**Scope**
+No engine/schema/director/gauntlet/grid/content-fallback changes. No visual smoke run; brief assigns that to the orchestrator.
+
+**Residual / Discovery**
+App-client lint currently forbids direct `src/**` imports, but this brief explicitly requires consuming `src/art` resolver/atlas from stage. I used narrow documented lint exceptions in the two stage files that touch the art seam. Actual time: ~35 min vs 60 min estimate / 120 min timebox.

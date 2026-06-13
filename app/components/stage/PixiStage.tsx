@@ -9,6 +9,7 @@ import {
 } from "@/components/grid/model";
 
 import { StageA11yMirror } from "./a11y-mirror";
+import type { StageCameraState } from "./camera";
 import { createStageDrawList } from "./draw-list";
 import styles from "./PixiStage.module.css";
 import type { StageProps } from "./seam";
@@ -20,6 +21,7 @@ const PixiStageCanvas = dynamic(() => import("./PixiStageCanvas"), {
 
 export function PixiStage({ state, markers = [] }: StageProps) {
   const cursorRef = useRef<GridRenderCursor | undefined>(undefined);
+  const cameraRef = useRef<StageCameraState | undefined>(undefined);
   const model = useMemo(() => {
     if (state === null) {
       return null;
@@ -32,8 +34,20 @@ export function PixiStage({ state, markers = [] }: StageProps) {
   }, [state, markers]);
 
   const drawList = useMemo(
-    () => (model === null ? null : createStageDrawList(model)),
-    [model],
+    () => {
+      if (model === null || state === null) {
+        return null;
+      }
+
+      const nextDrawList = createStageDrawList(model, {
+        state,
+        previousCamera: cameraRef.current,
+      });
+      cameraRef.current = nextDrawList.camera;
+
+      return nextDrawList;
+    },
+    [model, state],
   );
 
   if (model === null || drawList === null || model.width === 0 || model.height === 0) {
