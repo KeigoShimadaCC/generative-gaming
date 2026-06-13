@@ -26,6 +26,7 @@ import {
 import { SettingsScreen } from "@/components/settings";
 import { TitleScreen } from "@/components/title";
 import { FloorTransitionOverlay } from "@/components/transition";
+import { useGameAudio } from "@/audio/useGameAudio";
 import { GameInputOwner } from "@/input";
 import { InlineConfirmPrompt } from "@/input/InlineConfirmPrompt";
 import type { Position } from "@engine/state";
@@ -63,6 +64,8 @@ export function GameShell() {
     [gameState],
   );
   const shellStyle = themeVariables(settings.colorTheme) as CSSProperties;
+
+  useGameAudio();
 
   useEffect(() => {
     hydratePersistence();

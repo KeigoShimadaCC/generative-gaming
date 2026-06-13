@@ -99,6 +99,10 @@ const DEFAULT_GAP = 0;
 const DEFAULT_PADDING = 0;
 const ENTITY_INSET = 3;
 const HOARD_SCALE = 1.25;
+/** Floor tiles recede so walls/entities read as foreground. Stacks with fog alpha. */
+const FLOOR_DEEMPHASIS_ALPHA = 0.6;
+/** Slight darkening/desaturation toward the stage background fill. */
+const FLOOR_DEEMPHASIS_TINT = 0x8f8f8f;
 const GENERATED_SPRITE_CATALOG = loadBundledGeneratedSpriteCatalog();
 
 export type StageDrawListOptions = {
@@ -162,6 +166,12 @@ export const createStageDrawList = (
     );
     const wallPresentation = wallPresentationForCell(model, cell, bounds);
     const terrainSprite = terrainSpriteForCell(options.state, cell, artOptions);
+    const terrainTint = multiplyTint(wallPresentation.tint, fogPaint.spriteTint);
+    const floorPaint = floorDeemphasisForTerrainSprite(
+      terrainSprite.spriteId,
+      fogPaint.spriteAlpha,
+      terrainTint,
+    );
     sprites.push({
       key: `${cell.key}:terrain:${terrainSprite.spriteId}`,
       cellKey: cell.key,
@@ -171,8 +181,8 @@ export const createStageDrawList = (
       atlasKeyString: serializeSpriteAtlasKey(terrainSprite.atlasKey),
       spriteId: terrainSprite.spriteId,
       reason: terrainSprite.reason,
-      alpha: fogPaint.spriteAlpha,
-      tint: multiplyTint(wallPresentation.tint, fogPaint.spriteTint),
+      alpha: floorPaint.alpha,
+      tint: floorPaint.tint,
       wallMask: wallPresentation.mask,
     });
     tileOverlays.push(...wallPresentation.overlays);
@@ -221,6 +231,21 @@ export const createStageDrawList = (
       band: options.state.run.band,
     }),
     signatureHooks,
+  };
+};
+
+const floorDeemphasisForTerrainSprite = (
+  spriteId: FallbackSpriteId,
+  alpha: number,
+  tint: number,
+): { readonly alpha: number; readonly tint: number } => {
+  if (spriteId !== "terrain.floor") {
+    return { alpha, tint };
+  }
+
+  return {
+    alpha: alpha * FLOOR_DEEMPHASIS_ALPHA,
+    tint: multiplyTint(tint, FLOOR_DEEMPHASIS_TINT),
   };
 };
 
