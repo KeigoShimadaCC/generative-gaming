@@ -3,7 +3,9 @@ import { defineConfig, devices } from "@playwright/test";
 const port = Number.parseInt(process.env.PORT ?? "3101", 10);
 const baseURL = `http://127.0.0.1:${Number.isFinite(port) ? port : 3101}`;
 const ambientDirector = process.env.AMBIENT === "1";
+const ambientReal = process.env.AMBIENT_REAL === "1";
 const fullClearCampaign = process.env.FULLCLEAR === "1";
+const fullClearTimeoutMs = ambientReal ? 150 * 60 * 1000 : 60 * 60 * 1000;
 const isCI = process.env.CI === "true";
 const desktopChrome = {
   ...devices["Desktop Chrome"],
@@ -36,7 +38,7 @@ export default defineConfig({
           {
             name: "fullclear",
             testMatch: /full-clear\.spec\.ts/,
-            timeout: 60 * 60 * 1000,
+            timeout: fullClearTimeoutMs,
             use: {
               ...desktopChrome,
               actionTimeout: 30_000,

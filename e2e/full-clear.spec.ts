@@ -25,6 +25,8 @@ test.describe("full-game browser-clear campaign", () => {
   test(`clears floors 1–12 to WIN for seed ${campaignSeed}`, async ({
     page
   }) => {
+    test.setTimeout(process.env.AMBIENT_REAL === "1" ? 150 * 60 * 1000 : 60 * 60 * 1000);
+
     const state = page.getByTestId("game-state");
 
     try {
