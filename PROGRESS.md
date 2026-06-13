@@ -12,7 +12,7 @@ This file records *state*, never *design* — design lives in the doc spine
 **Phase:** M3 final acceptance - human checklist
 **Phase plan:** phase-plans/PHASE-61-M3-ACCEPTANCE.md
 **Started:** 2026-06-12
-**Status:** mechanical close-out COMPLETE incl. CI green at HEAD (https://github.com/KeigoShimadaCC/generative-gaming/actions/runs/27452465767, both jobs). Remaining: player sessions and final human verdict (HUMAN-CHECKLIST.md)
+**Status:** mechanical close-out COMPLETE. CI green at HEAD (b8e177da, both jobs) with the consolidated verify:ci gate (auto-discovers every suite; app/store + app/api/director now CI-gated). Full-clear browser campaign CLEARED (2 wins). Remaining is human-only: player sessions + final M3 verdict (HUMAN-CHECKLIST.md).
 **Active human item:** runs/milestones/HUMAN-CHECKLIST.md
 
 ## Task Queue
