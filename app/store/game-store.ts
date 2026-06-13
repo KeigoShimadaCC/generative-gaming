@@ -5,7 +5,9 @@ import { create } from "zustand";
 import {
   createClientGameSession,
   type ClientGameSession,
-  type ClientGameSessionStep
+  type ClientGameSessionStep,
+  type ClientPrefetchState,
+  type ClientServedFloor
 } from "@/input/game-session";
 import {
   DEFAULT_SETTINGS,
@@ -181,8 +183,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({ settings });
   },
   skipTransitionTheater: () => {
-    const transition = get().transition;
+    const { gameSession, transition } = get();
     if (
+      gameSession === null ||
       transition === null ||
       transition.phase !== "descending" ||
       !transition.floorReady
@@ -190,7 +193,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       return;
     }
 
-    enterResolvedFloor(get, set);
+    enterResolvedFloor(get, set, gameSession);
   },
   setGameState: (gameState) =>
     set((current) => {
@@ -326,6 +329,7 @@ const resolveTransitionFloor = async ({
   readonly startedAtMs: number;
 }): Promise<void> => {
   const deadlineMs = startedAtMs + DESCEND_FLOOR_RETRY_BUDGET_MS;
+  let retryIndex = 0;
 
   while (sameDescendingTransition(get().transition, descendingToken(depth, startedAtMs))) {
     if (nowMs() >= deadlineMs) {
@@ -338,12 +342,17 @@ const resolveTransitionFloor = async ({
       set,
       session,
       depth,
-      startedAtMs
+      startedAtMs,
+      retryIndex
     });
     if (resolved) {
-      completeDescendTransition(get, set, depth, startedAtMs);
+      if (get().transition?.phase !== "arrival") {
+        await completeDescendTransition(get, set, session, depth, startedAtMs);
+      }
       return;
     }
+
+    retryIndex += 1;
 
     if (!sameDescendingTransition(get().transition, descendingToken(depth, startedAtMs))) {
       return;
@@ -361,22 +370,31 @@ const attemptResolveDescendFloor = async ({
   set,
   session,
   depth,
-  startedAtMs
+  startedAtMs,
+  retryIndex
 }: {
   readonly get: StoreGet;
   readonly set: StoreSet;
   readonly session: ClientGameSession;
   readonly depth: number;
   readonly startedAtMs: number;
+  readonly retryIndex: number;
 }): Promise<boolean> => {
   const token = descendingToken(depth, startedAtMs);
 
   try {
+    const snapshotBeforePoll = get().transition;
     const controllerState = await withTimeout(
       session.pollFloor(depth),
       DESCEND_FLOOR_RETRY_MS
     );
-    if (!sameDescendingTransition(get().transition, token)) {
+    const transitionAfterPoll = rebindDescendingTransition(
+      get,
+      set,
+      token,
+      snapshotBeforePoll
+    );
+    if (transitionAfterPoll === null) {
       return false;
     }
 
@@ -384,34 +402,87 @@ const attemptResolveDescendFloor = async ({
       controllerState: controllerStateForStore(controllerState)
     });
 
-    const served = await withTimeout(
-      session.resolveFloor(depth),
-      DESCEND_FLOOR_RETRY_MS
+    const snapshotBeforeResolve = get().transition;
+    const useTimedResolve =
+      retryIndex > 0 || controllerState === "in_flight";
+    const served = useTimedResolve
+      ? await withTimeout(session.resolveFloor(depth), DESCEND_FLOOR_RETRY_MS)
+      : await session.resolveFloor(depth);
+    const transitionAfterResolve = rebindDescendingTransition(
+      get,
+      set,
+      token,
+      snapshotBeforeResolve
     );
-    if (!sameDescendingTransition(get().transition, token)) {
+    if (transitionAfterResolve === null) {
       return false;
     }
 
-    const transition = get().transition;
-    if (transition === null || transition.floorReady) {
-      return transition?.floorReady === true;
+    if (transitionAfterResolve.floorReady) {
+      if (
+        shouldAutoEnterFloor(transitionAfterResolve, nowMs()) &&
+        shouldFinishReadyDescendFloor(controllerState, served.source)
+      ) {
+        return (
+          finishReadyDescendFloor(
+            get,
+            set,
+            session,
+            transitionAfterResolve
+          ) || true
+        );
+      }
+      return true;
     }
 
-    set({
-      transition: markTransitionFloorReady(transition, nowMs(), served.source)
-    });
+    const readyTransition = markTransitionFloorReady(
+      transitionAfterResolve,
+      nowMs(),
+      served.source
+    );
+    setTransitionState(set, readyTransition);
+    if (
+      shouldAutoEnterFloor(readyTransition, nowMs()) &&
+      shouldFinishReadyDescendFloor(controllerState, served.source)
+    ) {
+      return finishReadyDescendFloor(get, set, session, readyTransition) || true;
+    }
     return true;
   } catch {
     return false;
   }
 };
 
-const completeDescendTransition = (
+const rebindDescendingTransition = (
   get: StoreGet,
   set: StoreSet,
+  token: FloorTransitionState,
+  snapshot: FloorTransitionState | null
+): FloorTransitionState | null => {
+  const current = get().transition;
+  if (sameDescendingTransition(current, token)) {
+    return current;
+  }
+
+  if (
+    current === null &&
+    snapshot !== null &&
+    sameDescendingTransition(snapshot, token)
+  ) {
+    setTransitionState(set, snapshot);
+    return snapshot;
+  }
+
+  return null;
+};
+
+const completeDescendTransition = async (
+  get: StoreGet,
+  set: StoreSet,
+  session: ClientGameSession,
   depth: number,
   startedAtMs: number
-): void => {
+): Promise<void> => {
   const token = descendingToken(depth, startedAtMs);
   const transition = get().transition;
   if (!sameDescendingTransition(transition, token) || !transition.floorReady) {
@@ -426,7 +497,7 @@ const completeDescendTransition = (
   }
 
   if (shouldAutoEnterFloor(next, nowMs())) {
-    enterResolvedFloor(get, set);
+    await enterResolvedFloorAsync(get, set, session);
     return;
   }
 
@@ -438,7 +509,7 @@ const completeDescendTransition = (
       sameDescendingTransition(current, token) &&
       shouldAutoEnterFloor(current, nowMs())
     ) {
-      enterResolvedFloor(get, set);
+      enterResolvedFloor(get, set, session);
     }
   }, delayMs);
 };
@@ -485,10 +556,11 @@ const recoverDescendWithFallback = async (
     return;
   }
 
-  set({
-    transition: markTransitionFloorReady(transition, nowMs(), "fallback")
-  });
-  enterResolvedFloor(get, set);
+  setTransitionState(
+    set,
+    markTransitionFloorReady(transition, nowMs(), "fallback")
+  );
+  await enterResolvedFloorAsync(get, set, session);
 };
 
 const descendingToken = (
@@ -507,17 +579,41 @@ const descendingToken = (
   playableAtMs: null
 });
 
-const enterResolvedFloor = (get: StoreGet, set: StoreSet): void => {
-  void enterResolvedFloorAsync(get, set);
+const shouldFinishReadyDescendFloor = (
+  controllerState: ClientPrefetchState,
+  servedSource: ClientServedFloor["source"]
+): boolean => controllerState === "none" && servedSource === "fallback";
+
+const finishReadyDescendFloor = (
+  get: StoreGet,
+  set: StoreSet,
+  session: ClientGameSession,
+  readyTransition: FloorTransitionState
+): boolean => {
+  try {
+    const result = session.step({ kind: "descend" });
+    commitResolvedFloorEntry(get, set, session, readyTransition, result);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+const enterResolvedFloor = (
+  get: StoreGet,
+  set: StoreSet,
+  session: ClientGameSession
+): void => {
+  void enterResolvedFloorAsync(get, set, session);
 };
 
 const enterResolvedFloorAsync = async (
   get: StoreGet,
-  set: StoreSet
+  set: StoreSet,
+  gameSession: ClientGameSession
 ): Promise<void> => {
-  const { gameSession, transition } = get();
+  const { transition } = get();
   if (
-    gameSession === null ||
     transition === null ||
     transition.phase !== "descending" ||
     !transition.floorReady
@@ -525,12 +621,38 @@ const enterResolvedFloorAsync = async (
     return;
   }
 
-  const stepped = await stepResolvedFloor(get, set, gameSession, transition);
-  if (stepped === null) {
+  try {
+    const result = gameSession.step({ kind: "descend" });
+    commitResolvedFloorEntry(get, set, gameSession, transition, result);
     return;
-  }
+  } catch {
+    const stepped = await stepResolvedFloorAfterEntryFailure(
+      get,
+      set,
+      gameSession,
+      transition
+    );
+    if (stepped === null) {
+      return;
+    }
 
-  const { result, transition: servedTransition } = stepped;
+    commitResolvedFloorEntry(
+      get,
+      set,
+      gameSession,
+      stepped.transition,
+      stepped.result
+    );
+  }
+};
+
+const commitResolvedFloorEntry = (
+  get: StoreGet,
+  set: StoreSet,
+  gameSession: ClientGameSession,
+  servedTransition: FloorTransitionState,
+  result: ClientGameSessionStep
+): void => {
   const arrivalStartedAtMs = nowMs();
   const arrivalTransition = startArrivalRitual(
     servedTransition,
@@ -545,19 +667,19 @@ const enterResolvedFloorAsync = async (
   persistActiveRun(gameSession);
   gameSession.prefetchNextFloor();
 
-  set({
+  set((current) => ({
     gameState: result.state,
     activeRun: activeRunFromSession(gameSession),
     transition: arrivalTransition,
     arrivalIntroLine: introLine,
-    latencySamples: [...get().latencySamples, latencySample],
-    ui: { ...get().ui, inputLocked: true, pendingConfirm: null }
-  });
+    latencySamples: [...current.latencySamples, latencySample],
+    ui: { ...current.ui, inputLocked: true, pendingConfirm: null }
+  }));
 
   scheduleArrivalCompletion(get, set);
 };
 
-const stepResolvedFloor = async (
+const stepResolvedFloorAfterEntryFailure = async (
   get: StoreGet,
   set: StoreSet,
   gameSession: ClientGameSession,
@@ -566,54 +688,47 @@ const stepResolvedFloor = async (
   readonly result: ClientGameSessionStep;
   readonly transition: FloorTransitionState;
 } | null> => {
+  const current = get().transition;
+  if (!sameDescendingTransition(current, transition)) {
+    return null;
+  }
+
+  const fallback = await resolveFallbackAfterEntryFailure(
+    gameSession,
+    transition.depth
+  );
+  if (fallback === null) {
+    clearFailedTransition(get, set);
+    return null;
+  }
+
+  if (fallback.source !== "fallback") {
+    clearFailedTransition(get, set);
+    return null;
+  }
+
+  gameSession.setServedFloor(fallback);
+
+  const recovered = get().transition;
+  if (!sameDescendingTransition(recovered, transition)) {
+    return null;
+  }
+
+  const fallbackTransition = markTransitionFloorReady(
+    recovered,
+    recovered.readyAtMs ?? nowMs(),
+    "fallback"
+  );
+  setTransitionState(set, fallbackTransition);
+
   try {
     return {
       result: gameSession.step({ kind: "descend" }),
-      transition
+      transition: fallbackTransition
     };
   } catch {
-    const current = get().transition;
-    if (!sameDescendingTransition(current, transition)) {
-      return null;
-    }
-
-    const fallback = await resolveFallbackAfterEntryFailure(
-      gameSession,
-      transition.depth
-    );
-    if (fallback === null) {
-      clearFailedTransition(get, set);
-      return null;
-    }
-
-    if (fallback.source !== "fallback") {
-      clearFailedTransition(get, set);
-      return null;
-    }
-
-    gameSession.setServedFloor(fallback);
-
-    const recovered = get().transition;
-    if (!sameDescendingTransition(recovered, transition)) {
-      return null;
-    }
-
-    const fallbackTransition = markTransitionFloorReady(
-      recovered,
-      recovered.readyAtMs ?? nowMs(),
-      "fallback"
-    );
-    set({ transition: fallbackTransition });
-
-    try {
-      return {
-        result: gameSession.step({ kind: "descend" }),
-        transition: fallbackTransition
-      };
-    } catch {
-      clearFailedTransition(get, set);
-      return null;
-    }
+    clearFailedTransition(get, set);
+    return null;
   }
 };
 
@@ -629,11 +744,11 @@ const resolveFallbackAfterEntryFailure = async (
 };
 
 const clearFailedTransition = (get: StoreGet, set: StoreSet): void => {
-  set({
+  set((current) => ({
     transition: null,
     arrivalIntroLine: null,
-    ui: { ...get().ui, inputLocked: false }
-  });
+    ui: { ...current.ui, inputLocked: false }
+  }));
 };
 
 const sameDescendingTransition = (
@@ -656,11 +771,11 @@ const finishArrival = (get: StoreGet, set: StoreSet): boolean => {
     return false;
   }
 
-  set({
+  set((current) => ({
     transition: null,
     arrivalIntroLine: null,
-    ui: { ...get().ui, inputLocked: false }
-  });
+    ui: { ...current.ui, inputLocked: false }
+  }));
   return true;
 };
 
@@ -724,6 +839,13 @@ const transitionLatencySample = (
   recordedAtMs
 });
 
+const setTransitionState = (
+  set: StoreSet,
+  transition: FloorTransitionState | null
+): void => {
+  set((current) => ({ ...current, transition }));
+};
+
 const patchCurrentTransition = (
   get: StoreGet,
   set: StoreSet,
@@ -734,7 +856,7 @@ const patchCurrentTransition = (
     return;
   }
 
-  set({ transition: { ...transition, ...patch } });
+  setTransitionState(set, { ...transition, ...patch });
 };
 
 const controllerStateForStore = (

@@ -46,7 +46,7 @@ describe("game store descending floor resolution", () => {
       resolveFloor: vi.fn(async (depth: number) => {
         resolveCalls += 1;
         if (resolveCalls === 1) {
-          await new Promise<void>(() => {});
+          throw new Error("hung first resolveFloor request");
         }
 
         return {
@@ -72,10 +72,45 @@ describe("game store descending floor resolution", () => {
     await vi.advanceTimersByTimeAsync(0);
     expect(useGameStore.getState().transition?.floorReady).toBe(false);
 
-    await vi.advanceTimersByTimeAsync(4_000);
+    await vi.advanceTimersByTimeAsync(3_500);
     expect(resolveCalls).toBeGreaterThanOrEqual(2);
     expect(useGameStore.getState().transition?.phase).toBe("arrival");
     expect(useGameStore.getState().transition?.floorReady).toBe(true);
+  });
+
+  it("records latency when resolveFloor drops gameSession from store state", async () => {
+    const session = createFakeSession("offline-session-drop", {
+      pollFloor: vi.fn(async () => "none" as const),
+      resolveFloor: vi.fn(async (depth: number) => {
+        useGameStore.setState({ gameSession: null });
+        return {
+          depth,
+          content: {} as ClientServedFloor["content"],
+          source: "fallback" as const
+        };
+      })
+    });
+
+    useGameStore.setState({
+      gameSession: session,
+      gameState: session.state,
+      screen: "playing",
+      transition: null,
+      arrivalIntroLine: null,
+      ui: defaultUi
+    });
+
+    expect(
+      useGameStore.getState().dispatchAction({ kind: "descend" })
+    ).toBeNull();
+    await vi.advanceTimersByTimeAsync(0);
+
+    expect(useGameStore.getState().latencySamples.at(-1)).toMatchObject({
+      fromDepth: 1,
+      toDepth: 2,
+      controllerState: "none",
+      servedSource: "fallback"
+    });
   });
 
   it("serves fallback and enters the floor when descend resolution exhausts the retry budget", async () => {
