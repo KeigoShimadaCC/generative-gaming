@@ -474,6 +474,25 @@ cleared the game twice (seeds fullclear-1 in 2.9m, fullclear-4 in 2.5m).
     real calibration as a multi-task chain with diagnosis gates, never as
     one "tune the numbers" task.
 
+11. **Get a deterministic reproduction before patching an INTERMITTENT bug.**
+    A ~30-50% transition-wedge flake drew three store-deadline fixes that
+    each passed new synthetic unit tests (hung-resolveFloor models) while
+    the real browser behavior was unchanged — the green-gates-≠-correctness
+    trap, self-inflicted. The flake was content-agnostic (hit fallback runs
+    too), so it was never an ambient-generation problem; chasing it as one
+    burned three iterations. Rule: when a failure is intermittent, the FIRST
+    task is a deterministic repro (instrument the suspected handoff, force
+    the interleaving), not a speculative fix. A fix you can't watch fail
+    first is a guess.
+
+12. **Verify the test harness actually exercises the path you think.**
+    `AMBIENT=1` full-clear runs were silently serving fallback content: the
+    webServer defaulted `DIRECTOR=fallback`, forcing a 1ms generation
+    timeout that aborted ambient on every floor. Effort spent on "ambient"
+    diagnosis was really fallback-path diagnosis. Before drawing conclusions
+    from an integration run, confirm via an artifact or a logged
+    provider/source field that the run used the provider you intended.
+
 ## Append Log
 
 | Date | Finding added | Trigger |
