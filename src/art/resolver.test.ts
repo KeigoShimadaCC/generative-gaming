@@ -24,6 +24,10 @@ import {
   TRAP_STATE_SPRITE_MAP,
   type ArtResolverCellView
 } from "./resolver.js";
+import {
+  GeneratedSpriteCatalog,
+  type GeneratedSpriteRecord
+} from "./atlas.js";
 
 const ITEM_KINDS = [
   "weapon",
@@ -175,6 +179,73 @@ describe("schema to sprite resolver", () => {
       resolveSpriteForCell(state, cellAt(5, 5, Terrain.Floor, "terrain"))
         .spriteId
     ).toBe("feature.hoard");
+  });
+
+  it("prefers generated themed atlas keys when the catalog has a sprite", () => {
+    const state = stateWith();
+    const catalog = catalogWithGeneratedSprite({
+      themeId: "torchlit-limestone",
+      entityId: "actor.player",
+      seed: "art-batch-shallows"
+    });
+
+    const resolved = resolveSpriteForCell(
+      state,
+      cellAt(0, 0, "floor", "player"),
+      {
+        themeId: "torchlit-limestone",
+        generatedCatalog: catalog
+      }
+    );
+
+    expect(resolved.spriteId).toBe("actor.player");
+    expect(resolved.atlasKey).toEqual({
+      themeId: "torchlit-limestone",
+      entityId: "actor.player",
+      seed: "art-batch-shallows"
+    });
+  });
+
+  it("keeps fallback atlas keys when no generated catalog entry exists", () => {
+    const state = stateWith();
+    const catalog = catalogWithGeneratedSprite({
+      themeId: "torchlit-limestone",
+      entityId: "enemy.brute",
+      seed: "art-batch-shallows"
+    });
+
+    const resolved = resolveSpriteForCell(
+      state,
+      cellAt(0, 0, "floor", "player"),
+      {
+        themeId: "torchlit-limestone",
+        generatedCatalog: catalog
+      }
+    );
+
+    expect(resolved).toEqual({
+      spriteId: "actor.player",
+      reason: "actor.player",
+      atlasKey: {
+        themeId: FALLBACK_THEME_ID,
+        entityId: "actor.player",
+        seed: "seed-1"
+      }
+    });
+  });
+
+  it("keeps fallback atlas keys when the generated catalog is empty", () => {
+    const state = stateWith();
+    const resolved = resolveSpriteForCell(
+      state,
+      cellAt(0, 0, "floor", "player"),
+      {
+        themeId: "torchlit-limestone",
+        generatedCatalog: GeneratedSpriteCatalog.empty()
+      }
+    );
+
+    expect(resolved.atlasKey.themeId).toBe(FALLBACK_THEME_ID);
   });
 });
 
@@ -331,3 +402,29 @@ const trapAt = (
     definition: {},
     armed: true
   }) as unknown as TrapEntityInstance;
+
+const catalogWithGeneratedSprite = (options: {
+  readonly themeId: string;
+  readonly entityId: GeneratedSpriteRecord["entityId"];
+  readonly seed: string;
+}): GeneratedSpriteCatalog =>
+  GeneratedSpriteCatalog.fromRecords([
+    {
+      version: "everdeep.art-generated.v1",
+      themeId: options.themeId,
+      entityId: options.entityId,
+      seed: options.seed,
+      manifest: generatedFixtureManifest()
+    }
+  ]);
+
+const generatedFixtureManifest = () => ({
+  w: 16 as const,
+  h: 16 as const,
+  palette: ["#101010", "#ffffff"] as const,
+  px: Array.from({ length: 16 }, (_, y) =>
+    Array.from({ length: 16 }, (_, x) =>
+      x >= 4 && x <= 11 && y >= 4 && y <= 11 ? 1 : 0
+    )
+  )
+});

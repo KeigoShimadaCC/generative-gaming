@@ -1,0 +1,99 @@
+{
+  "version": "everdeep.art-generated-index.v1",
+  "themes": [
+    {
+      "themeId": "ferrous-fungal-middle",
+      "seed": "art-batch-middle",
+      "sprites": [
+        {
+          "entityId": "actor.player",
+          "path": "ferrous-fungal-middle/actor.player.json"
+        },
+        {
+          "entityId": "enemy.caster",
+          "path": "ferrous-fungal-middle/enemy.caster.json"
+        },
+        {
+          "entityId": "enemy.skirmisher",
+          "path": "ferrous-fungal-middle/enemy.skirmisher.json"
+        },
+        {
+          "entityId": "feature.hoard",
+          "path": "ferrous-fungal-middle/feature.hoard.json"
+        },
+        {
+          "entityId": "terrain.floor",
+          "path": "ferrous-fungal-middle/terrain.floor.json"
+        },
+        {
+          "entityId": "terrain.wall",
+          "path": "ferrous-fungal-middle/terrain.wall.json"
+        }
+      ]
+    },
+    {
+      "themeId": "torchlit-limestone",
+      "seed": "art-batch-shallows",
+      "sprites": [
+        {
+          "entityId": "enemy.brute",
+          "path": "torchlit-limestone/enemy.brute.json"
+        },
+        {
+          "entityId": "enemy.caster",
+          "path": "torchlit-limestone/enemy.caster.json"
+        },
+        {
+          "entityId": "enemy.skirmisher",
+          "path": "torchlit-limestone/enemy.skirmisher.json"
+        },
+        {
+          "entityId": "feature.hoard",
+          "path": "torchlit-limestone/feature.hoard.json"
+        },
+        {
+          "entityId": "terrain.floor",
+          "path": "torchlit-limestone/terrain.floor.json"
+        },
+        {
+          "entityId": "terrain.wall",
+          "path": "torchlit-limestone/terrain.wall.json"
+        }
+      ]
+    },
+    {
+      "themeId": "void-ember-lowest",
+      "seed": "art-batch-lowest",
+      "sprites": [
+        {
+          "entityId": "actor.player",
+          "path": "void-ember-lowest/actor.player.json"
+        },
+        {
+          "entityId": "enemy.brute",
+          "path": "void-ember-lowest/enemy.brute.json"
+        },
+        {
+          "entityId": "enemy.caster",
+          "path": "void-ember-lowest/enemy.caster.json"
+        },
+        {
+          "entityId": "enemy.skirmisher",
+          "path": "void-ember-lowest/enemy.skirmisher.json"
+        },
+        {
+          "entityId": "feature.hoard",
+          "path": "void-ember-lowest/feature.hoard.json"
+        },
+        {
+          "entityId": "terrain.floor",
+          "path": "void-ember-lowest/terrain.floor.json"
+        },
+        {
+          "entityId": "terrain.wall",
+          "path": "void-ember-lowest/terrain.wall.json"
+        }
+      ]
+    }
+  ]
+}

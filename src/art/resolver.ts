@@ -11,6 +11,7 @@ import type {
 import type { BehaviorKind, ItemCategory } from "../schemas/entities/index.js";
 import {
   FALLBACK_THEME_ID,
+  GeneratedSpriteCatalog,
   spriteAtlasKey,
   type SpriteAtlasKey,
   type SpriteAtlasThemeId
@@ -39,6 +40,7 @@ export type ArtResolverOptions = {
   readonly themeId?: SpriteAtlasThemeId;
   readonly seed?: string;
   readonly revealHiddenTraps?: boolean;
+  readonly generatedCatalog?: GeneratedSpriteCatalog | null;
 };
 
 export type ResolvedSprite = {
@@ -239,6 +241,32 @@ export const resolveTrapSpriteId = (
     ? TRAP_STATE_SPRITE_MAP.revealed
     : TRAP_STATE_SPRITE_MAP.hidden;
 
+export const resolveAtlasKeyForSprite = (
+  spriteId: FallbackSpriteId,
+  options: {
+    readonly themeId?: SpriteAtlasThemeId;
+    readonly seed: string;
+    readonly generatedCatalog?: GeneratedSpriteCatalog | null;
+  }
+): SpriteAtlasKey => {
+  const themeId = options.themeId ?? FALLBACK_THEME_ID;
+  const catalog = options.generatedCatalog;
+
+  if (
+    themeId !== FALLBACK_THEME_ID &&
+    catalog !== undefined &&
+    catalog !== null &&
+    catalog.has(themeId, spriteId)
+  ) {
+    const generated = catalog.get(themeId, spriteId);
+    if (generated !== null) {
+      return generated.atlasKey;
+    }
+  }
+
+  return spriteAtlasKey(FALLBACK_THEME_ID, spriteId, options.seed);
+};
+
 const resolved = (
   state: GameState,
   spriteId: FallbackSpriteId,
@@ -246,11 +274,11 @@ const resolved = (
   options: ArtResolverOptions
 ): ResolvedSprite => ({
   spriteId,
-  atlasKey: spriteAtlasKey(
-    options.themeId ?? FALLBACK_THEME_ID,
-    spriteId,
-    options.seed ?? state.run.seed
-  ),
+  atlasKey: resolveAtlasKeyForSprite(spriteId, {
+    themeId: options.themeId,
+    seed: options.seed ?? state.run.seed,
+    generatedCatalog: options.generatedCatalog
+  }),
   reason
 });
 
