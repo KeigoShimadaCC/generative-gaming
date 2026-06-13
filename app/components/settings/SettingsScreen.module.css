@@ -29,7 +29,8 @@
 }
 
 .backButton,
-.segmented button {
+.segmented button,
+.segmentedTwo button {
   border: 1px solid var(--gg-border);
   border-radius: 6px;
   background: var(--gg-surface);
@@ -75,12 +76,20 @@
   gap: 0.4rem;
 }
 
-.segmented button {
+.segmentedTwo {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.4rem;
+}
+
+.segmented button,
+.segmentedTwo button {
   min-height: 2.25rem;
   padding: 0.35rem 0.4rem;
 }
 
-.segmented .selected {
+.segmented .selected,
+.segmentedTwo .selected {
   border-color: var(--gg-accent);
   background: var(--gg-surface-raised);
   color: var(--gg-accent);
@@ -98,6 +107,23 @@
   width: 1.15rem;
   height: 1.15rem;
   accent-color: var(--gg-accent);
+}
+
+.volumeRow {
+  display: grid;
+  gap: 0.45rem;
+  color: var(--gg-muted);
+  font-size: 0.82rem;
+}
+
+.volumeSlider {
+  width: 100%;
+  accent-color: var(--gg-accent);
+}
+
+.volumeSlider:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 .keymap {

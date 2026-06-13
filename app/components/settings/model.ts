@@ -5,11 +5,16 @@ export const SETTINGS_STORAGE_KEY = "everdeep.settings.v1";
 export type GlyphSizeSetting = "small" | "medium" | "large";
 export type ColorThemeSetting = "lantern" | "slate" | "ember";
 export type MessageSpeedSetting = "slow" | "normal" | "fast";
+export type MotionSetting = "full" | "reduced" | "off";
+export type RenderSurfaceSetting = "dom" | "pixi";
 
 export type SettingsState = {
   readonly glyphSize: GlyphSizeSetting;
   readonly colorTheme: ColorThemeSetting;
   readonly messageSpeed: MessageSpeedSetting;
+  readonly motion: MotionSetting;
+  readonly renderSurface: RenderSurfaceSetting;
+  readonly aiArtEnabled: boolean;
   readonly autoTravel: boolean;
   readonly autoTravelStopOnThreat: boolean;
   readonly hintKill: boolean;
@@ -21,6 +26,9 @@ export const DEFAULT_SETTINGS: SettingsState = {
   glyphSize: "medium",
   colorTheme: "lantern",
   messageSpeed: "normal",
+  motion: "full",
+  renderSurface: "pixi",
+  aiArtEnabled: true,
   autoTravel: true,
   autoTravelStopOnThreat: true,
   hintKill: true,
@@ -116,6 +124,16 @@ export const normalizeSettings = (value: unknown): SettingsState => {
     messageSpeed: isMessageSpeed(value.messageSpeed)
       ? value.messageSpeed
       : DEFAULT_SETTINGS.messageSpeed,
+    motion: isMotionSetting(value.motion)
+      ? value.motion
+      : DEFAULT_SETTINGS.motion,
+    renderSurface: isRenderSurfaceSetting(value.renderSurface)
+      ? value.renderSurface
+      : DEFAULT_SETTINGS.renderSurface,
+    aiArtEnabled:
+      typeof value.aiArtEnabled === "boolean"
+        ? value.aiArtEnabled
+        : DEFAULT_SETTINGS.aiArtEnabled,
     autoTravel:
       typeof value.autoTravel === "boolean"
         ? value.autoTravel
@@ -135,6 +153,10 @@ export const settingsStepLabels = (): readonly string[] => [
   "Glyph size",
   "Color theme",
   "Message speed",
+  "Motion",
+  "Render surface",
+  "AI-generated art",
+  "Audio",
   "Auto-travel",
   "Auto-travel stops",
   "Hint-kill",
@@ -156,6 +178,13 @@ const isColorTheme = (value: unknown): value is ColorThemeSetting =>
 
 const isMessageSpeed = (value: unknown): value is MessageSpeedSetting =>
   value === "slow" || value === "normal" || value === "fast";
+
+const isMotionSetting = (value: unknown): value is MotionSetting =>
+  value === "full" || value === "reduced" || value === "off";
+
+const isRenderSurfaceSetting = (
+  value: unknown,
+): value is RenderSurfaceSetting => value === "dom" || value === "pixi";
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   value !== null && typeof value === "object" && !Array.isArray(value);

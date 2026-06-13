@@ -1,13 +1,23 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 import { keymapOverlayRows } from "@/input/keys";
 
+import {
+  clampAudioVolume,
+  loadSettingsAudio,
+  saveSettingsAudio,
+  type AudioPreferences,
+} from "./audio-settings";
 import styles from "./SettingsScreen.module.css";
 import {
   keybindingViewRows,
   type ColorThemeSetting,
   type GlyphSizeSetting,
   type MessageSpeedSetting,
+  type MotionSetting,
+  type RenderSurfaceSetting,
   type SettingsState,
 } from "./model";
 
@@ -22,8 +32,28 @@ export function SettingsScreen({
   onChange,
   onBack,
 }: SettingsScreenProps) {
+  const [audio, setAudio] = useState<AudioPreferences>(() =>
+    loadSettingsAudio(null),
+  );
+
+  useEffect(() => {
+    setAudio(loadSettingsAudio(browserStorage()));
+  }, []);
+
   const patch = (partial: Partial<SettingsState>): void =>
     onChange({ ...settings, ...partial });
+
+  const patchAudio = (partial: Partial<AudioPreferences>): void => {
+    const next: AudioPreferences = {
+      ...audio,
+      ...partial,
+      ...(partial.volume === undefined
+        ? {}
+        : { volume: clampAudioVolume(partial.volume) }),
+    };
+    saveSettingsAudio(browserStorage(), next);
+    setAudio(next);
+  };
 
   return (
     <section className={styles.screen} aria-label="Settings">
@@ -77,6 +107,70 @@ export function SettingsScreen({
           />
         </fieldset>
 
+        <fieldset className={styles.group}>
+          <legend>Motion</legend>
+          <SegmentedControl<MotionSetting>
+            ariaLabel="Motion preference"
+            value={settings.motion}
+            options={[
+              ["full", "Full"],
+              ["reduced", "Reduced"],
+              ["off", "Off"],
+            ]}
+            onChange={(motion) => patch({ motion })}
+          />
+        </fieldset>
+
+        <fieldset className={styles.group}>
+          <legend>Render surface</legend>
+          <SegmentedControl<RenderSurfaceSetting>
+            ariaLabel="Render surface"
+            columns={2}
+            value={settings.renderSurface}
+            options={[
+              ["dom", "DOM glyphs"],
+              ["pixi", "Canvas"],
+            ]}
+            onChange={(renderSurface) => patch({ renderSurface })}
+          />
+        </fieldset>
+
+        <ToggleRow
+          checked={settings.aiArtEnabled}
+          label="AI-generated art"
+          onChange={(aiArtEnabled) => patch({ aiArtEnabled })}
+        />
+
+        <fieldset className={styles.group}>
+          <legend>Audio</legend>
+          <ToggleRow
+            checked={!audio.muted}
+            label="Sound"
+            onChange={(enabled) => patchAudio({ muted: !enabled })}
+          />
+          <label className={styles.volumeRow}>
+            <span id="settings-audio-volume-label">Volume</span>
+            <input
+              aria-labelledby="settings-audio-volume-label"
+              aria-valuemax={100}
+              aria-valuemin={0}
+              aria-valuenow={Math.round(audio.volume * 100)}
+              className={styles.volumeSlider}
+              disabled={audio.muted}
+              max={100}
+              min={0}
+              step={1}
+              type="range"
+              value={Math.round(audio.volume * 100)}
+              onChange={(event) =>
+                patchAudio({
+                  volume: Number.parseInt(event.currentTarget.value, 10) / 100,
+                })
+              }
+            />
+          </label>
+        </fieldset>
+
         <ToggleRow
           checked={settings.autoTravel}
           label="Auto-travel"
@@ -113,15 +207,26 @@ function SegmentedControl<Value extends string>({
   value,
   options,
   onChange,
+  ariaLabel,
+  columns = 3,
 }: {
   readonly value: Value;
   readonly options: readonly (readonly [Value, string])[];
   readonly onChange: (value: Value) => void;
+  readonly ariaLabel?: string;
+  readonly columns?: 2 | 3;
 }) {
   return (
-    <div className={styles.segmented}>
+    <div
+      className={
+        columns === 2 ? styles.segmentedTwo : styles.segmented
+      }
+      role="group"
+      {...(ariaLabel === undefined ? {} : { "aria-label": ariaLabel })}
+    >
       {options.map(([optionValue, label]) => (
         <button
+          aria-pressed={optionValue === value}
           className={optionValue === value ? styles.selected : ""}
           data-selected={optionValue === value ? "true" : "false"}
           key={optionValue}
@@ -155,3 +260,10 @@ function ToggleRow({
     </label>
   );
 }
+
+const browserStorage = (): Storage | null => {
+  if (typeof window === "undefined") {
+    return null;
+  }
+  return window.localStorage;
+};

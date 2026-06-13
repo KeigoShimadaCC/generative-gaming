@@ -3,6 +3,12 @@ import { describe, expect, it } from "vitest";
 import { keymapOverlayRows } from "@/input/keys";
 
 import {
+  AUDIO_STORAGE_KEY,
+  clampAudioVolume,
+  loadSettingsAudio,
+  saveSettingsAudio,
+} from "./audio-settings";
+import {
   DEFAULT_SETTINGS,
   GLYPH_SIZE_REM,
   MESSAGE_WINDOW_SIZE,
@@ -24,6 +30,9 @@ describe("settings screen model", () => {
       glyphSize: "large" as const,
       colorTheme: "ember" as const,
       messageSpeed: "fast" as const,
+      motion: "reduced" as const,
+      renderSurface: "dom" as const,
+      aiArtEnabled: false,
       autoTravel: false,
       hintKill: false,
     };
@@ -44,11 +53,31 @@ describe("settings screen model", () => {
     });
   });
 
+  it("persists audio preferences through the shared audio storage key", () => {
+    const storage = new MemoryStorage();
+    const preferences = { muted: true, volume: 0.35 };
+
+    saveSettingsAudio(storage, preferences);
+    expect(JSON.parse(storage.getItem(AUDIO_STORAGE_KEY) ?? "{}")).toEqual(
+      preferences,
+    );
+    expect(loadSettingsAudio(storage)).toEqual(preferences);
+  });
+
+  it("clamps audio volume into the supported range", () => {
+    expect(clampAudioVolume(1.4)).toBe(1);
+    expect(clampAudioVolume(-0.2)).toBe(0);
+  });
+
   it("maps one-screen settings to live presentation values", () => {
     expect(settingsStepLabels()).toEqual([
       "Glyph size",
       "Color theme",
       "Message speed",
+      "Motion",
+      "Render surface",
+      "AI-generated art",
+      "Audio",
       "Auto-travel",
       "Auto-travel stops",
       "Hint-kill",
