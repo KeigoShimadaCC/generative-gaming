@@ -16,7 +16,10 @@ import { depthBandForDepth } from "../../engine/state/init.js";
 import {
   createFallbackFloorContentProvider,
 } from "../../harness/fallback-provider.js";
-import type { WriteGenerationRecordOptions } from "../../harness/artifacts/index.js";
+import type {
+  GenerationRecord,
+  WriteGenerationRecordOptions,
+} from "../../harness/artifacts/index.js";
 import type {
   EnemyDefinition,
   ItemDefinition,
@@ -43,6 +46,31 @@ import {
 
 const DEFAULT_STAIRS_CAP_MS = 8_000;
 const SYNC_WAIT_SLICE_MS = 10;
+const AMBIENT_GEN_LIFECYCLE =
+  (process as { env?: Record<string, string | undefined> }).env?.AMBIENT_REAL
+  === "1";
+
+const formatGenLifecycleFailureReason = (
+  record: GenerationRecord,
+): string | undefined => {
+  if (record.outcome.kind !== "fallback") {
+    return undefined;
+  }
+
+  const lastAttempt = record.attempts[record.attempts.length - 1];
+  const error = lastAttempt?.provider.error;
+  if (error === undefined) {
+    return `fallbackId=${record.outcome.fallbackId}`;
+  }
+
+  const details = error.details?.[0];
+  const message =
+    details !== undefined && details.length > 0
+      ? `${error.message} | ${details}`
+      : error.message;
+
+  return `${error.code}: ${message}`;
+};
 
 type ReadySlot = {
   readonly depth: number;
@@ -306,7 +334,28 @@ export const createPrefetchController = (
       abortController.signal,
     );
     try {
+      const timeoutMs =
+        generateContext.providerOptions?.timeoutMs
+        ?? gameConfig.director.manifestTimeoutMs;
+      if (AMBIENT_GEN_LIFECYCLE) {
+        console.warn(
+          `[GEN-LIFECYCLE] depth=${depth} generate START timeoutMs=${timeoutMs} atMs=${Date.now()}`,
+        );
+      }
+
+      const genStartedAtMs = AMBIENT_GEN_LIFECYCLE ? Date.now() : 0;
       const result = await generateFloor(generateContext);
+
+      if (AMBIENT_GEN_LIFECYCLE) {
+        const outcome =
+          result.record.outcome.kind === "manifest" ? "manifest" : "fallback";
+        const failureReason = formatGenLifecycleFailureReason(result.record);
+        const failureSuffix =
+          failureReason === undefined ? "" : ` failure=${failureReason}`;
+        console.warn(
+          `[GEN-LIFECYCLE] depth=${depth} generate DONE outcome=${outcome} elapsedMs=${Date.now() - genStartedAtMs} recordKind=${result.record.outcome.kind}${failureSuffix}`,
+        );
+      }
 
       if (cancelled || abortController.signal.aborted) {
         recordDiscard(depth, "cancelled");

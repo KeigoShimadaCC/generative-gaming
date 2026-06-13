@@ -499,6 +499,20 @@ cleared the game twice (seeds fullclear-1 in 2.9m, fullclear-4 in 2.5m).
     from an integration run, confirm via an artifact or a logged
     provider/source field that the run used the provider you intended.
 
+13. **Measure the OUTPUT of the thing, not a downstream proxy — and don't
+    stop at the first plausible conclusion.** I nearly shipped a false
+    "browser live-AI is broken / serves 100% fallback": I was reading what
+    floors got *served* (all fallback) and inferring generation failed. A
+    designed experiment — logging the generation *lifecycle* itself
+    (`[GEN-LIFECYCLE]` start/outcome/elapsed) rather than the serve marker —
+    proved the opposite: 4/4 floors generated real AI manifests in 24-42s;
+    the served fallback was just the bot outpacing ~34s generation (the
+    invisible-fallback invariant working as designed). The serve marker was
+    a downstream proxy that happened to point the wrong way. When a metric
+    implies failure, instrument the actual mechanism before concluding —
+    especially when the "failure" is also a documented correct behavior.
+    (Browser live-AI confirmed working, 2026-06-13.)
+
 ## Append Log
 
 | Date | Finding added | Trigger |
