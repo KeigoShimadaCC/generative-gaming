@@ -108,6 +108,7 @@ spike ≤ 15 min (hard).
 
 | Logged | By | Item | Suggested phase |
 |---|---|---|---|
+| 2026-06-13 | orchestrator | **HEADLINE DEMONSTRATED: browser serves live AI-authored floors.** AMBIENT_REAL prefer-generated run served 4 floors as source=generated — AI Director authored each at runtime, passed the gauntlet, delivered to the player in the browser (the project thesis, proven live, not just the eval harness). KNOWN regen-loop wedge in prefer-generated demo mode (gated): the store's re-arming descend retry triggers a FRESH generation each retry (depth 6 generated 4× ~32s) instead of awaiting the in-flight/completed one → transition never completes (wedged d5→d6). FIX (bounded, not done): dedupe so prefer-generated awaits the in-flight/completed generation per depth, never restarts it on retry. Normal modes unaffected (gated). | demo-mode polish |
 | 2026-06-11 | orchestrator | Boss-fight system for floor 12 (GAME_DESIGN §13) | post-MVP |
 | 2026-06-11 | orchestrator | Free-form NPC conversation behind gauntlet (NORTH_STAR §11) | post-MVP |
 | 2026-06-11 | orchestrator | Effect/behavior vocabulary expansion round (GAME_DESIGN §7) | post-M3 |
