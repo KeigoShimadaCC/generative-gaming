@@ -84,6 +84,7 @@ const SERVER_STARTED_AT = new Date().toISOString();
 
 const isAmbientDirector = (): boolean => process.env.AMBIENT === "1";
 const isFallbackDirector = (): boolean => process.env.DIRECTOR === "fallback";
+const isRealAmbient = (): boolean => process.env.AMBIENT_REAL === "1";
 
 const relaxGate2Threshold = (
   threshold: Gate2Config["thresholdsByBand"]["shallows"]
@@ -199,6 +200,7 @@ const DEFAULT_HOARD: HoardFeatureParams = {
 };
 
 const FALLBACK_PROVIDER_TIMEOUT_MS = 1;
+const AMBIENT_REAL_TIMEOUT_MS = 45_000;
 const GENERATION_RECORD_FILENAME = "generation.json";
 
 let prefetchRecordExistsWarned = false;
@@ -660,7 +662,7 @@ const withFloorLocalRefs = (manifest: FloorManifest): FloorManifest => {
 };
 
 const createWebProvider = (): DirectorProvider => {
-  if (isAmbientDirector()) {
+  if (isRealAmbient() || isAmbientDirector()) {
     return new AmbientDirectorProvider();
   }
 
@@ -672,7 +674,7 @@ const createWebProvider = (): DirectorProvider => {
 };
 
 const hasBundledFallbackProvider = (): boolean =>
-  isFallbackDirector() || isAmbientDirector();
+  isRealAmbient() || isFallbackDirector() || isAmbientDirector();
 
 const createWebFallbackProvider = (): FloorContentProvider | undefined =>
   hasBundledFallbackProvider() ? bundledFallbackProvider : undefined;
@@ -685,7 +687,10 @@ type WebTransportState = {
   readonly artifactRunId: string;
   readonly fallbackDirector: boolean;
   readonly ambientDirector: boolean;
+  readonly realAmbientDirector: boolean;
+  readonly usesAmbientProvider: boolean;
   readonly fallbackProvider: FloorContentProvider | undefined;
+  readonly providerGenerationTimeoutMs: number | undefined;
 };
 
 const pendingGetFloorByKey = new Map<string, Promise<ServedFloor>>();
@@ -740,13 +745,23 @@ export const createWebTransportState = (
   const fallbackProvider = createWebFallbackProvider();
   const fallbackDirector = isFallbackDirector();
   const ambientDirector = isAmbientDirector();
+  const realAmbientDirector = isRealAmbient();
+  const providerGenerationTimeoutMs =
+    fallbackProvider === undefined
+      ? undefined
+      : realAmbientDirector
+        ? AMBIENT_REAL_TIMEOUT_MS
+        : fallbackDirector
+          ? FALLBACK_PROVIDER_TIMEOUT_MS
+          : undefined;
   const baseHandlers = createTransportHandlers(registry, {
     seed,
-    modelId: ambientDirector
-      ? "ambient-web-transport"
-      : fallbackDirector
-        ? FALLBACK_MODEL_ID
-        : MODEL_ID,
+    modelId:
+      realAmbientDirector || ambientDirector
+        ? "ambient-web-transport"
+        : fallbackDirector
+          ? FALLBACK_MODEL_ID
+          : MODEL_ID,
     provider: createWebProvider(),
     gate2: passingGate2(),
     clock: createPrefetchWallClock(),
@@ -756,11 +771,9 @@ export const createWebTransportState = (
       ? {}
       : {
           fallbackProvider,
-          ...(fallbackDirector
-            ? {
-                providerGenerationTimeoutMs: FALLBACK_PROVIDER_TIMEOUT_MS
-              }
-            : {})
+          ...(providerGenerationTimeoutMs === undefined
+            ? {}
+            : { providerGenerationTimeoutMs })
         })
   });
   const resolveGetFloor = async (
@@ -768,6 +781,7 @@ export const createWebTransportState = (
   ): Promise<ServedFloor> => {
     if (
       isFallbackDirector() &&
+      !realAmbientDirector &&
       request.depth === config.runStructure.depthFloors
     ) {
       return serveBundledFallbackFloor(request.depth, request.seed);
@@ -785,7 +799,16 @@ export const createWebTransportState = (
         return pending;
       }
 
-      const flight = resolveGetFloor(request).finally(() => {
+      const flight = resolveGetFloor(request)
+        .then((served) => {
+          if (realAmbientDirector) {
+            console.warn(
+              `[AMBIENT-SOURCE] depth=${served.depth} source=${served.source}`
+            );
+          }
+          return served;
+        })
+        .finally(() => {
           if (pendingGetFloorByKey.get(key) === flight) {
             pendingGetFloorByKey.delete(key);
           }
@@ -802,7 +825,10 @@ export const createWebTransportState = (
     artifactRunId,
     fallbackDirector,
     ambientDirector,
+    realAmbientDirector,
+    usesAmbientProvider: realAmbientDirector || ambientDirector,
     fallbackProvider,
+    providerGenerationTimeoutMs,
     handlers
   };
 };
@@ -814,11 +840,13 @@ const transportGlobal = globalThis as typeof globalThis & {
 const getWebTransportState = (): WebTransportState => {
   const wantsFallback = isFallbackDirector();
   const wantsAmbient = isAmbientDirector();
+  const wantsRealAmbient = isRealAmbient();
   const existing = transportGlobal.__ggWebTransportState;
   if (
     existing !== undefined &&
     existing.fallbackDirector === wantsFallback &&
-    existing.ambientDirector === wantsAmbient
+    existing.ambientDirector === wantsAmbient &&
+    existing.realAmbientDirector === wantsRealAmbient
   ) {
     return existing;
   }

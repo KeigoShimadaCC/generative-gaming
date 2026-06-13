@@ -51,6 +51,7 @@ export default defineConfig({
       NEXT_TELEMETRY_DISABLED: "1",
       PORT: String(port),
       AMBIENT: ambientDirector ? "1" : "0",
+      ...(process.env.AMBIENT_REAL ? { AMBIENT_REAL: process.env.AMBIENT_REAL } : {}),
       ...(fullClearCampaign ? { DIRECTOR: process.env.DIRECTOR ?? "fallback" } : {})
     },
     reuseExistingServer: !process.env.CI,

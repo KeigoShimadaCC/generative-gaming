@@ -129,6 +129,72 @@ describe("web director transport", () => {
     }
   });
 
+  it("wires real ambient transport when AMBIENT_REAL=1 even with DIRECTOR=fallback", async () => {
+    const previousAmbientReal = process.env.AMBIENT_REAL;
+    const previousDirector = process.env.DIRECTOR;
+    process.env.AMBIENT_REAL = "1";
+    process.env.DIRECTOR = "fallback";
+
+    try {
+      const state = createWebTransportState();
+      expect(state.realAmbientDirector).toBe(true);
+      expect(state.usesAmbientProvider).toBe(true);
+      expect(state.fallbackDirector).toBe(true);
+      expect(state.providerGenerationTimeoutMs).toBe(45_000);
+      expect(state.fallbackProvider).toBeDefined();
+      expect(
+        state.fallbackProvider?.getFloor(5, "ambient-real-fallback-seed").params
+          .bandOrSize
+      ).toBe("middle");
+    } finally {
+      if (previousAmbientReal === undefined) {
+        delete process.env.AMBIENT_REAL;
+      } else {
+        process.env.AMBIENT_REAL = previousAmbientReal;
+      }
+      if (previousDirector === undefined) {
+        delete process.env.DIRECTOR;
+      } else {
+        process.env.DIRECTOR = previousDirector;
+      }
+      resetWebTransportStateForTests();
+    }
+  });
+
+  it("leaves transport config unchanged when AMBIENT_REAL is unset", async () => {
+    const previousAmbientReal = process.env.AMBIENT_REAL;
+    const previousDirector = process.env.DIRECTOR;
+    const previousAmbient = process.env.AMBIENT;
+    delete process.env.AMBIENT_REAL;
+    delete process.env.DIRECTOR;
+    delete process.env.AMBIENT;
+
+    try {
+      const state = createWebTransportState();
+      expect(state.realAmbientDirector).toBe(false);
+      expect(state.usesAmbientProvider).toBe(false);
+      expect(state.providerGenerationTimeoutMs).toBeUndefined();
+      expect(state.fallbackProvider).toBeUndefined();
+    } finally {
+      if (previousAmbientReal === undefined) {
+        delete process.env.AMBIENT_REAL;
+      } else {
+        process.env.AMBIENT_REAL = previousAmbientReal;
+      }
+      if (previousDirector === undefined) {
+        delete process.env.DIRECTOR;
+      } else {
+        process.env.DIRECTOR = previousDirector;
+      }
+      if (previousAmbient === undefined) {
+        delete process.env.AMBIENT;
+      } else {
+        process.env.AMBIENT = previousAmbient;
+      }
+      resetWebTransportStateForTests();
+    }
+  });
+
   it("wires bundled fallback provider when AMBIENT=1 without DIRECTOR=fallback", async () => {
     const previousAmbient = process.env.AMBIENT;
     const previousDirector = process.env.DIRECTOR;
