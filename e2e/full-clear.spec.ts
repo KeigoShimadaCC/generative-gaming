@@ -31,7 +31,7 @@ test.describe("full-game browser-clear campaign", () => {
 
     try {
       await page.goto(
-        `/?seed=${encodeURIComponent(campaignSeed)}&botBridge=1`
+        `/?seed=${encodeURIComponent(campaignSeed)}&botBridge=1${process.env.AMBIENT_REAL === "1" ? "&ambientReal=1" : ""}`
       );
       await expect(state).toHaveAttribute("data-screen", "title");
       await expect(page.getByTestId("title-seed")).toContainText(campaignSeed);
@@ -92,7 +92,7 @@ test.describe("determinism note", () => {
 
       const state = page.getByTestId("game-state");
       await page.goto(
-        `/?seed=${encodeURIComponent(campaignSeed)}&botBridge=1`
+        `/?seed=${encodeURIComponent(campaignSeed)}&botBridge=1${process.env.AMBIENT_REAL === "1" ? "&ambientReal=1" : ""}`
       );
       await page.getByTestId("new-run-button").click();
       await driveRunToWin(page, { seed: campaignSeed });

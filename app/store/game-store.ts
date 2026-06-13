@@ -49,12 +49,21 @@ const DESCEND_FLOOR_RETRY_BUDGET_MS = 30_000;
 // waits for in-flight generation instead of preempting with fallback.
 const DESCEND_FLOOR_RETRY_BUDGET_AMBIENT_REAL_MS = 60_000;
 
-const isRealAmbient = (): boolean =>
-  (process as { env?: Record<string, string | undefined> }).env?.AMBIENT_REAL ===
-  "1";
+const AMBIENT_REAL_QUERY_PARAM = "ambientReal";
+
+const ambientRealRequested = (): boolean => {
+  if (typeof window === "undefined") {
+    return process.env.AMBIENT_REAL === "1";
+  }
+  return (
+    new URLSearchParams(window.location?.search ?? "").get(
+      AMBIENT_REAL_QUERY_PARAM
+    ) === "1" || process.env.AMBIENT_REAL === "1"
+  );
+};
 
 const descendFloorRetryBudgetMs = (): number =>
-  isRealAmbient()
+  ambientRealRequested()
     ? DESCEND_FLOOR_RETRY_BUDGET_AMBIENT_REAL_MS
     : DESCEND_FLOOR_RETRY_BUDGET_MS;
 const BOT_STATE_BRIDGE_QUERY_PARAM = "botBridge";
