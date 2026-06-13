@@ -149,6 +149,45 @@ describe("game store descending floor resolution", () => {
     expect(useGameStore.getState().transition?.servedSource).toBe("fallback");
   });
 
+  it("serves fallback when prefetch never reaches ready and resolveFloor hangs", async () => {
+    const session = createFakeSession("descend-pre-ready-hang", {
+      startDepth: 7,
+      pollFloor: vi.fn(async () => "none" as const),
+      resolveFloor: vi.fn(async (depth: number) => {
+        await new Promise<void>(() => {});
+        return {
+          depth,
+          content: {} as ClientServedFloor["content"],
+          source: "generated" as const
+        };
+      })
+    });
+
+    useGameStore.setState({
+      gameSession: session,
+      gameState: session.state,
+      screen: "playing",
+      transition: null,
+      arrivalIntroLine: null,
+      ui: defaultUi
+    });
+
+    expect(
+      useGameStore.getState().dispatchAction({ kind: "descend" })
+    ).toBeNull();
+    expect(useGameStore.getState().transition?.phase).toBe("descending");
+    expect(useGameStore.getState().transition?.controllerState).toBe("none");
+
+    await vi.advanceTimersByTimeAsync(32_000);
+
+    expect(session.setServedFloor).toHaveBeenCalledWith(
+      expect.objectContaining({ depth: 8, source: "fallback" })
+    );
+    expect(useGameStore.getState().transition?.phase).toBe("arrival");
+    expect(useGameStore.getState().transition?.servedSource).toBe("fallback");
+    expect(useGameStore.getState().transition?.floorReady).toBe(true);
+  });
+
   it("preempts a never-resolving resolveFloor when prefetch is ready and serves fallback within the budget", async () => {
     const session = createFakeSession("descend-pending-ready", {
       startDepth: 9,

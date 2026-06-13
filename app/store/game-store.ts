@@ -377,93 +377,103 @@ const attemptResolveDescendFloor = async ({
   readonly startedAtMs: number;
   readonly deadlineMs: number;
 }): Promise<boolean> => {
-  const token = descendingToken(depth, startedAtMs);
+  const iterationBudgetMs = Math.min(
+    DESCEND_FLOOR_RETRY_MS,
+    Math.max(0, deadlineMs - nowMs())
+  );
+  if (iterationBudgetMs <= 0) {
+    return false;
+  }
 
   try {
-    const pollTimeoutMs = Math.min(
-      DESCEND_FLOOR_RETRY_MS,
-      Math.max(0, deadlineMs - nowMs())
+    return await withTimeout(
+      attemptResolveDescendFloorIteration({
+        get,
+        set,
+        session,
+        depth,
+        startedAtMs
+      }),
+      iterationBudgetMs
     );
-    if (pollTimeoutMs <= 0) {
-      return false;
-    }
-
-    const snapshotBeforePoll = get().transition;
-    const controllerState = await withTimeout(
-      session.pollFloor(depth),
-      pollTimeoutMs
-    );
-    const transitionAfterPoll = rebindDescendingTransition(
-      get,
-      set,
-      token,
-      snapshotBeforePoll
-    );
-    if (transitionAfterPoll === null) {
-      return false;
-    }
-
-    patchCurrentTransition(get, set, {
-      controllerState: controllerStateForStore(controllerState)
-    });
-
-    const snapshotBeforeResolve = get().transition;
-    const resolveTimeoutMs = Math.min(
-      DESCEND_FLOOR_RETRY_MS,
-      Math.max(0, deadlineMs - nowMs())
-    );
-    if (resolveTimeoutMs <= 0) {
-      return false;
-    }
-
-    const needsResolveTimeout =
-      controllerState === "in_flight" || controllerState === "ready";
-    const served = needsResolveTimeout
-      ? await withTimeout(session.resolveFloor(depth), resolveTimeoutMs)
-      : await session.resolveFloor(depth);
-    const transitionAfterResolve = rebindDescendingTransition(
-      get,
-      set,
-      token,
-      snapshotBeforeResolve
-    );
-    if (transitionAfterResolve === null) {
-      return false;
-    }
-
-    if (transitionAfterResolve.floorReady) {
-      if (
-        shouldAutoEnterFloor(transitionAfterResolve, nowMs()) &&
-        shouldFinishReadyDescendFloor(controllerState, served.source)
-      ) {
-        return (
-          finishReadyDescendFloor(
-            get,
-            set,
-            session,
-            transitionAfterResolve
-          ) || true
-        );
-      }
-      return true;
-    }
-
-    const readyTransition = markTransitionFloorReady(
-      transitionAfterResolve,
-      nowMs(),
-      served.source
-    );
-    setTransitionState(set, readyTransition);
-    if (
-      shouldAutoEnterFloor(readyTransition, nowMs()) &&
-      shouldFinishReadyDescendFloor(controllerState, served.source)
-    ) {
-      return finishReadyDescendFloor(get, set, session, readyTransition) || true;
-    }
-    return true;
   } catch {
     return false;
   }
+};
+
+const attemptResolveDescendFloorIteration = async ({
+  get,
+  set,
+  session,
+  depth,
+  startedAtMs
+}: {
+  readonly get: StoreGet;
+  readonly set: StoreSet;
+  readonly session: ClientGameSession;
+  readonly depth: number;
+  readonly startedAtMs: number;
+}): Promise<boolean> => {
+  const token = descendingToken(depth, startedAtMs);
+
+  const snapshotBeforePoll = get().transition;
+  const controllerState = await session.pollFloor(depth);
+  const transitionAfterPoll = rebindDescendingTransition(
+    get,
+    set,
+    token,
+    snapshotBeforePoll
+  );
+  if (transitionAfterPoll === null) {
+    return false;
+  }
+
+  patchCurrentTransition(get, set, {
+    controllerState: controllerStateForStore(controllerState)
+  });
+
+  const snapshotBeforeResolve = get().transition;
+  const served = await session.resolveFloor(depth);
+  const transitionAfterResolve = rebindDescendingTransition(
+    get,
+    set,
+    token,
+    snapshotBeforeResolve
+  );
+  if (transitionAfterResolve === null) {
+    return false;
+  }
+
+  if (transitionAfterResolve.floorReady) {
+    if (
+      shouldAutoEnterFloor(transitionAfterResolve, nowMs()) &&
+      shouldFinishReadyDescendFloor(controllerState, served.source)
+    ) {
+      return (
+        finishReadyDescendFloor(
+          get,
+          set,
+          session,
+          transitionAfterResolve
+        ) || true
+      );
+    }
+    return true;
+  }
+
+  const readyTransition = markTransitionFloorReady(
+    transitionAfterResolve,
+    nowMs(),
+    served.source
+  );
+  setTransitionState(set, readyTransition);
+  if (
+    shouldAutoEnterFloor(readyTransition, nowMs()) &&
+    shouldFinishReadyDescendFloor(controllerState, served.source)
+  ) {
+    return finishReadyDescendFloor(get, set, session, readyTransition) || true;
+  }
+  return true;
 };
 
 const rebindDescendingTransition = (
