@@ -286,6 +286,95 @@ describe("game store descending floor resolution", () => {
     expect(useGameStore.getState().transition?.servedSource).toBe("fallback");
     expect(useGameStore.getState().transition?.floorReady).toBe(true);
   });
+
+  it("waits for a ~34s generated floor when AMBIENT_REAL=1 instead of preempting at 30s", async () => {
+    const previousAmbientReal = process.env.AMBIENT_REAL;
+    process.env.AMBIENT_REAL = "1";
+
+    try {
+      const session = createFakeSession("ambient-real-deadline-order", {
+        startDepth: 7,
+        pollFloor: vi.fn(async () => "in_flight" as const),
+        resolveFloor: createDedupedSlowResolveFloor(34_000)
+      });
+
+      useGameStore.setState({
+        gameSession: session,
+        gameState: session.state,
+        screen: "playing",
+        transition: null,
+        arrivalIntroLine: null,
+        ui: defaultUi
+      });
+
+      expect(
+        useGameStore.getState().dispatchAction({ kind: "descend" })
+      ).toBeNull();
+      expect(useGameStore.getState().transition?.phase).toBe("descending");
+
+      await vi.advanceTimersByTimeAsync(31_000);
+      expect(useGameStore.getState().transition?.phase).toBe("descending");
+      expect(session.setServedFloor).not.toHaveBeenCalled();
+
+      await vi.advanceTimersByTimeAsync(4_000);
+      expect(useGameStore.getState().transition?.phase).toBe("arrival");
+      expect(useGameStore.getState().transition?.servedSource).toBe(
+        "generated"
+      );
+      expect(useGameStore.getState().transition?.floorReady).toBe(true);
+      expect(session.setServedFloor).not.toHaveBeenCalled();
+
+      await vi.advanceTimersByTimeAsync(ARRIVAL_RITUAL_MS);
+      expect(useGameStore.getState().transition).toBeNull();
+      expect(useGameStore.getState().ui.inputLocked).toBe(false);
+    } finally {
+      if (previousAmbientReal === undefined) {
+        delete process.env.AMBIENT_REAL;
+      } else {
+        process.env.AMBIENT_REAL = previousAmbientReal;
+      }
+    }
+  });
+
+  it("still preempts a ~34s generated floor at 30s when AMBIENT_REAL is off", async () => {
+    const previousAmbientReal = process.env.AMBIENT_REAL;
+    delete process.env.AMBIENT_REAL;
+
+    try {
+      const session = createFakeSession("normal-deadline-order", {
+        startDepth: 7,
+        pollFloor: vi.fn(async () => "in_flight" as const),
+        resolveFloor: createDedupedSlowResolveFloor(34_000)
+      });
+
+      useGameStore.setState({
+        gameSession: session,
+        gameState: session.state,
+        screen: "playing",
+        transition: null,
+        arrivalIntroLine: null,
+        ui: defaultUi
+      });
+
+      expect(
+        useGameStore.getState().dispatchAction({ kind: "descend" })
+      ).toBeNull();
+
+      await vi.advanceTimersByTimeAsync(32_000);
+
+      expect(session.setServedFloor).toHaveBeenCalledWith(
+        expect.objectContaining({ depth: 8, source: "fallback" })
+      );
+      expect(useGameStore.getState().transition?.phase).toBe("arrival");
+      expect(useGameStore.getState().transition?.servedSource).toBe("fallback");
+    } finally {
+      if (previousAmbientReal === undefined) {
+        delete process.env.AMBIENT_REAL;
+      } else {
+        process.env.AMBIENT_REAL = previousAmbientReal;
+      }
+    }
+  });
 });
 
 describe("game store arrival transition", () => {
@@ -455,6 +544,29 @@ type FakeSessionOptions = {
   readonly startDepth?: number;
   readonly pollFloor?: ClientGameSession["pollFloor"];
   readonly resolveFloor?: ClientGameSession["resolveFloor"];
+};
+
+const createDedupedSlowResolveFloor = (
+  delayMs: number
+): ClientGameSession["resolveFloor"] => {
+  let inFlight: Promise<ClientServedFloor> | null = null;
+
+  return vi.fn(async (depth: number) => {
+    if (inFlight === null) {
+      inFlight = (async () => {
+        await new Promise<void>((resolve) => {
+          globalThis.setTimeout(resolve, delayMs);
+        });
+        return {
+          depth,
+          content: {} as ClientServedFloor["content"],
+          source: "generated" as const
+        };
+      })();
+    }
+
+    return inFlight;
+  });
 };
 
 const createFakeSession = (

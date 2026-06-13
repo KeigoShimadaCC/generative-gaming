@@ -45,6 +45,18 @@ import { createFallbackFloorContentProvider } from "@/api/director/fallback-prov
 const ARRIVAL_COMPLETION_RETRY_MS = 100;
 const DESCEND_FLOOR_RETRY_MS = 2_000;
 const DESCEND_FLOOR_RETRY_BUDGET_MS = 30_000;
+// Must exceed AMBIENT_REAL_TIMEOUT_MS (45_000 in transport-server.ts) so descend
+// waits for in-flight generation instead of preempting with fallback.
+const DESCEND_FLOOR_RETRY_BUDGET_AMBIENT_REAL_MS = 60_000;
+
+const isRealAmbient = (): boolean =>
+  (process as { env?: Record<string, string | undefined> }).env?.AMBIENT_REAL ===
+  "1";
+
+const descendFloorRetryBudgetMs = (): number =>
+  isRealAmbient()
+    ? DESCEND_FLOOR_RETRY_BUDGET_AMBIENT_REAL_MS
+    : DESCEND_FLOOR_RETRY_BUDGET_MS;
 const BOT_STATE_BRIDGE_QUERY_PARAM = "botBridge";
 const BOT_STATE_BRIDGE_ENABLED_VALUE = "1";
 
@@ -334,7 +346,7 @@ const resolveTransitionFloor = async ({
   readonly depth: number;
   readonly startedAtMs: number;
 }): Promise<void> => {
-  const deadlineMs = startedAtMs + DESCEND_FLOOR_RETRY_BUDGET_MS;
+  const deadlineMs = startedAtMs + descendFloorRetryBudgetMs();
 
   while (sameDescendingTransition(get().transition, descendingToken(depth, startedAtMs))) {
     if (nowMs() >= deadlineMs) {
