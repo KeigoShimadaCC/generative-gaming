@@ -1,0 +1,42 @@
+Implemented Phase 85 ArtDirector within the requested scope. No branch and no commits.
+
+**Changed**
+- [src/artdirector/provider.ts](/Users/keigoshimada/Documents/generative-gaming/src/artdirector/provider.ts:82): ambient Codex provider mirroring `codex exec --sandbox read-only -c approval_policy=never <prompt>`, stdin ignored, 45s default timeout, wrapper-text JSON extraction.
+- [src/artdirector/gauntlet.ts](/Users/keigoshimada/Documents/generative-gaming/src/artdirector/gauntlet.ts:24): schema/palette/render/readability Art Gauntlet using the phase-65 sprite validator/rasterizer.
+- [src/artdirector/director.ts](/Users/keigoshimada/Documents/generative-gaming/src/artdirector/director.ts:55): batch ArtDirector implementation, atlas cache by `(themeId, entityId, seed)`, `ART=fallback` mode, reject/timeout fallback path.
+- [src/artdirector/artifacts.ts](/Users/keigoshimada/Documents/generative-gaming/src/artdirector/artifacts.ts:44): persistent attempt/verdict artifacts via the existing artifact FS adapter.
+- [src/art/art-director.ts](/Users/keigoshimada/Documents/generative-gaming/src/art/art-director.ts:57): concrete seam export as `createArtDirector`.
+- Added contract/provider/director tests plus skipped host live smoke: [live-smoke.test.ts](/Users/keigoshimada/Documents/generative-gaming/src/artdirector/live-smoke.test.ts:18).
+
+**Evidence**
+`pnpm exec vitest run src/artdirector/contract.test.ts --reporter verbose` -> exit 0:
+```text
+Test Files  1 passed (1)
+Tests       3 passed (3)
+```
+
+`pnpm run verify:ci` -> exit 0:
+```text
+PASS: typecheck
+PASS: lint
+PASS: root vitest
+PASS: vitest: app/api/director/vitest.config.ts
+...
+PASS: vitest: tests/integration/vitest.config.ts
+All steps passed.
+```
+Root Vitest included `87 passed | 1 skipped` files and `573 passed | 3 skipped` tests.
+
+**Live Smoke For Orchestrator**
+Run host-side, with no other Codex process active:
+```bash
+ARTDIRECTOR_LIVE=1 pnpm exec vitest run src/artdirector/live-smoke.test.ts --reporter verbose
+```
+That test forces `mode: "generate"`, calls real Codex, writes artifacts under `runs/artdirector-live-smoke`, accepts through the Art Gauntlet, stores in `SpriteAtlasCache`, and verifies raster dimensions/pixels.
+
+**Phase Completion Check**
+Status: Complete for the worker brief.
+
+The provider/gauntlet/atlas/fallback contract is implemented and verified. Scope deviations by this task: none. I did not edit engine, schemas, director, gameplay gauntlet, app renderer, content fallback, or curated art. Current worktree does contain unrelated app/minimap changes outside my scope; I left them untouched.
+
+Environment discoveries: none. Actual time spent: about 70 minutes vs 60 minute estimate, under the 120 minute timebox.

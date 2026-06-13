@@ -26,3 +26,5 @@ dist/
 .pnpm-store/
 .cache/
 test-results/
+
+runs/artdirector-live-smoke/

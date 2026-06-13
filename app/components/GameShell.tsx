@@ -12,6 +12,7 @@ import { useGameStore } from "@/store/game-store";
 import { DiaryLayer, type DiaryLayerTab } from "@/components/diary";
 import { StageRegion } from "@/components/stage";
 import { HudRegion } from "@/components/hud";
+import { MinimapRegion } from "@/components/minimap";
 import { KeymapOverlay } from "@/components/keymap-overlay/KeymapOverlay";
 import { MessageLogRegion } from "@/components/log";
 import { ContextPanelFrame } from "@/components/panels/frame";
@@ -136,8 +137,9 @@ export function GameShell() {
           />
         </div>
 
-        <div className="grid min-h-0 grid-rows-[minmax(7rem,auto)_minmax(0,1fr)] gap-2">
+        <div className="grid min-h-0 grid-rows-[minmax(7rem,auto)_auto_minmax(0,1fr)] gap-2">
           <HudRegion state={gameState} />
+          <MinimapRegion state={gameState} />
 
           <ContextPanelFrame
             hoverPosition={hoverPosition}

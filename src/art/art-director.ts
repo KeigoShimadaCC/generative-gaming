@@ -53,3 +53,12 @@ export interface ArtDirector {
     options?: { readonly signal?: AbortSignal }
   ): Promise<ArtDirectorBatchResult>;
 }
+
+export {
+  AmbientArtDirector,
+  createAmbientArtDirector as createArtDirector
+} from "../artdirector/director.js";
+export type {
+  AmbientArtDirectorOptions as CreateArtDirectorOptions,
+  ArtDirectorMode
+} from "../artdirector/director.js";

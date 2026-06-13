@@ -17,6 +17,15 @@ export default defineConfig({
   resolve: {
     alias: [
       { find: "@", replacement: `${root}app` },
+      { find: /^@engine\/(.+)$/, replacement: `${root}src/engine/$1` },
+      {
+        find: /^@engine\/map$/,
+        replacement: `${root}src/engine/map/index.ts`,
+      },
+      {
+        find: /^@engine\/render$/,
+        replacement: `${root}src/engine/render/index.ts`,
+      },
       {
         find: /^@engine\/state$/,
         replacement: `${root}src/engine/state/index.ts`,
@@ -25,6 +34,9 @@ export default defineConfig({
   },
   test: {
     environment: "node",
-    include: ["app/components/hud/**/*.test.ts"],
+    include: [
+      "app/components/hud/**/*.test.ts",
+      "app/components/minimap/**/*.test.ts",
+    ],
   },
 });
