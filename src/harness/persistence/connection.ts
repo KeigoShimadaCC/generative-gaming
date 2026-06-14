@@ -66,6 +66,9 @@ export const openDatabase = (
   const path = options.path ?? DEFAULT_DB_PATH;
   ensureParentDirectory(path);
   const db = new Database(path);
+  db.pragma("foreign_keys = ON");
+  db.pragma("busy_timeout = 5000");
+  db.pragma("journal_mode = WAL");
   runMigrations(db);
 
   return {

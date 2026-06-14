@@ -142,6 +142,26 @@ describe("persistence connection", () => {
       rmSync(dir, { recursive: true, force: true });
     }
   });
+
+  it("rejects orphan memory events through foreign-key enforcement", () => {
+    const db = openDatabase({ path: ":memory:" });
+
+    try {
+      expect(() => {
+        db.memoryEvents.insert({
+          id: "evt-orphan",
+          profileId: "missing-profile",
+          runId: "run-orphan",
+          type: "deed",
+          payload: { label: "should fail" },
+          createdAt: CREATED_AT,
+          salience: 1,
+        });
+      }).toThrow(/FOREIGN KEY constraint failed/i);
+    } finally {
+      db.close();
+    }
+  });
 });
 
 describe("memory event queries", () => {
