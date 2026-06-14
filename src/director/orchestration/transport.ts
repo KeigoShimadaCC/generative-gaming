@@ -52,19 +52,60 @@ export type RunControllerRegistry = {
   readonly remove: (runId: string) => void;
 };
 
-export const createRunControllerRegistry = (): RunControllerRegistry => {
+export type RunControllerRegistryOptions = {
+  readonly maxControllers?: number;
+  /** When set, all controllers use this runId instead of the map key. */
+  readonly controllerRunId?: string;
+};
+
+const DEFAULT_MAX_CONTROLLERS = 128;
+
+export const createRunControllerRegistry = (
+  options: RunControllerRegistryOptions = {},
+): RunControllerRegistry => {
   const controllers = new Map<string, PrefetchController>();
+  const maxControllers = options.maxControllers ?? DEFAULT_MAX_CONTROLLERS;
+  const controllerRunId = options.controllerRunId;
+
+  const touch = (runId: string, controller: PrefetchController): void => {
+    controllers.delete(runId);
+    controllers.set(runId, controller);
+  };
+
+  const evictOverflow = (): void => {
+    while (controllers.size > maxControllers) {
+      const oldestRunId = controllers.keys().next().value as string | undefined;
+      if (oldestRunId === undefined) {
+        return;
+      }
+      const oldest = controllers.get(oldestRunId);
+      oldest?.cancel();
+      controllers.delete(oldestRunId);
+    }
+  };
 
   return {
-    get: (runId) => controllers.get(runId) ?? null,
+    get: (runId) => {
+      const controller = controllers.get(runId);
+      if (controller === undefined) {
+        return null;
+      }
+      touch(runId, controller);
+      return controller;
+    },
     getOrCreate: (runId, options) => {
       const existing = controllers.get(runId);
       if (existing !== undefined) {
+        touch(runId, existing);
         return existing;
       }
 
-      const created = createPrefetchController({ ...options, runId });
+      const created = createPrefetchController({
+        ...options,
+        runId: controllerRunId ?? runId,
+      });
       controllers.set(runId, created);
+      evictOverflow();
       return created;
     },
     remove: (runId) => {
@@ -80,6 +121,11 @@ export const createTransportHandlers = (
   defaultOptions: Omit<PrefetchControllerOptions, "runId">,
 ): TransportHandlers => ({
   startGeneration: (request) => {
+    if (request.trace.terminal !== undefined && request.trace.terminal !== null) {
+      registry.remove(request.runId);
+      return { ok: true, prefetchDepth: request.depth + 1 };
+    }
+
     const controller = registry.getOrCreate(request.runId, {
       ...defaultOptions,
       runId: request.runId,

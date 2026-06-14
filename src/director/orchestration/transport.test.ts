@@ -64,6 +64,60 @@ const defaultOptions = {
 const handlers = createTransportHandlers(registry, defaultOptions);
 
 describe("transport handlers", () => {
+  it("evicts oldest controllers when the production artifact registry exceeds its cap", () => {
+    const artifactRunId = "artifact-run-id";
+    const cappedRegistry = createRunControllerRegistry({
+      controllerRunId: artifactRunId,
+      maxControllers: 2,
+    });
+    const cappedHandlers = createTransportHandlers(cappedRegistry, defaultOptions);
+
+    cappedHandlers.startGeneration({
+      runId: "client-run-0",
+      depth: 1,
+      trace: traceForRun("client-run-0"),
+    });
+    cappedHandlers.startGeneration({
+      runId: "client-run-1",
+      depth: 1,
+      trace: traceForRun("client-run-1"),
+    });
+    cappedHandlers.startGeneration({
+      runId: "client-run-2",
+      depth: 1,
+      trace: traceForRun("client-run-2"),
+    });
+
+    expect(cappedRegistry.get("client-run-0")).toBeNull();
+    expect(cappedRegistry.get("client-run-1")).not.toBeNull();
+    expect(cappedRegistry.get("client-run-2")).not.toBeNull();
+    expect(cappedHandlers.pollStatus({ runId: "client-run-0" })).toEqual({
+      status: "idle",
+    });
+  });
+
+  it("evicts a run controller when a terminal trace is reported", () => {
+    const localRegistry = createRunControllerRegistry();
+    const localHandlers = createTransportHandlers(localRegistry, defaultOptions);
+
+    localHandlers.startGeneration({
+      runId: RUN_ID,
+      depth: 1,
+      trace: trace(),
+    });
+
+    expect(localRegistry.get(RUN_ID)).not.toBeNull();
+
+    localHandlers.startGeneration({
+      runId: RUN_ID,
+      depth: 12,
+      trace: terminalTrace(),
+    });
+
+    expect(localRegistry.get(RUN_ID)).toBeNull();
+    expect(localHandlers.pollStatus({ runId: RUN_ID })).toEqual({ status: "idle" });
+  });
+
   it("round-trips startGeneration, pollStatus, and getFloor through the http harness", async () => {
     const server = createHttpHarness(handlers);
     await new Promise<void>((resolve) => {
@@ -122,7 +176,9 @@ const postJson = async (
   return (await response.json()) as Record<string, unknown>;
 };
 
-const trace = (): ParsedTrace => ({
+const trace = (): ParsedTrace => traceForRun(RUN_ID);
+
+const traceForRun = (runId: string): ParsedTrace => ({
   header: {
     recordType: "header",
     protocolVersion: "1.2.0",
@@ -131,7 +187,17 @@ const trace = (): ParsedTrace => ({
     contentRef: { providerId: "transport-test", packVersion: "0.0.0" },
     seed: SEED,
     createdAt: CREATED_AT,
-    runId: RUN_ID,
+    runId,
   },
   turns: [],
+});
+
+const terminalTrace = (): ParsedTrace => ({
+  ...trace(),
+  terminal: {
+    recordType: "terminal",
+    turn: 42,
+    terminalStatus: "ABORTED",
+    stateHash: "terminal-hash",
+  },
 });

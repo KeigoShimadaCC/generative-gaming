@@ -5,14 +5,11 @@ import {
   type Gate2RunOptions
 } from "../../../src/gauntlet/gate2/run.js";
 import {
+  createRunControllerRegistry,
   createTransportHandlers,
   type RunControllerRegistry,
   type TransportHandlers
 } from "../../../src/director/orchestration/transport.js";
-import {
-  createPrefetchController,
-  type PrefetchController
-} from "../../../src/director/orchestration/prefetch.js";
 import type { PrefetchClock } from "../../../src/director/orchestration/types.js";
 import type { ServedFloor } from "../../../src/director/orchestration/types.js";
 import { AmbientDirectorProvider } from "../../../src/director/provider/ambient.js";
@@ -794,31 +791,8 @@ type WebTransportStateOptions = {
 
 const createArtifactRunRegistry = (
   artifactRunId: string
-): RunControllerRegistry => {
-  const controllers = new Map<string, PrefetchController>();
-
-  return {
-    get: (runId) => controllers.get(runId) ?? null,
-    getOrCreate: (runId, options) => {
-      const existing = controllers.get(runId);
-      if (existing !== undefined) {
-        return existing;
-      }
-
-      const created = createPrefetchController({
-        ...options,
-        runId: artifactRunId
-      });
-      controllers.set(runId, created);
-      return created;
-    },
-    remove: (runId) => {
-      const controller = controllers.get(runId);
-      controller?.cancel();
-      controllers.delete(runId);
-    }
-  };
-};
+): RunControllerRegistry =>
+  createRunControllerRegistry({ controllerRunId: artifactRunId });
 
 export const createWebTransportState = (
   options: WebTransportStateOptions = {}
