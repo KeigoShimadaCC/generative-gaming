@@ -1,7 +1,14 @@
 import { afterAll, describe, expect, it } from "vitest";
 
 import { bounds, config } from "../../config/index.js";
-import { createInitialState } from "../state/index.js";
+import type { ItemDefinition } from "../../schemas/entities/index.js";
+import { validFoodItemFixture } from "../../schemas/fixtures/entities.js";
+import {
+  createInitialState,
+  type GameState,
+  type InventorySlot,
+  type PlayerItemStack,
+} from "../state/index.js";
 import {
   acceptQuest,
   completeQuest,
@@ -154,4 +161,80 @@ describe("quest rewards", () => {
       }),
     ).toBe(false);
   });
+
+  it("completes and logs forfeited coin when the reward cannot fit the pack", () => {
+    const definition = fetchQuest("quest-full-pack");
+    const offered = offerQuest(
+      withInventory(createInitialState("quest-full-pack"), fullInventory()),
+      definition,
+      "npc#1",
+    );
+
+    if ("illegal" in offered) {
+      throw new Error(offered.reason);
+    }
+
+    const accepted = acceptQuest(offered.state, definition.id);
+    if ("illegal" in accepted) {
+      throw new Error(accepted.reason);
+    }
+
+    const completed = completeQuest(accepted.state, definition.id, testCatalog());
+    if ("illegal" in completed) {
+      throw new Error(completed.reason);
+    }
+
+    expect(completed.state.quests.completedQuestIds).toContain(definition.id);
+    expect(completed.state.quests.activeQuestIds).not.toContain(definition.id);
+    expect(completed.events).toContainEqual({
+      turn: 0,
+      type: "quest_reward_forfeited",
+      data: {
+        questId: definition.id,
+        coin: definition.reward.coin,
+        reason: "inventory_full",
+      },
+    });
+    expect(completed.events).toContainEqual({
+      turn: 0,
+      type: "quest_completed",
+      data: {
+        questId: definition.id,
+        rewardCoin: null,
+      },
+    });
+  });
+});
+
+const withInventory = (
+  state: GameState,
+  inventory: readonly InventorySlot[],
+): GameState => ({
+  ...state,
+  player: {
+    ...state.player,
+    inventory,
+  },
+});
+
+const fullInventory = (): readonly InventorySlot[] =>
+  Array.from({ length: config.playerCharacter.inventory.slots }, (_, index) =>
+    carried(`filler-${index}`, itemDefinition(`filler-${index}`), 1),
+  );
+
+const carried = (
+  itemInstanceId: string,
+  definition: ItemDefinition,
+  quantity: number,
+): PlayerItemStack => ({
+  itemInstanceId,
+  definition,
+  quantity,
+  identified: true,
+});
+
+const itemDefinition = (id: string): ItemDefinition => ({
+  ...validFoodItemFixture,
+  id,
+  value: { band: "shallows", coin: config.itemsEconomy.valueBandsCoin.shallows.min },
 });

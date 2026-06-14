@@ -51,6 +51,11 @@ declare module "../state/types.js" {
       readonly itemDefinitionIds: readonly string[];
       readonly identifyDefinitionIds: readonly string[];
     };
+    readonly quest_reward_forfeited: {
+      readonly questId: string;
+      readonly coin: number;
+      readonly reason: "inventory_full";
+    };
   }
 }
 
@@ -243,6 +248,8 @@ export const completeQuest = (
     return paid;
   }
 
+  const paidCoin = paid.events.find((event) => event.type === "quest_reward_paid")
+    ?.data.coin ?? null;
   const nextState = withQuestCompleted(paid.state, questId, runtime);
 
   return {
@@ -251,7 +258,7 @@ export const completeQuest = (
       ...paid.events,
       questEvent(state, "quest_completed", {
         questId,
-        rewardCoin: runtime.definition.reward.coin,
+        rewardCoin: paidCoin === null || paidCoin <= 0 ? null : paidCoin,
       }),
     ],
   };
@@ -294,6 +301,7 @@ export const payQuestReward = (
   let nextState = state;
   const events: TurnEvent[] = [];
   let coinPaid = 0;
+  let coinForfeited = 0;
   const itemDefinitionIds: string[] = [];
   const identifyDefinitionIds: string[] = [];
 
@@ -307,11 +315,11 @@ export const payQuestReward = (
     const credited = addToInventory(nextState, coinStack);
 
     if ("illegal" in credited) {
-      return credited;
+      coinForfeited = reward.coin;
+    } else {
+      nextState = credited.state;
+      coinPaid = reward.coin;
     }
-
-    nextState = credited.state;
-    coinPaid = reward.coin;
   }
 
   for (const definitionId of reward.itemIds) {
@@ -356,6 +364,16 @@ export const payQuestReward = (
       identifyDefinitionIds,
     }),
   );
+
+  if (coinForfeited > 0) {
+    events.push(
+      questEvent(state, "quest_reward_forfeited", {
+        questId,
+        coin: coinForfeited,
+        reason: "inventory_full",
+      }),
+    );
+  }
 
   return { state: nextState, events };
 };

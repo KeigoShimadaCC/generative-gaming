@@ -134,6 +134,8 @@ export const formatLogEvent = (event: EngineLogEvent): string => {
       return `t${turn} quest ${data.questId} failed: ${data.reason}`;
     case "quest_reward_paid":
       return `t${turn} quest reward ${data.questId} +${data.coin} coin${data.itemDefinitionIds.length === 0 ? "" : ` items:${data.itemDefinitionIds.join(",")}`}`;
+    case "quest_reward_forfeited":
+      return `t${turn} quest reward ${data.questId} forfeited ${data.coin} coin (${data.reason})`;
     case "quest_escort_moved":
       return "";
     case "quest_item_delivered":
@@ -252,6 +254,7 @@ export const ALL_LOG_EVENT_TYPES = [
   "quest_completed",
   "quest_failed",
   "quest_reward_paid",
+  "quest_reward_forfeited",
   "quest_escort_moved",
   "quest_item_delivered",
   "barter_buy",
@@ -688,6 +691,12 @@ const dummyEventData = (
         coin: 10,
         itemDefinitionIds: ["draught-1"],
         identifyDefinitionIds: [],
+      };
+    case "quest_reward_forfeited":
+      return {
+        questId: "quest-1",
+        coin: 10,
+        reason: "inventory_full",
       };
     case "quest_escort_moved":
       return {
