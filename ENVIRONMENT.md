@@ -12,15 +12,23 @@ tools and must be re-verified by the Phase 01 environment spike; facts marked
 
 ## Codex CLI (`codex exec`) sandbox facts — codex-cli 0.137.0
 
-- **[verified 2026-06-11, spike 01A]** `.git` writes are **ALLOWED** under
+- **[verified 2026-06-11, spike 01A]** `.git` writes were **ALLOWED** under
   `--sandbox workspace-write` (empty commit succeeded) — the inherited "blocked"
-  fact is REFUTED for this CLI version. Codex workers use AGENTS.md's
-  direct-commit path under `Codex Agent <agent@codex.local>`; COMMIT_PLAN.md
-  remains the fallback if a future version re-blocks.
+  fact was REFUTED for that CLI version. Codex workers were expected to use
+  AGENTS.md's direct-commit path under `Codex Agent <agent@codex.local>`.
   **[nuance 2026-06-12, phase 35]** Branch creation (`.git` ref writes) FAILED
   in one session while commits work — git capability in-sandbox is per-
   operation, not all-or-nothing. Workers needing branches should report rather
   than retry.
+  **[SUPERSEDED 2026-06-14, audit remediation]** `.git` writes are now **BLOCKED**
+  again in this environment: both the Critical+High and Medium audit-remediation
+  Codex runs failed every commit with `fatal: Unable to create '.git/index.lock':
+  Operation not permitted`, left all changes uncommitted, and emitted
+  `COMMIT_PLAN.md`. **Treat COMMIT_PLAN.md as the EXPECTED path, not the fallback:**
+  brief Codex to make the changes + write a `COMMIT_PLAN.md` mapping files→commit,
+  and the orchestrator applies the commits (per-finding, `--author="Codex Agent
+  <agent@codex.local>"`). Git capability is environment/session-dependent — do not
+  assume in-sandbox commits work.
 - **[verified 2026-06-11, spike 01A]** Non-destructive `&&` chaining WORKS —
   inherited "chained commands blocked" REFUTED. `rm -rf` is rejected by policy
   before execution (CONFIRMED) — use Node `fs` removals.
@@ -116,7 +124,36 @@ tools and must be re-verified by the Phase 01 environment spike; facts marked
 - **[verified 2026-06-12]** pnpm blocks native build scripts by default and
   `pnpm approve-builds` is interactive (sandbox-hostile). Native deps
   (better-sqlite3) must be listed in `pnpm.onlyBuiltDependencies` in
-  package.json.
+  package.json. **[noted 2026-06-14, audit]** `sharp` is similarly unapproved
+  locally (affects host art rasterization only; the dependency-free PNG path in
+  `runs/spikes/phase62/sprite-manifest.js` is the orchestrator's montage tool).
+
+## Host facts (orchestrator-side)
+
+- **[verified 2026-06-14]** Node engine mismatch: `package.json` requires Node
+  `>=24 <26`, but the local host runs **v22.x**. CI uses Node 24. Two `pnpm test`
+  entries can TIME OUT locally on Node 22 + throttled CPU — `evals/runner` (>5s cap)
+  and `harness/bots › wins depth-12 fallback runs` (~318s vs 300s cap) — these are
+  **timeouts, not assertion failures**; `verify:ci` and CI are green. Don't chase
+  them as logic bugs; a perf look at the one playthrough test is the only follow-up.
+- **[verified 2026-06-14]** Playwright browser cache invalidates on a chromium
+  version bump: `playwright test` fails with "Executable doesn't exist at
+  .../chromium_headless_shell-<v>/...". Fix on the host: `pnpm exec playwright
+  install chromium` (one-time per bump). Host smokes use `--project=chromium`;
+  the bundled full-clear campaign uses `pnpm run e2e:fullclear` (FULLCLEAR=1,
+  its own dev server with `DIRECTOR=fallback`).
+- **[verified 2026-06-14]** `scripts/generate-art.ts` footgun (now FIXED): a
+  single-entity regen (`--theme=X --entity=Y`) used to REPLACE that theme's whole
+  sprite list in `content/art/generated/index.json` (clobbered 47→3 entries). The
+  merge now seeds from the existing index; a codex-free `--reindex` flag rebuilds
+  `index.json` + `src/art/generated-records.ts` from on-disk records. Use
+  `pnpm run generate-art -- --reindex` to repair the index after manual sprite edits.
+- **[verified 2026-06-14]** Floor solvability is guaranteed at generation, not by
+  luck: `floorgen` `assertConnectivity` BFS-floods from the player spawn using the
+  player's own `isWalkableTile` + 8-neighbour movement and requires every walkable
+  cell (stairs included) reachable, else retry, else no floor ships. Verified by a
+  20k-seed reachability sweep (0 unreachable). Don't re-investigate "unreachable
+  stairs" as an open risk.
 
 ## Gate commands (cheapest first — fail fast)
 
