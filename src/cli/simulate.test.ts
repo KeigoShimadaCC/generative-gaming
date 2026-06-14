@@ -6,6 +6,7 @@ import { describe, expect, it } from "vitest";
 
 import { cautiousPolicy, balancedPolicy } from "../harness/bots/policies/index.js";
 import {
+  MAX_SIMULATE_SEED_COUNT,
   parseSeeds,
   parseSimulateArgs,
   runSimulate,
@@ -59,6 +60,26 @@ describe("simulate args", () => {
   it("expands numeric and list seeds", () => {
     expect(parseSeeds("3")).toEqual(["simulate-1", "simulate-2", "simulate-3"]);
     expect(parseSeeds("one,two")).toEqual(["one", "two"]);
+  });
+
+  it("rejects unsafe or over-cap numeric seed counts before allocation", () => {
+    expect(() => parseSeeds(`${Number.MAX_SAFE_INTEGER + 1}`)).toThrow(
+      "--seeds count must be a positive safe integer",
+    );
+    expect(() => parseSeeds(`${MAX_SIMULATE_SEED_COUNT + 1}`)).toThrow(
+      `--seeds count must be at most ${MAX_SIMULATE_SEED_COUNT}`,
+    );
+  });
+
+  it("rejects over-cap comma-separated seed lists before allocation", () => {
+    const seeds = Array.from(
+      { length: MAX_SIMULATE_SEED_COUNT + 1 },
+      (_, index) => `seed-${index + 1}`,
+    ).join(",");
+
+    expect(() => parseSeeds(seeds)).toThrow(
+      `--seeds list must have at most ${MAX_SIMULATE_SEED_COUNT} seeds`,
+    );
   });
 
   it("documents help text", () => {

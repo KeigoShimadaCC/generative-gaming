@@ -28,6 +28,7 @@ import {
 import type { BotPolicy, BotPolicyName } from "../harness/bots/types.js";
 
 const DEFAULT_MAX_TURNS = 900;
+export const MAX_SIMULATE_SEED_COUNT = 10_000;
 
 const policyByName = new Map<BotPolicyName, BotPolicy>(
   botPolicies.map((policy) => [policy.name, policy]),
@@ -350,9 +351,14 @@ const readPolicyList = (
 
 export const parseSeeds = (value: string): string[] => {
   if (/^\d+$/.test(value)) {
-    const count = Number.parseInt(value, 10);
-    if (count <= 0) {
-      throw new Error("--seeds count must be a positive integer");
+    const count = Number(value);
+    if (!Number.isSafeInteger(count) || count <= 0) {
+      throw new Error("--seeds count must be a positive safe integer");
+    }
+    if (count > MAX_SIMULATE_SEED_COUNT) {
+      throw new Error(
+        `--seeds count must be at most ${MAX_SIMULATE_SEED_COUNT}`,
+      );
     }
     return Array.from({ length: count }, (_, seedIndex) => `simulate-${seedIndex + 1}`);
   }
@@ -363,6 +369,11 @@ export const parseSeeds = (value: string): string[] => {
     .filter((entry) => entry.length > 0);
   if (seeds.length === 0) {
     throw new Error("--seeds requires at least one seed");
+  }
+  if (seeds.length > MAX_SIMULATE_SEED_COUNT) {
+    throw new Error(
+      `--seeds list must have at most ${MAX_SIMULATE_SEED_COUNT} seeds`,
+    );
   }
   return seeds;
 };
