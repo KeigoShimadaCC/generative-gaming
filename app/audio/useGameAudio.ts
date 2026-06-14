@@ -200,6 +200,22 @@ export const useGameAudio = (): GameAudioController => {
     for (const event of events) {
       playSfx(master.context, sfxGain, event.kind);
     }
+
+    let disconnected = false;
+    const disconnectSfxGain = (): void => {
+      if (disconnected) {
+        return;
+      }
+
+      disconnected = true;
+      sfxGain.disconnect();
+    };
+    const disconnectTimer = window.setTimeout(disconnectSfxGain, 1_000);
+
+    return () => {
+      window.clearTimeout(disconnectTimer);
+      disconnectSfxGain();
+    };
   }, [gameState, preferences.muted, unlocked]);
 
   useEffect(
