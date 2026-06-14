@@ -8,6 +8,10 @@ import {
   type PrefetchController,
   type PrefetchControllerOptions,
 } from "./prefetch.js";
+import {
+  TransportJsonRequestSchema,
+  type TransportJsonRequest,
+} from "./transport-validation.js";
 import type { PrefetchStatus, ServedFloor } from "./types.js";
 
 export type StartGenerationRequest = {
@@ -18,6 +22,7 @@ export type StartGenerationRequest = {
 
 export type PollStatusRequest = {
   readonly runId: string;
+  readonly depth?: number;
 };
 
 export type GetFloorRequest = {
@@ -134,7 +139,10 @@ export const createTransportHandlers = (
     return { ok: true, prefetchDepth: request.depth + 1 };
   },
   pollStatus: (request) =>
-    registry.get(request.runId)?.pollStatus() ?? { status: "idle" },
+    statusForRequestedDepth(
+      registry.get(request.runId)?.pollStatus() ?? { status: "idle" },
+      request.depth,
+    ),
   getFloor: async (request) => {
     const controller = registry.get(request.runId);
     if (controller === null) {
@@ -145,18 +153,40 @@ export const createTransportHandlers = (
   },
 });
 
-type JsonRequest = {
-  readonly action: "startGeneration" | "pollStatus" | "getFloor";
-  readonly body: Record<string, unknown>;
-};
+type HttpHarnessRequestErrorCode = "invalid_json" | "invalid_request";
 
-const readJsonBody = async (request: IncomingMessage): Promise<JsonRequest> => {
+class HttpHarnessRequestError extends Error {
+  readonly status: number;
+  readonly code: HttpHarnessRequestErrorCode;
+
+  constructor(status: number, code: HttpHarnessRequestErrorCode) {
+    super(code);
+    this.status = status;
+    this.code = code;
+  }
+}
+
+const readJsonBody = async (
+  request: IncomingMessage,
+): Promise<TransportJsonRequest> => {
   const chunks: Buffer[] = [];
   for await (const chunk of request) {
     chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
   }
 
-  return JSON.parse(Buffer.concat(chunks).toString("utf8")) as JsonRequest;
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(Buffer.concat(chunks).toString("utf8"));
+  } catch {
+    throw new HttpHarnessRequestError(400, "invalid_json");
+  }
+
+  const result = TransportJsonRequestSchema.safeParse(parsed);
+  if (!result.success) {
+    throw new HttpHarnessRequestError(400, "invalid_request");
+  }
+
+  return result.data;
 };
 
 const writeJson = (
@@ -183,7 +213,7 @@ export const createHttpHarness = (
         writeJson(
           response,
           200,
-          handlers.startGeneration(payload.body as StartGenerationRequest),
+          handlers.startGeneration(payload.body),
         );
         return;
       }
@@ -192,19 +222,24 @@ export const createHttpHarness = (
         writeJson(
           response,
           200,
-          handlers.pollStatus(payload.body as PollStatusRequest),
+          handlers.pollStatus(payload.body),
         );
         return;
       }
 
       if (payload.action === "getFloor") {
-        const floor = await handlers.getFloor(payload.body as GetFloorRequest);
+        const floor = await handlers.getFloor(payload.body);
         writeJson(response, 200, floor);
         return;
       }
 
       writeJson(response, 400, { error: "unknown_action" });
     } catch (error) {
+      if (error instanceof HttpHarnessRequestError) {
+        writeJson(response, error.status, { error: error.code });
+        return;
+      }
+
       writeJson(response, 500, {
         error: error instanceof Error ? error.message : String(error),
       });
@@ -213,3 +248,18 @@ export const createHttpHarness = (
 
 export const floorContentId = (content: FloorContent): string =>
   `${content.params.bandOrSize}:${content.roster.map((enemy) => enemy.id).join(",")}`;
+
+const statusForRequestedDepth = (
+  status: PrefetchStatus,
+  requestedDepth: number | undefined,
+): PrefetchStatus => {
+  if (
+    requestedDepth !== undefined &&
+    "depth" in status &&
+    status.depth !== requestedDepth
+  ) {
+    return { status: "idle" };
+  }
+
+  return status;
+};

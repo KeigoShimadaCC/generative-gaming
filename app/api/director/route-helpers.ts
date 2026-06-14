@@ -1,72 +1,12 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import type {
-  GetFloorRequest,
-  PollStatusRequest,
-  StartGenerationRequest,
-} from "../../../src/director/orchestration/transport.js";
-
-const nonEmptyString = z.string().min(1);
-const jsonRecord = z.record(z.string(), z.unknown());
-
-const TraceContentRefSchema = z.strictObject({
-  providerId: nonEmptyString,
-  packVersion: nonEmptyString,
-});
-
-const TraceHeaderSchema = z.strictObject({
-  recordType: z.literal("header"),
-  protocolVersion: nonEmptyString,
-  engineVersion: nonEmptyString,
-  modelId: nonEmptyString,
-  contentRef: TraceContentRefSchema,
-  seed: nonEmptyString,
-  runId: nonEmptyString,
-  createdAt: nonEmptyString,
-});
-
-const TraceActionSchema = z.object({
-  kind: nonEmptyString,
-}).catchall(z.unknown());
-
-const TraceEventSchema = z.strictObject({
-  turn: z.number().int(),
-  type: nonEmptyString,
-  data: jsonRecord,
-});
-
-const TraceTurnSchema = z.strictObject({
-  turn: z.number().int(),
-  action: TraceActionSchema,
-  events: z.array(TraceEventSchema),
-  stateHash: nonEmptyString,
-});
-
-const ParsedTraceSchema = z.strictObject({
-  header: TraceHeaderSchema,
-  turns: z.array(TraceTurnSchema),
-});
-
-export const START_GENERATION_BODY_MAX_BYTES = 256 * 1024;
-
-export const StartGenerationRequestSchema: z.ZodType<StartGenerationRequest> =
-  z.strictObject({
-    runId: nonEmptyString,
-    depth: z.number().int(),
-    trace: ParsedTraceSchema,
-  }) as unknown as z.ZodType<StartGenerationRequest>;
-
-export const PollStatusRequestSchema: z.ZodType<PollStatusRequest> =
-  z.strictObject({
-    runId: nonEmptyString,
-  });
-
-export const GetFloorRequestSchema: z.ZodType<GetFloorRequest> = z.strictObject({
-  runId: nonEmptyString,
-  depth: z.number().int(),
-  seed: nonEmptyString,
-});
+export {
+  GetFloorRequestSchema,
+  PollStatusRequestSchema,
+  START_GENERATION_BODY_MAX_BYTES,
+  StartGenerationRequestSchema,
+} from "../../../src/director/orchestration/transport-validation.js";
 
 type ApiErrorCode =
   | "body_too_large"

@@ -399,7 +399,7 @@ const pollPrefetchStatus = async (
   depth: number,
 ): Promise<ClientPrefetchState> => {
   try {
-    const response = await postJson("/api/director/poll-status", { runId });
+    const response = await postJson("/api/director/poll-status", { runId, depth });
     if (!isRecord(response)) {
       return "none";
     }

@@ -118,6 +118,23 @@ describe("transport handlers", () => {
     expect(localHandlers.pollStatus({ runId: RUN_ID })).toEqual({ status: "idle" });
   });
 
+  it("suppresses pollStatus responses for a different requested depth", () => {
+    const localRegistry = createRunControllerRegistry();
+    const localHandlers = createTransportHandlers(localRegistry, defaultOptions);
+    const runId = "transport-depth-guard";
+
+    localHandlers.startGeneration({
+      runId,
+      depth: 1,
+      trace: traceForRun(runId),
+    });
+
+    expect(localHandlers.pollStatus({ runId, depth: 2 }).status).not.toBe("idle");
+    expect(localHandlers.pollStatus({ runId, depth: 3 })).toEqual({
+      status: "idle",
+    });
+  });
+
   it("round-trips startGeneration, pollStatus, and getFloor through the http harness", async () => {
     const server = createHttpHarness(handlers);
     await new Promise<void>((resolve) => {
@@ -156,6 +173,96 @@ describe("transport handlers", () => {
       expect(floor.depth).toBe(2);
       expect(floor.content.roster.length).toBeGreaterThan(0);
       expect(["generated", "fallback"]).toContain(floor.source);
+    } finally {
+      await new Promise<void>((resolve, reject) => {
+        server.close((error) => (error ? reject(error) : resolve()));
+      });
+    }
+  });
+
+  it("rejects malformed http harness bodies before dispatching handlers", async () => {
+    const calls: string[] = [];
+    const server = createHttpHarness({
+      startGeneration: () => {
+        calls.push("startGeneration");
+        return { ok: true, prefetchDepth: 2 };
+      },
+      pollStatus: () => {
+        calls.push("pollStatus");
+        return { status: "idle" };
+      },
+      getFloor: async () => {
+        calls.push("getFloor");
+        throw new Error("should not dispatch");
+      },
+    });
+    await new Promise<void>((resolve) => {
+      server.listen(0, resolve);
+    });
+    const address = server.address();
+    if (address === null || typeof address === "string") {
+      throw new Error("expected bound tcp port");
+    }
+
+    try {
+      const response = await fetch(`http://127.0.0.1:${address.port}/director`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          action: "startGeneration",
+          body: {
+            runId: RUN_ID,
+            depth: "2",
+            trace: trace(),
+          },
+        }),
+      });
+
+      expect(response.status).toBe(400);
+      expect(await response.json()).toEqual({ error: "invalid_request" });
+      expect(calls).toEqual([]);
+    } finally {
+      await new Promise<void>((resolve, reject) => {
+        server.close((error) => (error ? reject(error) : resolve()));
+      });
+    }
+  });
+
+  it("accepts terminal traces through http harness validation", async () => {
+    const localRegistry = createRunControllerRegistry();
+    const server = createHttpHarness(
+      createTransportHandlers(localRegistry, defaultOptions),
+    );
+    await new Promise<void>((resolve) => {
+      server.listen(0, resolve);
+    });
+    const address = server.address();
+    if (address === null || typeof address === "string") {
+      throw new Error("expected bound tcp port");
+    }
+
+    try {
+      const start = await postJson(address.port, {
+        action: "startGeneration",
+        body: {
+          runId: RUN_ID,
+          depth: 1,
+          trace: trace(),
+        },
+      });
+      expect(start).toEqual({ ok: true, prefetchDepth: 2 });
+      expect(localRegistry.get(RUN_ID)).not.toBeNull();
+
+      const terminal = await postJson(address.port, {
+        action: "startGeneration",
+        body: {
+          runId: RUN_ID,
+          depth: 12,
+          trace: terminalTrace(),
+        },
+      });
+      expect(terminal).toEqual({ ok: true, prefetchDepth: 13 });
+      expect(localRegistry.get(RUN_ID)).toBeNull();
     } finally {
       await new Promise<void>((resolve, reject) => {
         server.close((error) => (error ? reject(error) : resolve()));
