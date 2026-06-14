@@ -183,7 +183,7 @@ export const deriveCombatStats = (
       config.combatMath.minimumDamage,
       withStatusModifiers.attack,
     ),
-    defense: withStatusModifiers.defense,
+    defense: Math.max(0, withStatusModifiers.defense),
   };
 };
 

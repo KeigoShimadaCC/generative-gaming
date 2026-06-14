@@ -100,6 +100,28 @@ describe("combat formula and stat derivation", () => {
     );
   });
 
+  it("clamps derived defense so negative modifiers cannot amplify raw damage", () => {
+    const state = {
+      ...stateFromFixture("negative-defense-floor", "@"),
+      player: {
+        ...stateFromFixture("negative-defense-floor", "@").player,
+        statuses: [
+          {
+            status: "buff_stat",
+            duration: bounds.effectVocabulary.verbs.buffStat.durationTurns.min,
+            kind: "buff_stat",
+            stat: "DEF",
+            magnitude: -3,
+          } as unknown as StatusApplication,
+        ],
+      },
+    };
+    const stats = deriveCombatStats(state, "player");
+
+    expect(stats?.defense).toBe(0);
+    expect(calculateDamage(5, stats?.defense ?? 0, 1)).toBe(5);
+  });
+
   it("keeps hit rate and damage rolls inside the configured seeded bands", () => {
     let state = withPlayerEquipment(
       withEntities(stateFromFixture("combat-statistical", "@E"), [
