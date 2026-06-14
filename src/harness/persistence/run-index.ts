@@ -74,7 +74,7 @@ export const createRunIndexRepository = (
   );
   const listRecentStmt = db.prepare(`
     SELECT * FROM run_index
-    ORDER BY created_at DESC
+    ORDER BY created_at DESC, rowid DESC
     LIMIT ?
   `);
 

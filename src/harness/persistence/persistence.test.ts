@@ -164,6 +164,26 @@ describe("persistence connection", () => {
   });
 });
 
+describe("run index queries", () => {
+  it("uses rowid as a stable tiebreaker for same-time recent runs", () => {
+    const db = openDatabase({ path: ":memory:" });
+
+    try {
+      db.runIndex.insert(runIndexEntry("run-tie-a", CREATED_AT));
+      db.runIndex.insert(runIndexEntry("run-tie-b", CREATED_AT));
+      db.runIndex.insert(runIndexEntry("run-later", CREATED_AT_LATER));
+
+      expect(db.runIndex.listRecent(3).map((run) => run.runId)).toEqual([
+        "run-later",
+        "run-tie-b",
+        "run-tie-a",
+      ]);
+    } finally {
+      db.close();
+    }
+  });
+});
+
 describe("memory event queries", () => {
   const openIsolated = (): PersistenceDatabase => {
     const db = openDatabase({ path: ":memory:" });
@@ -284,4 +304,20 @@ describe("memory event queries", () => {
     expect(filtered.map((event) => event.type)).toEqual(["death"]);
     db.close();
   });
+});
+
+const runIndexEntry = (
+  runId: string,
+  createdAt: string,
+): Parameters<PersistenceDatabase["runIndex"]["insert"]>[0] => ({
+  runId,
+  header: {
+    ...sampleHeader(runId),
+    createdAt,
+  },
+  outcome: "defeat",
+  depth: 3,
+  turns: 42,
+  summary: { cause: "starvation" },
+  tracePath: `runs/${runId}.ndjson`,
 });
