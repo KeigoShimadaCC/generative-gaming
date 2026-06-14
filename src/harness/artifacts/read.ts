@@ -15,6 +15,16 @@ export type ArtifactReadOptions = {
   readonly fs?: ArtifactFsAdapter;
 };
 
+export class ArtifactJsonParseError extends Error {
+  readonly path: string;
+
+  constructor(path: string, message: string) {
+    super(`${path}: ${message}`);
+    this.name = "ArtifactJsonParseError";
+    this.path = path;
+  }
+}
+
 const INDEX_FILE = "index.json";
 
 const resolveReadContext = (options: ArtifactReadOptions = {}) => ({
@@ -32,7 +42,7 @@ const loadRunIndexFile = (
     throw new Error(`generation index not found for run: ${runId}`);
   }
 
-  return JSON.parse(fs.readFile(indexPath)) as RunGenerationIndex;
+  return readArtifactJson<RunGenerationIndex>(fs, indexPath);
 };
 
 export const listRuns = (
@@ -51,7 +61,16 @@ export const listRuns = (
       continue;
     }
 
-    const index = JSON.parse(fs.readFile(indexPath)) as RunGenerationIndex;
+    let index: RunGenerationIndex;
+    try {
+      index = readArtifactJson<RunGenerationIndex>(fs, indexPath);
+    } catch (error) {
+      if (error instanceof ArtifactJsonParseError) {
+        continue;
+      }
+      throw error;
+    }
+
     if (index.recordType !== "generation-index") {
       continue;
     }
@@ -104,7 +123,7 @@ export const loadGenerationChain = (
     throw new Error(`generation record missing at ${recordPath}`);
   }
 
-  return JSON.parse(fs.readFile(recordPath)) as GenerationRecord;
+  return readArtifactJson<GenerationRecord>(fs, recordPath);
 };
 
 export const readRunIndex = (
@@ -113,4 +132,13 @@ export const readRunIndex = (
 ): RunGenerationIndex => {
   const { rootDir, fs } = resolveReadContext(options);
   return loadRunIndexFile(fs, rootDir, runId);
+};
+
+const readArtifactJson = <T>(fs: ArtifactFsAdapter, path: string): T => {
+  try {
+    return JSON.parse(fs.readFile(path)) as T;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new ArtifactJsonParseError(path, message);
+  }
 };

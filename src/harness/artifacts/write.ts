@@ -153,6 +153,41 @@ const writeIndexAtomically = (
   fs.rename(tempPath, indexPath);
 };
 
+const mergeIndexForWrite = (
+  fs: ArtifactFsAdapter,
+  runDir: string,
+  input: WriteGenerationRecordInput,
+  baseIndex: RunGenerationIndex,
+  floorEntry: FloorIndexEntry,
+): RunGenerationIndex => {
+  const latestIndex = loadOrCreateIndex(fs, runDir, input);
+  const floorsByDepth = new Map<number, FloorIndexEntry>();
+
+  for (const entry of baseIndex.floors) {
+    floorsByDepth.set(entry.depth, entry);
+  }
+  for (const entry of latestIndex.floors) {
+    floorsByDepth.set(entry.depth, entry);
+  }
+  floorsByDepth.set(floorEntry.depth, floorEntry);
+
+  return {
+    ...latestIndex,
+    modelId: input.modelId,
+    seed: input.seed,
+    updatedAt: maxTimestamp(
+      maxTimestamp(baseIndex.updatedAt, latestIndex.updatedAt),
+      input.recordedAt,
+    ),
+    floors: [...floorsByDepth.values()].sort(
+      (left, right) => left.depth - right.depth,
+    ),
+  };
+};
+
+const maxTimestamp = (left: string, right: string): string =>
+  left.localeCompare(right) >= 0 ? left : right;
+
 export const writeGenerationRecord = (
   input: WriteGenerationRecordInput,
   options: WriteGenerationRecordOptions = {},
@@ -196,7 +231,7 @@ export const writeGenerationRecord = (
 
   fs.writeNewFile(recordPath, `${JSON.stringify(record, null, 2)}\n`);
 
-  const index = loadOrCreateIndex(fs, runDir, input);
+  const baseIndex = loadOrCreateIndex(fs, runDir, input);
   const recordRelativePath = relativeRunPath(runDir, recordPath);
   const floorEntry: FloorIndexEntry = {
     depth: input.depth,
@@ -204,17 +239,7 @@ export const writeGenerationRecord = (
     outcome: toOutcomeSummary(input.outcome),
     recordedAt: input.recordedAt,
   };
-  const nextFloors = [
-    ...index.floors.filter((entry) => entry.depth !== input.depth),
-    floorEntry,
-  ].sort((left, right) => left.depth - right.depth);
-  const nextIndex: RunGenerationIndex = {
-    ...index,
-    modelId: input.modelId,
-    seed: input.seed,
-    updatedAt: input.recordedAt,
-    floors: nextFloors,
-  };
+  const nextIndex = mergeIndexForWrite(fs, runDir, input, baseIndex, floorEntry);
 
   writeIndexAtomically(fs, `${runDir}/${INDEX_FILE}`, nextIndex);
 

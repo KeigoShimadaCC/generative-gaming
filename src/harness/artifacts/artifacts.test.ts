@@ -11,6 +11,7 @@ import { ENGINE_VERSION, PROTOCOL_VERSION } from "../../schemas/protocol.js";
 import { MemoryArtifactFs } from "./fs.js";
 import { hashPrompt } from "./hash.js";
 import {
+  ArtifactJsonParseError,
   listFloors,
   listRuns,
   loadGenerationChain,
@@ -19,6 +20,7 @@ import {
 import { TECH_SPEC_STAMP_FIELDS, type RunGenerationIndex } from "./types.js";
 import {
   GenerationRecordExistsError,
+  runIndexPath,
   writeGenerationRecord,
 } from "./write.js";
 
@@ -169,6 +171,22 @@ describe("generation artifact persistence", () => {
     ]);
   });
 
+  it("merges the latest run index when a write starts from a stale read", () => {
+    const fs = new StaleFirstIndexReadFs();
+    const indexPath = runIndexPath(RUN_ID, "runs");
+    writeSample(fs, 1, "2026-06-12T00:01:00.000Z");
+    const staleIndex = fs.readFile(indexPath);
+    writeSample(fs, 3, "2026-06-12T00:03:00.000Z");
+
+    fs.serveStaleOnce(indexPath, staleIndex);
+    writeSample(fs, 2, "2026-06-12T00:02:00.000Z");
+
+    const index = readRunIndex(RUN_ID, { fs, rootDir: "runs" });
+    expect(index.floors.map((entry) => entry.depth)).toEqual([1, 2, 3]);
+    expect(index.updatedAt).toBe("2026-06-12T00:03:00.000Z");
+    expect(loadGenerationChain(RUN_ID, 3, { fs, rootDir: "runs" }).depth).toBe(3);
+  });
+
   it("carries the complete TECH_SPEC §5 stamp set on records and index", () => {
     const fs = new MemoryArtifactFs();
     const record = writeSample(fs, 4);
@@ -202,6 +220,29 @@ describe("generation artifact persistence", () => {
 
     expect(() => loadGenerationChain(RUN_ID, 5, { fs, rootDir: "runs" })).toThrow(
       /generation record missing/,
+    );
+  });
+
+  it("skips corrupt run indexes while listing other runs", () => {
+    const fs = new MemoryArtifactFs();
+    writeSample(fs, 6, "2026-06-12T00:03:00.000Z");
+    fs.files.set("runs/corrupt-run/index.json", "{not json");
+
+    expect(listRuns({ fs, rootDir: "runs" }).map((run) => run.runId)).toEqual([
+      RUN_ID,
+    ]);
+    expect(() => readRunIndex("corrupt-run", { fs, rootDir: "runs" })).toThrow(
+      ArtifactJsonParseError,
+    );
+  });
+
+  it("reports corrupt generation records with a typed parse error", () => {
+    const fs = new MemoryArtifactFs();
+    writeSample(fs, 8, "2026-06-12T00:03:00.000Z");
+    fs.files.set(`runs/${RUN_ID}/floors/8/generation.json`, "{not json");
+
+    expect(() => loadGenerationChain(RUN_ID, 8, { fs, rootDir: "runs" })).toThrow(
+      ArtifactJsonParseError,
     );
   });
 
@@ -251,3 +292,26 @@ describe("generation artifact persistence", () => {
     });
   });
 });
+
+class StaleFirstIndexReadFs extends MemoryArtifactFs {
+  private staleRead:
+    | {
+        readonly path: string;
+        readonly contents: string;
+      }
+    | null = null;
+
+  serveStaleOnce(path: string, contents: string): void {
+    this.staleRead = { path, contents };
+  }
+
+  override readFile(path: string): string {
+    if (this.staleRead !== null && this.staleRead.path === path) {
+      const contents = this.staleRead.contents;
+      this.staleRead = null;
+      return contents;
+    }
+
+    return super.readFile(path);
+  }
+}
