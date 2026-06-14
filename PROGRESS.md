@@ -9,7 +9,21 @@ This file records *state*, never *design* — design lives in the doc spine
 
 ## Active Phase
 
-**Phase:** M4 — Make It a Game (visual/UX overhaul) — **COMPLETE (core MET), CI-green at HEAD**
+**Phase:** Post-M4 hardening — **audit remediation (Critical + High + Medium) COMPLETE, merged, CI-running**
+**Source:** `docs/audit-2026-06-14.md` (read-only audit: 1 Critical, 8 High, ~13 Medium, ~12 Low).
+**Status:** Critical + all 8 High merged (`a2179d6b..e11818ce`, 8 atomic commits) and the
+Medium tier merged (`e11818ce..53d680ff`, 11 of 13 Mediums fixed). **M1 deferred** (open-door
+AI pathing diverged 7 goldens from turn 1 — correct stop, no layout change forced). **M13
+deferred** (audit premise inaccurate — no client-side in-memory artifact model; the implemented
+producer added an /api fetch to the descend hot path, so reverted to the baseline on-tab-open
+fetch). Every batch: golden/stateHash integrity proven (sim unchanged except M12 persona-balanced
+turn 466 — full-slot charm equip now refuses), independent Cursor review (caught H8 + M13 landing
+off the real path), `verify:ci` green, full-clear behavioral smoke WIN. Worker mechanics this round:
+Codex `.git` writes blocked → COMMIT_PLAN.md path, orchestrator applied commits under Codex author
+(ENVIRONMENT.md updated). **Remaining:** the ~12 Low items (latents/polish) — backlog, awaiting
+human go-ahead.
+
+**Phase (prior):** M4 — Make It a Game (visual/UX overhaul) — **COMPLETE (core MET), CI-green at HEAD**
 **Phase plan:** phase-plans/M4-VISUAL-OVERHAUL.md (approved 2026-06-13, "execute till done")
 **Started:** 2026-06-13 · **Closed:** 2026-06-14 (4850534a)
 **Status (M4):** COMPLETE — core MET. Final close commit 4850534a: floor de-emphasis
@@ -34,6 +48,9 @@ runs/milestones/HUMAN-CHECKLIST.md.
 
 | Task | Status | Owner | Notes |
 |---|---|---|---|
+| audit-crit-high-remediation | merged | Codex+Cursor | C1+H1–H8, 8 atomic commits (`a2179d6b..e11818ce`). Independent review caught H8 landing in the test-only registry → round-tripped to production path. verify:ci green; full-clear smoke WIN. |
+| audit-medium-remediation | merged | Codex+Cursor | 11/13 Mediums (`e11818ce..53d680ff`). M1 + M13 deferred with documented reasons. Only golden change: persona-balanced t466 (M12). verify:ci green; full-clear smoke WIN. |
+| audit-low-remediation | backlog | — | ~12 Low latents/polish from docs/audit-2026-06-14.md; awaiting human go-ahead. |
 | phase85-artdirector | ready-for-verify | Codex | Provider/parser, Art Gauntlet, artifact records, atlas seam wiring, ART=fallback mode, skipped host live-smoke, and tests complete. No commits per brief. |
 | fullclear-combat-fix | merged | Codex | 3d2f5bb5; independently verified GREEN (Cursor, 2026-06-13) incl. eval-bank regeneration plausibility. |
 | fullclear-transition-wait | merged | Codex | c1aef324 (bot v3 commit); verified in the same GREEN pass. |
@@ -67,6 +84,8 @@ Format: `YYYY-MM-DD · phase/task · who · what was verified · evidence (comma
 
 | Date | Task | Agent | Verified | Evidence |
 |---|---|---|---|---|
+| 2026-06-14 | audit-medium | orchestrator+Codex+Cursor | 11/13 Medium audit findings fixed (M2-M12; M1+M13 deferred). Proved sim unchanged: only persona-balanced golden changed, byte-identical through t465, diverges at t466 (M12 charm refusal). Independent review caught M13 producer landing only in tests → deferred (would add /api fetch to descend hot path); M10 preserved | `pnpm run verify:ci` → "All steps passed" (605 passed/3 skipped); per-finding stateHash diff (only persona-balanced, first divergence t466); independent Cursor review (M4/M13 concerns); behavioral smoke `pnpm run e2e:fullclear` → 1 passed (WIN, 12 floors); merged `e11818ce..53d680ff` |
+| 2026-06-14 | audit-crit-high | orchestrator+Codex+Cursor | C1 + all 8 High audit findings fixed, 8 atomic commits. Proved goldens mask nothing (every per-turn stateHash byte-identical; only a terminal record appended by H5). Independent review caught H8 eviction landing in the test-only registry → round-tripped to production createArtifactRunRegistry | `pnpm run verify:ci` → "All steps passed"; golden/eval-bank stateHash comparison IDENTICAL across all traces; independent Cursor review; behavioral smoke `pnpm run e2e:fullclear` → 1 passed (WIN, 12 floors); merged `a2179d6b..e11818ce` |
 | 2026-06-14 | M4-close | orchestrator+Cursor | M4 final polish merged + milestone closed: floor de-emphasis (terrain.floor recedes so foreground pops) + GameShell useGameAudio() mount (R4 audio now active). Full gate green; themed visual smoke confirms the hierarchy reads | `pnpm run verify:ci` → "All steps passed" (typecheck, lint, root vitest, all 18 package configs incl. stage + determinism audit + golden suite); themed visual smoke `pnpm exec playwright test e2e/_themed-smoke.spec.ts --project=chromium` → 1 passed, `test-results/themed/floor2.png` viewed (floor recedes, player/crates/stairs pop); commit 4850534a; report `runs/milestones/m4/report.md` |
 | 2026-06-14 | phase85-artdirector | Codex | ArtDirector provider/parser + Art Gauntlet + atlas seam wiring ready: captured live slug accepted; adversarial malformed outputs rejected; accepted sprites cache by `(themeId, entityId, seed)`; ART=fallback skips provider; full CI gate green | `pnpm exec vitest run src/artdirector/contract.test.ts --reporter verbose` -> exit 0, 1 file / 3 tests passed; `pnpm run verify:ci` -> exit 0, typecheck PASS, lint PASS, root Vitest 87 passed / 1 skipped files, 573 passed / 3 skipped tests, every discovered app/tests Vitest config PASS, summary "All steps passed." |
 | 2026-06-12 | 51AB-1 | Codex | Context panels complete: inspect truthfulness, 16-slot inventory/equipment/actions, dialogue replies/barter pause, quest checklist/markers/HUD chip, panel focus routing, one visible frame | `pnpm exec vitest run --config app/components/panels/vitest.config.ts --reporter verbose` → exit 0, 1 file / 5 tests passed; required names: "keeps inspect card truthfulness: unknown item shows exactly the unknown and witnessed facts appear only after witnessing", "walks a fixture conversation by keyboard through barter while paused"; `pnpm exec vitest run --config app/components/hud/vitest.config.ts --reporter verbose` → exit 0, 1 file / 2 tests passed; `pnpm exec vitest run --config app/input/vitest.config.ts --reporter verbose` → exit 0, 2 files / 6 tests passed; `pnpm exec vitest run --config app/components/grid/vitest.config.ts --reporter verbose` → exit 0, 1 file / 4 tests passed; clean `.next` then redirected `pnpm run check` → exit 0, 78 files / 529 passed / 2 skipped |
