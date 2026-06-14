@@ -62,6 +62,14 @@
           "path": "ferrous-fungal-middle/terrain.wall.json"
         },
         {
+          "entityId": "terrain.water",
+          "path": "ferrous-fungal-middle/terrain.water.json"
+        },
+        {
+          "entityId": "trap.hidden",
+          "path": "ferrous-fungal-middle/trap.hidden.json"
+        },
+        {
           "entityId": "trap.revealed",
           "path": "ferrous-fungal-middle/trap.revealed.json"
         }
@@ -94,6 +102,10 @@
         {
           "entityId": "item.consumable",
           "path": "torchlit-limestone/item.consumable.json"
+        },
+        {
+          "entityId": "item.gear",
+          "path": "torchlit-limestone/item.gear.json"
         },
         {
           "entityId": "item.treasure",
@@ -164,6 +176,10 @@
         {
           "entityId": "item.consumable",
           "path": "void-ember-lowest/item.consumable.json"
+        },
+        {
+          "entityId": "item.gear",
+          "path": "void-ember-lowest/item.gear.json"
         },
         {
           "entityId": "item.treasure",

@@ -10,6 +10,7 @@
  */
 import {
   mkdirSync,
+  readdirSync,
   readFileSync,
   writeFileSync,
 } from "node:fs";
@@ -273,6 +274,7 @@ Commands:
   (default)     Generate sprites sequentially via ArtDirector + Art Gauntlet
   --dry-run     Print planned (theme, entity) pairs without calling codex
   --list        Alias for --dry-run
+  --reindex     Rebuild index.json and generated-records.ts from on-disk files
   --help, -h    Show this help
 
 Filters (combine as needed):
@@ -310,6 +312,10 @@ const parseArgs = (argv: readonly string[]): ParsedArgs => {
     }
     if (arg === "--dry-run" || arg === "--list") {
       flags.add("dry-run");
+      continue;
+    }
+    if (arg === "--reindex") {
+      flags.add("reindex");
       continue;
     }
     if (arg.startsWith("--theme=")) {
@@ -368,11 +374,120 @@ const printPlannedPairs = (pairs: readonly PlannedPair[]): void => {
   }
 };
 
+const loadExistingIndex = (): GeneratedArtIndex | null => {
+  try {
+    const parsed = parseGeneratedArtIndex(
+      JSON.parse(readFileSync(GENERATED_INDEX_PATH, "utf8")),
+    );
+    return parsed.ok ? parsed.index : null;
+  } catch {
+    return null;
+  }
+};
+
+type OnDiskGeneratedRecord = {
+  readonly themeId: string;
+  readonly entityId: string;
+  readonly seed: string;
+};
+
+const readOnDiskRecord = (absolutePath: string): OnDiskGeneratedRecord => {
+  const value = JSON.parse(readFileSync(absolutePath, "utf8")) as {
+    themeId?: unknown;
+    entityId?: unknown;
+    seed?: unknown;
+  };
+
+  if (
+    typeof value.themeId !== "string" ||
+    typeof value.entityId !== "string" ||
+    typeof value.seed !== "string"
+  ) {
+    throw new Error(`invalid generated art record: ${absolutePath}`);
+  }
+
+  return {
+    themeId: value.themeId,
+    entityId: value.entityId,
+    seed: value.seed,
+  };
+};
+
+const reindexFromDisk = (): void => {
+  const themeIds = readdirSync(GENERATED_ROOT, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name)
+    .sort((left, right) => left.localeCompare(right));
+
+  const themes: GeneratedArtIndex["themes"][number][] = [];
+
+  for (const themeId of themeIds) {
+    const themeDir = join(GENERATED_ROOT, themeId);
+    const entityFiles = readdirSync(themeDir)
+      .filter((name) => name.endsWith(".json"))
+      .sort((left, right) => left.localeCompare(right));
+
+    const sprites: { entityId: string; path: string }[] = [];
+    let seed: string | null = null;
+
+    for (const fileName of entityFiles) {
+      const absolutePath = join(themeDir, fileName);
+      const record = readOnDiskRecord(absolutePath);
+
+      if (seed === null) {
+        seed = record.seed;
+      }
+
+      sprites.push({
+        entityId: record.entityId,
+        path: `${themeId}/${fileName}`,
+      });
+    }
+
+    sprites.sort((left, right) => left.entityId.localeCompare(right.entityId));
+
+    if (sprites.length > 0) {
+      themes.push({
+        themeId,
+        seed: seed ?? "",
+        sprites,
+      });
+    }
+  }
+
+  themes.sort((left, right) => left.themeId.localeCompare(right.themeId));
+
+  const index: GeneratedArtIndex = {
+    version: GENERATED_ART_INDEX_VERSION,
+    themes,
+  };
+
+  writeFileSync(
+    GENERATED_INDEX_PATH,
+    `${JSON.stringify(index, null, 2)}\n`,
+    "utf8",
+  );
+  writeGeneratedRecordsModule(index);
+
+  console.log("=== Reindex Summary ===");
+  console.log(`themes:  ${themes.length}`);
+  for (const theme of themes) {
+    console.log(`  ${theme.themeId}: ${theme.sprites.length} sprite(s)`);
+  }
+  console.log(`index:   ${GENERATED_INDEX_PATH}`);
+  console.log(`imports: ${GENERATED_RECORDS_MODULE_PATH}`);
+};
+
 const runGeneration = async (argv: readonly string[]): Promise<void> => {
   const { flags, themeFilter, entityFilter } = parseArgs(argv);
 
   if (flags.has("help")) {
     console.log(HELP_TEXT);
+    return;
+  }
+
+  if (flags.has("reindex")) {
+    reindexFromDisk();
     return;
   }
 
@@ -393,6 +508,8 @@ const runGeneration = async (argv: readonly string[]): Promise<void> => {
   });
 
   mkdirSync(GENERATED_ROOT, { recursive: true });
+
+  const existingIndexData = loadExistingIndex();
 
   const themesById = new Map<
     string,
@@ -454,10 +571,13 @@ const runGeneration = async (argv: readonly string[]): Promise<void> => {
 
     writeFileSync(absolutePath, `${JSON.stringify(record, null, 2)}\n`, "utf8");
 
+    const existingTheme = existingIndexData?.themes.find(
+      (theme) => theme.themeId === pair.themeId,
+    );
     const existing = themesById.get(pair.themeId) ?? {
       themeId: pair.themeId,
-      seed: pair.seed,
-      sprites: [],
+      seed: existingTheme?.seed ?? pair.seed,
+      sprites: existingTheme ? [...existingTheme.sprites] : [],
     };
     const sprites = existing.sprites.filter(
       (sprite) => sprite.entityId !== pair.entityId,
@@ -469,12 +589,9 @@ const runGeneration = async (argv: readonly string[]): Promise<void> => {
     console.log(`  accepted -> ${relativePath}`);
   }
 
-  const existingIndex = parseGeneratedArtIndex(
-    JSON.parse(readFileSync(GENERATED_INDEX_PATH, "utf8")),
-  );
   const preservedThemes =
-    existingIndex.ok === true
-      ? existingIndex.index.themes.filter(
+    existingIndexData !== null
+      ? existingIndexData.themes.filter(
           (theme) => !themesById.has(theme.themeId),
         )
       : [];

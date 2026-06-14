@@ -98,11 +98,17 @@ const DEFAULT_CELL_SIZE = 32;
 const DEFAULT_GAP = 0;
 const DEFAULT_PADDING = 0;
 const ENTITY_INSET = 3;
+const ENEMY_INSET = 1;
 const HOARD_SCALE = 1.25;
 /** Floor tiles recede so walls/entities read as foreground. Stacks with fog alpha. */
-const FLOOR_DEEMPHASIS_ALPHA = 0.6;
-/** Slight darkening/desaturation toward the stage background fill. */
-const FLOOR_DEEMPHASIS_TINT = 0x8f8f8f;
+const FLOOR_DEEMPHASIS_BY_BAND: Record<
+  GameState["run"]["band"],
+  { readonly alpha: number; readonly tint: number }
+> = {
+  shallows: { alpha: 0.6, tint: 0x8f8f8f },
+  middle: { alpha: 0.58, tint: 0x8a8a8a },
+  lowest: { alpha: 0.46, tint: 0x70707a },
+};
 const GENERATED_SPRITE_CATALOG = loadBundledGeneratedSpriteCatalog();
 
 export type StageDrawListOptions = {
@@ -171,6 +177,7 @@ export const createStageDrawList = (
       terrainSprite.spriteId,
       fogPaint.spriteAlpha,
       terrainTint,
+      options.state.run.band,
     );
     sprites.push({
       key: `${cell.key}:terrain:${terrainSprite.spriteId}`,
@@ -199,6 +206,8 @@ export const createStageDrawList = (
 
       if (entitySprite.spriteId === "feature.hoard") {
         glows.push(hoardGlowForCell(options.state, cell, bounds));
+      } else if (cell.layer === "enemy") {
+        glows.push(enemyContrastGlowForCell(cell, bounds));
       }
     }
 
@@ -238,14 +247,16 @@ const floorDeemphasisForTerrainSprite = (
   spriteId: FallbackSpriteId,
   alpha: number,
   tint: number,
+  band: GameState["run"]["band"],
 ): { readonly alpha: number; readonly tint: number } => {
   if (spriteId !== "terrain.floor") {
     return { alpha, tint };
   }
 
+  const factors = FLOOR_DEEMPHASIS_BY_BAND[band];
   return {
-    alpha: alpha * FLOOR_DEEMPHASIS_ALPHA,
-    tint: multiplyTint(tint, FLOOR_DEEMPHASIS_TINT),
+    alpha: alpha * factors.alpha,
+    tint: multiplyTint(tint, factors.tint),
   };
 };
 
@@ -283,10 +294,12 @@ const entitySpriteForCell = (
   }
 
   const resolved = resolveSpriteForCell(state, cell, artOptions);
+  const inset =
+    cell.layer === "enemy" ? ENEMY_INSET : ENTITY_INSET;
   const size =
     resolved.spriteId === "feature.hoard"
       ? bounds.width * HOARD_SCALE
-      : bounds.width - ENTITY_INSET * 2;
+      : bounds.width - inset * 2;
   const x = bounds.x + (bounds.width - size) / 2;
   const y = bounds.y + (bounds.height - size) / 2;
 
@@ -316,6 +329,18 @@ const shouldDrawEntitySprite = (cell: GridCellView): boolean =>
   cell.layer === "trap" ||
   cell.featureKind === "hoard";
 
+const enemyContrastGlowForCell = (
+  cell: GridCellView,
+  bounds: { readonly x: number; readonly y: number; readonly width: number; readonly height: number },
+): StageGlowDraw => ({
+  key: `${cell.key}:enemy-contrast-glow`,
+  x: bounds.x + bounds.width / 2,
+  y: bounds.y + bounds.height / 2,
+  radius: bounds.width * 0.6,
+  fillColor: 0x05070d,
+  alpha: 0.34,
+});
+
 const hoardGlowForCell = (
   state: GameState,
   cell: GridCellView,
@@ -327,9 +352,9 @@ const hoardGlowForCell = (
     key: `${cell.key}:hoard-glow`,
     x: bounds.x + bounds.width / 2,
     y: bounds.y + bounds.height / 2,
-    radius: bounds.width * (0.68 + pulseStep * 0.025),
+    radius: bounds.width * (0.82 + pulseStep * 0.025),
     fillColor: 0xffd27d,
-    alpha: 0.18 + pulseStep * 0.015,
+    alpha: 0.26 + pulseStep * 0.015,
   };
 };
 

@@ -14,6 +14,8 @@ import terrainEntranceFerrous from "../../content/art/generated/ferrous-fungal-m
 import terrainFloorFerrous from "../../content/art/generated/ferrous-fungal-middle/terrain.floor.json" with { type: "json" };
 import terrainStairsDownFerrous from "../../content/art/generated/ferrous-fungal-middle/terrain.stairs_down.json" with { type: "json" };
 import terrainWallFerrous from "../../content/art/generated/ferrous-fungal-middle/terrain.wall.json" with { type: "json" };
+import terrainWaterFerrous from "../../content/art/generated/ferrous-fungal-middle/terrain.water.json" with { type: "json" };
+import trapHiddenFerrous from "../../content/art/generated/ferrous-fungal-middle/trap.hidden.json" with { type: "json" };
 import trapRevealedFerrous from "../../content/art/generated/ferrous-fungal-middle/trap.revealed.json" with { type: "json" };
 import actorPlayerTorchlit from "../../content/art/generated/torchlit-limestone/actor.player.json" with { type: "json" };
 import enemyBruteTorchlit from "../../content/art/generated/torchlit-limestone/enemy.brute.json" with { type: "json" };
@@ -21,6 +23,7 @@ import enemyCasterTorchlit from "../../content/art/generated/torchlit-limestone/
 import enemySkirmisherTorchlit from "../../content/art/generated/torchlit-limestone/enemy.skirmisher.json" with { type: "json" };
 import featureHoardTorchlit from "../../content/art/generated/torchlit-limestone/feature.hoard.json" with { type: "json" };
 import itemConsumableTorchlit from "../../content/art/generated/torchlit-limestone/item.consumable.json" with { type: "json" };
+import itemGearTorchlit from "../../content/art/generated/torchlit-limestone/item.gear.json" with { type: "json" };
 import itemTreasureTorchlit from "../../content/art/generated/torchlit-limestone/item.treasure.json" with { type: "json" };
 import npcKeeperTorchlit from "../../content/art/generated/torchlit-limestone/npc.keeper.json" with { type: "json" };
 import terrainDoorTorchlit from "../../content/art/generated/torchlit-limestone/terrain.door.json" with { type: "json" };
@@ -37,6 +40,7 @@ import enemyCasterVoid from "../../content/art/generated/void-ember-lowest/enemy
 import enemySkirmisherVoid from "../../content/art/generated/void-ember-lowest/enemy.skirmisher.json" with { type: "json" };
 import featureHoardVoid from "../../content/art/generated/void-ember-lowest/feature.hoard.json" with { type: "json" };
 import itemConsumableVoid from "../../content/art/generated/void-ember-lowest/item.consumable.json" with { type: "json" };
+import itemGearVoid from "../../content/art/generated/void-ember-lowest/item.gear.json" with { type: "json" };
 import itemTreasureVoid from "../../content/art/generated/void-ember-lowest/item.treasure.json" with { type: "json" };
 import npcKeeperVoid from "../../content/art/generated/void-ember-lowest/npc.keeper.json" with { type: "json" };
 import terrainDoorVoid from "../../content/art/generated/void-ember-lowest/terrain.door.json" with { type: "json" };
@@ -63,6 +67,8 @@ export const GENERATED_RECORDS_BY_PATH: Readonly<Record<string, unknown>> = {
   "ferrous-fungal-middle/terrain.floor.json": terrainFloorFerrous,
   "ferrous-fungal-middle/terrain.stairs_down.json": terrainStairsDownFerrous,
   "ferrous-fungal-middle/terrain.wall.json": terrainWallFerrous,
+  "ferrous-fungal-middle/terrain.water.json": terrainWaterFerrous,
+  "ferrous-fungal-middle/trap.hidden.json": trapHiddenFerrous,
   "ferrous-fungal-middle/trap.revealed.json": trapRevealedFerrous,
   "torchlit-limestone/actor.player.json": actorPlayerTorchlit,
   "torchlit-limestone/enemy.brute.json": enemyBruteTorchlit,
@@ -70,6 +76,7 @@ export const GENERATED_RECORDS_BY_PATH: Readonly<Record<string, unknown>> = {
   "torchlit-limestone/enemy.skirmisher.json": enemySkirmisherTorchlit,
   "torchlit-limestone/feature.hoard.json": featureHoardTorchlit,
   "torchlit-limestone/item.consumable.json": itemConsumableTorchlit,
+  "torchlit-limestone/item.gear.json": itemGearTorchlit,
   "torchlit-limestone/item.treasure.json": itemTreasureTorchlit,
   "torchlit-limestone/npc.keeper.json": npcKeeperTorchlit,
   "torchlit-limestone/terrain.door.json": terrainDoorTorchlit,
@@ -86,6 +93,7 @@ export const GENERATED_RECORDS_BY_PATH: Readonly<Record<string, unknown>> = {
   "void-ember-lowest/enemy.skirmisher.json": enemySkirmisherVoid,
   "void-ember-lowest/feature.hoard.json": featureHoardVoid,
   "void-ember-lowest/item.consumable.json": itemConsumableVoid,
+  "void-ember-lowest/item.gear.json": itemGearVoid,
   "void-ember-lowest/item.treasure.json": itemTreasureVoid,
   "void-ember-lowest/npc.keeper.json": npcKeeperVoid,
   "void-ember-lowest/terrain.door.json": terrainDoorVoid,
