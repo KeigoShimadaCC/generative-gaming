@@ -226,7 +226,7 @@ const applyPendingLevelUps = (state: GameState): ApplyXpResult => {
     };
 
     events.push(
-      playerEvent(state, "level_up", {
+      playerEvent(nextState, "level_up", {
         actorId: "player",
         levelBefore,
         levelAfter,

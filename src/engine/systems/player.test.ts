@@ -54,9 +54,27 @@ describe("XP and level growth", () => {
 
     expect(multi.state.player.level).toBe(3);
     expect(multi.state.player.xp).toBe(1);
-    expect(
-      multi.events.filter((event) => event.type === "level_up")
-    ).toHaveLength(2);
+    const levelUps = multi.events.filter(
+      (event): event is Extract<TurnEvent, { readonly type: "level_up" }> =>
+        event.type === "level_up"
+    );
+    expect(levelUps).toHaveLength(2);
+    expect(levelUps[0]?.data).toMatchObject({
+      levelBefore: 1,
+      levelAfter: 2,
+      maxHpBefore: derivePlayerBaseStats(1).maxHp,
+      maxHpAfter: derivePlayerBaseStats(2).maxHp,
+      currentHpBefore: derivePlayerBaseStats(1).maxHp,
+      currentHpAfter: derivePlayerBaseStats(2).maxHp
+    });
+    expect(levelUps[1]?.data).toMatchObject({
+      levelBefore: 2,
+      levelAfter: 3,
+      maxHpBefore: derivePlayerBaseStats(2).maxHp,
+      maxHpAfter: derivePlayerBaseStats(3).maxHp,
+      currentHpBefore: derivePlayerBaseStats(2).maxHp,
+      currentHpAfter: derivePlayerBaseStats(3).maxHp
+    });
 
     const xpToCap = sumThresholdsThroughLevel(
       bounds.playerCharacter.levelCap - 1
