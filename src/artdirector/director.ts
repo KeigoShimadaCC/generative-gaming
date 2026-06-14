@@ -135,7 +135,7 @@ export class AmbientArtDirector implements ArtDirector {
     );
 
     if (!providerResult.ok) {
-      const path = this.writeAttempt({
+      const write = this.tryWriteAttempt({
         request,
         sprite,
         prompt,
@@ -148,8 +148,10 @@ export class AmbientArtDirector implements ArtDirector {
         rejected: {
           entityId: sprite.entityId,
           fallbackSpriteId: sprite.fallbackSpriteId,
-          reason: providerResult.error.message,
-          sourceArtifactPath: path,
+          reason: write.ok
+            ? providerResult.error.message
+            : `${providerResult.error.message}; artifact write failed: ${write.reason}`,
+          sourceArtifactPath: write.ok ? write.path : null,
         },
       };
     }
@@ -158,7 +160,7 @@ export class AmbientArtDirector implements ArtDirector {
       role: sprite.role,
     });
     if (!gauntlet.ok) {
-      const path = this.writeAttempt({
+      const write = this.tryWriteAttempt({
         request,
         sprite,
         prompt,
@@ -171,14 +173,15 @@ export class AmbientArtDirector implements ArtDirector {
         rejected: {
           entityId: sprite.entityId,
           fallbackSpriteId: sprite.fallbackSpriteId,
-          reason: gauntlet.reason,
-          sourceArtifactPath: path,
+          reason: write.ok
+            ? gauntlet.reason
+            : `${gauntlet.reason}; artifact write failed: ${write.reason}`,
+          sourceArtifactPath: write.ok ? write.path : null,
         },
       };
     }
 
-    const entry = this.atlas.getOrSet(atlasKey, gauntlet.manifest);
-    const path = this.writeAttempt({
+    const write = this.tryWriteAttempt({
       request,
       sprite,
       prompt,
@@ -186,7 +189,20 @@ export class AmbientArtDirector implements ArtDirector {
       gauntlet,
       reason: null,
     });
-    this.sourcePaths.set(entry.keyString, path);
+    if (!write.ok) {
+      return {
+        kind: "rejected",
+        rejected: {
+          entityId: sprite.entityId,
+          fallbackSpriteId: sprite.fallbackSpriteId,
+          reason: `artifact write failed: ${write.reason}`,
+          sourceArtifactPath: null,
+        },
+      };
+    }
+
+    const entry = this.atlas.getOrSet(atlasKey, gauntlet.manifest);
+    this.sourcePaths.set(entry.keyString, write.path);
 
     return {
       kind: "accepted",
@@ -194,9 +210,19 @@ export class AmbientArtDirector implements ArtDirector {
         entityId: sprite.entityId,
         atlasKey,
         manifest: entry.manifest,
-        sourceArtifactPath: path,
+        sourceArtifactPath: write.path,
       },
     };
+  }
+
+  private tryWriteAttempt(
+    input: Parameters<AmbientArtDirector["writeAttempt"]>[0],
+  ): { readonly ok: true; readonly path: string } | { readonly ok: false; readonly reason: string } {
+    try {
+      return { ok: true, path: this.writeAttempt(input) };
+    } catch (error) {
+      return { ok: false, reason: errorMessage(error) };
+    }
   }
 
   private writeAttempt({
@@ -253,6 +279,9 @@ export class AmbientArtDirector implements ArtDirector {
 export const createAmbientArtDirector = (
   options: AmbientArtDirectorOptions = {},
 ): AmbientArtDirector => new AmbientArtDirector(options);
+
+const errorMessage = (error: unknown): string =>
+  error instanceof Error ? error.message : String(error);
 
 const artDirectorModeFromEnv = (): ArtDirectorMode => {
   const artMode = (

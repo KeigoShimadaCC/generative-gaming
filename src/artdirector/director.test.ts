@@ -120,6 +120,59 @@ describe("AmbientArtDirector", () => {
     expect(artifact.provider.ok).toBe(false);
   });
 
+  it("isolates artifact write failures to the affected sprite", async () => {
+    const fs = new FailFirstWriteFs();
+    const atlas = new SpriteAtlasCache();
+    const provider = new QueueSpriteProvider([
+      providerSuccess(boxSprite()),
+      providerSuccess(boxSprite()),
+    ]);
+    const director = new AmbientArtDirector({
+      provider,
+      atlas,
+      artifacts: { fs, rootDir: "runs/art-test", runId: "run-art" },
+      now: () => "2026-06-14T00:00:02.000Z",
+    });
+
+    const result = await director.generateSprites({
+      ...batchRequest(),
+      sprites: [
+        ...batchRequest().sprites,
+        {
+          entityId: "enemy.caster",
+          role: "enemy",
+          size: 16,
+          fallbackSpriteId: "enemy.caster",
+          prompt: "a candlelit cave caster with a hood",
+          paletteHint: ["#151a14", "#89965d", "#c7a55a"],
+        },
+      ],
+    });
+
+    expect(provider.calls).toHaveLength(2);
+    expect(result.accepted.map((sprite) => sprite.entityId)).toEqual([
+      "enemy.caster",
+    ]);
+    expect(result.rejected).toEqual([
+      {
+        entityId: "enemy.brute",
+        fallbackSpriteId: "enemy.brute",
+        reason: "artifact write failed: simulated artifact write failure",
+        sourceArtifactPath: null,
+      },
+    ]);
+    expect(atlas.size).toBe(1);
+
+    const acceptedPath = result.accepted[0]?.sourceArtifactPath;
+    if (acceptedPath === undefined) {
+      throw new Error("expected second sprite artifact path");
+    }
+    expect(JSON.parse(fs.readFile(acceptedPath)) as ArtAttemptRecord).toMatchObject({
+      entityId: "enemy.caster",
+      outcome: { kind: "accepted" },
+    });
+  });
+
   it("honors ART=fallback mode without calling the provider", async () => {
     const provider = new QueueSpriteProvider([providerSuccess(boxSprite())]);
     const director = new AmbientArtDirector({
@@ -163,8 +216,22 @@ class QueueSpriteProvider implements ArtDirectorSpriteProvider {
   }
 }
 
+class FailFirstWriteFs extends MemoryArtifactFs {
+  private failed = false;
+
+  override writeNewFile(path: string, contents: string): void {
+    if (!this.failed && path.endsWith(".json")) {
+      this.failed = true;
+      throw new Error("simulated artifact write failure");
+    }
+
+    super.writeNewFile(path, contents);
+  }
+}
+
 type ArtAttemptRecord = {
   readonly recordType: string;
+  readonly entityId?: string;
   readonly provider: { readonly ok: boolean };
   readonly gauntlet: { readonly ok: boolean } | null;
   readonly outcome:
