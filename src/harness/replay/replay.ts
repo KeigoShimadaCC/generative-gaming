@@ -64,6 +64,30 @@ export const replayTrace = (
     }
   }
 
+  const terminal = trace.terminal ?? null;
+  if (terminal === null) {
+    return {
+      status: "unreadable",
+      error: "trace is missing terminal record"
+    };
+  }
+
+  const terminalHash = computeStateHash(state);
+  if (
+    state.run.turn !== terminal.turn ||
+    state.run.terminalStatus !== terminal.terminalStatus ||
+    terminalHash !== terminal.stateHash
+  ) {
+    return {
+      status: "diverged",
+      report: {
+        firstDivergentTurn: terminal.turn,
+        expectedHash: terminal.stateHash,
+        actualHash: terminalHash
+      }
+    };
+  }
+
   return { status: "identical" };
 };
 

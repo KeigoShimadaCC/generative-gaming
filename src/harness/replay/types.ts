@@ -2,7 +2,8 @@ import type { RunEvent } from "../../engine/run/events.js";
 import type { RunAction } from "../../engine/run/loop.js";
 import type {
   TraceContentRef,
-  TraceHeader as RecorderTraceHeader
+  TraceHeader as RecorderTraceHeader,
+  TraceTerminalLine
 } from "../trace/recorder.js";
 
 export type ContentRef = TraceContentRef;
@@ -19,6 +20,7 @@ export type TraceTurnRecord = {
 export type ParsedTrace = {
   readonly header: TraceHeader;
   readonly turns: readonly TraceTurnRecord[];
+  readonly terminal?: TraceTerminalLine | null;
 };
 
 export type DivergenceReport = {

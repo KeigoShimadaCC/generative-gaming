@@ -1,7 +1,21 @@
-import { appendFileSync, mkdirSync, writeFileSync } from "node:fs";
+import {
+  appendFileSync,
+  closeSync,
+  fsyncSync,
+  mkdirSync,
+  openSync,
+  renameSync,
+  writeFileSync,
+} from "node:fs";
+import { dirname } from "node:path";
 
 import { ENGINE_VERSION, PROTOCOL_VERSION } from "../../schemas/protocol.js";
-import type { EngineLogEvent, GameState } from "../../engine/state/index.js";
+import {
+  ACTIVE_TERMINAL_STATUS,
+  type EngineLogEvent,
+  type GameState,
+  type TerminalStatus,
+} from "../../engine/state/index.js";
 import { computeStateHash } from "./hash.js";
 
 export type TraceContentRef = {
@@ -27,6 +41,13 @@ export type TraceTurnLine<
   readonly turn: number;
   readonly action: Action;
   readonly events: readonly Event[];
+  readonly stateHash: string;
+};
+
+export type TraceTerminalLine = {
+  readonly recordType: "terminal";
+  readonly turn: number;
+  readonly terminalStatus: Exclude<TerminalStatus, typeof ACTIVE_TERMINAL_STATUS>;
   readonly stateHash: string;
 };
 
@@ -73,6 +94,7 @@ export type TraceRecorder<
     action: Action,
     result: EngineLikeStepResult<Event>
   ) => TraceTurnLine<Action, Event>;
+  readonly finalize: (state: GameState) => TraceTerminalLine | null;
 };
 
 export type TraceWriter = {
@@ -81,12 +103,15 @@ export type TraceWriter = {
   readonly appendTurn: <Action, Event extends EngineLogEvent>(
     line: TraceTurnLine<Action, Event>
   ) => void;
+  readonly appendTerminal?: (line: TraceTerminalLine) => void;
+  readonly finalize?: () => void;
 };
 
 export type TraceFsAdapter = {
   readonly makeDir: (path: string) => void;
   readonly writeNewFile: (path: string, contents: string) => void;
   readonly appendFile: (path: string, contents: string) => void;
+  readonly finalizeFile?: (fromPath: string, toPath: string) => void;
 };
 
 export type FileTraceWriterOptions = {
@@ -115,10 +140,32 @@ export const createTraceRecorder = <
   };
 
   writer.writeHeader(header);
+  let terminalLine: TraceTerminalLine | null = null;
+
+  const finalize = (state: GameState): TraceTerminalLine | null => {
+    if (terminalLine !== null) {
+      return terminalLine;
+    }
+
+    const line = terminalLineFromState(state);
+    if (line === null) {
+      return null;
+    }
+
+    if (writer.appendTerminal === undefined) {
+      writer.appendTurn(line as unknown as TraceTurnLine<Action, Event>);
+    } else {
+      writer.appendTerminal(line);
+    }
+    writer.finalize?.();
+    terminalLine = line;
+    return line;
+  };
 
   return {
     header,
     path: writer.path,
+    finalize,
     recordTurn: (action, result) => {
       // Trace turn numbers use the recorder's post-step state convention.
       const line: TraceTurnLine<Action, Event> = {
@@ -128,6 +175,7 @@ export const createTraceRecorder = <
         stateHash: computeStateHash(result.state)
       };
       writer.appendTurn(line);
+      finalize(result.state);
       return line;
     }
   };
@@ -160,17 +208,42 @@ export const createFileTraceWriter = (
   const rootDir = trimTrailingSlash(options.rootDir ?? "runs");
   const dir = `${rootDir}/${options.runId}`;
   const path = `${dir}/trace.ndjson`;
+  const writePath =
+    options.fs?.finalizeFile === undefined && options.fs !== undefined
+      ? path
+      : `${path}.tmp`;
   const fs = options.fs ?? nodeTraceFsAdapter;
 
   return {
     path,
     writeHeader: (header) => {
       fs.makeDir(dir);
-      fs.writeNewFile(path, `${JSON.stringify(header)}\n`);
+      fs.writeNewFile(writePath, `${JSON.stringify(header)}\n`);
     },
     appendTurn: (line) => {
-      fs.appendFile(path, `${JSON.stringify(line)}\n`);
-    }
+      fs.appendFile(writePath, `${JSON.stringify(line)}\n`);
+    },
+    appendTerminal: (line) => {
+      fs.appendFile(writePath, `${JSON.stringify(line)}\n`);
+    },
+    finalize: () => {
+      fs.finalizeFile?.(writePath, path);
+    },
+  };
+};
+
+export const terminalLineFromState = (
+  state: GameState,
+): TraceTerminalLine | null => {
+  if (state.run.terminalStatus === ACTIVE_TERMINAL_STATUS) {
+    return null;
+  }
+
+  return {
+    recordType: "terminal",
+    turn: state.run.turn,
+    terminalStatus: state.run.terminalStatus,
+    stateHash: computeStateHash(state),
   };
 };
 
@@ -200,5 +273,23 @@ const nodeTraceFsAdapter: TraceFsAdapter = {
   },
   appendFile: (path, contents) => {
     appendFileSync(path, contents, { encoding: "utf8" });
+  },
+  finalizeFile: (fromPath, toPath) => {
+    fsyncFile(fromPath);
+    renameSync(fromPath, toPath);
+    try {
+      fsyncFile(dirname(toPath));
+    } catch {
+      // Some filesystems do not allow opening directories for fsync.
+    }
+  },
+};
+
+const fsyncFile = (path: string): void => {
+  const fd = openSync(path, "r");
+  try {
+    fsyncSync(fd);
+  } finally {
+    closeSync(fd);
   }
 };

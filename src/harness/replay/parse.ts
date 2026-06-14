@@ -1,12 +1,13 @@
 import type { RunEvent } from "../../engine/run/events.js";
 import type { RunAction } from "../../engine/run/loop.js";
-import { PROTOCOL_VERSION } from "../../schemas/protocol.js";
+import { ENGINE_VERSION, PROTOCOL_VERSION } from "../../schemas/protocol.js";
 import type {
   ContentRef,
   ParsedTrace,
   TraceHeader,
   TraceTurnRecord
 } from "./types.js";
+import type { TraceTerminalLine } from "../trace/recorder.js";
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   value !== null && typeof value === "object" && !Array.isArray(value);
@@ -65,15 +66,43 @@ const parseHeader = (value: unknown, lineNumber: number): TraceHeader => {
     throw new Error(`header.protocolVersion must be "${PROTOCOL_VERSION}"`);
   }
 
+  const engineVersion = readString(value, "engineVersion", "header");
+  if (engineVersion !== ENGINE_VERSION) {
+    throw new Error(`header.engineVersion must be "${ENGINE_VERSION}"`);
+  }
+
   return {
     recordType,
     protocolVersion,
-    engineVersion: readString(value, "engineVersion", "header"),
+    engineVersion,
     modelId: readString(value, "modelId", "header"),
     seed: readString(value, "seed", "header"),
     contentRef: parseContentRef(value.contentRef),
     runId: readString(value, "runId", "header"),
     createdAt: readString(value, "createdAt", "header")
+  };
+};
+
+const parseTerminalRecord = (
+  value: Record<string, unknown>,
+  lineNumber: number
+): TraceTerminalLine => {
+  const terminalStatus = readString(value, "terminalStatus", "terminal");
+  if (
+    terminalStatus !== "WIN" &&
+    terminalStatus !== "LOSS" &&
+    terminalStatus !== "ABORTED"
+  ) {
+    throw new Error(
+      `line ${lineNumber}: terminal.terminalStatus must be WIN, LOSS, or ABORTED`
+    );
+  }
+
+  return {
+    recordType: "terminal",
+    turn: readNumber(value, "turn", "terminal"),
+    terminalStatus,
+    stateHash: readString(value, "stateHash", "terminal")
   };
 };
 
@@ -142,6 +171,7 @@ export const parseTraceNdjson = (content: string): ParsedTrace => {
   }
 
   const turns: TraceTurnRecord[] = [];
+  let terminal: TraceTerminalLine | null = null;
 
   for (let index = 1; index < lines.length; index += 1) {
     const lineNumber = index + 1;
@@ -155,8 +185,20 @@ export const parseTraceNdjson = (content: string): ParsedTrace => {
       throw new Error(`line ${lineNumber}: invalid JSON (${message})`);
     }
 
+    if (!isRecord(parsed)) {
+      throw new Error(`line ${lineNumber}: trace record must be a JSON object`);
+    }
+
+    if (parsed.recordType === "terminal") {
+      if (index !== lines.length - 1) {
+        throw new Error(`line ${lineNumber}: terminal record must be last`);
+      }
+      terminal = parseTerminalRecord(parsed, lineNumber);
+      continue;
+    }
+
     turns.push(parseTurnRecord(parsed, lineNumber));
   }
 
-  return { header, turns };
+  return { header, turns, terminal };
 };

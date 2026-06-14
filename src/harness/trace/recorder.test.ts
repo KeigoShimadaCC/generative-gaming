@@ -25,6 +25,7 @@ import {
   type EngineLikeSession,
   type TraceFsAdapter,
   type TraceHeader,
+  type TraceTerminalLine,
   type TraceTurnLine
 } from "./recorder.js";
 import { computeStateHash, hashSerializedState } from "./hash.js";
@@ -53,7 +54,7 @@ describe("trace recorder", () => {
     session.step({ kind: "abort" });
 
     const lines = readTraceLines(fs, runId);
-    expect(lines).toHaveLength(3);
+    expect(lines).toHaveLength(4);
 
     const header = expectHeader(lines[0]);
     expect(header).toMatchObject({
@@ -67,7 +68,7 @@ describe("trace recorder", () => {
       runId
     });
 
-    const turnLines = lines.slice(1).map(expectTurnLine);
+    const turnLines = lines.slice(1, -1).map(expectTurnLine);
     expect(turnLines.map((line) => line.action.kind)).toEqual([
       "wait",
       "abort"
@@ -76,6 +77,10 @@ describe("trace recorder", () => {
       turnLines.every((line) => /^[0-9a-f]{8}$/.test(line.stateHash))
     ).toBe(true);
     expect(turnLines.flatMap((line) => line.events).length).toBeGreaterThan(0);
+    expect(expectTerminalLine(lines.at(-1), turnLines.at(-1)?.turn)).toMatchObject({
+      recordType: "terminal",
+      terminalStatus: "ABORTED"
+    });
   });
 
   it("records decayed status durations through trace serialization until expiry", () => {
@@ -183,7 +188,8 @@ describe("trace recorder", () => {
       config.runStructure.terminalStates.win
     );
 
-    const turnLines = readTraceLines(fs, runId).slice(1).map(expectTurnLine);
+    const lines = readTraceLines(fs, runId);
+    const turnLines = lines.slice(1, -1).map(expectTurnLine);
     expect(turnLines).toHaveLength(config.runStructure.depthFloors);
     expect(
       turnLines
@@ -193,6 +199,12 @@ describe("trace recorder", () => {
     ).toEqual([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
     expect(turnLines.at(-1)?.events.map((event) => event.type)).toEqual(
       expect.arrayContaining(["hoard_taken", "terminal_state"])
+    );
+    expect(expectTerminalLine(lines.at(-1), turnLines.at(-1)?.turn)).toMatchObject(
+      {
+        recordType: "terminal",
+        terminalStatus: config.runStructure.terminalStates.win
+      }
     );
   });
 });
@@ -314,6 +326,22 @@ const expectTurnLine = (
   expect(Array.isArray(parsed.events)).toBe(true);
   expect(typeof parsed.stateHash).toBe("string");
   return parsed as TraceTurnLine<RunAction, RunEvent>;
+};
+
+const expectTerminalLine = (
+  line: string | undefined,
+  expectedTurn: number | undefined
+): TraceTerminalLine => {
+  expect(line).toBeDefined();
+  const parsed = JSON.parse(line ?? "null") as unknown;
+  expect(isRecord(parsed)).toBe(true);
+  if (!isRecord(parsed)) {
+    throw new Error("missing trace terminal line");
+  }
+  expect(parsed.recordType).toBe("terminal");
+  expect(parsed.turn).toBe(expectedTurn);
+  expect(typeof parsed.stateHash).toBe("string");
+  return parsed as TraceTerminalLine;
 };
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>

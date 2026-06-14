@@ -26,6 +26,7 @@ import {
 import { isWorldPaused } from "../../engine/npc/runtime.js";
 import {
   createTraceRecorder,
+  terminalLineFromState,
   traceRunId,
   type TraceContentRef,
   type TraceTurnLine,
@@ -217,7 +218,7 @@ export const runPersonaBot = (
     },
     trace: {
       path: recorder.path,
-      content: traceContent(recorder.header, turns),
+      content: traceContent(recorder.header, turns, state),
       turns,
     },
     state,
@@ -369,10 +370,18 @@ const progressSignature = (view: BotStateView): string =>
 const traceContent = (
   header: Parameters<typeof JSON.stringify>[0],
   turns: readonly TraceTurnLine<RunAction, RunEvent>[],
+  state: GameState,
 ): string =>
-  [JSON.stringify(header), ...turns.map((turn) => JSON.stringify(turn))].join(
-    "\n",
-  ) + "\n";
+  [
+    JSON.stringify(header),
+    ...turns.map((turn) => JSON.stringify(turn)),
+    ...terminalContentLine(state),
+  ].join("\n") + "\n";
+
+const terminalContentLine = (state: GameState): readonly string[] => {
+  const terminal = terminalLineFromState(state);
+  return terminal === null ? [] : [JSON.stringify(terminal)];
+};
 
 const assertMaxTurns = (maxTurns: number): void => {
   if (!Number.isSafeInteger(maxTurns) || maxTurns <= 0) {

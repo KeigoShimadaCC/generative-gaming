@@ -81,28 +81,28 @@ const main = async (): Promise<void> => {
     writeScriptedFallbackTrace(
       "replay-mini-wait.ndjson",
       "golden-mini-wait",
-      [{ kind: "wait" }, { kind: "wait" }],
+      [{ kind: "wait" }, { kind: "abort" }],
     ),
   );
   generated.push(
     writeScriptedFallbackTrace(
       "band-shallows.ndjson",
       "golden-band-shallows",
-      [{ kind: "wait" }],
+      [{ kind: "abort" }],
     ),
   );
   generated.push(
     writeScriptedFallbackTrace(
       "band-middle.ndjson",
       "golden-band-middle",
-      [...actionsToDepth("golden-band-middle", 5), { kind: "wait" }],
+      [...actionsToDepth("golden-band-middle", 5), { kind: "abort" }],
     ),
   );
   generated.push(
     writeScriptedFallbackTrace(
       "band-lowest.ndjson",
       "golden-band-lowest-v2-3",
-      [...actionsToDepth("golden-band-lowest-v2-3", 10), { kind: "wait" }],
+      [...actionsToDepth("golden-band-lowest-v2-3", 10), { kind: "abort" }],
     ),
   );
 
@@ -171,7 +171,7 @@ const writeMockDirectorTrace = async (): Promise<GeneratedTrace> => {
   const provider = await mockDirectorFloorProvider(seed);
   const trace = recordAndVerifyRoundTrip({
     seed,
-    actions: [{ kind: "wait" }, { kind: "wait" }],
+    actions: [{ kind: "wait" }, { kind: "abort" }],
     provider,
     contentRef: MOCK_CONTENT_REF,
     createdAt: CREATED_AT,

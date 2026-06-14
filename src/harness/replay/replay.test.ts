@@ -49,7 +49,7 @@ describe("trace replay", () => {
     const provider = createFallbackFloorContentProvider();
     const trace = buildTraceFromRun({
       seed: "replay-round-trip",
-      actions: [{ kind: "wait" }, { kind: "wait" }, { kind: "wait" }],
+      actions: [{ kind: "wait" }, { kind: "wait" }, { kind: "abort" }],
       provider,
       contentRef: DEFAULT_CONTENT_REF,
       createdAt: CREATED_AT
@@ -81,7 +81,7 @@ describe("trace replay", () => {
     const provider = createFallbackFloorContentProvider();
     const result = recordAndVerifyRoundTrip({
       seed: "golden-mini-wait",
-      actions: [{ kind: "wait" }, { kind: "wait" }],
+      actions: [{ kind: "wait" }, { kind: "abort" }],
       provider,
       contentRef: DEFAULT_CONTENT_REF,
       createdAt: CREATED_AT,
@@ -97,7 +97,7 @@ describe("trace replay", () => {
     const provider = createFallbackFloorContentProvider();
     const trace = buildTraceFromRun({
       seed: "replay-corrupt",
-      actions: [{ kind: "wait" }, { kind: "wait" }],
+      actions: [{ kind: "wait" }, { kind: "abort" }],
       provider,
       contentRef: DEFAULT_CONTENT_REF,
       createdAt: CREATED_AT
@@ -123,7 +123,7 @@ describe("trace replay", () => {
         { kind: "wait" },
         { kind: "wait" },
         { kind: "wait" },
-        { kind: "wait" }
+        { kind: "abort" }
       ],
       provider,
       contentRef: DEFAULT_CONTENT_REF,
@@ -166,7 +166,7 @@ describe("trace replay", () => {
     const provider = createFallbackFloorContentProvider();
     const result = recordAndVerifyRoundTrip({
       seed: "replay-golden-helper",
-      actions: [{ kind: "wait" }],
+      actions: [{ kind: "abort" }],
       provider,
       contentRef: DEFAULT_CONTENT_REF,
       createdAt: CREATED_AT
@@ -175,7 +175,49 @@ describe("trace replay", () => {
     expect(result.verify).toEqual({ status: "identical" });
     expect(
       result.trace.split("\n").filter((line) => line.length > 0)
-    ).toHaveLength(2);
+    ).toHaveLength(3);
+  });
+
+  it("does not verify a trace truncated before its terminal record", () => {
+    const provider = createFallbackFloorContentProvider();
+    const trace = buildTraceFromRun({
+      seed: "replay-truncated",
+      actions: [{ kind: "wait" }, { kind: "abort" }],
+      provider,
+      contentRef: DEFAULT_CONTENT_REF,
+      createdAt: CREATED_AT
+    });
+    const lines = trace.trim().split("\n");
+    const truncated = `${lines.slice(0, -1).join("\n")}\n`;
+
+    const result = verifyTraceContent(truncated);
+
+    expect(result).toEqual({
+      status: "unreadable",
+      error: "trace is missing terminal record"
+    });
+  });
+
+  it("rejects traces recorded with a different engine version", () => {
+    const provider = createFallbackFloorContentProvider();
+    const trace = buildTraceFromRun({
+      seed: "replay-engine-version",
+      actions: [{ kind: "abort" }],
+      provider,
+      contentRef: DEFAULT_CONTENT_REF,
+      createdAt: CREATED_AT
+    });
+    const lines = trace.trim().split("\n");
+    const header = JSON.parse(lines[0] ?? "{}") as Record<string, unknown>;
+    lines[0] = JSON.stringify({ ...header, engineVersion: "0.0.0-stale" });
+
+    const result = verifyTraceContent(`${lines.join("\n")}\n`);
+
+    expect(result.status).toBe("unreadable");
+    if (result.status !== "unreadable") {
+      throw new Error("expected unreadable result");
+    }
+    expect(result.error).toMatch(/header\.engineVersion/);
   });
 });
 
@@ -194,6 +236,7 @@ const recordTwoFloorFixtureTrace = (): string => {
   });
 
   moveToDepth(session, 2);
+  session.step({ kind: "abort" });
 
   return fs.read(`runs/${runId}/trace.ndjson`);
 };

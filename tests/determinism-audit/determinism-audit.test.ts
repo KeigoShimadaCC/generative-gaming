@@ -12,8 +12,8 @@ const OBJECT_ITERATION_PATTERN =
   /Object\.(keys|values|entries)|for \(const .* in /;
 
 const KNOWN_ENGINE_OBJECT_ITERATION_SITES = [
-  "src/engine/npc/barter.ts:280:  for (const entity of Object.values(state.entities)) {",
-  "src/engine/npc/runtime.ts:117:  Object.values(state.entities)",
+  "src/engine/npc/barter.ts:292:  for (const entity of Object.values(state.entities)) {",
+  "src/engine/npc/runtime.ts:119:  Object.values(state.entities)",
   "src/engine/effects/core.ts:75:  const unregisterers = Object.entries(CORE_EXECUTORS).map(([verb, executor]) =>",
   "src/engine/effects/spatial.ts:113:  const unregisterers = Object.entries(SPATIAL_EXECUTORS).map(",
   "src/engine/effects/spatial.ts:783:    Object.entries(state.entities).map(([id, entity]) => {",
@@ -29,8 +29,8 @@ const KNOWN_ENGINE_OBJECT_ITERATION_SITES = [
   "src/engine/systems/inventory.ts:410:  const items = Object.values(state.entities)",
   "src/engine/run/loop.ts:1029:    ...Object.values(state.entities).map((entity) =>",
   "src/engine/render/grid.ts:136:  Object.values(state.entities)",
-  "src/engine/quests/machine.ts:205:    Object.entries(state.quests.quests).filter(([id]) => id !== questId),",
-  "src/engine/quests/machine.ts:513:  const ward = Object.values(state.entities).find(",
+  "src/engine/quests/machine.ts:210:    Object.entries(state.quests.quests).filter(([id]) => id !== questId),",
+  "src/engine/quests/machine.ts:531:  const ward = Object.values(state.entities).find(",
   "src/engine/items/triggers.ts:895:  const entries = Object.entries(",
   "src/engine/items/triggers.ts:1019:  Object.values(state.entities).sort((left, right) =>",
   "src/engine/turn/actions.ts:405:  Object.values(state.entities).sort((a, b) => a.id.localeCompare(b.id));",
@@ -42,7 +42,7 @@ const KNOWN_ENGINE_OBJECT_ITERATION_SITES = [
   "src/engine/quests/objectives.ts:420:    for (const entity of Object.values(state.entities)) {",
   "src/engine/quests/log.ts:61:    ...Object.keys(state.quests.quests),",
   "src/engine/state/init.ts:202:  Object.entries(gameConfig.runStructure.depthBands) as readonly [",
-  "src/engine/turn/loop.ts:550:  Object.values(state.entities)",
+  "src/engine/turn/loop.ts:553:  Object.values(state.entities)",
   "src/engine/behaviors/special.ts:246:    const bodyguard = Object.values(state.entities)",
   "src/engine/behaviors/perception.ts:87:  const allies = Object.values(state.entities).filter(",
   "src/engine/items/identify.ts:298:    Object.entries(state.entities).map(([id, entity]) => {",
