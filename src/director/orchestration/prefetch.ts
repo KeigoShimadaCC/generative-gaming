@@ -346,13 +346,13 @@ export const createPrefetchController = (
     releaseGlobal: () => void,
     globalGate: Promise<void>,
   ): Promise<void> => {
-    const prompt = buildPrompt(depth, trace);
-    const generateContext = buildGenerateContext(
-      depth,
-      prompt,
-      abortController.signal,
-    );
     try {
+      const prompt = buildPrompt(depth, trace);
+      const generateContext = buildGenerateContext(
+        depth,
+        prompt,
+        abortController.signal,
+      );
       const timeoutMs =
         generateContext.providerOptions?.timeoutMs
         ?? gameConfig.director.manifestTimeoutMs;
@@ -385,6 +385,13 @@ export const createPrefetchController = (
         result.record.outcome.kind === "manifest" ? "generated" : "fallback";
       const content = generatedResultToFloorContent(result.floor, options.seed);
       completeGeneration(depth, content, source);
+    } catch {
+      recordDiscard(
+        depth,
+        cancelled || abortController.signal.aborted
+          ? "cancelled"
+          : "generation_failed",
+      );
     } finally {
       releaseGlobal();
       if (globalGenerationInFlight === globalGate) {

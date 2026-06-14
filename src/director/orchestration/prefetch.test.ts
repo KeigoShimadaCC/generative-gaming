@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
+import { config, type GameConfig } from "../../config/index.js";
 import {
   type DirectorProvider,
   type GenerateManifestOptions,
@@ -131,6 +132,46 @@ describe("prefetch controller", () => {
     await flushAsync(250);
     expect(provider.getGenerationCount()).toBe(1);
   }, 10_000);
+
+  it("falls back and releases the global gate when prompt assembly throws", async () => {
+    const failingProvider = new DelayedMockDirectorProvider();
+    const failingController = createPrefetchController({
+      runId: `${RUN_ID}-oversized-prompt`,
+      seed: SEED,
+      modelId: MODEL_ID,
+      provider: failingProvider,
+      gameConfig: oversizedPromptConfig(),
+      gate2: passingGate2(validShallowsManifestFixture),
+      artifacts: { fs: new MemoryArtifactFs(), rootDir: ROOT_DIR },
+      prefetch: { stairsCapMs: 20 },
+      now: () => CREATED_AT,
+      providerGenerationTimeoutMs: 120_000,
+    });
+
+    failingController.onFloorEnter(1, trace());
+    await flushAsync(0);
+
+    expect(failingController.getDiscards()).toContainEqual(
+      expect.objectContaining({ depth: 2, reason: "generation_failed" }),
+    );
+    expect(failingProvider.getGenerationCount()).toBe(0);
+
+    const fallback = await failingController.resolveFloor(2, `${SEED}:floor:2`);
+    expect(fallback.source).toBe("fallback");
+
+    const normalProvider = new DelayedMockDirectorProvider();
+    const normalController = createController(
+      new MemoryArtifactFs(),
+      normalProvider,
+      { stairsCapMs: 20 },
+    );
+
+    normalController.onFloorEnter(1, trace());
+    await flushAsync(40);
+
+    expect(normalProvider.getGenerationCount()).toBe(1);
+    expect(normalController.pollStatus()).toEqual({ status: "ready", depth: 2 });
+  });
 
   it("cancels in-flight work without leaving pending timers", async () => {
     vi.useFakeTimers();
@@ -389,6 +430,23 @@ const relaxHp = (
   medianHpRetentionPercent: {
     ...threshold.medianHpRetentionPercent,
     max: 100,
+  },
+});
+
+const oversizedPromptConfig = (): GameConfig => ({
+  ...config,
+  runStructure: {
+    ...config.runStructure,
+    floorGeometry: {
+      ...config.runStructure.floorGeometry,
+      shallows: {
+        ...config.runStructure.floorGeometry.shallows,
+        layoutFlavors: Array.from(
+          { length: 5_000 },
+          (_, index) => `oversized-flavor-${index}`,
+        ) as unknown as GameConfig["runStructure"]["floorGeometry"]["shallows"]["layoutFlavors"],
+      },
+    },
   },
 });
 
