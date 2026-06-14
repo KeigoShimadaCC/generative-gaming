@@ -108,7 +108,7 @@ export const effectCost = (effect: Effect): number => {
     case "buff_stat": {
       const payload = effect.buffStat;
       const magnitudeDuration =
-        payload === null ? 0 : Math.abs(payload.magnitude) * payload.duration;
+        Math.abs(payload?.magnitude ?? 0) * (payload?.duration ?? 0);
 
       return (
         verbBase +

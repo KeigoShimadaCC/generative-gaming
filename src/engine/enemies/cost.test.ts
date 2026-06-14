@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { bounds } from "../../config/index.js";
+import { bounds, config } from "../../config/index.js";
 import type {
   Behavior,
   DepthBand,
@@ -17,14 +17,16 @@ import {
   validMeleeTargetingFixture,
   validSelfTargetingFixture,
   validUseTriggerFixture,
+  validBuffStatEffectFixture,
 } from "../../schemas/fixtures/vocab.js";
-import type { EffectBundle, TargetingShape } from "../../schemas/vocab/index.js";
+import type { Effect, EffectBundle, TargetingShape } from "../../schemas/vocab/index.js";
 import { createRng } from "../rng/index.js";
 import { createInitialState, deserialize, serialize } from "../state/index.js";
 import type { GameState } from "../state/index.js";
 import { assemble } from "./assembly.js";
 import {
   costOf,
+  effectCost,
   rosterAffordable,
   statsWithinBand,
   xpYieldFromCost,
@@ -297,6 +299,17 @@ describe("enemy cost monotonicity", () => {
         costOf(base),
       );
     }
+  });
+});
+
+describe("effect cost payload tolerance", () => {
+  it("prices an undefined buff_stat payload as zero magnitude-duration", () => {
+    const withoutPayload = { ...validBuffStatEffectFixture } as Partial<Effect>;
+    delete withoutPayload.buffStat;
+
+    expect(effectCost(withoutPayload as Effect)).toBe(
+      config.enemyDesign.costWeights.effects.verbs.buff_stat,
+    );
   });
 });
 
