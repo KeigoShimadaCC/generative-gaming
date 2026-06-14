@@ -10,7 +10,9 @@ export const boundedNumber = (range: {
 
 export const nonEmptyString = z.string().min(1);
 
-export const glyphSchema = z.string().min(1);
+export const MAX_GLYPH_CHARS = 16;
+
+export const glyphSchema = z.string().min(1).max(MAX_GLYPH_CHARS);
 
 export const enforceActivePayload = (
   value: Record<string, unknown> & {

@@ -40,6 +40,7 @@ import {
   validQuaffTriggerFixture,
   validSelfTargetingFixture,
 } from "../fixtures/vocab.js";
+import { MAX_GLYPH_CHARS } from "../common.js";
 
 const expectPasses = (schema: SchemaLike, value: unknown): void => {
   expect(schema.safeParse(value).success).toBe(true);
@@ -56,6 +57,23 @@ type SchemaLike = {
 const overCapString = (maxChars: number): string => "x".repeat(maxChars + 1);
 
 describe("generated text caps", () => {
+  it("rejects glyphs over the schema cap", () => {
+    const overCapGlyph = overCapString(MAX_GLYPH_CHARS);
+
+    expectFails(ItemDefinitionSchema, {
+      ...validItemFixtures[0],
+      glyph: overCapGlyph,
+    });
+    expectFails(EnemyDefinitionSchema, {
+      ...validEnemyDefinitionFixture,
+      glyph: overCapGlyph,
+    });
+    expectFails(NpcDefinitionSchema, {
+      ...validNpcDefinitionFixture,
+      glyph: overCapGlyph,
+    });
+  });
+
   it("rejects names over the configured name cap", () => {
     const overCapName = overCapString(
       bounds.directorManifest.textCaps.nameMaxChars,
