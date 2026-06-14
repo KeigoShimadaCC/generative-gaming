@@ -237,7 +237,7 @@ export const step = (
     return illegalStep(state, action, legality.reason);
   }
 
-  const forcedTerminal = forcedTerminalFor(state);
+  const forcedTerminal = forcedTerminalFor(state, { includeHardCap: false });
   if (forcedTerminal !== null) {
     return terminalStep(state, forcedTerminal.status, forcedTerminal.reason);
   }
@@ -445,7 +445,10 @@ const isActionResolverIllegal = (
 
 const forcedTerminalFor = (
   state: GameState,
+  options: { readonly includeHardCap?: boolean } = {},
 ): { readonly status: Exclude<TerminalStatus, "ACTIVE">; readonly reason: string } | null => {
+  const includeHardCap = options.includeHardCap ?? true;
+
   if (state.player.hp.current <= 0) {
     return {
       status: config.runStructure.terminalStates.loss,
@@ -453,7 +456,7 @@ const forcedTerminalFor = (
     };
   }
 
-  if (state.run.turn >= bounds.runStructure.perRunHardCapTurns) {
+  if (includeHardCap && state.run.turn >= bounds.runStructure.perRunHardCapTurns) {
     return {
       status: config.runStructure.terminalStates.loss,
       reason: `run hard cap reached at ${bounds.runStructure.perRunHardCapTurns} turns`,

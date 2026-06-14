@@ -159,6 +159,31 @@ describe("invalid and terminal action handling", () => {
     });
   });
 
+  it("honors a final-floor winning descend submitted on the hard-cap turn", () => {
+    const base = finalFloorStairsState("hard-cap-winning-descend");
+    const state = {
+      ...base,
+      run: {
+        ...base.run,
+        turn: bounds.runStructure.perRunHardCapTurns,
+      },
+    };
+
+    const result = step(state, { kind: "descend" });
+
+    expect(result.state.run.terminalStatus).toBe(
+      config.runStructure.terminalStates.win,
+    );
+    expect(result.events).toContainEqual({
+      turn: bounds.runStructure.perRunHardCapTurns,
+      type: "terminal_state",
+      data: {
+        status: "WIN",
+        reason: "player descended from the final floor",
+      },
+    });
+  });
+
   it("makes win, loss, and aborted terminal states reachable", () => {
     const aborted = step(start("aborted-terminal"), { kind: "abort" }).state;
     const loss = step(withPlayerHp(start("loss-terminal"), 0), {
