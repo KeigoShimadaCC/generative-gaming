@@ -9,7 +9,7 @@ This file records *state*, never *design* — design lives in the doc spine
 
 ## Active Phase
 
-**Phase:** Post-M4 hardening — **audit remediation (Critical + High + Medium) COMPLETE, merged, CI-running**
+**Phase:** Post-M4 hardening — **audit remediation (Critical + High + Medium + quick Low) COMPLETE, merged**
 **Source:** `docs/audit-2026-06-14.md` (read-only audit: 1 Critical, 8 High, ~13 Medium, ~12 Low).
 **Status:** Critical + all 8 High merged (`a2179d6b..e11818ce`, 8 atomic commits) and the
 Medium tier merged (`e11818ce..53d680ff`, 11 of 13 Mediums fixed). **M1 deferred** (open-door
@@ -20,8 +20,14 @@ fetch). Every batch: golden/stateHash integrity proven (sim unchanged except M12
 turn 466 — full-slot charm equip now refuses), independent Cursor review (caught H8 + M13 landing
 off the real path), `verify:ci` green, full-clear behavioral smoke WIN. Worker mechanics this round:
 Codex `.git` writes blocked → COMMIT_PLAN.md path, orchestrator applied commits under Codex author
-(ENVIRONMENT.md updated). **Remaining:** the ~12 Low items (latents/polish) — backlog, awaiting
-human go-ahead.
+(ENVIRONMENT.md updated). The 7 quick Low fixes are also merged (`f8687967..0993faa7`: glyph cap,
+CLI parseInt guard, audio gain disconnect, buff_stat cost ??0, run-index tiebreak, verify-ci
+robustness, runs/ gitignore + m0-evidence regen gated behind UPDATE_M0_EVIDENCE=1). **Audit
+effectively closed.** Deliberately NOT done (need their own scoped pass with golden regen / design
+sign-off): 4 not-quick Lows (widen 32-bit replay hash → regenerates every golden; status/EntityId
+sort-ordering latents → determinism risk; WebGL context-loss handling → painter lifecycle;
+split-stack itemInstanceId → id-scheme/serialization risk) + M1 (door-aware connectivity) + M13
+(artifact-viewer in-memory model).
 
 **Phase (prior):** M4 — Make It a Game (visual/UX overhaul) — **COMPLETE (core MET), CI-green at HEAD**
 **Phase plan:** phase-plans/M4-VISUAL-OVERHAUL.md (approved 2026-06-13, "execute till done")
@@ -50,7 +56,7 @@ runs/milestones/HUMAN-CHECKLIST.md.
 |---|---|---|---|
 | audit-crit-high-remediation | merged | Codex+Cursor | C1+H1–H8, 8 atomic commits (`a2179d6b..e11818ce`). Independent review caught H8 landing in the test-only registry → round-tripped to production path. verify:ci green; full-clear smoke WIN. |
 | audit-medium-remediation | merged | Codex+Cursor | 11/13 Mediums (`e11818ce..53d680ff`). M1 + M13 deferred with documented reasons. Only golden change: persona-balanced t466 (M12). verify:ci green; full-clear smoke WIN. |
-| audit-low-remediation | backlog | — | ~12 Low latents/polish from docs/audit-2026-06-14.md; awaiting human go-ahead. |
+| audit-low-remediation | merged | Codex | 7 quick Lows (`f8687967..0993faa7`): glyph cap, CLI parseInt guard, audio gain disconnect, buff_stat cost ??0, run-index tiebreak, verify-ci robustness, runs/ gitignore + m0 regen gating. verify:ci green, zero golden/trace churn. 4 not-quick Lows + M1 + M13 deferred (need own pass). |
 | phase85-artdirector | ready-for-verify | Codex | Provider/parser, Art Gauntlet, artifact records, atlas seam wiring, ART=fallback mode, skipped host live-smoke, and tests complete. No commits per brief. |
 | fullclear-combat-fix | merged | Codex | 3d2f5bb5; independently verified GREEN (Cursor, 2026-06-13) incl. eval-bank regeneration plausibility. |
 | fullclear-transition-wait | merged | Codex | c1aef324 (bot v3 commit); verified in the same GREEN pass. |
@@ -84,6 +90,7 @@ Format: `YYYY-MM-DD · phase/task · who · what was verified · evidence (comma
 
 | Date | Task | Agent | Verified | Evidence |
 |---|---|---|---|---|
+| 2026-06-14 | audit-low (quick) | orchestrator+Codex | 7 quick Low fixes merged; verified golden-neutral and gitignore-safe | `pnpm run verify:ci` → "All steps passed"; new gitignore patterns matched 0 tracked files (`git ls-files <pattern>`); `git status` shows zero `tests/golden`/`tests/eval-bank`/`runs/milestones/m0` changes (m0 regen now gated behind UPDATE_M0_EVIDENCE=1); merged `f8687967..0993faa7` |
 | 2026-06-14 | audit-medium | orchestrator+Codex+Cursor | 11/13 Medium audit findings fixed (M2-M12; M1+M13 deferred). Proved sim unchanged: only persona-balanced golden changed, byte-identical through t465, diverges at t466 (M12 charm refusal). Independent review caught M13 producer landing only in tests → deferred (would add /api fetch to descend hot path); M10 preserved | `pnpm run verify:ci` → "All steps passed" (605 passed/3 skipped); per-finding stateHash diff (only persona-balanced, first divergence t466); independent Cursor review (M4/M13 concerns); behavioral smoke `pnpm run e2e:fullclear` → 1 passed (WIN, 12 floors); merged `e11818ce..53d680ff` |
 | 2026-06-14 | audit-crit-high | orchestrator+Codex+Cursor | C1 + all 8 High audit findings fixed, 8 atomic commits. Proved goldens mask nothing (every per-turn stateHash byte-identical; only a terminal record appended by H5). Independent review caught H8 eviction landing in the test-only registry → round-tripped to production createArtifactRunRegistry | `pnpm run verify:ci` → "All steps passed"; golden/eval-bank stateHash comparison IDENTICAL across all traces; independent Cursor review; behavioral smoke `pnpm run e2e:fullclear` → 1 passed (WIN, 12 floors); merged `a2179d6b..e11818ce` |
 | 2026-06-14 | M4-close | orchestrator+Cursor | M4 final polish merged + milestone closed: floor de-emphasis (terrain.floor recedes so foreground pops) + GameShell useGameAudio() mount (R4 audio now active). Full gate green; themed visual smoke confirms the hierarchy reads | `pnpm run verify:ci` → "All steps passed" (typecheck, lint, root vitest, all 18 package configs incl. stage + determinism audit + golden suite); themed visual smoke `pnpm exec playwright test e2e/_themed-smoke.spec.ts --project=chromium` → 1 passed, `test-results/themed/floor2.png` viewed (floor recedes, player/crates/stairs pop); commit 4850534a; report `runs/milestones/m4/report.md` |
