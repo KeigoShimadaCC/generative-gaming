@@ -74,6 +74,26 @@ describe("Gate 3 heuristics", () => {
     }
   });
 
+  it("reports malformed banned-vocab regex entries without throwing", () => {
+    const report = runGate3Heuristics(validShallowsManifestFixture, {
+      bannedVocabulary: {
+        version: "malformed-regex-test",
+        patterns: [
+          {
+            id: "broken-pattern",
+            pattern: "[",
+            reason: "test malformed regex guard",
+          },
+        ],
+      },
+    });
+
+    expect(report.pass).toBe(false);
+    expect(failedCodes(report)).toEqual(["G3_BANNED_VOCAB"]);
+    expect(report.checks[0]?.detail).toContain("broken-pattern");
+    expect(report.checks[0]?.detail).toContain("invalid banned-vocab regex");
+  });
+
   it("feeds Gate 3 failures into the repair chain", async () => {
     const fs = new MemoryArtifactFs();
     const bad = withNarration("You click the inventory button.");

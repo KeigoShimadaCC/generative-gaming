@@ -48,6 +48,15 @@ export type BannedVocabularyFile = {
   readonly patterns: readonly BannedVocabularyPattern[];
 };
 
+type CompiledBannedVocabularyPattern = BannedVocabularyPattern & {
+  readonly regex: RegExp;
+};
+
+type CompiledBannedVocabulary = {
+  readonly patterns: readonly CompiledBannedVocabularyPattern[];
+  readonly errors: readonly string[];
+};
+
 export type Gate3HeuristicsContext = {
   readonly bannedVocabulary?: BannedVocabularyFile;
   readonly recentNarration?: readonly string[];
@@ -62,6 +71,10 @@ const DEFAULT_BANNED_VOCAB_URL = new URL(
 const DEFAULT_NEAR_DUPLICATE_THRESHOLD = 0.9;
 
 let cachedBannedVocabulary: BannedVocabularyFile | null = null;
+const compiledBannedVocabularyCache = new WeakMap<
+  BannedVocabularyFile,
+  CompiledBannedVocabulary
+>();
 
 export const runGate3Heuristics = (
   manifest: FloorManifest,
@@ -179,10 +192,10 @@ const checkBannedVocabulary = (
   entries: readonly GeneratedTextEntry[],
   bannedVocabulary: BannedVocabularyFile,
 ): Gate3Check => {
+  const compiled = compileBannedVocabulary(bannedVocabulary);
   const violations = entries.flatMap((entry) =>
-    bannedVocabulary.patterns.flatMap((pattern) => {
-      const regex = new RegExp(pattern.pattern, "iu");
-      if (!regex.test(entry.value)) {
+    compiled.patterns.flatMap((pattern) => {
+      if (!pattern.regex.test(entry.value)) {
         return [];
       }
 
@@ -191,10 +204,40 @@ const checkBannedVocabulary = (
       ];
     }),
   );
+  const failures = [...compiled.errors, ...violations];
 
-  return violations.length === 0
+  return failures.length === 0
     ? passCheck("G3_BANNED_VOCAB", "no banned vocabulary found")
-    : failCheck("G3_BANNED_VOCAB", violations.join("; "));
+    : failCheck("G3_BANNED_VOCAB", failures.join("; "));
+};
+
+const compileBannedVocabulary = (
+  bannedVocabulary: BannedVocabularyFile,
+): CompiledBannedVocabulary => {
+  const cached = compiledBannedVocabularyCache.get(bannedVocabulary);
+  if (cached !== undefined) {
+    return cached;
+  }
+
+  const patterns: CompiledBannedVocabularyPattern[] = [];
+  const errors: string[] = [];
+
+  for (const pattern of bannedVocabulary.patterns) {
+    try {
+      patterns.push({
+        ...pattern,
+        regex: new RegExp(pattern.pattern, "iu"),
+      });
+    } catch (error) {
+      errors.push(
+        `${pattern.id} has invalid banned-vocab regex ${JSON.stringify(pattern.pattern)}: ${error instanceof Error ? error.message : String(error)}`,
+      );
+    }
+  }
+
+  const compiled = { patterns, errors };
+  compiledBannedVocabularyCache.set(bannedVocabulary, compiled);
+  return compiled;
 };
 
 const checkTextCaps = (
