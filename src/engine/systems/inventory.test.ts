@@ -3,6 +3,7 @@ import { afterAll, describe, expect, it } from "vitest";
 import { config } from "../../config/index.js";
 import type { ItemDefinition } from "../../schemas/entities/index.js";
 import {
+  validCharmItemFixture,
   validCoinItemFixture,
   validDraughtItemFixture,
   validFoodItemFixture,
@@ -284,6 +285,31 @@ describe("equip and unequip", () => {
     });
     expect(state.player.equipment.weapon).toEqual(weapon);
     expect(state.player.inventory).toEqual(state.player.inventory);
+  });
+
+  it("refuses default charm equip when every charm slot is full", () => {
+    const existingCharmA = carried("charm#old-a", validCharmItemFixture, 1);
+    const existingCharmB = carried("charm#old-b", validCharmItemFixture, 1);
+    const newCharm = carried("charm#new", validCharmItemFixture, 1);
+    const state = withPlayerEquipment(
+      withInventory(createInitialState("equip-charm-full"), [
+        newCharm,
+        ...emptySlots(15),
+      ]),
+      { charms: [existingCharmA, existingCharmB] },
+    );
+
+    const result = equipItem(state, "charm#new");
+
+    expect(result).toEqual({
+      illegal: true,
+      reason: "All charm slots are full.",
+    });
+    expect(state.player.equipment.charms).toEqual([
+      existingCharmA,
+      existingCharmB,
+    ]);
+    expect(state.player.inventory[0]).toEqual(newCharm);
   });
 });
 

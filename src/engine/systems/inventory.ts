@@ -36,6 +36,11 @@ export type InventoryOperationResult =
       readonly reason: string;
     };
 
+type InventoryIllegalResult = Extract<
+  InventoryOperationResult,
+  { readonly illegal: true }
+>;
+
 export type EquipTarget =
   | {
       readonly kind: "weapon";
@@ -590,6 +595,10 @@ export const equipItem = (
   const resolvedTarget =
     target ?? defaultEquipTarget(carried.definition, state.player.equipment.charms);
 
+  if (resolvedTarget !== null && "illegal" in resolvedTarget) {
+    return resolvedTarget;
+  }
+
   if (resolvedTarget === null) {
     return {
       illegal: true,
@@ -758,7 +767,7 @@ export const unregisterInventoryActionResolver = registerInventoryActionResolver
 const defaultEquipTarget = (
   definition: ItemDefinition,
   charms: readonly (PlayerItemStack | null)[],
-): EquipTarget | null => {
+): EquipTarget | InventoryIllegalResult | null => {
   switch (definition.kind) {
     case "weapon":
       return { kind: "weapon" };
@@ -773,12 +782,18 @@ const defaultEquipTarget = (
 
 const defaultCharmTarget = (
   charms: readonly (PlayerItemStack | null)[],
-): EquipTarget => {
+): EquipTarget | InventoryIllegalResult => {
   const firstEmpty = charms.findIndex((charm) => charm === null);
+  if (firstEmpty === -1) {
+    return {
+      illegal: true,
+      reason: "All charm slots are full.",
+    };
+  }
 
   return {
     kind: "charm",
-    index: firstEmpty === -1 ? 0 : firstEmpty,
+    index: firstEmpty,
   };
 };
 
