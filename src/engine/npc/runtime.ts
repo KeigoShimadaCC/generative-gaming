@@ -10,6 +10,7 @@ export const ACTIVE_NODE_KEY = "activeNodeId" as const;
 export const DIALOGUE_FLAGS_KEY = "dialogueFlags" as const;
 export const BARTER_OPEN_KEY = "barterOpen" as const;
 export const MERCHANT_STOCK_KEY = "merchantStockIds" as const;
+export const BARTER_CREDIT_KEY = "barterCredit" as const;
 
 export type ActiveConversation = {
   readonly npcId: EntityId;
@@ -21,6 +22,7 @@ export type DialogueRuntime = {
   readonly [DIALOGUE_FLAGS_KEY]?: SerializableRecord;
   readonly [BARTER_OPEN_KEY]?: boolean;
   readonly [MERCHANT_STOCK_KEY]?: readonly string[];
+  readonly [BARTER_CREDIT_KEY]?: number;
 };
 
 const isRecord = (value: SerializableValue | undefined): value is SerializableRecord =>

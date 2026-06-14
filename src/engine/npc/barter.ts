@@ -14,7 +14,14 @@ import type {
   PlayerItemStack,
 } from "../state/index.js";
 import type { TurnEvent } from "../turn/index.js";
-import { getActiveConversation, isBarterOpen, readDialogueRuntime, withNpcDialogueRuntime } from "./runtime.js";
+import {
+  BARTER_CREDIT_KEY,
+  getActiveConversation,
+  isBarterOpen,
+  readDialogueRuntime,
+  sortedNpcs,
+  withNpcDialogueRuntime,
+} from "./runtime.js";
 
 export type BarterCatalog = {
   readonly resolve: (definitionId: string) => ItemDefinition | null;
@@ -109,7 +116,7 @@ export const countPlayerCoinValue = (state: GameState): number => {
     total += slot.quantity * slot.definition.value.coin;
   }
 
-  return total;
+  return total + countBarterCreditValue(state);
 };
 
 export const computePlayerWealth = (state: GameState): number => {
@@ -164,7 +171,7 @@ export const buyFromMerchant = (
     return refuse("inventory_full", INVENTORY_FULL_MESSAGE);
   }
 
-  const paid = removeCoinValue(state, price);
+  const paid = removeCoinValue(state, merchant.id, price);
 
   if ("refused" in paid) {
     return paid;
@@ -237,7 +244,12 @@ export const sellToMerchant = (
     return refuse("item_not_carried", ITEM_NOT_CARRIED_MESSAGE);
   }
 
-  const credited = addCoinValue(removed.state, price, catalog.coinDefinition);
+  const credited = addCoinValue(
+    removed.state,
+    merchant.id,
+    price,
+    catalog.coinDefinition,
+  );
 
   if ("refused" in credited || "illegal" in credited) {
     return "refused" in credited
@@ -314,14 +326,100 @@ const merchantStock = (npc: NpcEntityInstance): readonly string[] =>
   readDialogueRuntime(npc)[MERCHANT_STOCK_KEY] ??
   npc.definition.merchantInventoryItemIds;
 
+const readBarterCredit = (npc: NpcEntityInstance): number => {
+  const value = readDialogueRuntime(npc)[BARTER_CREDIT_KEY];
+
+  return typeof value === "number" && Number.isInteger(value) && value > 0
+    ? value
+    : 0;
+};
+
+const countBarterCreditValue = (state: GameState): number => {
+  let total = 0;
+
+  for (const npc of sortedNpcs(state)) {
+    total += readBarterCredit(npc);
+  }
+
+  return total;
+};
+
+const withBarterCredit = (
+  state: GameState,
+  npcId: EntityId,
+  amount: number,
+): GameState =>
+  withNpcDialogueRuntime(state, npcId, {
+    [BARTER_CREDIT_KEY]: Math.max(0, amount),
+  });
+
+const addBarterCredit = (
+  state: GameState,
+  npcId: EntityId,
+  amount: number,
+): GameState => {
+  if (amount <= 0) {
+    return state;
+  }
+
+  const npc = state.entities[npcId];
+  const current = npc?.kind === "npc" ? readBarterCredit(npc) : 0;
+  return withBarterCredit(state, npcId, current + amount);
+};
+
+const creditNpcsInSpendOrder = (
+  state: GameState,
+  preferredNpcId: EntityId,
+): readonly NpcEntityInstance[] => {
+  const npcs = sortedNpcs(state);
+  const preferred = npcs.find((npc) => npc.id === preferredNpcId);
+
+  if (preferred === undefined) {
+    return npcs;
+  }
+
+  return [
+    preferred,
+    ...npcs.filter((npc) => npc.id !== preferredNpcId),
+  ];
+};
+
+const removeBarterCreditValue = (
+  state: GameState,
+  preferredNpcId: EntityId,
+  amount: number,
+): { readonly state: GameState; readonly remaining: number } => {
+  let nextState = state;
+  let remaining = amount;
+
+  for (const npc of creditNpcsInSpendOrder(state, preferredNpcId)) {
+    if (remaining <= 0) {
+      break;
+    }
+
+    const credit = readBarterCredit(npc);
+    if (credit <= 0) {
+      continue;
+    }
+
+    const paid = Math.min(credit, remaining);
+    nextState = withBarterCredit(nextState, npc.id, credit - paid);
+    remaining -= paid;
+  }
+
+  return { state: nextState, remaining };
+};
+
 const removeCoinValue = (
   state: GameState,
+  creditNpcId: EntityId,
   amount: number,
 ): BarterResolution | { readonly state: GameState } => {
-  let remaining = amount;
-  let nextState = state;
+  const credited = removeBarterCreditValue(state, creditNpcId, amount);
+  let remaining = credited.remaining;
+  let nextState = credited.state;
 
-  for (const slot of state.player.inventory) {
+  for (const slot of nextState.player.inventory) {
     if (slot === null || slot.definition.kind !== "coin" || remaining <= 0) {
       continue;
     }
@@ -348,18 +446,22 @@ const removeCoinValue = (
     }
 
     nextState = removed.state;
-    remaining = 0;
+    const paidValue = unitsNeeded * slot.definition.value.coin;
+    remaining -= paidValue;
   }
 
   if (remaining > 0) {
     return refuse("insufficient_coin", INSUFFICIENT_COIN_MESSAGE);
   }
 
+  nextState = addBarterCredit(nextState, creditNpcId, Math.abs(remaining));
+
   return { state: nextState };
 };
 
 const addCoinValue = (
   state: GameState,
+  creditNpcId: EntityId,
   amount: number,
   fallbackCoinDefinition: ItemDefinition,
 ): BarterResolution | InventoryOperationResult => {
@@ -367,18 +469,35 @@ const addCoinValue = (
 
   const unitValue = coinDefinition.value.coin;
 
-  if (unitValue < 1 || amount % unitValue !== 0) {
+  if (unitValue < 1 || !Number.isInteger(amount) || amount < 0) {
     return refuse("insufficient_coin", INSUFFICIENT_COIN_MESSAGE);
   }
 
-  const stack: PlayerItemStack = {
-    itemInstanceId: `coin#barter-${amount}`,
-    definition: coinDefinition,
-    quantity: amount / unitValue,
-    identified: true,
-  };
+  const quantity = Math.floor(amount / unitValue);
+  const credit = amount - quantity * unitValue;
+  let nextState = state;
 
-  return addToInventory(state, stack);
+  if (quantity > 0) {
+    const stack: PlayerItemStack = {
+      itemInstanceId: `coin#barter-${amount}`,
+      definition: coinDefinition,
+      quantity,
+      identified: true,
+    };
+
+    const added = addToInventory(nextState, stack);
+
+    if ("illegal" in added) {
+      return added;
+    }
+
+    nextState = added.state;
+  }
+
+  return {
+    state: addBarterCredit(nextState, creditNpcId, credit),
+    events: [],
+  };
 };
 
 const findCoinDefinition = (state: GameState): ItemDefinition | null => {

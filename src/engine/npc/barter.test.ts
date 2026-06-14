@@ -24,6 +24,7 @@ import {
 } from "../state/index.js";
 import {
   buyFromMerchant,
+  countPlayerCoinValue,
   computePlayerWealth,
   merchantBuyPrice,
   merchantSellPrice,
@@ -100,6 +101,56 @@ describe("barter transactions", () => {
         .dialogueRuntime.merchantStockIds,
     ).toEqual(["weapon-1"]);
   });
+
+  it.each([4, 7, 26])(
+    "credits exact sell price %i with 5-value coin denominations",
+    (price) => {
+      const definition = itemDefinition(
+        `sell-price-${price}`,
+        validWeaponItemFixture,
+        price * 2,
+      );
+      const catalog = catalogFrom({ [definition.id]: definition });
+      let state = barterReady({ coinQuantity: 0, stock: [], catalog });
+      state = withInventoryItem(state, carried(`${definition.id}#1`, definition, 1));
+
+      const result = expectBarter(
+        sellToMerchant(state, catalog, `${definition.id}#1`),
+      );
+
+      expect(merchantBuyPrice(definition.value.coin)).toBe(price);
+      expect(countPlayerCoinValue(result.state)).toBe(price);
+      expect(computePlayerWealth(result.state)).toBe(price);
+    },
+  );
+
+  it.each([4, 7, 26])(
+    "charges exact buy price %i and preserves change as credit",
+    (price) => {
+      const priced = merchantStockForBuyPrice(price);
+      const catalog = catalogFrom({ [priced.definition.id]: priced.definition });
+      const state = barterReady({
+        coinQuantity: 30,
+        stock: [priced.definition.id],
+        catalog,
+      });
+
+      expect(
+        merchantSellPrice(
+          state,
+          "npc#1",
+          priced.definition.id,
+          priced.definition.value.coin,
+        ),
+      ).toBe(price);
+
+      const result = expectBarter(
+        buyFromMerchant(state, catalog, priced.definition.id),
+      );
+
+      expect(countPlayerCoinValue(result.state)).toBe(30 - price);
+    },
+  );
 });
 
 describe("barter conservation", () => {
@@ -263,6 +314,32 @@ const itemDefinition = (
   id,
   value: { band: "shallows", coin },
 });
+
+const merchantStockForBuyPrice = (
+  price: number,
+): { readonly definition: ItemDefinition } => {
+  for (let value = 1; value <= 200; value += 1) {
+    for (let salt = 0; salt < 1_000; salt += 1) {
+      const definition = itemDefinition(
+        `buy-price-${price}-${value}-${salt}`,
+        validFoodItemFixture,
+        value,
+      );
+      const catalog = catalogFrom({ [definition.id]: definition });
+      const state = barterReady({
+        coinQuantity: 30,
+        stock: [definition.id],
+        catalog,
+      });
+
+      if (merchantSellPrice(state, "npc#1", definition.id, value) === price) {
+        return { definition };
+      }
+    }
+  }
+
+  throw new Error(`no fixture item found for merchant sell price ${price}`);
+};
 
 const fixtureState = (definition = validNpcDefinitionFixture): GameState => ({
   ...withGrid(createInitialState("npc-barter"), createTileGrid({ width: 3, height: 3 }), {
