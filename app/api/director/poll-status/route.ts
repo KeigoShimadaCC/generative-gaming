@@ -1,19 +1,20 @@
 import { NextResponse } from "next/server";
 
-import type { PollStatusRequest } from "../../../../src/director/orchestration/transport.js";
+import {
+  jsonErrorResponse,
+  PollStatusRequestSchema,
+  readValidatedJson,
+} from "../route-helpers";
 import { getTransportHandlers } from "../transport-server";
 
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
   try {
-    const body = (await request.json()) as PollStatusRequest;
+    const body = await readValidatedJson(request, PollStatusRequestSchema);
     const result = getTransportHandlers().pollStatus(body);
     return NextResponse.json(result);
   } catch (error) {
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : String(error) },
-      { status: 500 },
-    );
+    return jsonErrorResponse(error);
   }
 }
