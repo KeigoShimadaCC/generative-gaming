@@ -21,6 +21,7 @@ import type {
   InventorySlot,
   PlayerItemStack
 } from "../state/index.js";
+import type { TurnEvent } from "../turn/index.js";
 import {
   effectExecutedEvent,
   registerEffectExecutor,
@@ -364,16 +365,17 @@ function executeBuffStat(
   }
 
   const targetId = target.id;
-  const currentStatuses = statusesForEntity(state, targetId);
-  const nextStatuses = appendStatusWithCap(
-    currentStatuses,
+  const applied = appendStatusWithCap(
+    state,
+    targetId,
+    statusesForEntity(state, targetId),
     runtimeBuffStatus({
       stat,
       magnitude,
       duration
     })
   );
-  const nextState = withEntityStatuses(state, targetId, nextStatuses);
+  const nextState = withEntityStatuses(state, targetId, applied.statuses);
   const statsAfter = deriveCombatStats(nextState, targetId);
 
   return {
@@ -390,7 +392,8 @@ function executeBuffStat(
           attackAfter: statsAfter?.attack ?? null,
           defenseAfter: statsAfter?.defense ?? null
         }
-      )
+      ),
+      ...applied.events
     ]
   };
 }
@@ -749,14 +752,70 @@ const withEntityStatuses = (
 };
 
 const appendStatusWithCap = (
+  state: GameState,
+  entityId: StatusEntityId,
   statuses: readonly StatusApplication[],
   status: StatusApplication
-): readonly StatusApplication[] => {
+): {
+  readonly statuses: readonly StatusApplication[];
+  readonly events: readonly TurnEvent[];
+} => {
   const max = bounds.statusVocabulary.maxConcurrentPerActor;
-  const kept = statuses.length >= max ? statuses.slice(1) : statuses;
+  const existingIndex = statuses.findIndex((entry) => entry.status === status.status);
 
-  return [...kept, status];
+  if (existingIndex >= 0) {
+    return {
+      statuses: statuses.map((entry, index) =>
+        index === existingIndex ? status : entry
+      ),
+      events: [
+        statusEvent(state, "status_refreshed", {
+          entityId,
+          status: status.status,
+          duration: status.duration
+        })
+      ]
+    };
+  }
+
+  const events: TurnEvent[] = [];
+  let kept = statuses;
+  if (statuses.length >= max) {
+    const dropped = statuses[0];
+    kept = statuses.slice(1);
+    if (dropped !== undefined) {
+      events.push(
+        statusEvent(state, "status_dropped_oldest", {
+          entityId,
+          status: dropped.status
+        })
+      );
+    }
+  }
+
+  return {
+    statuses: [...kept, status],
+    events: [
+      ...events,
+      statusEvent(state, "status_applied", {
+        entityId,
+        status: status.status,
+        duration: status.duration
+      })
+    ]
+  };
 };
+
+const statusEvent = <Type extends TurnEvent["type"]>(
+  state: GameState,
+  type: Type,
+  data: Extract<TurnEvent, { readonly type: Type }>["data"]
+): Extract<TurnEvent, { readonly type: Type }> =>
+  ({
+    turn: state.run.turn,
+    type,
+    data
+  }) as Extract<TurnEvent, { readonly type: Type }>;
 
 const runtimeBuffStatus = (input: {
   readonly stat: "ATK" | "DEF";

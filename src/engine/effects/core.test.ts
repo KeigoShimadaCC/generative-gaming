@@ -17,7 +17,11 @@ import {
   validQuaffTriggerFixture,
   validSelfTargetingFixture
 } from "../../schemas/fixtures/vocab.js";
-import type { Effect, EffectBundle } from "../../schemas/vocab/index.js";
+import type {
+  Effect,
+  EffectBundle,
+  StatusApplication
+} from "../../schemas/vocab/index.js";
 import { deriveCombatStats } from "../systems/combat.js";
 import { createRng } from "../rng/index.js";
 import {
@@ -168,6 +172,104 @@ describe("core effect executors", () => {
       kind: "buff_stat",
       stat: "ATK",
       magnitude: 2
+    });
+  });
+
+  it("buff_stat refreshes an existing buff instead of stacking duplicates", () => {
+    const state = createInitialState("effect-buff-stat-refresh");
+    const before = deriveCombatStats(state, "player");
+    const first = executeBundle(
+      state,
+      bundle([
+        makeEffectFixture("buff_stat", "buffStat", {
+          stat: "ATK",
+          magnitude: 2,
+          duration: bounds.effectVocabulary.verbs.buffStat.durationTurns.min
+        })
+      ]),
+      context("effect-buff-stat-refresh")
+    );
+    const second = executeBundle(
+      first.state,
+      bundle([
+        makeEffectFixture("buff_stat", "buffStat", {
+          stat: "ATK",
+          magnitude: 3,
+          duration: bounds.effectVocabulary.verbs.buffStat.durationTurns.max
+        })
+      ]),
+      context("effect-buff-stat-refresh")
+    );
+
+    expect(second.state.player.statuses).toHaveLength(1);
+    expect(second.state.player.statuses[0]).toMatchObject({
+      status: "buff_stat",
+      duration: bounds.effectVocabulary.verbs.buffStat.durationTurns.max,
+      kind: "buff_stat",
+      stat: "ATK",
+      magnitude: 3
+    });
+    expect(deriveCombatStats(second.state, "player")?.attack).toBe(
+      (before?.attack ?? 0) + 3
+    );
+    expect(second.events.map((event) => event.type)).toEqual([
+      "effect_executed",
+      "status_refreshed"
+    ]);
+  });
+
+  it("buff_stat emits the status cap eviction event before applying a new buff", () => {
+    const fullStatusList: StatusApplication[] = [
+      {
+        status: "poison",
+        duration: bounds.statusVocabulary.durationTurns.poison.min
+      },
+      {
+        status: "burn",
+        duration: bounds.statusVocabulary.durationTurns.burn.min
+      },
+      {
+        status: "regen",
+        duration: bounds.statusVocabulary.durationTurns.regen.min
+      },
+      {
+        status: "stun",
+        duration: bounds.statusVocabulary.durationTurns.stun.min
+      }
+    ];
+    const state = {
+      ...createInitialState("effect-buff-stat-cap"),
+      player: {
+        ...createInitialState("effect-buff-stat-cap").player,
+        statuses: fullStatusList
+      }
+    };
+    const result = executeBundle(
+      state,
+      bundle([
+        makeEffectFixture("buff_stat", "buffStat", {
+          stat: "DEF",
+          magnitude: 1,
+          duration: bounds.effectVocabulary.verbs.buffStat.durationTurns.min
+        })
+      ]),
+      context("effect-buff-stat-cap")
+    );
+
+    expect(result.state.player.statuses.map((status) => status.status)).toEqual([
+      "burn",
+      "regen",
+      "stun",
+      "buff_stat"
+    ]);
+    expect(result.events.map((event) => event.type)).toEqual([
+      "effect_executed",
+      "status_dropped_oldest",
+      "status_applied"
+    ]);
+    expect(eventOfType(result.events, "status_dropped_oldest").data).toEqual({
+      entityId: "player",
+      status: "poison"
     });
   });
 
