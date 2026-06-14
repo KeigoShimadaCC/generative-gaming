@@ -62,6 +62,15 @@ describe("simulate args", () => {
     expect(parseSeeds("one,two")).toEqual(["one", "two"]);
   });
 
+  it("rejects max-turns values with trailing garbage", () => {
+    expect(() =>
+      parseSimulateArgs(["--policy", "cautious", "--max-turns", "50abc"]),
+    ).toThrow("--max-turns must be a positive integer");
+    expect(() =>
+      parseSimulateArgs(["--policy", "cautious", "--max-turns=50abc"]),
+    ).toThrow("--max-turns must be a positive integer");
+  });
+
   it("rejects unsafe or over-cap numeric seed counts before allocation", () => {
     expect(() => parseSeeds(`${Number.MAX_SAFE_INTEGER + 1}`)).toThrow(
       "--seeds count must be a positive safe integer",

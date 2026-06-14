@@ -39,6 +39,15 @@ describe("replay args", () => {
     });
   });
 
+  it("rejects delay values with trailing garbage", () => {
+    expect(() =>
+      parseReplayArgs(["runs/trace.ndjson", "--delay", "50abc"]),
+    ).toThrow("--delay must be a non-negative integer");
+    expect(() =>
+      parseReplayArgs(["runs/trace.ndjson", "--delay=50abc"]),
+    ).toThrow("--delay must be a non-negative integer");
+  });
+
   it("documents help text", () => {
     expect(REPLAY_HELP_TEXT).toContain("--watch");
     expect(REPLAY_HELP_TEXT).toContain("--delay");

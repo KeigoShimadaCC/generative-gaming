@@ -29,6 +29,7 @@ import type { BotPolicy, BotPolicyName } from "../harness/bots/types.js";
 
 const DEFAULT_MAX_TURNS = 900;
 export const MAX_SIMULATE_SEED_COUNT = 10_000;
+const POSITIVE_INT_PATTERN = /^\d+$/;
 
 const policyByName = new Map<BotPolicyName, BotPolicy>(
   botPolicies.map((policy) => [policy.name, policy]),
@@ -414,7 +415,12 @@ const readPositiveInt = (argv: readonly string[], index: number, flag: string): 
 
 const parsePositiveInt = (value: string, flag: string): number => {
   const parsed = Number.parseInt(value, 10);
-  if (!Number.isSafeInteger(parsed) || parsed <= 0) {
+  if (
+    !POSITIVE_INT_PATTERN.test(value) ||
+    !Number.isSafeInteger(parsed) ||
+    parsed <= 0 ||
+    String(parsed) !== value
+  ) {
     throw new Error(`${flag} must be a positive integer`);
   }
   return parsed;

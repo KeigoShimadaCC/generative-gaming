@@ -11,6 +11,8 @@ import { resolveContentProvider } from "../harness/replay/provider.js";
 import { verify, verifyTraceContent } from "../harness/replay/replay.js";
 import type { ParsedTrace, VerifyResult } from "../harness/replay/types.js";
 
+const NON_NEGATIVE_INT_PATTERN = /^\d+$/;
+
 export type ParsedReplayArgs =
   | { readonly help: true }
   | {
@@ -196,7 +198,12 @@ const readNonNegativeInt = (argv: readonly string[], index: number, flag: string
 
 const parseNonNegativeInt = (value: string, flag: string): number => {
   const parsed = Number.parseInt(value, 10);
-  if (!Number.isSafeInteger(parsed) || parsed < 0) {
+  if (
+    !NON_NEGATIVE_INT_PATTERN.test(value) ||
+    !Number.isSafeInteger(parsed) ||
+    parsed < 0 ||
+    String(parsed) !== value
+  ) {
     throw new Error(`${flag} must be a non-negative integer`);
   }
   return parsed;
