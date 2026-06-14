@@ -34,6 +34,7 @@ const CONTENT_REF = {
 } as const satisfies TraceContentRef;
 const M0_SEEDS = Array.from({ length: 5 }, (_, index) => `phase24-bot-${index + 1}`);
 const MAX_TURNS = 900;
+const WRITE_M0_EVIDENCE = process.env.UPDATE_M0_EVIDENCE === "1";
 const M0_SENTENCE =
   "**M0 — Playable skeleton.** The engine runs a complete, finite, seeded run with fallback content, headless and in the UI, fully offline. Bots can play it end to end.";
 
@@ -51,10 +52,14 @@ describe("M0 integration milestone", () => {
       expect(verifyTraceContent(run.trace.content), `${run.policy}/${run.seed}`).toEqual({
         status: "identical",
       });
-      writeTraceFile(run);
     }
 
-    writeMilestoneReport(runs);
+    if (WRITE_M0_EVIDENCE) {
+      for (const run of runs) {
+        writeTraceFile(run);
+      }
+      writeMilestoneReport(runs);
+    }
   }, 600_000);
 
   it("records byte-identical traces when the same policy and seed are run twice", () => {

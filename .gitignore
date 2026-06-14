@@ -28,3 +28,11 @@ dist/
 test-results/
 
 runs/artdirector-live-smoke/
+
+# Generated local run artifacts; committed evidence under runs/ stays tracked.
+runs/bot-*-simulate-*/
+runs/run-*-simulate-*/
+runs/run-*-cli-sim-*/
+runs/evals/ci-mock-baseline-current-*/
+runs/evals/ci-smoke-*/
+runs/art-batch/
